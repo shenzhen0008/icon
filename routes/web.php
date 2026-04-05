@@ -1,0 +1,38 @@
+<?php
+
+use App\Modules\User\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Modules\User\Http\Controllers\Auth\ConfirmablePasswordController;
+use App\Modules\User\Http\Controllers\Auth\RegisteredUserController;
+use App\Modules\Exchange\Http\Controllers\ExchangeMetricsFeedController;
+use App\Modules\Product\Http\Controllers\ProductDetailController;
+use App\Modules\Product\Http\Controllers\PublicProductCatalogController;
+use App\Modules\User\Http\Controllers\HomeController;
+use App\Modules\User\Http\Controllers\MyCenterController;
+use App\Modules\Position\Http\Controllers\PurchasePositionController;
+use App\Modules\User\Http\Controllers\SensitivePageController;
+use Illuminate\Support\Facades\Route;
+
+Route::get('/', HomeController::class);
+Route::get('/exchange-metrics', ExchangeMetricsFeedController::class);
+Route::get('/products', PublicProductCatalogController::class);
+Route::get('/products/{product}', ProductDetailController::class);
+Route::get('/me', MyCenterController::class);
+
+Route::middleware('guest')->group(function (): void {
+    Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
+    Route::post('/register', [RegisteredUserController::class, 'store']);
+
+    Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
+    Route::post('/login', [AuthenticatedSessionController::class, 'store']);
+});
+
+Route::middleware('auth')->group(function (): void {
+    Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
+    Route::post('/positions/purchase', PurchasePositionController::class);
+
+    Route::get('/confirm-password', [ConfirmablePasswordController::class, 'show'])
+        ->name('password.confirm');
+    Route::post('/confirm-password', [ConfirmablePasswordController::class, 'store']);
+
+    Route::get('/sensitive', SensitivePageController::class)->middleware('password.confirm');
+});
