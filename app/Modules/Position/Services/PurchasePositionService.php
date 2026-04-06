@@ -22,6 +22,36 @@ class PurchasePositionService
 
             $amount = (float) $product->unit_price * $shares;
 
+            $openPositions = Position::query()
+                ->where('user_id', $user->id)
+                ->where('product_id', $product->id)
+                ->where('status', 'open')
+                ->lockForUpdate()
+                ->get(['id', 'principal']);
+
+            $currentPurchaseCount = $openPositions->count();
+            $currentPrincipal = (float) $openPositions->sum(static fn (Position $position): float => (float) $position->principal);
+
+            if ($product->purchase_limit !== null && $currentPurchaseCount >= (int) $product->purchase_limit) {
+                throw ValidationException::withMessages([
+                    'shares' => '该产品购买次数已达上限。',
+                ]);
+            }
+
+            if ($product->limit_min_usdt !== null && $amount < (float) $product->limit_min_usdt) {
+                throw ValidationException::withMessages([
+                    'shares' => '购买金额低于产品最低限额。',
+                ]);
+            }
+
+            $nextPrincipal = $currentPrincipal + $amount;
+
+            if ($product->limit_max_usdt !== null && $nextPrincipal > (float) $product->limit_max_usdt) {
+                throw ValidationException::withMessages([
+                    'shares' => '购买后累计金额超过产品上限。',
+                ]);
+            }
+
             $freshUser = User::query()->lockForUpdate()->findOrFail($user->id);
 
             if ((float) $freshUser->balance < $amount) {

@@ -102,4 +102,147 @@ class DailySettlementTest extends TestCase
         $this->assertDatabaseCount('daily_settlements', 1);
         $this->assertDatabaseCount('balance_ledgers', 1);
     }
+
+    public function test_settlement_by_product_code_generates_daily_rate_and_settles_each_order(): void
+    {
+        $user = User::factory()->create([
+            'balance' => 0,
+        ]);
+
+        $product = Product::query()->create([
+            'name' => 'Mobile AMM',
+            'code' => 'MAMM',
+            'unit_price' => 1000,
+            'is_active' => true,
+            'rate_min_percent' => 1.15,
+            'rate_max_percent' => 2.22,
+        ]);
+
+        $positionA = Position::query()->create([
+            'user_id' => $user->id,
+            'product_id' => $product->id,
+            'principal' => 1000,
+            'status' => 'open',
+            'opened_at' => now(),
+        ]);
+
+        $positionB = Position::query()->create([
+            'user_id' => $user->id,
+            'product_id' => $product->id,
+            'principal' => 9000,
+            'status' => 'open',
+            'opened_at' => now(),
+        ]);
+
+        $service = app(DailySettlementService::class);
+        $service->settleByProductCodeAndDate('MAMM', '2026-04-06');
+
+        $dailyReturn = ProductDailyReturn::query()
+            ->where('product_id', $product->id)
+            ->whereDate('return_date', '2026-04-06')
+            ->firstOrFail();
+
+        $rate = (float) $dailyReturn->rate;
+        $this->assertGreaterThanOrEqual(0.0115, $rate);
+        $this->assertLessThanOrEqual(0.0222, $rate);
+
+        $profitA = round(1000 * $rate, 2);
+        $profitB = round(9000 * $rate, 2);
+
+        $this->assertDatabaseHas('daily_settlements', [
+            'position_id' => $positionA->id,
+            'settlement_date' => '2026-04-06',
+            'rate' => $rate,
+            'profit' => $profitA,
+        ]);
+
+        $this->assertDatabaseHas('daily_settlements', [
+            'position_id' => $positionB->id,
+            'settlement_date' => '2026-04-06',
+            'rate' => $rate,
+            'profit' => $profitB,
+        ]);
+
+        $user->refresh();
+        $this->assertSame(number_format($profitA + $profitB, 2, '.', ''), number_format((float) $user->balance, 2, '.', ''));
+    }
+
+    public function test_settlement_by_product_code_is_idempotent_and_keeps_one_daily_rate_record(): void
+    {
+        $user = User::factory()->create([
+            'balance' => 0,
+        ]);
+
+        $product = Product::query()->create([
+            'name' => 'Mobile AMM',
+            'code' => 'MAMM',
+            'unit_price' => 1000,
+            'is_active' => true,
+            'rate_min_percent' => 1.15,
+            'rate_max_percent' => 2.22,
+        ]);
+
+        Position::query()->create([
+            'user_id' => $user->id,
+            'product_id' => $product->id,
+            'principal' => 1000,
+            'status' => 'open',
+            'opened_at' => now(),
+        ]);
+
+        $service = app(DailySettlementService::class);
+        $service->settleByProductCodeAndDate('MAMM', '2026-04-06');
+        $service->settleByProductCodeAndDate('MAMM', '2026-04-06');
+
+        $this->assertDatabaseCount('product_daily_returns', 1);
+        $this->assertDatabaseCount('daily_settlements', 1);
+        $this->assertDatabaseCount('balance_ledgers', 1);
+    }
+
+    public function test_settlement_all_products_by_date_settles_all_open_positions(): void
+    {
+        $user = User::factory()->create([
+            'balance' => 0,
+        ]);
+
+        $productA = Product::query()->create([
+            'name' => 'Mobile AMM',
+            'code' => 'MAMM',
+            'unit_price' => 1000,
+            'is_active' => true,
+            'rate_min_percent' => 1.10,
+            'rate_max_percent' => 1.20,
+        ]);
+
+        $productB = Product::query()->create([
+            'name' => 'Alpha Pool',
+            'code' => 'ALPHA',
+            'unit_price' => 1000,
+            'is_active' => false,
+            'rate_min_percent' => 1.30,
+            'rate_max_percent' => 1.40,
+        ]);
+
+        Position::query()->create([
+            'user_id' => $user->id,
+            'product_id' => $productA->id,
+            'principal' => 1000,
+            'status' => 'open',
+            'opened_at' => now(),
+        ]);
+
+        Position::query()->create([
+            'user_id' => $user->id,
+            'product_id' => $productB->id,
+            'principal' => 1000,
+            'status' => 'open',
+            'opened_at' => now(),
+        ]);
+
+        app(DailySettlementService::class)->settleAllProductsByDate('2026-04-06');
+
+        $this->assertDatabaseCount('product_daily_returns', 2);
+        $this->assertDatabaseCount('daily_settlements', 2);
+        $this->assertDatabaseCount('balance_ledgers', 2);
+    }
 }

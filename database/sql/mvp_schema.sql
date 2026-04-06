@@ -170,6 +170,7 @@ CREATE TABLE `users` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `username` varchar(21) COLLATE utf8mb4_bin NOT NULL,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `remark` text COLLATE utf8mb4_unicode_ci,
   `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `email_verified_at` timestamp NULL DEFAULT NULL,
   `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -193,8 +194,17 @@ DROP TABLE IF EXISTS `products`;
 CREATE TABLE `products` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` text COLLATE utf8mb4_unicode_ci,
   `code` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `unit_price` decimal(16,2) NOT NULL DEFAULT '1000.00',
+  `purchase_limit` int(10) unsigned DEFAULT NULL,
+  `limit_min_usdt` decimal(16,2) DEFAULT NULL,
+  `limit_max_usdt` decimal(16,2) DEFAULT NULL,
+  `rate_min_percent` decimal(8,2) DEFAULT NULL,
+  `rate_max_percent` decimal(8,2) DEFAULT NULL,
+  `cycle_days` int(10) unsigned DEFAULT NULL,
+  `product_icon_path` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `symbol_icon_paths` json DEFAULT NULL,
   `is_active` tinyint(1) NOT NULL DEFAULT '1',
   `sort` int(10) unsigned NOT NULL DEFAULT '0',
   `created_at` timestamp NULL DEFAULT NULL,
@@ -248,6 +258,38 @@ CREATE TABLE `positions` (
   KEY `positions_product_id_status_index` (`product_id`,`status`),
   CONSTRAINT `positions_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE,
   CONSTRAINT `positions_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `position_redemption_requests`
+--
+
+DROP TABLE IF EXISTS `position_redemption_requests`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `position_redemption_requests` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) unsigned NOT NULL,
+  `position_id` bigint(20) unsigned NOT NULL,
+  `product_id` bigint(20) unsigned NOT NULL,
+  `status` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'pending',
+  `requested_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `reviewed_by` bigint(20) unsigned DEFAULT NULL,
+  `reviewed_at` timestamp NULL DEFAULT NULL,
+  `review_remark` text COLLATE utf8mb4_unicode_ci,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `position_redemption_requests_status_requested_at_index` (`status`,`requested_at`),
+  KEY `position_redemption_requests_user_id_status_index` (`user_id`,`status`),
+  KEY `position_redemption_requests_position_id_status_index` (`position_id`,`status`),
+  KEY `position_redemption_requests_product_id_foreign` (`product_id`),
+  KEY `position_redemption_requests_reviewed_by_foreign` (`reviewed_by`),
+  CONSTRAINT `position_redemption_requests_position_id_foreign` FOREIGN KEY (`position_id`) REFERENCES `positions` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `position_redemption_requests_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `position_redemption_requests_reviewed_by_foreign` FOREIGN KEY (`reviewed_by`) REFERENCES `users` (`id`) ON DELETE SET NULL,
+  CONSTRAINT `position_redemption_requests_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

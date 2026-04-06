@@ -10,11 +10,11 @@
     <div class="mt-5 rounded-xl border border-white/10 bg-slate-900/60 p-4">
         <div class="grid grid-cols-2 gap-3">
             <div class="min-w-0 pr-3">
-                <p class="text-sm text-slate-400">Total earnings (USDT)</p>
+                <p class="text-sm text-slate-400 whitespace-nowrap">Total earnings (USDT)</p>
                 <p id="hero-total-earnings" class="mt-2 h-8 overflow-hidden text-ellipsis whitespace-nowrap font-mono text-xl font-semibold leading-none tabular-nums text-white sm:h-9 sm:text-3xl">$0.00</p>
             </div>
             <div class="min-w-0 border-l border-white/10 pl-3">
-                <p class="text-sm text-slate-400">Earnings 24h (USDT)</p>
+                <p class="text-sm text-slate-400 whitespace-nowrap">Earnings 24h (USDT)</p>
                 <p id="hero-earnings-24h" class="mt-2 h-8 overflow-hidden text-ellipsis whitespace-nowrap font-mono text-xl font-semibold leading-none tabular-nums text-white sm:h-9 sm:text-3xl">$0.00</p>
             </div>
         </div>
@@ -24,7 +24,7 @@
         <button id="hero-damo-btn" type="button" class="inline-flex items-center justify-center rounded-xl bg-slate-700 px-4 py-3 text-sm font-semibold text-slate-100 transition hover:bg-slate-600">
             DAMO
         </button>
-        <button id="hero-live-btn" type="button" class="inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-cyan-500 to-blue-500 px-4 py-3 text-sm font-semibold text-slate-950 transition hover:from-cyan-400 hover:to-blue-400">
+        <button id="hero-live-btn" type="button" class="inline-flex items-center justify-center rounded-xl bg-slate-700 px-4 py-3 text-sm font-semibold text-slate-100 transition hover:bg-slate-600">
             LIVE
         </button>
     </div>
@@ -56,14 +56,21 @@
             if (earnings24h) earnings24h.textContent = formatMoney(selected.day);
 
             const damoActive = mode === 'damo';
-            damoBtn?.classList.toggle('bg-slate-700', damoActive);
-            damoBtn?.classList.toggle('bg-slate-900', !damoActive);
-            liveBtn?.classList.toggle('from-cyan-500', !damoActive);
-            liveBtn?.classList.toggle('to-blue-500', !damoActive);
-            liveBtn?.classList.toggle('from-slate-700', damoActive);
-            liveBtn?.classList.toggle('to-slate-700', damoActive);
-            liveBtn?.classList.toggle('text-slate-950', !damoActive);
-            liveBtn?.classList.toggle('text-slate-100', damoActive);
+            const setButtonActiveState = (button, active) => {
+                button?.classList.toggle('bg-gradient-to-r', active);
+                button?.classList.toggle('from-cyan-500', active);
+                button?.classList.toggle('to-blue-500', active);
+                button?.classList.toggle('text-slate-950', active);
+                button?.classList.toggle('hover:from-cyan-400', active);
+                button?.classList.toggle('hover:to-blue-400', active);
+
+                button?.classList.toggle('bg-slate-700', !active);
+                button?.classList.toggle('text-slate-100', !active);
+                button?.classList.toggle('hover:bg-slate-600', !active);
+            };
+
+            setButtonActiveState(damoBtn, damoActive);
+            setButtonActiveState(liveBtn, !damoActive);
         };
 
         damoBtn?.addEventListener('click', () => setMode('damo'));

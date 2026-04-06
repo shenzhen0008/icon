@@ -2,7 +2,10 @@
 
 namespace Tests\Feature\Product;
 
+use App\Models\User;
+use App\Modules\Position\Models\Position;
 use App\Modules\Product\Models\Product;
+use App\Modules\Settlement\Models\DailySettlement;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -13,19 +16,40 @@ class PublicProductCatalogTest extends TestCase
     public function test_guest_can_view_public_product_catalog_page(): void
     {
         Product::query()->create([
-            'name' => 'Product A',
-            'code' => 'PA',
+            'name' => 'Alpha Pool',
+            'code' => 'ALPHA',
             'unit_price' => 1000,
             'is_active' => true,
             'sort' => 20,
+            'purchase_limit' => 1,
+            'limit_min_usdt' => 3000,
+            'limit_max_usdt' => 50000,
+            'rate_min_percent' => 1.20,
+            'rate_max_percent' => 1.50,
+            'cycle_days' => 7,
+            'product_icon_path' => '/images/products/symbols/symbol-01.png',
+            'symbol_icon_paths' => ['/images/products/symbols/symbol-01.png'],
         ]);
 
         Product::query()->create([
-            'name' => 'Product B',
-            'code' => 'PB',
+            'name' => 'Mobile AMM',
+            'code' => 'MAMM',
             'unit_price' => 2000,
             'is_active' => true,
-            'sort' => 10,
+            'sort' => 0,
+            'purchase_limit' => 2,
+            'limit_min_usdt' => 1000,
+            'limit_max_usdt' => 10000,
+            'rate_min_percent' => 1.83,
+            'rate_max_percent' => 2.01,
+            'cycle_days' => 2,
+            'product_icon_path' => '/images/products/symbols/symbol-02.png',
+            'symbol_icon_paths' => [
+                '/images/products/symbols/symbol-01.png',
+                '/images/products/symbols/symbol-02.png',
+                '/images/products/symbols/symbol-03.png',
+                '/images/products/symbols/symbol-04.png',
+            ],
         ]);
 
         Product::query()->create([
@@ -40,24 +64,138 @@ class PublicProductCatalogTest extends TestCase
 
         $response->assertOk();
         $response->assertSee('产品市场');
-        $response->assertSeeInOrder(['Product B', 'Product A']);
+        $response->assertSeeInOrder(['Mobile AMM', 'Alpha Pool']);
         $response->assertDontSee('Product C');
+        $response->assertSee('今日预计收益');
+        $response->assertSee('累计收益');
+        $response->assertSee('订单数量');
+        $response->assertSee('自动质押');
+        $response->assertSee('限购');
+        $response->assertSee('份');
+        $response->assertSee('限额(USDT)');
+        $response->assertSee('收益率');
+        $response->assertSee('周期');
+        $response->assertSee('1,000-10,000');
+        $response->assertSee('1.83-2.01%');
+        $response->assertSee('2天');
+        $response->assertSee('立即购买');
+        $response->assertSee('/images/products/symbols/symbol-04.png');
     }
 
     public function test_guest_can_view_product_detail_and_is_prompted_to_login_for_purchase(): void
     {
         $product = Product::query()->create([
-            'name' => 'Product A',
-            'code' => 'PA',
+            'name' => 'Mobile AMM',
+            'code' => 'MAMM',
             'unit_price' => 1000,
             'is_active' => true,
+            'purchase_limit' => 2,
+            'limit_min_usdt' => 1000,
+            'limit_max_usdt' => 10000,
+            'rate_min_percent' => 1.15,
+            'rate_max_percent' => 2.22,
+            'cycle_days' => 2,
+            'description' => '这是产品介绍内容',
+            'product_icon_path' => '/images/products/symbols/symbol-01.png',
+            'symbol_icon_paths' => [
+                '/images/products/symbols/symbol-01.png',
+                '/images/products/symbols/symbol-02.png',
+            ],
         ]);
 
         $response = $this->get('/products/'.$product->id);
 
         $response->assertOk();
-        $response->assertSee('每份价格');
-        $response->assertSee('1000.00');
+        $response->assertSee('Mobile AMM');
+        $response->assertSee('限购');
+        $response->assertSee('限额(USDT)');
+        $response->assertSee('1,000-10,000');
+        $response->assertSee('收益率');
+        $response->assertSee('1.15-2.22%');
+        $response->assertSee('周期');
+        $response->assertSee('2天');
+        $response->assertSee('产品介绍');
+        $response->assertSee('这是产品介绍内容');
+        $response->assertSee('/images/products/symbols/symbol-01.png');
         $response->assertSee('去登录');
+    }
+
+    public function test_catalog_falls_back_to_default_symbol_icons_when_product_has_no_symbol_icon_paths(): void
+    {
+        Product::query()->create([
+            'name' => 'Mobile AMM',
+            'code' => 'MAMM',
+            'unit_price' => 2000,
+            'is_active' => true,
+            'sort' => 0,
+            'purchase_limit' => 2,
+            'limit_min_usdt' => 1000,
+            'limit_max_usdt' => 10000,
+            'rate_min_percent' => 1.83,
+            'rate_max_percent' => 2.01,
+            'cycle_days' => 2,
+            'product_icon_path' => '/images/products/symbols/symbol-02.png',
+            'symbol_icon_paths' => null,
+        ]);
+
+        $response = $this->get('/products');
+
+        $response->assertOk();
+        $response->assertSee('/images/products/symbols/symbol-01.png');
+        $response->assertSee('/images/products/symbols/symbol-07.png');
+    }
+
+    public function test_authenticated_user_sees_real_profit_summary_in_catalog(): void
+    {
+        $user = User::factory()->create();
+
+        $product = Product::query()->create([
+            'name' => 'Mobile AMM',
+            'code' => 'MAMM',
+            'unit_price' => 2000,
+            'is_active' => true,
+            'sort' => 0,
+            'purchase_limit' => 2,
+            'limit_min_usdt' => 1000,
+            'limit_max_usdt' => 10000,
+            'rate_min_percent' => 1.83,
+            'rate_max_percent' => 2.01,
+            'cycle_days' => 2,
+        ]);
+
+        $position = Position::query()->create([
+            'user_id' => $user->id,
+            'product_id' => $product->id,
+            'principal' => 3000,
+            'status' => 'open',
+            'opened_at' => now(),
+        ]);
+
+        DailySettlement::query()->create([
+            'user_id' => $user->id,
+            'product_id' => $product->id,
+            'position_id' => $position->id,
+            'settlement_date' => now()->toDateString(),
+            'rate' => 0.02,
+            'profit' => 120.50,
+        ]);
+
+        DailySettlement::query()->create([
+            'user_id' => $user->id,
+            'product_id' => $product->id,
+            'position_id' => $position->id,
+            'settlement_date' => now()->subDay()->toDateString(),
+            'rate' => 0.02,
+            'profit' => 80,
+        ]);
+
+        $response = $this
+            ->actingAs($user)
+            ->get('/products');
+
+        $response->assertOk();
+        $response->assertSee('$120.50');
+        $response->assertSee('$200.50');
+        $response->assertSee('1');
     }
 }

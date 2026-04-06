@@ -20,12 +20,19 @@ class GlobalNavigationTest extends TestCase
             'is_active' => true,
         ]);
 
-        foreach (['/', '/products', '/products/'.$product->id, '/me', '/login', '/register'] as $uri) {
+        foreach (['/', '/products', '/products/'.$product->id, '/me', '/support', '/stream-chat', '/login', '/register'] as $uri) {
             $this->get($uri)
                 ->assertOk()
                 ->assertSee('首页')
                 ->assertSee('产品')
-                ->assertSee('我的');
+                ->assertSee('我的')
+                ->assertSee('客服')
+                ->assertSee('/support')
+                ->assertSee('后台')
+                ->assertSee('/admin')
+                ->assertSee('Stream Chat')
+                ->assertSee('/stream-chat')
+                ->assertDontSee('Stream Agent');
         }
     }
 
@@ -38,6 +45,14 @@ class GlobalNavigationTest extends TestCase
             ->assertOk()
             ->assertSee('首页')
             ->assertSee('产品')
-            ->assertSee('我的');
+            ->assertSee('我的')
+            ->assertSee('客服')
+            ->assertSee('/support')
+            ->assertSee('后台')
+            ->assertSee('/admin')
+            ->assertSee('Stream Chat')
+            ->assertSee('/stream-chat')
+            ->assertSee('Stream Agent')
+            ->assertSee('/stream-chat-agent');
     }
 }

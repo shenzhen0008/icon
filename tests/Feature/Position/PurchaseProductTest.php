@@ -110,4 +110,127 @@ class PurchaseProductTest extends TestCase
 
         $this->assertDatabaseCount('balance_ledgers', 0);
     }
+
+    public function test_purchase_fails_when_user_purchase_count_reaches_product_purchase_limit(): void
+    {
+        $user = User::factory()->create([
+            'balance' => 20000,
+        ]);
+
+        $product = Product::query()->create([
+            'name' => 'Product C',
+            'code' => 'PC',
+            'unit_price' => 1000,
+            'is_active' => true,
+            'purchase_limit' => 2,
+        ]);
+
+        $this->actingAs($user)->post('/positions/purchase', [
+            'product_id' => $product->id,
+            'shares' => 1,
+        ])->assertRedirect();
+
+        $this->actingAs($user)->post('/positions/purchase', [
+            'product_id' => $product->id,
+            'shares' => 1,
+        ])->assertRedirect();
+
+        $this->from('/products/'.$product->id)->actingAs($user)->post('/positions/purchase', [
+            'product_id' => $product->id,
+            'shares' => 1,
+        ])->assertRedirect('/products/'.$product->id)
+            ->assertSessionHasErrors(['shares']);
+
+        $this->assertDatabaseCount('positions', 2);
+        $this->assertDatabaseCount('balance_ledgers', 2);
+    }
+
+    public function test_purchase_fails_when_total_amount_is_below_product_min_limit(): void
+    {
+        $user = User::factory()->create([
+            'balance' => 10000,
+        ]);
+
+        $product = Product::query()->create([
+            'name' => 'Product D',
+            'code' => 'PD',
+            'unit_price' => 1000,
+            'is_active' => true,
+            'limit_min_usdt' => 3000,
+        ]);
+
+        $this->from('/products/'.$product->id)->actingAs($user)->post('/positions/purchase', [
+            'product_id' => $product->id,
+            'shares' => 2,
+        ])->assertRedirect('/products/'.$product->id)
+            ->assertSessionHasErrors(['shares']);
+
+        $this->assertDatabaseCount('positions', 0);
+        $this->assertDatabaseCount('balance_ledgers', 0);
+    }
+
+    public function test_purchase_fails_when_user_total_amount_for_product_exceeds_product_max_limit(): void
+    {
+        $user = User::factory()->create([
+            'balance' => 10000,
+        ]);
+
+        $product = Product::query()->create([
+            'name' => 'Product E',
+            'code' => 'PE',
+            'unit_price' => 1000,
+            'is_active' => true,
+            'limit_max_usdt' => 3000,
+        ]);
+
+        $this->actingAs($user)->post('/positions/purchase', [
+            'product_id' => $product->id,
+            'shares' => 2,
+        ])->assertRedirect();
+
+        $this->from('/products/'.$product->id)->actingAs($user)->post('/positions/purchase', [
+            'product_id' => $product->id,
+            'shares' => 2,
+        ])->assertRedirect('/products/'.$product->id)
+            ->assertSessionHasErrors(['shares']);
+
+        $this->assertDatabaseCount('positions', 1);
+        $this->assertDatabaseCount('balance_ledgers', 1);
+    }
+
+    public function test_user_can_purchase_product_twice_within_purchase_limit_and_max_total_amount(): void
+    {
+        $user = User::factory()->create([
+            'balance' => 20000,
+        ]);
+
+        $product = Product::query()->create([
+            'name' => 'Product F',
+            'code' => 'PF',
+            'unit_price' => 1000,
+            'is_active' => true,
+            'purchase_limit' => 2,
+            'limit_min_usdt' => 1000,
+            'limit_max_usdt' => 10000,
+        ]);
+
+        $this->from('/products/'.$product->id)->actingAs($user)->post('/positions/purchase', [
+            'product_id' => $product->id,
+            'shares' => 1,
+        ])->assertRedirect('/products/'.$product->id);
+
+        $this->from('/products/'.$product->id)->actingAs($user)->post('/positions/purchase', [
+            'product_id' => $product->id,
+            'shares' => 9,
+        ])->assertRedirect('/products/'.$product->id);
+
+        $this->assertDatabaseCount('positions', 2);
+        $this->assertDatabaseCount('balance_ledgers', 2);
+
+        $this->from('/products/'.$product->id)->actingAs($user)->post('/positions/purchase', [
+            'product_id' => $product->id,
+            'shares' => 1,
+        ])->assertRedirect('/products/'.$product->id)
+            ->assertSessionHasErrors(['shares']);
+    }
 }

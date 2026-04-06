@@ -3,6 +3,9 @@
 namespace Tests\Feature\User;
 
 use App\Models\User;
+use App\Modules\Position\Models\Position;
+use App\Modules\Product\Models\Product;
+use App\Modules\Settlement\Models\DailySettlement;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
@@ -59,6 +62,7 @@ class MyCenterPageTest extends TestCase
     {
         $user = User::factory()->create([
             'username' => 'AbC123xYz987QwErT654X',
+            'remark' => '这是管理员备注',
             'password' => bcrypt('password1234'),
         ]);
 
@@ -71,6 +75,112 @@ class MyCenterPageTest extends TestCase
             ->assertSee('正式账号')
             ->assertSee('AbC123xYz987QwErT654X')
             ->assertSee('退出登录')
+            ->assertDontSee('这是管理员备注')
             ->assertDontSee('设置密码并注册');
+    }
+
+    public function test_my_center_shows_redeeming_positions_but_hides_redeemed_positions(): void
+    {
+        $user = User::factory()->create();
+
+        $product = Product::query()->create([
+            'name' => 'Mobile AMM',
+            'code' => 'MAMM',
+            'unit_price' => 1000,
+            'is_active' => true,
+        ]);
+
+        Position::query()->create([
+            'user_id' => $user->id,
+            'product_id' => $product->id,
+            'principal' => 1000,
+            'status' => 'open',
+            'opened_at' => now(),
+        ]);
+
+        Position::query()->create([
+            'user_id' => $user->id,
+            'product_id' => $product->id,
+            'principal' => 2000,
+            'status' => 'redeeming',
+            'opened_at' => now(),
+        ]);
+
+        Position::query()->create([
+            'user_id' => $user->id,
+            'product_id' => $product->id,
+            'principal' => 3000,
+            'status' => 'redeemed',
+            'opened_at' => now(),
+        ]);
+
+        $this->actingAs($user)
+            ->get('/me')
+            ->assertOk()
+            ->assertSee('持有中')
+            ->assertSee('赎回中')
+            ->assertDontSee('已赎回');
+    }
+
+    public function test_my_center_position_card_shows_latest_three_daily_profits(): void
+    {
+        $user = User::factory()->create();
+
+        $product = Product::query()->create([
+            'name' => 'Mobile AMM',
+            'code' => 'MAMM',
+            'unit_price' => 1000,
+            'is_active' => true,
+        ]);
+
+        $position = Position::query()->create([
+            'user_id' => $user->id,
+            'product_id' => $product->id,
+            'principal' => 1000,
+            'status' => 'open',
+            'opened_at' => now(),
+        ]);
+
+        DailySettlement::query()->create([
+            'user_id' => $user->id,
+            'product_id' => $product->id,
+            'position_id' => $position->id,
+            'settlement_date' => '2026-04-01',
+            'rate' => 0.01,
+            'profit' => 10,
+        ]);
+        DailySettlement::query()->create([
+            'user_id' => $user->id,
+            'product_id' => $product->id,
+            'position_id' => $position->id,
+            'settlement_date' => '2026-04-02',
+            'rate' => 0.01,
+            'profit' => 11,
+        ]);
+        DailySettlement::query()->create([
+            'user_id' => $user->id,
+            'product_id' => $product->id,
+            'position_id' => $position->id,
+            'settlement_date' => '2026-04-03',
+            'rate' => 0.01,
+            'profit' => 12,
+        ]);
+        DailySettlement::query()->create([
+            'user_id' => $user->id,
+            'product_id' => $product->id,
+            'position_id' => $position->id,
+            'settlement_date' => '2026-04-04',
+            'rate' => 0.01,
+            'profit' => 13,
+        ]);
+
+        $this->actingAs($user)
+            ->get('/me')
+            ->assertOk()
+            ->assertSee('最近3天收益')
+            ->assertSee('04-04')
+            ->assertSee('04-03')
+            ->assertSee('04-02')
+            ->assertDontSee('04-01');
     }
 }

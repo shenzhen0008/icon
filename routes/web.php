@@ -8,7 +8,15 @@ use App\Modules\Product\Http\Controllers\ProductDetailController;
 use App\Modules\Product\Http\Controllers\PublicProductCatalogController;
 use App\Modules\User\Http\Controllers\HomeController;
 use App\Modules\User\Http\Controllers\MyCenterController;
+use App\Modules\Position\Http\Controllers\PositionOrderPageController;
 use App\Modules\Position\Http\Controllers\PurchasePositionController;
+use App\Modules\Redemption\Http\Controllers\SubmitPositionRedemptionRequestController;
+use App\Modules\Support\Http\Controllers\SupportPageController;
+use App\Modules\Support\Http\Controllers\StreamChatAgentPageController;
+use App\Modules\Support\Http\Controllers\StreamChatAgentTokenController;
+use App\Modules\Support\Http\Controllers\StreamChatGuestTokenController;
+use App\Modules\Support\Http\Controllers\StreamChatNotifyTokenController;
+use App\Modules\Support\Http\Controllers\StreamChatPageController;
 use App\Modules\User\Http\Controllers\SensitivePageController;
 use Illuminate\Support\Facades\Route;
 
@@ -17,6 +25,10 @@ Route::get('/exchange-metrics', ExchangeMetricsFeedController::class);
 Route::get('/products', PublicProductCatalogController::class);
 Route::get('/products/{product}', ProductDetailController::class);
 Route::get('/me', MyCenterController::class);
+Route::get('/support', SupportPageController::class);
+Route::get('/stream-chat', StreamChatPageController::class);
+Route::post('/stream-chat/guest-token', StreamChatGuestTokenController::class);
+Route::get('/stream-chat/notify-token', StreamChatNotifyTokenController::class);
 
 Route::middleware('guest')->group(function (): void {
     Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
@@ -29,6 +41,10 @@ Route::middleware('guest')->group(function (): void {
 Route::middleware('auth')->group(function (): void {
     Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
     Route::post('/positions/purchase', PurchasePositionController::class);
+    Route::get('/me/positions/{position}', PositionOrderPageController::class);
+    Route::post('/me/positions/{position}/redemption-requests', SubmitPositionRedemptionRequestController::class);
+    Route::get('/stream-chat-agent', StreamChatAgentPageController::class);
+    Route::post('/stream-chat-agent/token', StreamChatAgentTokenController::class);
 
     Route::get('/confirm-password', [ConfirmablePasswordController::class, 'show'])
         ->name('password.confirm');

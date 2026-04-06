@@ -24,9 +24,25 @@ class MyCenterController extends Controller
             $positions = Position::query()
                 ->with('product:id,name')
                 ->where('user_id', $user->id)
-                ->where('status', 'open')
+                ->whereIn('status', ['open', 'redeeming'])
                 ->latest('id')
                 ->get();
+
+            $recentProfitRowsByPosition = DailySettlement::query()
+                ->whereIn('position_id', $positions->pluck('id'))
+                ->orderByDesc('settlement_date')
+                ->orderByDesc('id')
+                ->get()
+                ->groupBy('position_id')
+                ->map(fn ($rows): array => $rows
+                    ->take(3)
+                    ->map(fn (DailySettlement $settlement): array => [
+                        'date' => $settlement->settlement_date?->format('m-d') ?? '--',
+                        'profit' => number_format((float) $settlement->profit, 2, '.', ''),
+                    ])
+                    ->values()
+                    ->all())
+                ->all();
 
             $todayProfit = (float) DailySettlement::query()
                 ->where('user_id', $user->id)
@@ -52,9 +68,11 @@ class MyCenterController extends Controller
                     'balance' => number_format((float) $user->balance, 2, '.', ''),
                 ],
                 'positions' => $positions->map(fn (Position $position): array => [
+                    'id' => $position->id,
                     'name' => $position->product?->name ?? '--',
                     'principal' => number_format((float) $position->principal, 2, '.', ''),
                     'status' => $position->status,
+                    'recent_profits' => $recentProfitRowsByPosition[$position->id] ?? [],
                 ])->all(),
             ]);
         }

@@ -5,28 +5,105 @@ namespace App\Modules\Settlement\Services;
 use App\Models\User;
 use App\Modules\Balance\Models\BalanceLedger;
 use App\Modules\Position\Models\Position;
+use App\Modules\Product\Models\Product;
 use App\Modules\Product\Models\ProductDailyReturn;
 use App\Modules\Settlement\Models\DailySettlement;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 
 class DailySettlementService
 {
     public function settleByProductAndDate(int $productId, string $date): void
     {
-        $dailyReturn = ProductDailyReturn::query()
-            ->where('product_id', $productId)
-            ->whereDate('return_date', $date)
+        $product = Product::query()
+            ->whereKey($productId)
             ->firstOrFail();
 
+        $dailyReturn = $this->resolveOrCreateDailyReturn($product, $date);
+
+        $this->settleOpenPositions($product->id, (float) $dailyReturn->rate, $date);
+    }
+
+    public function settleByProductCodeAndDate(string $productCode, string $date): void
+    {
+        $product = Product::query()
+            ->where('code', $productCode)
+            ->firstOrFail();
+
+        $dailyReturn = $this->resolveOrCreateDailyReturn($product, $date);
+
+        $this->settleOpenPositions($product->id, (float) $dailyReturn->rate, $date);
+    }
+
+    public function settleAllProductsByDate(string $date): void
+    {
+        Position::query()
+            ->where('status', 'open')
+            ->select('product_id')
+            ->distinct()
+            ->pluck('product_id')
+            ->each(function (int $productId) use ($date): void {
+                $this->settleByProductAndDate($productId, $date);
+            });
+    }
+
+    private function settleOpenPositions(int $productId, float $rate, string $date): void
+    {
         Position::query()
             ->where('product_id', $productId)
             ->where('status', 'open')
             ->orderBy('id')
-            ->chunkById(200, function ($positions) use ($dailyReturn, $date): void {
+            ->chunkById(200, function ($positions) use ($rate, $date): void {
                 foreach ($positions as $position) {
-                    $this->settleOnePosition($position, (float) $dailyReturn->rate, $date);
+                    $this->settleOnePosition($position, $rate, $date);
                 }
             });
+    }
+
+    private function resolveOrCreateDailyReturn(Product $product, string $date): ProductDailyReturn
+    {
+        $existing = ProductDailyReturn::query()
+            ->where('product_id', $product->id)
+            ->whereDate('return_date', $date)
+            ->first();
+
+        if ($existing !== null) {
+            return $existing;
+        }
+
+        if ($product->rate_min_percent === null || $product->rate_max_percent === null) {
+            throw ValidationException::withMessages([
+                'product_code' => '产品收益率区间未配置，无法自动结算。',
+            ]);
+        }
+
+        $minRate = (int) round(((float) $product->rate_min_percent / 100) * 10000);
+        $maxRate = (int) round(((float) $product->rate_max_percent / 100) * 10000);
+
+        if ($maxRate < $minRate) {
+            throw ValidationException::withMessages([
+                'product_code' => '产品收益率区间配置错误，最小值不能大于最大值。',
+            ]);
+        }
+
+        $hashSource = $product->code . '|' . $date . '|' . (config('app.key') ?? 'icon-market');
+        $seed = abs((int) crc32($hashSource));
+        $rateAsInt = $minRate + ($seed % max(1, ($maxRate - $minRate + 1)));
+        $rate = $rateAsInt / 10000;
+
+        try {
+            return ProductDailyReturn::query()->create([
+                'product_id' => $product->id,
+                'return_date' => $date,
+                'rate' => $rate,
+            ]);
+        } catch (QueryException) {
+            return ProductDailyReturn::query()
+                ->where('product_id', $product->id)
+                ->whereDate('return_date', $date)
+                ->firstOrFail();
+        }
     }
 
     private function settleOnePosition(Position $position, float $rate, string $date): void

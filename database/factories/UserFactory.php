@@ -20,9 +20,9 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'username' => strtoupper(fake()->bothify('??##??##??##??##??###')),
-            'name' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
+            'username' => strtoupper($this->faker->bothify('??##??##??##??##??###')),
+            'name' => $this->faker->name(),
+            'email' => $this->faker->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
