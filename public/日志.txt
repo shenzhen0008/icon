@@ -1,88 +1,184 @@
-root@iZ7xv3im0r3fy60q5cb1rlZ:~# # 进入项目目录
+root@iZ7xv3im0r3fy60q5cb1rlZ:/www/wwwroot/bitcon.yunqueapp.com# cd /www/wwwroot/bitcon.yunqueapp.com
+root@iZ7xv3im0r3fy60q5cb1rlZ:/www/wwwroot/bitcon.yunqueapp.com# tail -f storage/logs/laravel.log
+#1 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Container/Container.php(936): Illuminate\\Container\\Container->build()
+#2 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(1078): Illuminate\\Container\\Container->resolve()
+#3 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Container/Container.php(864): Illuminate\\Foundation\\Application->resolve()
+#4 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(1058): Illuminate\\Container\\Container->make()
+#5 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(257): Illuminate\\Foundation\\Application->make()
+#6 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(215): Illuminate\\Foundation\\Http\\Kernel->terminateMiddleware()
+#7 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(1222): Illuminate\\Foundation\\Http\\Kernel->terminate()
+#8 /www/wwwroot/bitcon.yunqueapp.com/public/index.php(20): Illuminate\\Foundation\\Application->handleRequest()
+#9 {main}
+"} 
+
+
+
+
+[2026-04-07 10:22:26] local.ERROR: Target class [App\Providers\Filament\DisableBladeIconComponents] does not exist. {"userId":8,"exception":"[object] (Illuminate\\Contracts\\Container\\BindingResolutionException(code: 0): Target class [App\\Providers\\Filament\\DisableBladeIconComponents] does not exist. at /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Container/Container.php:1127)
+[stacktrace]
+#0 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Container/Container.php(936): Illuminate\\Container\\Container->build()
+#1 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(1078): Illuminate\\Container\\Container->resolve()
+#2 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Container/Container.php(864): Illuminate\\Foundation\\Application->resolve()
+#3 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(1058): Illuminate\\Container\\Container->make()
+#4 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(208): Illuminate\\Foundation\\Application->make()
+#5 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Routing/Middleware/SubstituteBindings.php(52): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#6 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\\Routing\\Middleware\\SubstituteBindings->handle()
+#7 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/PreventRequestForgery.php(104): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#8 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\\Foundation\\Http\\Middleware\\PreventRequestForgery->handle()
+#9 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/View/Middleware/ShareErrorsFromSession.php(48): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#10 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\\View\\Middleware\\ShareErrorsFromSession->handle()
+#11 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Session/Middleware/StartSession.php(120): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#12 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Session/Middleware/StartSession.php(63): Illuminate\\Session\\Middleware\\StartSession->handleStatefulRequest()
+#13 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\\Session\\Middleware\\StartSession->handle()
+#14 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Cookie/Middleware/AddQueuedCookiesToResponse.php(36): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#15 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\\Cookie\\Middleware\\AddQueuedCookiesToResponse->handle()
+#16 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Cookie/Middleware/EncryptCookies.php(74): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#17 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\\Cookie\\Middleware\\EncryptCookies->handle()
+#18 /www/wwwroot/bitcon.yunqueapp.com/vendor/filament/filament/src/Http/Middleware/SetUpPanel.php(19): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#19 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Filament\\Http\\Middleware\\SetUpPanel->handle()
+#20 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(137): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#21 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Routing/Router.php(821): Illuminate\\Pipeline\\Pipeline->then()
+#22 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Routing/Router.php(800): Illuminate\\Routing\\Router->runRouteWithinStack()
+#23 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Routing/Router.php(764): Illuminate\\Routing\\Router->runRoute()
+#24 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Routing/Router.php(753): Illuminate\\Routing\\Router->dispatchToRoute()
+#25 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(200): Illuminate\\Routing\\Router->dispatch()
+#26 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate\\Foundation\\Http\\Kernel->Illuminate\\Foundation\\Http\\{closure}()
+#27 /www/wwwroot/bitcon.yunqueapp.com/vendor/livewire/livewire/src/Features/SupportDisablingBackButtonCache/DisableBackButtonCacheMiddleware.php(19): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#28 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Livewire\\Features\\SupportDisablingBackButtonCache\\DisableBackButtonCacheMiddleware->handle()
+#29 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#30 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ConvertEmptyStringsToNull.php(31): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle()
+#31 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull->handle()
+#32 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#33 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TrimStrings.php(51): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle()
+#34 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\\Foundation\\Http\\Middleware\\TrimStrings->handle()
+#35 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Http/Middleware/ValidatePostSize.php(27): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#36 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\\Http\\Middleware\\ValidatePostSize->handle()
+#37 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/PreventRequestsDuringMaintenance.php(109): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#38 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance->handle()
+#39 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Http/Middleware/HandleCors.php(61): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#40 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\\Http\\Middleware\\HandleCors->handle()
+#41 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Http/Middleware/TrustProxies.php(58): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#42 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\\Http\\Middleware\\TrustProxies->handle()
+#43 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/InvokeDeferredCallbacks.php(22): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#44 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\\Foundation\\Http\\Middleware\\InvokeDeferredCallbacks->handle()
+#45 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Http/Middleware/ValidatePathEncoding.php(28): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#46 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\\Http\\Middleware\\ValidatePathEncoding->handle()
+#47 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(137): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#48 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(175): Illuminate\\Pipeline\\Pipeline->then()
+#49 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(144): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter()
+#50 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(1220): Illuminate\\Foundation\\Http\\Kernel->handle()
+#51 /www/wwwroot/bitcon.yunqueapp.com/public/index.php(20): Illuminate\\Foundation\\Application->handleRequest()
+#52 {main}
+
+[previous exception] [object] (ReflectionException(code: -1): Class \"App\\Providers\\Filament\\DisableBladeIconComponents\" does not exist at /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Container/Container.php:1125)
+[stacktrace]
+#0 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Container/Container.php(1125): ReflectionClass->__construct()
+#1 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Container/Container.php(936): Illuminate\\Container\\Container->build()
+#2 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(1078): Illuminate\\Container\\Container->resolve()
+#3 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Container/Container.php(864): Illuminate\\Foundation\\Application->resolve()
+#4 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(1058): Illuminate\\Container\\Container->make()
+#5 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(208): Illuminate\\Foundation\\Application->make()
+#6 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Routing/Middleware/SubstituteBindings.php(52): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#7 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\\Routing\\Middleware\\SubstituteBindings->handle()
+#8 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/PreventRequestForgery.php(104): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#9 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\\Foundation\\Http\\Middleware\\PreventRequestForgery->handle()
+#10 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/View/Middleware/ShareErrorsFromSession.php(48): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#11 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\\View\\Middleware\\ShareErrorsFromSession->handle()
+#12 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Session/Middleware/StartSession.php(120): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#13 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Session/Middleware/StartSession.php(63): Illuminate\\Session\\Middleware\\StartSession->handleStatefulRequest()
+#14 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\\Session\\Middleware\\StartSession->handle()
+#15 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Cookie/Middleware/AddQueuedCookiesToResponse.php(36): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#16 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\\Cookie\\Middleware\\AddQueuedCookiesToResponse->handle()
+#17 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Cookie/Middleware/EncryptCookies.php(74): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#18 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\\Cookie\\Middleware\\EncryptCookies->handle()
+#19 /www/wwwroot/bitcon.yunqueapp.com/vendor/filament/filament/src/Http/Middleware/SetUpPanel.php(19): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#20 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Filament\\Http\\Middleware\\SetUpPanel->handle()
+#21 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(137): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#22 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Routing/Router.php(821): Illuminate\\Pipeline\\Pipeline->then()
+#23 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Routing/Router.php(800): Illuminate\\Routing\\Router->runRouteWithinStack()
+#24 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Routing/Router.php(764): Illuminate\\Routing\\Router->runRoute()
+#25 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Routing/Router.php(753): Illuminate\\Routing\\Router->dispatchToRoute()
+#26 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(200): Illuminate\\Routing\\Router->dispatch()
+#27 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(180): Illuminate\\Foundation\\Http\\Kernel->Illuminate\\Foundation\\Http\\{closure}()
+#28 /www/wwwroot/bitcon.yunqueapp.com/vendor/livewire/livewire/src/Features/SupportDisablingBackButtonCache/DisableBackButtonCacheMiddleware.php(19): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#29 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Livewire\\Features\\SupportDisablingBackButtonCache\\DisableBackButtonCacheMiddleware->handle()
+#30 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#31 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/ConvertEmptyStringsToNull.php(31): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle()
+#32 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull->handle()
+#33 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TransformsRequest.php(21): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#34 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/TrimStrings.php(51): Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest->handle()
+#35 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\\Foundation\\Http\\Middleware\\TrimStrings->handle()
+#36 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Http/Middleware/ValidatePostSize.php(27): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#37 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\\Http\\Middleware\\ValidatePostSize->handle()
+#38 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/PreventRequestsDuringMaintenance.php(109): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#39 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance->handle()
+#40 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Http/Middleware/HandleCors.php(61): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#41 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\\Http\\Middleware\\HandleCors->handle()
+#42 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Http/Middleware/TrustProxies.php(58): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#43 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\\Http\\Middleware\\TrustProxies->handle()
+#44 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Foundation/Http/Middleware/InvokeDeferredCallbacks.php(22): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#45 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\\Foundation\\Http\\Middleware\\InvokeDeferredCallbacks->handle()
+#46 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Http/Middleware/ValidatePathEncoding.php(28): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#47 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(219): Illuminate\\Http\\Middleware\\ValidatePathEncoding->handle()
+#48 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(137): Illuminate\\Pipeline\\Pipeline->Illuminate\\Pipeline\\{closure}()
+#49 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(175): Illuminate\\Pipeline\\Pipeline->then()
+#50 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(144): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter()
+#51 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(1220): Illuminate\\Foundation\\Http\\Kernel->handle()
+#52 /www/wwwroot/bitcon.yunqueapp.com/public/index.php(20): Illuminate\\Foundation\\Application->handleRequest()
+#53 {main}
+"} 
+[2026-04-07 10:22:26] local.ERROR: Target class [App\Providers\Filament\DisableBladeIconComponents] does not exist. {"userId":8,"exception":"[object] (Illuminate\\Contracts\\Container\\BindingResolutionException(code: 0): Target class [App\\Providers\\Filament\\DisableBladeIconComponents] does not exist. at /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Container/Container.php:1127)
+[stacktrace]
+#0 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Container/Container.php(936): Illuminate\\Container\\Container->build()
+#1 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(1078): Illuminate\\Container\\Container->resolve()
+#2 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Container/Container.php(864): Illuminate\\Foundation\\Application->resolve()
+#3 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(1058): Illuminate\\Container\\Container->make()
+#4 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(257): Illuminate\\Foundation\\Application->make()
+#5 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(215): Illuminate\\Foundation\\Http\\Kernel->terminateMiddleware()
+#6 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(1222): Illuminate\\Foundation\\Http\\Kernel->terminate()
+#7 /www/wwwroot/bitcon.yunqueapp.com/public/index.php(20): Illuminate\\Foundation\\Application->handleRequest()
+#8 {main}
+
+[previous exception] [object] (ReflectionException(code: -1): Class \"App\\Providers\\Filament\\DisableBladeIconComponents\" does not exist at /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Container/Container.php:1125)
+[stacktrace]
+#0 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Container/Container.php(1125): ReflectionClass->__construct()
+#1 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Container/Container.php(936): Illuminate\\Container\\Container->build()
+#2 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(1078): Illuminate\\Container\\Container->resolve()
+#3 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Container/Container.php(864): Illuminate\\Foundation\\Application->resolve()
+#4 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(1058): Illuminate\\Container\\Container->make()
+#5 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(257): Illuminate\\Foundation\\Application->make()
+#6 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(215): Illuminate\\Foundation\\Http\\Kernel->terminateMiddleware()
+#7 /www/wwwroot/bitcon.yunqueapp.com/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(1222): Illuminate\\Foundation\\Http\\Kernel->terminate()
+#8 /www/wwwroot/bitcon.yunqueapp.com/public/index.php(20): Illuminate\\Foundation\\Application->handleRequest()
+#9 {main}
+"} 
+
+
+
+@iZ7xv3im0r3fy60q5cb1rlZ:~# # 查看PHP 8.3的错误日志
+root@iZ7xv3im0r3fy60q5cb1rlZ:~# tail -f /www/server/php/83/log/php_errors.log
+tail: cannot open '/www/server/php/83/log/php_errors.log' for reading: No such file or directory
+tail: no files remaining
+root@iZ7xv3im0r3fy60q5cb1rlZ:~# # 或查看nginx/apache错误日志
+root@iZ7xv3im0r3fy60q5cb1rlZ:~# tail -f /www/server/panel/vhost/error.log
+tail: cannot open '/www/server/panel/vhost/error.log' for reading: No such file or directory
+tail: no files remaining
 root@iZ7xv3im0r3fy60q5cb1rlZ:~# cd /www/wwwroot/bitcon.yunqueapp.com
-root@iZ7xv3im0r3fy60q5cb1rlZ:/www/wwwroot/bitcon.yunqueapp.com# 
-root@iZ7xv3im0r3fy60q5cb1rlZ:/www/wwwroot/bitcon.yunqueapp.com# # 拉取最新代码
-root@iZ7xv3im0r3fy60q5cb1rlZ:/www/wwwroot/bitcon.yunqueapp.com# git pull origin main
-remote: Enumerating objects: 76, done.
-remote: Counting objects: 100% (76/76), done.
-remote: Compressing objects: 100% (27/27), done.
-remote: Total 49 (delta 22), reused 46 (delta 19), pack-reused 0 (from 0)
-Unpacking objects: 100% (49/49), 213.95 KiB | 826.00 KiB/s, done.
-From https://github.com/shenzhen0008/icon
- * branch            main       -> FETCH_HEAD
-   4ed4183..17a72d7  main       -> origin/main
-Updating 4ed4183..17a72d7
-error: Your local changes to the following files would be overwritten by merge:
-        public/build/manifest.json
-Please commit your changes or stash them before you merge.
-error: The following untracked working tree files would be overwritten by merge:
-        public/build.zip
-Please move or remove them before you merge.
-Aborting
-root@iZ7xv3im0r3fy60q5cb1rlZ:/www/wwwroot/bitcon.yunqueapp.com# 
-root@iZ7xv3im0r3fy60q5cb1rlZ:/www/wwwroot/bitcon.yunqueapp.com# # 清理缓存
-root@iZ7xv3im0r3fy60q5cb1rlZ:/www/wwwroot/bitcon.yunqueapp.com# php artisan config:clear
-PHP Fatal error:  Uncaught RuntimeException: Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.3.0". You are running 7.4.33. in /www/wwwroot/bitcon.yunqueapp.com/vendor/composer/platform_check.php:22
-Stack trace:
-#0 /www/wwwroot/bitcon.yunqueapp.com/vendor/composer/autoload_real.php(25): require()
-#1 /www/wwwroot/bitcon.yunqueapp.com/vendor/autoload.php(22): ComposerAutoloaderInitf7725d76bfeae4c69c234bd24cc5fb6a::getLoader()
-#2 /www/wwwroot/bitcon.yunqueapp.com/artisan(10): require('/www/wwwroot/bi...')
-#3 {main}
-  thrown in /www/wwwroot/bitcon.yunqueapp.com/vendor/composer/platform_check.php on line 22
+root@iZ7xv3im0r3fy60q5cb1rlZ:/www/wwwroot/bitcon.yunqueapp.com# /www/server/php/83/bin/php artisan config:cache
 
-Fatal error: Uncaught RuntimeException: Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.3.0". You are running 7.4.33. in /www/wwwroot/bitcon.yunqueapp.com/vendor/composer/platform_check.php:22
-Stack trace:
-#0 /www/wwwroot/bitcon.yunqueapp.com/vendor/composer/autoload_real.php(25): require()
-#1 /www/wwwroot/bitcon.yunqueapp.com/vendor/autoload.php(22): ComposerAutoloaderInitf7725d76bfeae4c69c234bd24cc5fb6a::getLoader()
-#2 /www/wwwroot/bitcon.yunqueapp.com/artisan(10): require('/www/wwwroot/bi...')
-#3 {main}
-  thrown in /www/wwwroot/bitcon.yunqueapp.com/vendor/composer/platform_check.php on line 22
-root@iZ7xv3im0r3fy60q5cb1rlZ:/www/wwwroot/bitcon.yunqueapp.com# php artisan view:clear
-PHP Fatal error:  Uncaught RuntimeException: Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.3.0". You are running 7.4.33. in /www/wwwroot/bitcon.yunqueapp.com/vendor/composer/platform_check.php:22
-Stack trace:
-#0 /www/wwwroot/bitcon.yunqueapp.com/vendor/composer/autoload_real.php(25): require()
-#1 /www/wwwroot/bitcon.yunqueapp.com/vendor/autoload.php(22): ComposerAutoloaderInitf7725d76bfeae4c69c234bd24cc5fb6a::getLoader()
-#2 /www/wwwroot/bitcon.yunqueapp.com/artisan(10): require('/www/wwwroot/bi...')
-#3 {main}
-  thrown in /www/wwwroot/bitcon.yunqueapp.com/vendor/composer/platform_check.php on line 22
+   INFO  Configuration cached successfully.  
 
-Fatal error: Uncaught RuntimeException: Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.3.0". You are running 7.4.33. in /www/wwwroot/bitcon.yunqueapp.com/vendor/composer/platform_check.php:22
-Stack trace:
-#0 /www/wwwroot/bitcon.yunqueapp.com/vendor/composer/autoload_real.php(25): require()
-#1 /www/wwwroot/bitcon.yunqueapp.com/vendor/autoload.php(22): ComposerAutoloaderInitf7725d76bfeae4c69c234bd24cc5fb6a::getLoader()
-#2 /www/wwwroot/bitcon.yunqueapp.com/artisan(10): require('/www/wwwroot/bi...')
-#3 {main}
-  thrown in /www/wwwroot/bitcon.yunqueapp.com/vendor/composer/platform_check.php on line 22
-root@iZ7xv3im0r3fy60q5cb1rlZ:/www/wwwroot/bitcon.yunqueapp.com# php artisan route:clear
-PHP Fatal error:  Uncaught RuntimeException: Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.3.0". You are running 7.4.33. in /www/wwwroot/bitcon.yunqueapp.com/vendor/composer/platform_check.php:22
-Stack trace:
-#0 /www/wwwroot/bitcon.yunqueapp.com/vendor/composer/autoload_real.php(25): require()
-#1 /www/wwwroot/bitcon.yunqueapp.com/vendor/autoload.php(22): ComposerAutoloaderInitf7725d76bfeae4c69c234bd24cc5fb6a::getLoader()
-#2 /www/wwwroot/bitcon.yunqueapp.com/artisan(10): require('/www/wwwroot/bi...')
-#3 {main}
-  thrown in /www/wwwroot/bitcon.yunqueapp.com/vendor/composer/platform_check.php on line 22
+root@iZ7xv3im0r3fy60q5cb1rlZ:/www/wwwroot/bitcon.yunqueapp.com# # 确保.env中的APP_DEBUG=true
+root@iZ7xv3im0r3fy60q5cb1rlZ:/www/wwwroot/bitcon.yunqueapp.com# cd /www/wwwroot/bitcon.yunqueapp.com
+root@iZ7xv3im0r3fy60q5cb1rlZ:/www/wwwroot/bitcon.yunqueapp.com# /www/server/php/83/bin/php artisan tinker
+Psy Shell v0.12.22 (PHP 8.3.27 — cli) by Justin Hileman
+New PHP manual is available (latest: 3.0.5). Update with `doc --update-manual`
 
-Fatal error: Uncaught RuntimeException: Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.3.0". You are running 7.4.33. in /www/wwwroot/bitcon.yunqueapp.com/vendor/composer/platform_check.php:22
-Stack trace:
-#0 /www/wwwroot/bitcon.yunqueapp.com/vendor/composer/autoload_real.php(25): require()
-#1 /www/wwwroot/bitcon.yunqueapp.com/vendor/autoload.php(22): ComposerAutoloaderInitf7725d76bfeae4c69c234bd24cc5fb6a::getLoader()
-#2 /www/wwwroot/bitcon.yunqueapp.com/artisan(10): require('/www/wwwroot/bi...')
-#3 {main}
-  thrown in /www/wwwroot/bitcon.yunqueapp.com/vendor/composer/platform_check.php on line 22
-root@iZ7xv3im0r3fy60q5cb1rlZ:/www/wwwroot/bitcon.yunqueapp.com# php artisan cache:clear
-PHP Fatal error:  Uncaught RuntimeException: Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.3.0". You are running 7.4.33. in /www/wwwroot/bitcon.yunqueapp.com/vendor/composer/platform_check.php:22
-Stack trace:
-#0 /www/wwwroot/bitcon.yunqueapp.com/vendor/composer/autoload_real.php(25): require()
-#1 /www/wwwroot/bitcon.yunqueapp.com/vendor/autoload.php(22): ComposerAutoloaderInitf7725d76bfeae4c69c234bd24cc5fb6a::getLoader()
-#2 /www/wwwroot/bitcon.yunqueapp.com/artisan(10): require('/www/wwwroot/bi...')
-#3 {main}
-  thrown in /www/wwwroot/bitcon.yunqueapp.com/vendor/composer/platform_check.php on line 22
+> 
 
-Fatal error: Uncaught RuntimeException: Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.3.0". You are running 7.4.33. in /www/wwwroot/bitcon.yunqueapp.com/vendor/composer/platform_check.php:22
-Stack trace:
-#0 /www/wwwroot/bitcon.yunqueapp.com/vendor/composer/autoload_real.php(25): require()
-#1 /www/wwwroot/bitcon.yunqueapp.com/vendor/autoload.php(22): ComposerAutoloaderInitf7725d76bfeae4c69c234bd24cc5fb6a::getLoader()
-#2 /www/wwwroot/bitcon.yunqueapp.com/artisan(10): require('/www/wwwroot/bi...')
-#3 {main}
-  thrown in /www/wwwroot/bitcon.yunqueapp.com/vendor/composer/platform_check.php on line 22
+
+
+root@iZ7xv3im0r3fy60q5cb1rlZ:~# cd /www/wwwroot/bitcon.yunqueapp.com
+root@iZ7xv3im0r3fy60q5cb1rlZ:/www/wwwroot/bitcon.yunqueapp.com# chown -R www:www storage bootstrap/cache
+root@iZ7xv3im0r3fy60q5cb1rlZ:/www/wwwroot/bitcon.yunqueapp.com# chmod -R 775 storage bootstrap/cache
 root@iZ7xv3im0r3fy60q5cb1rlZ:/www/wwwroot/bitcon.yunqueapp.com# 
