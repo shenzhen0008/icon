@@ -2,10 +2,6 @@
 
 namespace App\Providers\Filament;
 
-use Filament\Http\Middleware\Authenticate;
-use Filament\Http\Middleware\AuthenticateSession;
-use Filament\Http\Middleware\DisableBladeIconComponents;
-use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
@@ -21,8 +17,6 @@ class AdminPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
-        $isLocal = app()->environment(['local', 'testing']);
-
         $middleware = [
             EncryptCookies::class,
             AddQueuedCookiesToResponse::class,
@@ -33,10 +27,6 @@ class AdminPanelProvider extends PanelProvider
             DisableBladeIconComponents::class,
             DispatchServingFilamentEvent::class,
         ];
-
-        if (! $isLocal) {
-            $middleware[] = AuthenticateSession::class;
-        }
 
         $panel = $panel
             ->default()
@@ -55,14 +45,6 @@ class AdminPanelProvider extends PanelProvider
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets([])
             ->middleware($middleware);
-
-        if (! $isLocal) {
-            $panel
-                ->login()
-                ->authMiddleware([
-                    Authenticate::class,
-                ]);
-        }
 
         return $panel;
     }
