@@ -32,8 +32,12 @@
               <p class="font-medium text-slate-100">{{ $position['name'] }}</p>
               <span class="rounded-full border border-white/15 px-2 py-0.5 text-xs text-slate-300" data-status-key="{{ $position['status'] }}">{{ $statusLabels[$position['status']] ?? $position['status'] }}</span>
             </div>
-            <p class="mt-2 text-sm text-slate-300">本金：{{ $position['principal'] }}</p>
           </button>
+
+          <div class="mt-2 flex items-center justify-between gap-3">
+            <p class="text-sm text-slate-300">本金：{{ $position['principal'] }}</p>
+            <a href="/me/positions/{{ $position['id'] }}" class="text-sm text-cyan-300 underline underline-offset-4">查看订单</a>
+          </div>
 
           <div id="{{ $panelId }}" class="mt-3 hidden border-t border-white/10 pt-3">
             <div class="rounded-lg border border-white/10 bg-slate-900/50 p-3">
@@ -50,9 +54,6 @@
                   @endforeach
                 @endif
               </div>
-            </div>
-            <div class="mt-3 text-right">
-              <a href="/me/positions/{{ $position['id'] }}" class="text-sm text-cyan-300 underline underline-offset-4">查看订单</a>
             </div>
           </div>
         </li>

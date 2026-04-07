@@ -14,7 +14,7 @@
 
   <x-nav.top />
 
-  <main class="mx-auto w-full max-w-6xl px-6 pb-28 pt-8 md:pb-12">
+  <main class="mx-auto w-full max-w-7xl px-2 pb-28 pt-8 md:pb-12">
     <x-home.hero :summary="$summary" />
     <x-home.stats :summary="$summary" />
     <x-home.exchange-metrics :metrics="$metrics" />

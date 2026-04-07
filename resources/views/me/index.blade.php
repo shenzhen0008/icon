@@ -9,12 +9,7 @@
 <body class="min-h-screen bg-slate-950 text-slate-100">
   <x-nav.top />
 
-  <main class="mx-auto w-full max-w-5xl px-6 pb-28 pt-8 md:pb-10">
-    <div class="mb-6">
-      <h1 class="text-2xl font-semibold">我的</h1>
-      <p class="mt-1 text-sm text-slate-400">这里展示账号信息、收益状态与持仓产品。</p>
-    </div>
-
+  <main class="mx-auto w-full max-w-7xl px-2 pb-28 pt-8 md:pb-10">
     <div class="grid gap-5 lg:grid-cols-3">
       <div class="order-last lg:order-none lg:col-span-1">
         <x-me.account-panel :profile="$profile" :is-guest="$isGuest" />

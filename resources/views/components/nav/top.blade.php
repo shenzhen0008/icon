@@ -6,6 +6,7 @@
       <a href="/" class="{{ request()->is('/') ? 'text-cyan-200' : 'text-slate-300 hover:text-cyan-200' }}">首页</a>
       <a href="/admin" class="{{ request()->is('admin') || request()->is('admin/*') ? 'text-cyan-200' : 'text-slate-300 hover:text-cyan-200' }}">后台</a>
       <a href="/products" class="{{ request()->is('products') || request()->is('products/*') ? 'text-cyan-200' : 'text-slate-300 hover:text-cyan-200' }}">产品</a>
+      <a href="/recharge" class="{{ request()->is('recharge') ? 'text-cyan-200' : 'text-slate-300 hover:text-cyan-200' }}">充值</a>
       <a href="/me" class="{{ request()->is('me') ? 'text-cyan-200' : 'text-slate-300 hover:text-cyan-200' }}">我的</a>
       <a href="/support" class="{{ request()->is('support') ? 'text-cyan-200' : 'text-slate-300 hover:text-cyan-200' }}">客服</a>
       <a href="/stream-chat" class="{{ request()->is('stream-chat') ? 'text-cyan-200' : 'text-slate-300 hover:text-cyan-200' }}">

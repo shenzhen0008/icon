@@ -3,7 +3,10 @@
 
   <div class="mt-4 rounded-xl border border-white/10 bg-slate-950/60 p-4">
     <p class="text-xs text-slate-400">{{ $profile['label'] }}</p>
-    <p class="mt-1 break-all text-lg font-semibold tracking-wider text-cyan-200">{{ $profile['id'] }}</p>
+    <div class="mt-1 flex items-start justify-between gap-3">
+      <p class="min-w-0 break-all text-lg font-semibold tracking-wider text-cyan-200">{{ $profile['id'] }}</p>
+      <button type="button" id="copy-account-button" data-copy-text="{{ $profile['id'] }}" class="shrink-0 rounded-2xl border border-white/15 bg-white/5 px-3 py-1.5 text-sm font-semibold text-slate-100 transition hover:bg-white/10">复制账号</button>
+    </div>
   </div>
 
   <dl class="mt-4 grid grid-cols-3 gap-3 text-sm">
@@ -24,4 +27,19 @@
       </div>
     @endif
   </dl>
+
+  <script>
+    document.getElementById('copy-account-button')?.addEventListener('click', function () {
+      const copyText = this.dataset.copyText;
+      if (!copyText) return;
+
+      navigator.clipboard.writeText(copyText).then(() => {
+        const originalText = this.textContent;
+        this.textContent = '已复制';
+        setTimeout(() => {
+          this.textContent = originalText;
+        }, 1500);
+      });
+    });
+  </script>
 </section>

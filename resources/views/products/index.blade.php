@@ -9,7 +9,7 @@
 <body class="min-h-screen bg-slate-950 text-slate-100">
   <x-nav.top />
 
-  <main class="mx-auto w-full max-w-3xl px-4 pb-28 pt-6 md:pb-10 md:pt-8">
+  <main class="mx-auto w-full max-w-7xl px-4 pb-28 pt-6 md:pb-10 md:pt-8">
     <section class="mb-6 overflow-hidden rounded-3xl border border-cyan-400/20 bg-gradient-to-br from-cyan-500/10 to-blue-500/10 p-5 shadow-xl shadow-cyan-500/10">
       <div class="space-y-4 rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-5 text-slate-200">
         <div class="flex items-center justify-between">
@@ -37,9 +37,9 @@
           当前暂无上架产品。
         </section>
       @else
-        <section class="space-y-4">
+        <section class="space-y-3">
           @foreach ($products as $product)
-            <article class="overflow-hidden rounded-3xl border border-cyan-400/20 bg-gradient-to-br from-cyan-500/10 to-blue-500/10 p-4 text-slate-100 shadow-xl shadow-cyan-500/10">
+            <article class="overflow-hidden rounded-2xl border border-cyan-400/20 bg-gradient-to-br from-cyan-500/10 to-blue-500/10 p-3 text-slate-100 shadow-xl shadow-cyan-500/10">
               <div class="flex items-center justify-between gap-3">
                 <div class="flex min-w-0 items-center gap-3">
                   <div class="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-full border border-cyan-300/30 bg-slate-900/70">
@@ -50,7 +50,7 @@
                     @endif
                   </div>
                   <div class="min-w-0">
-                    <h3 class="truncate text-3xl font-semibold leading-none text-white">{{ $product['name'] }}</h3>
+                    <h3 class="truncate text-2xl font-semibold leading-none text-white">{{ $product['name'] }}</h3>
                   </div>
                 </div>
                 @if ($product['purchase_limit'] !== null)
@@ -58,24 +58,24 @@
                 @endif
               </div>
 
-              <div class="mt-4 h-px bg-white/10"></div>
+              <div class="mt-3 h-px bg-white/10"></div>
 
-              <div class="mt-4 flex items-start gap-2">
+              <div class="mt-3 flex items-start gap-2">
                 <div class="shrink-0 text-left pr-2">
                   <p class="text-xs text-slate-400">限额(USDT)</p>
-                  <p class="mt-1 whitespace-nowrap text-xl font-medium text-slate-100">{{ $product['limit_range'] }}</p>
+                  <p class="mt-1 whitespace-nowrap text-lg font-medium text-slate-100">{{ $product['limit_range'] }}</p>
                 </div>
                 <div class="min-w-0 flex-1 text-center">
                   <p class="text-xs text-slate-400">收益率</p>
-                  <p class="mt-1 whitespace-nowrap text-xl font-medium text-slate-100">{{ $product['rate_range'] }}</p>
+                  <p class="mt-1 whitespace-nowrap text-lg font-medium text-slate-100">{{ $product['rate_range'] }}</p>
                 </div>
                 <div class="min-w-0 flex-1 text-right">
                   <p class="text-xs text-slate-400">周期</p>
-                  <p class="mt-1 whitespace-nowrap text-xl font-medium text-slate-100">{{ $product['cycle_label'] }}</p>
+                  <p class="mt-1 whitespace-nowrap text-lg font-medium text-slate-100">{{ $product['cycle_label'] }}</p>
                 </div>
               </div>
 
-              <div class="mt-4 rounded-2xl border border-white/10 bg-slate-900/70 px-3 py-3">
+              <div class="mt-3 rounded-2xl border border-white/10 bg-slate-900/70 px-3 py-2">
                 <div class="flex flex-nowrap items-center gap-2 overflow-x-auto overflow-y-hidden whitespace-nowrap pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                   @foreach ($product['symbol_icon_paths'] as $iconPath)
                     <span class="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full border border-white/10 bg-slate-800/70">
@@ -85,7 +85,7 @@
                 </div>
               </div>
 
-              <a href="/products/{{ $product['id'] }}" class="mt-4 inline-flex w-full items-center justify-center rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-500 px-4 py-3 text-2xl font-medium text-slate-950 shadow-lg shadow-cyan-500/30 transition hover:from-cyan-400 hover:to-blue-400">
+              <a href="/products/{{ $product['id'] }}" class="mt-3 inline-flex w-full items-center justify-center rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-500 px-4 py-2 text-xl font-medium text-slate-950 shadow-lg shadow-cyan-500/30 transition hover:from-cyan-400 hover:to-blue-400">
                 立即购买
               </a>
             </article>
