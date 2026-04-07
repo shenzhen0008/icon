@@ -25,6 +25,7 @@ fi
 $PHP_BIN /usr/bin/composer install --no-dev --optimize-autoloader
 $PHP_BIN artisan key:generate --force
 $PHP_BIN artisan migrate --force
+$PHP_BIN artisan livewire:publish --assets
 
 chown -R www:www storage bootstrap/cache
 chmod -R 775 storage bootstrap/cache

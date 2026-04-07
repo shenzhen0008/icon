@@ -1,6 +1,6 @@
 {
   "resources/css/app.css": {
-    "file": "assets/app-DPl5O_qK.css",
+    "file": "assets/app--VNXLJuJ.css",
     "name": "app",
     "names": [
       "app.css"
@@ -21,7 +21,7 @@
     "isEntry": true
   },
   "vendor/filament/filament/dist/theme.css": {
-    "file": "assets/theme-BOBoHN_e.css",
+    "file": "assets/theme-CmftCAKC.css",
     "name": "theme",
     "names": [
       "theme.css"
