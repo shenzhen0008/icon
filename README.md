@@ -22,6 +22,7 @@ bash scripts/deploy.sh
 1. 复制 `.env.production.example` 为 `.env`（若 `.env` 不存在，脚本也会自动复制）。
 2. 在 `.env` 中填写真实生产数据库配置（不要使用占位密码）。
 3. Web 站点根目录指向 `public`，并启用 Laravel 伪静态规则。
+4. **项目要求 PHP >= 8.3.0**，服务器如有多个PHP版本，请确保使用 `/www/server/php/83/bin/php` 路径。
 
 脚本会自动执行：`composer install --no-dev`、`key:generate`、数据库迁移、`storage/bootstrap` 权限修复，以及 Laravel 缓存重建（`optimize:clear` / `optimize`）。
 
@@ -41,6 +42,10 @@ cp -n .env.production.example .env
 # 编辑 .env，填写真实 DB 配置
 bash scripts/deploy.sh
 ```
+
+**部署故障排除：**
+- 如遇到 "PHP Fatal error: Uncaught RuntimeException: Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.3.0""，请使用 `/www/server/php/83/bin/php` 替代 `php` 命令
+- 如遇到 "Your local changes to the following files would be overwritten by merge"，请先备份或清理 `public/build/` 目录下的文件，然后重新执行 `git pull`
 
 ## About Laravel
 
