@@ -45,6 +45,23 @@
     themeColorMeta.setAttribute('content', color);
   };
 
+  const forceThemeColorRefreshIfNeeded = () => {
+    const ua = window.navigator.userAgent || '';
+    const isIOS = /iPhone|iPad|iPod/i.test(ua);
+    if (!isIOS) return;
+
+    const refreshFlag = 'theme_color_refresh_pending';
+    if (sessionStorage.getItem(refreshFlag) === '1') {
+      sessionStorage.removeItem(refreshFlag);
+      return;
+    }
+
+    sessionStorage.setItem(refreshFlag, '1');
+    window.setTimeout(() => {
+      window.location.reload();
+    }, 60);
+  };
+
   const persistTheme = (theme) => {
     localStorage.setItem('theme', theme);
     document.cookie = `theme=${theme}; path=/; max-age=31536000; SameSite=Lax`;
@@ -58,6 +75,7 @@
     html.setAttribute('data-theme', newTheme);
     persistTheme(newTheme);
     updateBrowserThemeColor(newTheme);
+    forceThemeColorRefreshIfNeeded();
   });
 
   // 页面加载时恢复主题

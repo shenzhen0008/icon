@@ -63,6 +63,8 @@ class GlobalNavigationTest extends TestCase
             ->assertSee('id="top-nav"', false)
             ->assertSee('id="mobile-nav"', false)
             ->assertSee('updateBrowserThemeColor', false)
+            ->assertSee('forceThemeColorRefreshIfNeeded', false)
+            ->assertSee('location.reload()', false)
             ->assertSee('meta[name="theme-color"]', false)
             ->assertSee('border-theme')
             ->assertSee('bg-theme-secondary/90')
