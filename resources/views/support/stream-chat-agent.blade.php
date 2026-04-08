@@ -100,7 +100,13 @@
 
       let activeChannel = null;
       let listSubscription = null;
+      let messageSubscription = null;
+      let notificationSubscription = null;
+      let recoveredSubscription = null;
       let activeSubscription = null;
+      let refreshPromise = null;
+      const unreadByChannel = new Map();
+      let hideChannel = async () => {};
       const isMobile = () => window.matchMedia('(max-width: 767px)').matches;
 
       const setStatus = (message) => {
@@ -130,6 +136,24 @@
 
       const resetMessages = () => {
         if (messagesEl) messagesEl.innerHTML = '';
+      };
+
+      const isIncomingCustomerMessage = (message) => {
+        const senderId = message?.user?.id || '';
+        if (!senderId || senderId === currentUserId) return false;
+        return !senderId.startsWith('support_agent_') && !senderId.startsWith('agent_');
+      };
+
+      const isIncomingCustomerSenderId = (senderId) => {
+        if (!senderId || senderId === currentUserId) return false;
+        return !senderId.startsWith('support_agent_') && !senderId.startsWith('agent_');
+      };
+
+      const normalizeChannelId = (rawChannelId) => {
+        if (!rawChannelId) return '';
+        if (!rawChannelId.includes(':')) return rawChannelId;
+        const parts = rawChannelId.split(':');
+        return parts[parts.length - 1] || '';
       };
 
       const buildMessageNode = (message) => {
@@ -258,9 +282,14 @@
       const updateActiveChannelHighlight = () => {
         document.querySelectorAll('[data-agent-channel-item]').forEach((node) => {
           const isActive = node.dataset.channelId === activeChannel?.id;
+          const unreadCount = Number(unreadByChannel.get(node.dataset.channelId) ?? 0);
+          const unreadDot = node.querySelector('[data-agent-unread-dot]');
           node.classList.toggle('bg-[rgb(var(--theme-primary))]/20', isActive);
           node.classList.toggle('text-[rgb(var(--theme-primary))]', isActive);
           node.classList.toggle('text-theme', !isActive);
+          if (unreadDot) {
+            unreadDot.classList.toggle('hidden', isActive || unreadCount <= 0);
+          }
         });
       };
 
@@ -274,6 +303,8 @@
         activeChannel = channel;
         await channel.watch();
         renderHistory(channel.state.messages);
+        unreadByChannel.set(channel.id, 0);
+        channel.markRead?.().catch(() => {});
         updateActiveChannelHighlight();
 
         setStatus(`当前会话：${channel.data?.name || channel.id}`);
@@ -321,7 +352,37 @@
           btn.dataset.agentChannelItem = '1';
           btn.dataset.channelId = channel.id;
           btn.className = 'block w-full border-b border-theme px-4 py-3 text-left text-sm text-theme transition hover:bg-theme-secondary';
-          btn.textContent = channel.data?.name || channel.id;
+
+          const row = document.createElement('span');
+          row.className = 'flex items-center justify-between gap-2';
+
+          const name = document.createElement('span');
+          name.className = 'truncate';
+          name.textContent = channel.data?.name || channel.id;
+          row.appendChild(name);
+
+          const unreadDot = document.createElement('span');
+          unreadDot.dataset.agentUnreadDot = '1';
+          unreadDot.className = 'hidden h-2.5 w-2.5 shrink-0 rounded-full bg-[rgb(var(--theme-rose))]';
+          row.appendChild(unreadDot);
+
+          const hideButton = document.createElement('button');
+          hideButton.type = 'button';
+          hideButton.setAttribute('data-agent-hide-channel', '1');
+          hideButton.className = 'ml-2 inline-flex shrink-0 items-center rounded border border-theme px-1.5 py-0.5 text-[10px] text-theme-secondary hover:border-[rgb(var(--theme-rose))] hover:text-[rgb(var(--theme-rose))]';
+          hideButton.textContent = '删除';
+          hideButton.addEventListener('click', async (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+
+            const confirmed = window.confirm(`确定从客服列表移除「${channel.data?.name || channel.id}」吗？后续该访客再次发消息会自动出现。`);
+            if (!confirmed) return;
+
+            await hideChannel(channel);
+          });
+          row.appendChild(hideButton);
+
+          btn.appendChild(row);
           btn.addEventListener('click', () => {
             activateChannel(channel);
           });
@@ -330,8 +391,25 @@
       };
 
       const renderChannelList = async (channels) => {
+        const channelIds = new Set(channels.map((channel) => channel.id));
+        Array.from(unreadByChannel.keys()).forEach((channelId) => {
+          if (!channelIds.has(channelId)) {
+            unreadByChannel.delete(channelId);
+          }
+        });
+
+        channels.forEach((channel) => {
+          const unreadCount = channel.countUnread?.();
+          if (Number.isFinite(unreadCount)) {
+            unreadByChannel.set(channel.id, Math.max(0, Number(unreadCount)));
+          } else if (!unreadByChannel.has(channel.id)) {
+            unreadByChannel.set(channel.id, 0);
+          }
+        });
+
         renderChannelButtons(listEl, channels);
         renderChannelButtons(drawerListEl, channels);
+        updateActiveChannelHighlight();
 
         if (channels.length === 0) {
           resetMessages();
@@ -391,30 +469,87 @@
         await client.connectUser(payload.user, payload.token);
         currentUserId = payload.user.id;
 
-        const channels = await client.queryChannels(
-          {
-            type: payload.channel.type,
-            members: { $in: [payload.user.id] },
-          },
-          { last_message_at: -1 },
-          { watch: true, state: true, limit: 30 }
-        );
+        const refreshChannels = async () => {
+          if (refreshPromise) return refreshPromise;
+          refreshPromise = (async () => {
+            const channels = await client.queryChannels(
+              {
+                type: payload.channel.type,
+                members: { $in: [payload.user.id] },
+              },
+              { last_message_at: -1 },
+              { watch: true, state: true, limit: 30 }
+            );
 
-        await renderChannelList(channels);
+            await renderChannelList(channels);
+          })();
+
+          try {
+            await refreshPromise;
+          } finally {
+            refreshPromise = null;
+          }
+        };
+
+        hideChannel = async (channel) => {
+          if (!channel) return;
+          try {
+            await channel.hide();
+          } catch (_) {
+            setStatus('删除会话失败，请稍后重试。');
+            return;
+          }
+
+          unreadByChannel.delete(channel.id);
+          if (activeChannel?.id === channel.id) {
+            activeChannel = null;
+            resetMessages();
+            showListView();
+            setStatus('会话已从列表移除。');
+          }
+
+          await refreshChannels();
+        };
+
+        await refreshChannels();
 
         if (listSubscription) {
           listSubscription.unsubscribe();
         }
-        listSubscription = client.on('notification.added_to_channel', async () => {
-          const refreshed = await client.queryChannels(
-            {
-              type: payload.channel.type,
-              members: { $in: [payload.user.id] },
-            },
-            { last_message_at: -1 },
-            { watch: true, state: true, limit: 30 }
-          );
-          await renderChannelList(refreshed);
+        listSubscription = client.on('notification.added_to_channel', () => {
+          refreshChannels().catch(() => {});
+        });
+
+        if (notificationSubscription) {
+          notificationSubscription.unsubscribe();
+        }
+        notificationSubscription = client.on('notification.message_new', (event) => {
+          const channelId = normalizeChannelId(event.channel?.id || event.channel_id || event.cid || '');
+          const senderId = event.message?.user?.id || event.user?.id || '';
+          if (channelId && activeChannel?.id !== channelId && isIncomingCustomerSenderId(senderId)) {
+            beep().catch(() => {});
+          }
+          refreshChannels().catch(() => {});
+        });
+
+        if (recoveredSubscription) {
+          recoveredSubscription.unsubscribe();
+        }
+        recoveredSubscription = client.on('connection.recovered', () => {
+          refreshChannels().catch(() => {});
+        });
+
+        if (messageSubscription) {
+          messageSubscription.unsubscribe();
+        }
+        messageSubscription = client.on('message.new', (event) => {
+          const channelId = normalizeChannelId(event.channel?.id || event.channel_id || event.cid || '');
+          if (!channelId || !isIncomingCustomerMessage(event.message)) return;
+          if (activeChannel?.id === channelId) return;
+
+          const current = Number(unreadByChannel.get(channelId) ?? 0);
+          unreadByChannel.set(channelId, current + 1);
+          updateActiveChannelHighlight();
         });
 
         formEl?.addEventListener('submit', async (event) => {
