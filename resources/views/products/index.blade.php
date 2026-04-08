@@ -39,22 +39,22 @@
       @else
         <section class="space-y-3">
           @foreach ($products as $product)
-            <article class="overflow-hidden rounded-2xl border border-theme bg-theme-card p-2.5 text-theme shadow-xl shadow-[rgb(var(--theme-primary))]/10">
+            <article class="overflow-hidden rounded-2xl border border-theme bg-theme-card p-2 text-theme shadow-xl shadow-[rgb(var(--theme-primary))]/10">
               <div class="flex items-center justify-between gap-3">
-                <div class="flex min-w-0 items-center gap-2.5">
-                  <div class="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full border border-theme bg-theme-secondary/80 text-theme">
+                <div class="flex min-w-0 items-center gap-2">
+                  <div class="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-full border border-theme bg-theme-secondary/80 text-theme">
                     @if (!empty($product['product_icon_path']))
-                      <img src="{{ $product['product_icon_path'] }}" alt="" class="h-6.5 w-6.5 object-contain">
+                      <img src="{{ $product['product_icon_path'] }}" alt="" class="h-6 w-6 object-contain">
                     @else
                       <span class="text-[10px] font-semibold uppercase text-theme">{{ strtoupper(substr($product['code'], 0, 2)) }}</span>
                     @endif
                   </div>
                   <div class="min-w-0">
-                    <h3 class="truncate text-xl font-semibold leading-none text-theme">{{ $product['name'] }}</h3>
+                    <h3 class="truncate text-lg font-semibold leading-none text-theme">{{ $product['name'] }}</h3>
                   </div>
                 </div>
                 @if ($product['purchase_limit'] !== null)
-                  <p class="shrink-0 text-xs text-[rgb(var(--theme-primary))]">限购 <span class="font-semibold text-[rgb(var(--theme-accent))]">{{ $product['purchase_limit'] }}</span> 份</p>
+                  <p class="shrink-0 text-[11px] text-[rgb(var(--theme-primary))]">限购 <span class="font-semibold text-[rgb(var(--theme-accent))]">{{ $product['purchase_limit'] }}</span> 份</p>
                 @endif
               </div>
 
@@ -63,29 +63,29 @@
               <div class="mt-3 flex items-start gap-2">
                 <div class="shrink-0 text-left pr-2">
                   <p class="text-xs text-theme-secondary">限额(USDT)</p>
-                  <p class="mt-1 whitespace-nowrap text-base font-medium text-theme">{{ $product['limit_range'] }}</p>
+                  <p class="mt-1 whitespace-nowrap text-sm font-medium text-theme">{{ $product['limit_range'] }}</p>
                 </div>
                 <div class="min-w-0 flex-1 text-center">
                   <p class="text-xs text-theme-secondary">收益率</p>
-                  <p class="mt-1 whitespace-nowrap text-base font-medium text-theme">{{ $product['rate_range'] }}</p>
+                  <p class="mt-1 whitespace-nowrap text-sm font-medium text-theme">{{ $product['rate_range'] }}</p>
                 </div>
                 <div class="min-w-0 flex-1 text-right">
                   <p class="text-xs text-theme-secondary">周期</p>
-                  <p class="mt-1 whitespace-nowrap text-base font-medium text-theme">{{ $product['cycle_label'] }}</p>
+                  <p class="mt-1 whitespace-nowrap text-sm font-medium text-theme">{{ $product['cycle_label'] }}</p>
                 </div>
               </div>
 
-              <div class="mt-3 rounded-2xl border border-theme bg-theme-secondary/20 px-2.5 py-1.5">
+              <div class="mt-2.5 rounded-2xl border border-theme bg-theme-secondary/20 px-2 py-1">
                 <div class="flex flex-nowrap items-center gap-2 overflow-x-auto overflow-y-hidden whitespace-nowrap pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                   @foreach ($product['symbol_icon_paths'] as $iconPath)
-                    <span class="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-full border border-theme bg-theme-card">
-                      <img src="{{ $iconPath }}" alt="" class="h-6 w-6 object-contain">
+                    <span class="flex h-7 w-7 shrink-0 items-center justify-center overflow-hidden rounded-full border border-theme bg-theme-card">
+                      <img src="{{ $iconPath }}" alt="" class="h-5 w-5 object-contain">
                     </span>
                   @endforeach
                 </div>
               </div>
 
-              <a href="/products/{{ $product['id'] }}" class="mt-3 inline-flex w-full items-center justify-center rounded-2xl bg-[rgb(var(--theme-primary))] px-3 py-1.5 text-base font-semibold text-theme-on-primary shadow-lg shadow-[rgb(var(--theme-primary))]/20 transition hover:bg-[rgb(var(--theme-primary))]/90">
+              <a href="/products/{{ $product['id'] }}" class="mt-2.5 inline-flex w-full items-center justify-center rounded-2xl bg-[rgb(var(--theme-primary))] px-3 py-1 text-sm font-semibold text-theme-on-primary shadow-lg shadow-[rgb(var(--theme-primary))]/20 transition hover:bg-[rgb(var(--theme-primary))]/90">
                 立即购买
               </a>
             </article>

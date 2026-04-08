@@ -120,8 +120,8 @@ class PublicProductCatalogTest extends TestCase
         $response->assertSee('这是产品介绍内容');
         $response->assertSee('/images/products/symbols/symbol-01.png');
         $response->assertSee('去登录');
-        $response->assertSee('text-theme-secondary');
-        $response->assertDontSee('text-white');
+        $response->assertSee('text-theme-on-primary');
+        $response->assertDontSee('text-theme-secondary">去登录');
     }
 
     public function test_authenticated_user_sees_theme_text_class_on_purchase_button_in_product_detail(): void
