@@ -4,7 +4,6 @@
 
     <nav class="hidden items-center gap-6 text-sm md:flex">
       <a href="/" class="{{ request()->is('/') ? 'text-[rgb(var(--theme-primary))]' : 'text-theme-secondary hover:text-[rgb(var(--theme-primary))]' }}">首页</a>
-      <a href="/admin" class="{{ request()->is('admin') || request()->is('admin/*') ? 'text-[rgb(var(--theme-primary))]' : 'text-theme-secondary hover:text-[rgb(var(--theme-primary))]' }}">后台</a>
       <a href="/products" class="{{ request()->is('products') || request()->is('products/*') ? 'text-[rgb(var(--theme-primary))]' : 'text-theme-secondary hover:text-[rgb(var(--theme-primary))]' }}">产品</a>
       <a href="/recharge" class="{{ request()->is('recharge') ? 'text-[rgb(var(--theme-primary))]' : 'text-theme-secondary hover:text-[rgb(var(--theme-primary))]' }}">充值</a>
       <a href="/me" class="{{ request()->is('me') ? 'text-[rgb(var(--theme-primary))]' : 'text-theme-secondary hover:text-[rgb(var(--theme-primary))]' }}">我的</a>
@@ -30,22 +29,6 @@
 </header>
 
 <script>
-  const updateBrowserThemeColor = (theme) => {
-    const colorMap = {
-      tech: '#0f172a',
-      business: '#f3f4f6',
-    };
-    const color = colorMap[theme] ?? colorMap.tech;
-    let themeColorMeta = document.getElementById('app-theme-color') || document.querySelector('meta[name="theme-color"]');
-    if (!themeColorMeta) {
-      themeColorMeta = document.createElement('meta');
-      themeColorMeta.id = 'app-theme-color';
-      themeColorMeta.setAttribute('name', 'theme-color');
-      document.head.appendChild(themeColorMeta);
-    }
-    themeColorMeta.setAttribute('content', color);
-  };
-
   // 主题切换功能
   document.getElementById('theme-toggle').addEventListener('click', () => {
     const html = document.documentElement;
@@ -53,21 +36,11 @@
     const newTheme = currentTheme === 'tech' ? 'business' : 'tech';
     html.setAttribute('data-theme', newTheme);
     localStorage.setItem('theme', newTheme);
-    updateBrowserThemeColor(newTheme);
   });
 
   // 页面加载时恢复主题
   const savedTheme = localStorage.getItem('theme') || 'tech';
   document.documentElement.setAttribute('data-theme', savedTheme);
-  updateBrowserThemeColor(savedTheme);
-
-  new MutationObserver(() => {
-    const theme = document.documentElement.getAttribute('data-theme') || 'tech';
-    updateBrowserThemeColor(theme);
-  }).observe(document.documentElement, {
-    attributes: true,
-    attributeFilter: ['data-theme'],
-  });
 
   // 同步顶部/底部导航与可视区域数据，避免移动端键盘弹起后布局溢出。
   const syncLayoutInsets = () => {

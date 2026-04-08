@@ -1,10 +1,7 @@
 <nav id="mobile-nav" class="fixed inset-x-0 bottom-0 z-30 border-t border-theme bg-theme-secondary/90 backdrop-blur md:hidden">
-  <div class="mx-auto grid max-w-6xl grid-cols-7">
+  <div class="mx-auto grid max-w-6xl grid-cols-6">
     <a href="/" class="flex flex-col items-center gap-1 px-2 py-3 text-xs {{ request()->is('/') ? 'text-[rgb(var(--theme-primary))]' : 'text-theme-secondary hover:text-[rgb(var(--theme-primary))]' }}">
       <span>首页</span>
-    </a>
-    <a href="/admin" class="flex flex-col items-center gap-1 px-2 py-3 text-xs {{ request()->is('admin') || request()->is('admin/*') ? 'text-[rgb(var(--theme-primary))]' : 'text-theme-secondary hover:text-[rgb(var(--theme-primary))]' }}">
-      <span>后台</span>
     </a>
     <a href="/products" class="flex flex-col items-center gap-1 px-2 py-3 text-xs {{ request()->is('products') || request()->is('products/*') ? 'text-[rgb(var(--theme-primary))]' : 'text-theme-secondary hover:text-[rgb(var(--theme-primary))]' }}">
       <span>产品</span>
