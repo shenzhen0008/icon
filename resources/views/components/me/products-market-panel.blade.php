@@ -18,7 +18,7 @@
           @if ($isGuest)
             <p class="mt-3 text-sm text-theme-secondary">登录后可进入详情页购买。</p>
           @else
-            <a href="/products/{{ $product['id'] }}" class="mt-3 inline-flex rounded-lg px-4 py-2 text-sm font-semibold {{ $product['is_eligible'] ? 'bg-[rgb(var(--theme-primary))] text-theme-secondary' : 'bg-theme-secondary text-theme' }}">
+            <a href="/products/{{ $product['id'] }}" class="mt-3 inline-flex h-[clamp(1.9rem,7vw,2.2rem)] w-[clamp(8rem,45vw,10rem)] items-center justify-center rounded-lg px-[clamp(0.6rem,2.5vw,0.9rem)] text-[clamp(0.7rem,3vw,0.9rem)] font-semibold {{ $product['is_eligible'] ? 'bg-[rgb(var(--theme-primary))] text-theme-on-primary' : 'bg-theme-secondary text-theme' }}">
               {{ $product['is_eligible'] ? '前往详情购买' : '前往详情查看' }}
             </a>
           @endif

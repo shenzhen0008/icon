@@ -71,7 +71,7 @@
 
       @if ($isGuest)
         <p class="mt-3 text-sm text-theme-secondary">请先登录后购买。</p>
-        <a href="/login" class="mt-4 flex h-[clamp(2rem,8vw,2.35rem)] w-[clamp(8.5rem,50vw,11.5rem)] items-center justify-center rounded-lg bg-[rgb(var(--theme-primary))] px-[clamp(0.75rem,3vw,1rem)] text-[clamp(0.75rem,3.2vw,0.95rem)] font-semibold text-theme-on-primary mx-auto">去登录</a>
+        <a href="/login" class="mt-4 flex h-[clamp(1.9rem,7vw,2.2rem)] w-[clamp(7rem,42vw,9rem)] items-center justify-center rounded-lg bg-[rgb(var(--theme-primary))] px-[clamp(0.6rem,2.5vw,0.9rem)] text-[clamp(0.7rem,3vw,0.9rem)] font-semibold text-theme-on-primary mx-auto">去登录</a>
       @else
         <p class="mt-3 text-sm text-theme-secondary">当前余额：{{ $balance }}</p>
 
@@ -82,7 +82,7 @@
             <label class="mb-1 block text-xs text-theme-secondary">购买份数</label>
             <input type="number" min="1" step="1" name="shares" class="w-full rounded-lg border border-theme bg-theme-secondary px-3 py-2 text-sm text-theme" required>
           </div>
-          <button class="h-[clamp(2rem,8vw,2.35rem)] w-[clamp(8.5rem,50vw,11.5rem)] self-center rounded-lg bg-[rgb(var(--theme-primary))] px-[clamp(0.75rem,3vw,1rem)] text-[clamp(0.75rem,3.2vw,0.95rem)] font-semibold text-theme-on-primary mx-auto sm:w-[clamp(9rem,24vw,12rem)] sm:self-auto sm:mx-0">
+          <button class="h-[clamp(1.9rem,7vw,2.2rem)] w-[clamp(7rem,42vw,9rem)] self-center rounded-lg bg-[rgb(var(--theme-primary))] px-[clamp(0.6rem,2.5vw,0.9rem)] text-[clamp(0.7rem,3vw,0.9rem)] font-semibold text-theme-on-primary mx-auto sm:w-[clamp(7.5rem,20vw,10rem)] sm:self-auto sm:mx-0">
             立即购买
           </button>
         </form>

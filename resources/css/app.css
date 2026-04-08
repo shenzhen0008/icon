@@ -12,6 +12,11 @@
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
 
+/* 全站前台流体字号：基于 rem 的文本/按钮/间距会随屏宽自适应。 */
+html {
+    font-size: clamp(13px, calc(1.8vw + 6px), 16px);
+}
+
 /* 默认主题变量（科技风格） */
 :root {
     --theme-bg: 15 23 42; /* slate-950 */
