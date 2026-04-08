@@ -14,6 +14,8 @@ class SupportPageTest extends TestCase
 
         $this->get('/support')
             ->assertOk()
+            ->assertSee('data-theme="', false)
+            ->assertSee('bg-theme text-theme')
             ->assertSee('客服中心')
             ->assertSee('embed.tawk.to')
             ->assertSee('69d2b6406c34951c3533e334')
@@ -28,6 +30,8 @@ class SupportPageTest extends TestCase
 
         $this->get('/support')
             ->assertOk()
+            ->assertSee('data-theme="', false)
+            ->assertSee('bg-theme text-theme')
             ->assertSee('客服系统暂未配置完成');
     }
 }

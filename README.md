@@ -67,7 +67,33 @@ bash scripts/deploy.sh
 - 在 `.env` 中设置 `APP_THEME=business` 可切换到商务风格。
 - 前端支持实时切换（首页右下角按钮），并保存到浏览器 localStorage。
 
-服务器端更新：
+
+## 推送到 GitHub
+
+开发完成后，可按以下流程推送代码到 `origin/main`：
+
+```bash
+# 1) 查看当前改动
+git status
+
+# 2) （建议）先验证
+php artisan test
+npm run build
+
+# 3) 提交改动
+git add -A
+git commit -m "feat: your change summary"
+
+# 4) 推送到 GitHub
+git push origin main
+```
+
+常见问题：
+
+- 如果提示 `non-fast-forward`，先执行 `git pull --rebase origin main`，解决冲突后再 `git push origin main`。
+- 如果不想提交某些文件，先用 `git restore --staged <file>` 取消暂存，再重新 `commit`。
+
+## 服务器端更新：
 cd /www/wwwroot/bitcon.yunqueapp.com
 
 # 拉取修复代码

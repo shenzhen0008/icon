@@ -13,6 +13,8 @@ class StreamChatTest extends TestCase
 
         $this->get('/stream-chat')
             ->assertOk()
+            ->assertSee('data-theme="', false)
+            ->assertSee('bg-theme text-theme')
             ->assertSee('stream-chat-file')
             ->assertSee('stream-chat-sound-prompt');
     }
