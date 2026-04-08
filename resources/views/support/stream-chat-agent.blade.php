@@ -2,7 +2,7 @@
 <html lang="zh-CN" data-theme="{{ config('themes.active') }}">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <title>Stream Chat Agent | Icon Market</title>
   @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -15,7 +15,7 @@
       <section class="grid overflow-hidden rounded-2xl border border-[rgb(var(--theme-primary))]/20 bg-theme-card shadow-xl shadow-[rgb(var(--theme-primary))]/10 md:grid-cols-[17rem_1fr]">
         <aside id="agent-mobile-list-view" class="md:border-r md:border-theme">
           <div class="border-b border-theme px-4 py-3 text-xs text-theme-secondary">会话列表</div>
-          <div id="agent-channel-list" class="h-[calc(100vh-19rem)] min-h-[360px] overflow-y-auto"></div>
+          <div id="agent-channel-list" class="h-[calc(var(--app-vh,100dvh)-19rem)] min-h-[360px] overflow-y-auto"></div>
         </aside>
         <div id="agent-mobile-chat-view" class="hidden min-h-[420px] flex-col md:flex">
           <div class="flex items-center justify-between border-b border-theme px-4 py-3 text-xs text-theme-secondary md:hidden">
@@ -23,7 +23,7 @@
             <button id="agent-open-channel-drawer" type="button" class="inline-flex items-center gap-1 rounded-lg border border-theme px-2.5 py-1.5 text-xs text-theme-secondary hover:border-[rgb(var(--theme-primary))] hover:text-[rgb(var(--theme-primary))]">切换会话</button>
           </div>
           <div id="agent-status" class="border-b border-theme px-4 py-3 text-xs text-theme-secondary">正在连接客服工作台...</div>
-          <div id="agent-messages" class="h-[calc(100vh-24rem)] min-h-[260px] overflow-y-auto px-4 py-4"></div>
+          <div id="agent-messages" class="h-[calc(var(--app-vh,100dvh)-24rem)] min-h-[260px] overflow-y-auto px-4 py-4"></div>
           <form id="agent-chat-form" class="border-t border-theme p-3">
             <div class="flex min-w-0 items-center gap-2">
               <label for="agent-chat-file" class="inline-flex shrink-0 cursor-pointer items-center whitespace-nowrap rounded-lg border border-theme px-3 py-2 text-xs text-theme-secondary transition hover:border-[rgb(var(--theme-primary))] hover:text-[rgb(var(--theme-primary))]">图片</label>
@@ -33,7 +33,7 @@
                 type="text"
                 maxlength="500"
                 placeholder="输入回复内容..."
-                class="flex-1 min-w-0 rounded-lg border border-theme bg-theme-secondary px-3 py-2 text-sm text-theme placeholder:text-theme-secondary focus:border-[rgb(var(--theme-primary))] focus:outline-none"
+                class="flex-1 min-w-0 rounded-lg border border-theme bg-theme-secondary px-3 py-2 text-base text-theme placeholder:text-theme-secondary focus:border-[rgb(var(--theme-primary))] focus:outline-none md:text-sm"
               >
               <button
                 type="submit"

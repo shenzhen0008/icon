@@ -2,7 +2,7 @@
 <html lang="zh-CN" data-theme="{{ config('themes.active') }}">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <title>Stream Chat | Icon Market</title>
   @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -10,7 +10,10 @@
 <body class="min-h-screen overflow-x-hidden overflow-y-hidden bg-theme text-theme md:overflow-auto">
   <x-nav.top />
 
-  <main class="fixed inset-x-0 top-[var(--top-nav-height,4.25rem)] bottom-[calc(var(--mobile-nav-height,4.25rem)+env(safe-area-inset-bottom))] w-full overflow-hidden md:static md:mx-auto md:w-full md:max-w-6xl md:px-6 md:pb-10 md:pt-8">
+  <main
+    class="fixed inset-x-0 w-full overflow-hidden md:static md:mx-auto md:w-full md:max-w-6xl md:px-6 md:pb-10 md:pt-8"
+    style="top: var(--top-nav-height, 4.25rem); bottom: max(calc(var(--mobile-nav-height, 4.25rem) + env(safe-area-inset-bottom)), var(--chat-keyboard-inset, 0px));"
+  >
     @if ($streamEnabled)
       <section class="flex h-full flex-col overflow-hidden rounded-none border border-[rgb(var(--theme-primary))]/20 bg-theme-card shadow-none md:rounded-2xl md:shadow-xl md:shadow-[rgb(var(--theme-primary))]/10">
         <div id="stream-chat-status" class="border-b border-theme px-4 py-3 text-xs text-theme-secondary">正在连接客服...</div>
@@ -24,7 +27,7 @@
               type="text"
               maxlength="500"
               placeholder="请输入消息..."
-              class="flex-1 min-w-0 rounded-lg border border-theme bg-theme-secondary px-3 py-2 text-sm text-theme placeholder:text-theme-secondary focus:border-[rgb(var(--theme-primary))] focus:outline-none"
+              class="flex-1 min-w-0 rounded-lg border border-theme bg-theme-secondary px-3 py-2 text-base text-theme placeholder:text-theme-secondary focus:border-[rgb(var(--theme-primary))] focus:outline-none md:text-sm"
             >
             <button
               type="submit"

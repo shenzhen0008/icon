@@ -81,4 +81,22 @@ class GlobalNavigationTest extends TestCase
         $response->assertOk();
         $this->assertSame(1, substr_count($response->getContent(), 'const savedTheme'));
     }
+
+    public function test_public_pages_disable_mobile_zoom_via_viewport_meta(): void
+    {
+        $product = Product::query()->create([
+            'name' => 'Product Zoom Guard',
+            'code' => 'PZG',
+            'unit_price' => 1000,
+            'is_active' => true,
+        ]);
+
+        $viewport = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover';
+
+        foreach (['/', '/products', '/products/'.$product->id, '/support', '/stream-chat', '/login', '/register'] as $uri) {
+            $this->get($uri)
+                ->assertOk()
+                ->assertSee($viewport);
+        }
+    }
 }

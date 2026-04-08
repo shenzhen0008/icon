@@ -43,19 +43,28 @@
   const savedTheme = localStorage.getItem('theme') || 'tech';
   document.documentElement.setAttribute('data-theme', savedTheme);
 
-  // 同步顶部/底部导航的实际高度，避免移动端不同浏览器下写死高度导致布局溢出。
+  // 同步顶部/底部导航与可视区域数据，避免移动端键盘弹起后布局溢出。
   const syncLayoutInsets = () => {
     const topNav = document.getElementById('top-nav');
     const mobileNav = document.getElementById('mobile-nav');
+    const visualViewport = window.visualViewport;
     const topHeight = topNav ? `${topNav.offsetHeight}px` : '68px';
     const mobileHeight = mobileNav ? `${mobileNav.offsetHeight}px` : '68px';
+    const viewportHeight = visualViewport ? `${visualViewport.height}px` : `${window.innerHeight}px`;
+    const keyboardInset = visualViewport
+      ? `${Math.max(0, window.innerHeight - visualViewport.height - visualViewport.offsetTop)}px`
+      : '0px';
     document.documentElement.style.setProperty('--top-nav-height', topHeight);
     document.documentElement.style.setProperty('--mobile-nav-height', mobileHeight);
+    document.documentElement.style.setProperty('--app-vh', viewportHeight);
+    document.documentElement.style.setProperty('--chat-keyboard-inset', keyboardInset);
   };
 
   syncLayoutInsets();
   window.addEventListener('load', syncLayoutInsets);
   window.addEventListener('resize', syncLayoutInsets);
+  window.visualViewport?.addEventListener('resize', syncLayoutInsets);
+  window.visualViewport?.addEventListener('scroll', syncLayoutInsets);
 </script>
 
 <script type="module">
