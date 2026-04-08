@@ -13,16 +13,20 @@
   <main class="mx-auto w-full max-w-6xl px-6 pb-28 pt-8 md:pb-10">
     @if ($streamEnabled)
       <section class="grid overflow-hidden rounded-2xl border border-[rgb(var(--theme-primary))]/20 bg-theme-card shadow-xl shadow-[rgb(var(--theme-primary))]/10 md:grid-cols-[17rem_1fr]">
-        <aside class="border-r border-theme">
+        <aside id="agent-mobile-list-view" class="md:border-r md:border-theme">
           <div class="border-b border-theme px-4 py-3 text-xs text-theme-secondary">会话列表</div>
           <div id="agent-channel-list" class="h-[calc(100vh-19rem)] min-h-[360px] overflow-y-auto"></div>
         </aside>
-        <div class="flex min-h-[420px] flex-col">
+        <div id="agent-mobile-chat-view" class="hidden min-h-[420px] flex-col md:flex">
+          <div class="flex items-center justify-between border-b border-theme px-4 py-3 text-xs text-theme-secondary md:hidden">
+            <button id="agent-mobile-back" type="button" class="inline-flex items-center gap-1 rounded-lg border border-theme px-2.5 py-1.5 text-xs text-theme-secondary hover:border-[rgb(var(--theme-primary))] hover:text-[rgb(var(--theme-primary))]">返回列表</button>
+            <button id="agent-open-channel-drawer" type="button" class="inline-flex items-center gap-1 rounded-lg border border-theme px-2.5 py-1.5 text-xs text-theme-secondary hover:border-[rgb(var(--theme-primary))] hover:text-[rgb(var(--theme-primary))]">切换会话</button>
+          </div>
           <div id="agent-status" class="border-b border-theme px-4 py-3 text-xs text-theme-secondary">正在连接客服工作台...</div>
           <div id="agent-messages" class="h-[calc(100vh-24rem)] min-h-[260px] overflow-y-auto px-4 py-4"></div>
           <form id="agent-chat-form" class="border-t border-theme p-3">
             <div class="flex items-center gap-2">
-              <label for="agent-chat-file" class="inline-flex cursor-pointer items-center rounded-lg border border-theme px-3 py-2 text-xs text-theme-secondary transition hover:border-[rgb(var(--theme-primary))] hover:text-[rgb(var(--theme-primary))]">图片</label>
+              <label for="agent-chat-file" class="inline-flex shrink-0 cursor-pointer items-center whitespace-nowrap rounded-lg border border-theme px-3 py-2 text-xs text-theme-secondary transition hover:border-[rgb(var(--theme-primary))] hover:text-[rgb(var(--theme-primary))]">图片</label>
               <input id="agent-chat-file" type="file" accept="image/*" class="hidden">
               <input
                 id="agent-chat-input"
@@ -33,22 +37,33 @@
               >
               <button
                 type="submit"
-                class="rounded-lg bg-[rgb(var(--theme-primary))] px-4 py-2 text-sm font-semibold text-theme-secondary transition hover:bg-[rgb(var(--theme-primary))]/80"
+                class="whitespace-nowrap rounded-lg bg-[rgb(var(--theme-primary))] px-4 py-2 text-sm font-semibold text-theme-secondary transition hover:bg-[rgb(var(--theme-primary))]/80"
               >发送</button>
             </div>
           </form>
         </div>
       </section>
 
-      <aside id="agent-chat-sound-prompt" class="fixed right-3 top-20 z-40 hidden w-56 rounded-xl border border-cyan-400/30 bg-slate-900/95 p-3 shadow-lg shadow-cyan-500/20 md:right-6 md:top-24">
-        <p class="text-xs text-slate-300">开启消息提醒音？收到访客新消息时会播放提示音。</p>
+      <div id="agent-channel-drawer" class="fixed inset-0 z-40 hidden md:hidden">
+        <button id="agent-channel-drawer-mask" type="button" class="absolute inset-0 bg-black/45"></button>
+        <section class="absolute inset-x-0 bottom-0 max-h-[70vh] overflow-hidden rounded-t-2xl border border-theme bg-theme-card shadow-2xl shadow-[rgb(var(--theme-primary))]/20">
+          <div class="flex items-center justify-between border-b border-theme px-4 py-3">
+            <p class="text-sm font-semibold text-theme">切换会话</p>
+            <button id="agent-close-channel-drawer" type="button" class="rounded-lg border border-theme px-2.5 py-1 text-xs text-theme-secondary hover:border-[rgb(var(--theme-primary))] hover:text-[rgb(var(--theme-primary))]">关闭</button>
+          </div>
+          <div id="agent-channel-drawer-list" class="max-h-[55vh] overflow-y-auto"></div>
+        </section>
+      </div>
+
+      <aside id="agent-chat-sound-prompt" class="fixed right-3 top-20 z-40 hidden w-56 rounded-xl border border-[rgb(var(--theme-primary))]/30 bg-theme-card p-3 shadow-lg shadow-[rgb(var(--theme-primary))]/20 md:right-6 md:top-24">
+        <p class="text-xs text-theme-secondary">开启消息提醒音？收到访客新消息时会播放提示音。</p>
         <div class="mt-2 flex items-center justify-end gap-2">
-          <button id="agent-chat-sound-dismiss" type="button" class="rounded-lg border border-white/15 px-2.5 py-1 text-xs text-slate-300 hover:border-white/30">稍后</button>
-          <button id="agent-chat-sound-enable" type="button" class="rounded-lg bg-cyan-400 px-2.5 py-1 text-xs font-semibold text-slate-950 hover:bg-cyan-300">开启</button>
+          <button id="agent-chat-sound-dismiss" type="button" class="rounded-lg border border-theme px-2.5 py-1 text-xs text-theme-secondary hover:border-[rgb(var(--theme-primary))]">稍后</button>
+          <button id="agent-chat-sound-enable" type="button" class="rounded-lg bg-[rgb(var(--theme-primary))] px-2.5 py-1 text-xs font-semibold text-theme-on-primary hover:bg-[rgb(var(--theme-primary))]/80">开启</button>
         </div>
       </aside>
     @else
-      <section class="rounded-2xl border border-dashed border-white/20 bg-slate-900/60 p-8 text-sm text-slate-300">
+      <section class="rounded-2xl border border-dashed border-theme bg-theme-card p-8 text-sm text-theme-secondary">
         Stream Chat 尚未配置完成，请先设置 API Key 和 Secret。
       </section>
     @endif
@@ -63,10 +78,18 @@
       const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content ?? '';
       const statusEl = document.getElementById('agent-status');
       const listEl = document.getElementById('agent-channel-list');
+      const drawerListEl = document.getElementById('agent-channel-drawer-list');
       const messagesEl = document.getElementById('agent-messages');
       const formEl = document.getElementById('agent-chat-form');
       const inputEl = document.getElementById('agent-chat-input');
       const fileEl = document.getElementById('agent-chat-file');
+      const listViewEl = document.getElementById('agent-mobile-list-view');
+      const chatViewEl = document.getElementById('agent-mobile-chat-view');
+      const backButtonEl = document.getElementById('agent-mobile-back');
+      const openDrawerButtonEl = document.getElementById('agent-open-channel-drawer');
+      const drawerEl = document.getElementById('agent-channel-drawer');
+      const drawerMaskEl = document.getElementById('agent-channel-drawer-mask');
+      const closeDrawerButtonEl = document.getElementById('agent-close-channel-drawer');
       const soundPromptEl = document.getElementById('agent-chat-sound-prompt');
       const soundEnableEl = document.getElementById('agent-chat-sound-enable');
       const soundDismissEl = document.getElementById('agent-chat-sound-dismiss');
@@ -78,9 +101,31 @@
       let activeChannel = null;
       let listSubscription = null;
       let activeSubscription = null;
+      const isMobile = () => window.matchMedia('(max-width: 767px)').matches;
 
       const setStatus = (message) => {
         if (statusEl) statusEl.textContent = message;
+      };
+
+      const showListView = () => {
+        if (!isMobile()) return;
+        listViewEl?.classList.remove('hidden');
+        chatViewEl?.classList.add('hidden');
+      };
+
+      const showChatView = () => {
+        if (!isMobile()) return;
+        chatViewEl?.classList.remove('hidden');
+        listViewEl?.classList.add('hidden');
+      };
+
+      const openChannelDrawer = () => {
+        if (!isMobile()) return;
+        drawerEl?.classList.remove('hidden');
+      };
+
+      const closeChannelDrawer = () => {
+        drawerEl?.classList.add('hidden');
       };
 
       const resetMessages = () => {
@@ -97,15 +142,15 @@
         content.className = 'max-w-[80%]';
 
         const sender = document.createElement('div');
-        sender.className = `mb-1 text-xs ${isAgent ? 'text-right text-cyan-200' : 'text-slate-400'}`;
+        sender.className = `mb-1 text-xs ${isAgent ? 'text-right text-[rgb(var(--theme-primary))]' : 'text-theme-secondary'}`;
         sender.textContent = `${displayName}:`;
         content.appendChild(sender);
 
         if (message.text) {
           const bubble = document.createElement('div');
           bubble.className = isAgent
-            ? 'rounded-lg bg-cyan-500/30 px-3 py-2 text-sm text-cyan-100'
-            : 'rounded-lg bg-slate-800/80 px-3 py-2 text-sm text-slate-100';
+            ? 'rounded-lg bg-[rgb(var(--theme-primary))]/20 px-3 py-2 text-sm text-theme'
+            : 'rounded-lg bg-theme-secondary/80 px-3 py-2 text-sm text-theme';
           bubble.textContent = message.text;
           content.appendChild(bubble);
         }
@@ -118,7 +163,7 @@
           const image = document.createElement('img');
           image.src = imageUrl;
           image.alt = attachment?.title || 'uploaded image';
-          image.className = 'mt-2 max-h-64 rounded-lg border border-white/10 object-contain';
+          image.className = 'mt-2 max-h-64 rounded-lg border border-theme object-contain';
           content.appendChild(image);
         });
 
@@ -193,16 +238,16 @@
         content.className = 'max-w-[80%]';
 
         const sender = document.createElement('div');
-        sender.className = 'mb-1 text-right text-xs text-cyan-200';
+        sender.className = 'mb-1 text-right text-xs text-[rgb(var(--theme-primary))]';
         sender.textContent = '我:';
         content.appendChild(sender);
 
         const skeleton = document.createElement('div');
-        skeleton.className = 'h-40 w-40 max-w-full animate-pulse rounded-lg border border-cyan-300/20 bg-cyan-500/10 blur-[1px]';
+        skeleton.className = 'h-40 w-40 max-w-full animate-pulse rounded-lg border border-theme bg-theme-secondary/60 blur-[1px]';
         content.appendChild(skeleton);
 
         const hint = document.createElement('div');
-        hint.className = 'mt-1 text-right text-xs text-cyan-200';
+        hint.className = 'mt-1 text-right text-xs text-theme-secondary';
         hint.textContent = '图片上传中...';
         content.appendChild(hint);
 
@@ -210,7 +255,16 @@
         return wrapper;
       };
 
-      const activateChannel = async (channel, element) => {
+      const updateActiveChannelHighlight = () => {
+        document.querySelectorAll('[data-agent-channel-item]').forEach((node) => {
+          const isActive = node.dataset.channelId === activeChannel?.id;
+          node.classList.toggle('bg-[rgb(var(--theme-primary))]/20', isActive);
+          node.classList.toggle('text-[rgb(var(--theme-primary))]', isActive);
+          node.classList.toggle('text-theme', !isActive);
+        });
+      };
+
+      const activateChannel = async (channel) => {
         if (!channel) return;
         if (activeSubscription) {
           activeSubscription.unsubscribe();
@@ -220,18 +274,11 @@
         activeChannel = channel;
         await channel.watch();
         renderHistory(channel.state.messages);
-
-        document.querySelectorAll('[data-agent-channel-item]').forEach((node) => {
-          node.classList.remove('bg-cyan-500/20', 'text-cyan-200');
-          node.classList.add('text-slate-200');
-        });
-
-        if (element) {
-          element.classList.add('bg-cyan-500/20', 'text-cyan-200');
-          element.classList.remove('text-slate-200');
-        }
+        updateActiveChannelHighlight();
 
         setStatus(`当前会话：${channel.data?.name || channel.id}`);
+        showChatView();
+        closeChannelDrawer();
 
         activeSubscription = channel.on('message.new', (event) => {
           const localUploadId = event.message?.local_upload_id;
@@ -256,36 +303,73 @@
         });
       };
 
-      const renderChannelList = async (channels) => {
-        if (!listEl) return;
-        listEl.innerHTML = '';
+      const renderChannelButtons = (container, channels) => {
+        if (!container) return;
+        container.innerHTML = '';
 
         if (channels.length === 0) {
           const empty = document.createElement('div');
-          empty.className = 'px-4 py-4 text-sm text-slate-400';
+          empty.className = 'px-4 py-4 text-sm text-theme-secondary';
           empty.textContent = '暂无访客会话。';
-          listEl.appendChild(empty);
-          resetMessages();
-          setStatus('等待新的访客消息...');
+          container.appendChild(empty);
           return;
         }
 
-        channels.forEach((channel, index) => {
+        channels.forEach((channel) => {
           const btn = document.createElement('button');
           btn.type = 'button';
           btn.dataset.agentChannelItem = '1';
-          btn.className = 'block w-full border-b border-white/5 px-4 py-3 text-left text-sm text-slate-200 hover:bg-white/5';
+          btn.dataset.channelId = channel.id;
+          btn.className = 'block w-full border-b border-theme px-4 py-3 text-left text-sm text-theme transition hover:bg-theme-secondary';
           btn.textContent = channel.data?.name || channel.id;
           btn.addEventListener('click', () => {
-            activateChannel(channel, btn);
+            activateChannel(channel);
           });
-          listEl.appendChild(btn);
-
-          if (index === 0 && !activeChannel) {
-            activateChannel(channel, btn);
-          }
+          container.appendChild(btn);
         });
       };
+
+      const renderChannelList = async (channels) => {
+        renderChannelButtons(listEl, channels);
+        renderChannelButtons(drawerListEl, channels);
+
+        if (channels.length === 0) {
+          resetMessages();
+          setStatus('等待新的访客消息...');
+          showListView();
+          closeChannelDrawer();
+          return;
+        }
+
+        const activeChannelId = activeChannel?.id;
+        const matched = channels.find((channel) => channel.id === activeChannelId);
+        if (matched) {
+          await activateChannel(matched);
+          return;
+        }
+
+        if (!activeChannel && isMobile()) {
+          updateActiveChannelHighlight();
+          setStatus('请选择会话开始接待...');
+          showListView();
+          closeChannelDrawer();
+          return;
+        }
+
+        if (!activeChannel) {
+          await activateChannel(channels[0]);
+        } else {
+          activeChannel = channels[0];
+          await activateChannel(channels[0]);
+        }
+      };
+
+      backButtonEl?.addEventListener('click', () => {
+        showListView();
+      });
+      openDrawerButtonEl?.addEventListener('click', openChannelDrawer);
+      closeDrawerButtonEl?.addEventListener('click', closeChannelDrawer);
+      drawerMaskEl?.addEventListener('click', closeChannelDrawer);
 
       const connectAgent = async () => {
         const tokenResponse = await fetch('/stream-chat-agent/token', {
@@ -330,7 +414,6 @@
             { last_message_at: -1 },
             { watch: true, state: true, limit: 30 }
           );
-          activeChannel = null;
           await renderChannelList(refreshed);
         });
 
@@ -380,16 +463,16 @@
               content.className = 'max-w-[80%]';
 
               const sender = document.createElement('div');
-              sender.className = 'mb-1 text-right text-xs text-cyan-200';
+              sender.className = 'mb-1 text-right text-xs text-[rgb(var(--theme-primary))]';
               sender.textContent = '我:';
               content.appendChild(sender);
 
               const failedBlock = document.createElement('div');
-              failedBlock.className = 'h-40 w-40 max-w-full rounded-lg border border-rose-400/40 bg-rose-500/10';
+              failedBlock.className = 'h-40 w-40 max-w-full rounded-lg border border-[rgb(var(--theme-rose))]/40 bg-[rgb(var(--theme-rose))]/10';
               content.appendChild(failedBlock);
 
               const failedHint = document.createElement('div');
-              failedHint.className = 'mt-1 text-right text-xs text-rose-300';
+              failedHint.className = 'mt-1 text-right text-xs text-[rgb(var(--theme-rose))]';
               failedHint.textContent = '图片发送失败，请重试。';
               content.appendChild(failedHint);
 

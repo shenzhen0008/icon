@@ -10,14 +10,14 @@
 <body class="min-h-screen overflow-hidden bg-theme text-theme md:overflow-auto">
   <x-nav.top />
 
-  <main class="fixed inset-x-0 top-14 bottom-11 w-full overflow-hidden md:static md:mx-auto md:w-full md:max-w-6xl md:px-6 md:pb-10 md:pt-8">
+  <main class="fixed inset-x-0 top-[4.25rem] bottom-[calc(4.25rem+env(safe-area-inset-bottom))] w-full overflow-hidden md:static md:mx-auto md:w-full md:max-w-6xl md:px-6 md:pb-10 md:pt-8">
     @if ($streamEnabled)
       <section class="flex h-full flex-col overflow-hidden rounded-none border border-[rgb(var(--theme-primary))]/20 bg-theme-card shadow-none md:rounded-2xl md:shadow-xl md:shadow-[rgb(var(--theme-primary))]/10">
         <div id="stream-chat-status" class="border-b border-theme px-4 py-3 text-xs text-theme-secondary">正在连接客服...</div>
         <div id="stream-chat-messages" class="min-h-0 flex-1 overflow-y-auto px-4 py-4"></div>
-        <form id="stream-chat-form" class="shrink-0 border-t border-theme p-3">
+        <form id="stream-chat-form" class="shrink-0 border-t border-theme p-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] md:pb-3">
           <div class="flex items-center gap-2">
-            <label for="stream-chat-file" class="inline-flex cursor-pointer items-center rounded-lg border border-theme px-3 py-2 text-xs text-theme-secondary transition hover:border-[rgb(var(--theme-primary))] hover:text-[rgb(var(--theme-primary))]">图片</label>
+            <label for="stream-chat-file" class="inline-flex shrink-0 cursor-pointer items-center whitespace-nowrap rounded-lg border border-theme px-3 py-2 text-xs text-theme-secondary transition hover:border-[rgb(var(--theme-primary))] hover:text-[rgb(var(--theme-primary))]">图片</label>
             <input id="stream-chat-file" type="file" accept="image/*" class="hidden">
             <input
               id="stream-chat-input"
@@ -28,7 +28,7 @@
             >
             <button
               type="submit"
-              class="rounded-lg bg-[rgb(var(--theme-primary))] px-4 py-2 text-sm font-semibold text-theme-on-primary transition hover:bg-[rgb(var(--theme-primary))]/80"
+              class="whitespace-nowrap rounded-lg bg-[rgb(var(--theme-primary))] px-4 py-2 text-sm font-semibold text-theme-on-primary transition hover:bg-[rgb(var(--theme-primary))]/80"
             >发送</button>
           </div>
         </form>

@@ -21,7 +21,12 @@ class StreamChatAgentTest extends TestCase
             ->get('/stream-chat-agent')
             ->assertOk()
             ->assertSee('agent-chat-file')
-            ->assertSee('agent-chat-sound-prompt');
+            ->assertSee('agent-chat-sound-prompt')
+            ->assertSee('agent-mobile-list-view')
+            ->assertSee('agent-mobile-chat-view')
+            ->assertSee('agent-mobile-back')
+            ->assertSee('agent-open-channel-drawer')
+            ->assertSee('agent-channel-drawer');
     }
 
     public function test_guest_cannot_access_stream_chat_agent_routes(): void
