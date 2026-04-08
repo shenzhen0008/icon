@@ -45,19 +45,25 @@
     themeColorMeta.setAttribute('content', color);
   };
 
+  const persistTheme = (theme) => {
+    localStorage.setItem('theme', theme);
+    document.cookie = `theme=${theme}; path=/; max-age=31536000; SameSite=Lax`;
+  };
+
   // 主题切换功能
   document.getElementById('theme-toggle').addEventListener('click', () => {
     const html = document.documentElement;
     const currentTheme = html.getAttribute('data-theme');
     const newTheme = currentTheme === 'tech' ? 'business' : 'tech';
     html.setAttribute('data-theme', newTheme);
-    localStorage.setItem('theme', newTheme);
+    persistTheme(newTheme);
     updateBrowserThemeColor(newTheme);
   });
 
   // 页面加载时恢复主题
   const savedTheme = localStorage.getItem('theme') || 'tech';
   document.documentElement.setAttribute('data-theme', savedTheme);
+  persistTheme(savedTheme);
   updateBrowserThemeColor(savedTheme);
 
   new MutationObserver(() => {
