@@ -30,6 +30,21 @@
 </header>
 
 <script>
+  const updateBrowserThemeColor = (theme) => {
+    const colorMap = {
+      tech: '#0f172a',
+      business: '#f3f4f6',
+    };
+    const color = colorMap[theme] ?? colorMap.tech;
+    let themeColorMeta = document.querySelector('meta[name="theme-color"]');
+    if (!themeColorMeta) {
+      themeColorMeta = document.createElement('meta');
+      themeColorMeta.setAttribute('name', 'theme-color');
+      document.head.appendChild(themeColorMeta);
+    }
+    themeColorMeta.setAttribute('content', color);
+  };
+
   // 主题切换功能
   document.getElementById('theme-toggle').addEventListener('click', () => {
     const html = document.documentElement;
@@ -37,11 +52,21 @@
     const newTheme = currentTheme === 'tech' ? 'business' : 'tech';
     html.setAttribute('data-theme', newTheme);
     localStorage.setItem('theme', newTheme);
+    updateBrowserThemeColor(newTheme);
   });
 
   // 页面加载时恢复主题
   const savedTheme = localStorage.getItem('theme') || 'tech';
   document.documentElement.setAttribute('data-theme', savedTheme);
+  updateBrowserThemeColor(savedTheme);
+
+  new MutationObserver(() => {
+    const theme = document.documentElement.getAttribute('data-theme') || 'tech';
+    updateBrowserThemeColor(theme);
+  }).observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['data-theme'],
+  });
 
   // 同步顶部/底部导航与可视区域数据，避免移动端键盘弹起后布局溢出。
   const syncLayoutInsets = () => {
