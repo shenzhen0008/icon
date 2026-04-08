@@ -79,6 +79,8 @@ class PublicProductCatalogTest extends TestCase
         $response->assertSee('1.83-2.01%');
         $response->assertSee('2天');
         $response->assertSee('立即购买');
+        $response->assertSee('text-theme-on-primary');
+        $response->assertDontSee('rounded-2xl bg-[rgb(var(--theme-primary))] px-4 py-2 text-xl font-medium text-theme-secondary');
         $response->assertSee('/images/products/symbols/symbol-04.png');
     }
 
@@ -118,6 +120,35 @@ class PublicProductCatalogTest extends TestCase
         $response->assertSee('这是产品介绍内容');
         $response->assertSee('/images/products/symbols/symbol-01.png');
         $response->assertSee('去登录');
+        $response->assertSee('text-theme-secondary');
+        $response->assertDontSee('text-white');
+    }
+
+    public function test_authenticated_user_sees_theme_text_class_on_purchase_button_in_product_detail(): void
+    {
+        $user = User::factory()->create();
+
+        $product = Product::query()->create([
+            'name' => 'Mobile AMM',
+            'code' => 'MAMM',
+            'unit_price' => 1000,
+            'is_active' => true,
+            'purchase_limit' => 2,
+            'limit_min_usdt' => 1000,
+            'limit_max_usdt' => 10000,
+            'rate_min_percent' => 1.15,
+            'rate_max_percent' => 2.22,
+            'cycle_days' => 2,
+        ]);
+
+        $response = $this
+            ->actingAs($user)
+            ->get('/products/'.$product->id);
+
+        $response->assertOk();
+        $response->assertSee('立即购买');
+        $response->assertSee('text-theme-on-primary');
+        $response->assertDontSee('rounded-lg bg-[rgb(var(--theme-primary))] px-4 py-2 text-sm font-semibold text-theme-secondary');
     }
 
     public function test_catalog_falls_back_to_default_symbol_icons_when_product_has_no_symbol_icon_paths(): void

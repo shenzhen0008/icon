@@ -1,24 +1,24 @@
-<section class="rounded-2xl border border-white/10 bg-slate-900/70 p-5">
-  <h2 class="text-base font-semibold">可购买产品</h2>
+<section class="rounded-2xl border border-theme bg-theme-card p-5">
+  <h2 class="text-base font-semibold text-theme">可购买产品</h2>
 
   @if (count($products) === 0)
-    <div class="mt-4 rounded-xl border border-dashed border-white/20 bg-slate-950/40 p-4 text-sm text-slate-400">
+    <div class="mt-4 rounded-xl border border-dashed border-theme bg-theme-secondary/20 p-4 text-sm text-theme-secondary">
       暂无可购买产品
     </div>
   @else
     <ul class="mt-4 space-y-3">
       @foreach ($products as $product)
-        <li class="rounded-xl border border-white/10 bg-slate-950/40 p-4">
+        <li class="rounded-xl border border-theme bg-theme-secondary/20 p-4">
           <div class="flex items-center justify-between gap-3">
-            <p class="font-medium text-slate-100">{{ $product['name'] }} <span class="text-xs text-slate-400">({{ $product['code'] }})</span></p>
-            <span class="rounded-full border border-white/15 px-2 py-0.5 text-xs text-slate-300">单价: {{ $product['unit_price'] }}</span>
+            <p class="font-medium text-theme">{{ $product['name'] }} <span class="text-xs text-theme-secondary">({{ $product['code'] }})</span></p>
+            <span class="rounded-full border border-theme px-2 py-0.5 text-xs text-theme-secondary">单价: {{ $product['unit_price'] }}</span>
           </div>
-          <p class="mt-2 text-xs text-slate-400">按份购买，余额不足时会提示失败。</p>
+          <p class="mt-2 text-xs text-theme-secondary">按份购买，余额不足时会提示失败。</p>
 
           @if ($isGuest)
-            <p class="mt-3 text-sm text-slate-400">登录后可进入详情页购买。</p>
+            <p class="mt-3 text-sm text-theme-secondary">登录后可进入详情页购买。</p>
           @else
-            <a href="/products/{{ $product['id'] }}" class="mt-3 inline-flex rounded-lg px-4 py-2 text-sm font-semibold {{ $product['is_eligible'] ? 'bg-cyan-400 text-slate-950' : 'bg-slate-700 text-slate-200' }}">
+            <a href="/products/{{ $product['id'] }}" class="mt-3 inline-flex rounded-lg px-4 py-2 text-sm font-semibold {{ $product['is_eligible'] ? 'bg-[rgb(var(--theme-primary))] text-theme-secondary' : 'bg-theme-secondary text-theme' }}">
               {{ $product['is_eligible'] ? '前往详情购买' : '前往详情查看' }}
             </a>
           @endif

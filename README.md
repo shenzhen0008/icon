@@ -9,6 +9,9 @@ bash scripts/deploy.sh
 
 注意：该脚本不会在 `git pull` 后自动触发。每次部署更新后需要手动执行一次。
 
+### PHP 版本说明
+`bash scripts/deploy.sh` 已经内部固定使用 `/www/server/php/83/bin/php`，所以直接运行脚本即可使用 PHP 8.3，无需额外指定版本。
+
 首次执行前请确认：
 
 1. 复制 `.env.production.example` 为 `.env`（若 `.env` 不存在，脚本也会自动复制）。
@@ -41,8 +44,28 @@ bash scripts/deploy.sh
 - 如遇到 "Your local changes to the following files would be overwritten by merge"，请先备份或清理 `public/build/` 目录下的文件，然后重新执行 `git pull`
 - 如果后台打开后出现 `/livewire/livewire.min.js` 404，请检查 Nginx 是否把 `/livewire` 请求转发给 Laravel；也可以直接运行 `/www/server/php/83/bin/php artisan livewire:publish --assets` 以生成 `public/vendor/livewire` 静态前端资源。
 
+### 后台空白页修复
+- 如果后台打开后显示空白，并且浏览器控制台报 `/livewire/livewire.min.js` 404，说明 Livewire 前端资源未正确发布或 `/livewire` 路径没有被 Laravel 处理。
+- 解决步骤：
+  1. 进入服务器目录：`cd /www/wwwroot/bitcon.yunqueapp.com`
+  2. 拉取最新代码：`git pull origin main`
+  3. 运行部署脚本：`bash scripts/deploy.sh`
+  4. 如果需要手动修复，可以执行：`/www/server/php/83/bin/php artisan livewire:publish --assets` 和 `/www/server/php/83/bin/php artisan optimize:clear`
+  5. 确认 Nginx 伪静态规则生效，`public` 目录为站点根，并且 `/livewire` 请求能被 Laravel 路由处理。
+- 这个问题通常不是代码业务逻辑出错，而是部署后 Livewire 资源未发布或服务端 rewrite 配置不正确。
 
+### 主题配置
+项目支持多风格切换，默认科技风格（tech），可选商务风格（business）。
 
+- 配置文件：`config/themes.php`
+  ```php
+  return [
+      'active' => env('APP_THEME', 'tech'),
+      'available' => ['tech', 'business'],
+  ];
+  ```
+- 在 `.env` 中设置 `APP_THEME=business` 可切换到商务风格。
+- 前端支持实时切换（首页右下角按钮），并保存到浏览器 localStorage。
 
 服务器端更新：
 cd /www/wwwroot/bitcon.yunqueapp.com

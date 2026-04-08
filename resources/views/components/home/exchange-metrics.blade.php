@@ -1,12 +1,12 @@
-<section class="mt-8 rounded-2xl border border-white/10 bg-slate-900/60 p-5">
+<section class="mt-8 rounded-2xl border border-theme bg-theme-card p-5">
     <div class="mb-4 flex items-center justify-between gap-3">
-        <h2 class="text-lg font-semibold text-white">实时操盘平台</h2>
-        <p class="text-xs text-slate-400">每 2 秒刷新</p>
+        <h2 class="text-lg font-semibold text-theme">实时操盘平台</h2>
+        <p class="text-xs text-theme-secondary">每 2 秒刷新</p>
     </div>
 
     <div id="exchange-metrics-list" class="-mx-5 space-y-3">
         @foreach ($metrics as $metric)
-            <article class="rounded-xl border border-white/10 bg-slate-950/50">
+            <article class="rounded-xl border border-theme bg-theme-secondary/20">
                 <button
                     type="button"
                     class="flex w-full items-center justify-between gap-3 px-4 py-3 text-left"
@@ -14,7 +14,7 @@
                     data-code="{{ $metric['exchange_code'] }}"
                 >
                     <span class="flex items-center gap-3">
-                        <span class="flex h-8 w-8 items-center justify-center overflow-hidden rounded-full bg-slate-800 text-xs font-semibold text-slate-200">
+                        <span class="flex h-8 w-8 items-center justify-center overflow-hidden rounded-full bg-theme-secondary text-xs font-semibold text-theme-secondary">
                             <img
                                 src="{{ $metric['logo_url'] }}"
                                 alt="{{ $metric['exchange_name'] }} logo"
@@ -25,21 +25,21 @@
                             >
                             <span class="hidden" data-logo-fallback>{{ strtoupper(substr($metric['exchange_name'], 0, 1)) }}</span>
                         </span>
-                        <span class="font-medium text-slate-100">{{ $metric['exchange_name'] }}</span>
+                        <span class="font-medium text-theme">{{ $metric['exchange_name'] }}</span>
                     </span>
-                    <span class="font-semibold text-cyan-200" data-field="profit_value">{{ $metric['profit_value'] }}</span>
+                    <span class="font-semibold text-[rgb(var(--theme-primary))]" data-field="profit_value">{{ $metric['profit_value'] }}</span>
                 </button>
 
-                <div class="hidden border-t border-white/10 px-4 py-3 text-sm" data-detail-row="{{ $metric['exchange_code'] }}">
-                    <div class="grid grid-cols-3 border-b border-white/10 pb-2 text-xs text-slate-400">
+                <div class="hidden border-t border-theme px-4 py-3 text-sm" data-detail-row="{{ $metric['exchange_code'] }}">
+                    <div class="grid grid-cols-3 border-b border-theme pb-2 text-xs text-theme-secondary">
                         <span>Currency</span>
                         <span class="text-center">24h Volume</span>
                         <span class="text-right">Liquidity</span>
                     </div>
 
                     <div class="mt-2 grid grid-cols-3 items-center gap-2">
-                        <span class="flex items-center gap-2 text-slate-300">
-                            <span class="flex h-6 w-6 items-center justify-center overflow-hidden rounded-full bg-slate-800 text-[10px] font-semibold text-slate-200">
+                        <span class="flex items-center gap-2 text-theme-secondary">
+                            <span class="flex h-6 w-6 items-center justify-center overflow-hidden rounded-full bg-theme-secondary/80 text-[10px] font-semibold text-theme">
                                 <img
                                     src="/images/assets/bitcoin.svg"
                                     alt="Bitcoin logo"
@@ -51,12 +51,12 @@
                             </span>
                             <span>BTC</span>
                         </span>
-                        <span class="text-center text-slate-200" data-field="btc_value">{{ $metric['btc_value'] }}</span>
-                        <span class="text-right text-slate-200" data-field="btc_liquidity">{{ $metric['btc_liquidity'] }}</span>
+                        <span class="text-center text-theme" data-field="btc_value">{{ $metric['btc_value'] }}</span>
+                        <span class="text-right text-theme" data-field="btc_liquidity">{{ $metric['btc_liquidity'] }}</span>
                     </div>
                     <div class="mt-2 grid grid-cols-3 items-center gap-2">
-                        <span class="flex items-center gap-2 text-slate-300">
-                            <span class="flex h-6 w-6 items-center justify-center overflow-hidden rounded-full bg-slate-800 text-[10px] font-semibold text-slate-200">
+                        <span class="flex items-center gap-2 text-theme-secondary">
+                            <span class="flex h-6 w-6 items-center justify-center overflow-hidden rounded-full bg-theme-secondary/80 text-[10px] font-semibold text-theme">
                                 <img
                                     src="/images/assets/ethereum.svg"
                                     alt="Ethereum logo"
@@ -68,10 +68,10 @@
                             </span>
                             <span>ETH</span>
                         </span>
-                        <span class="text-center text-slate-200" data-field="eth_value">{{ $metric['eth_value'] }}</span>
-                        <span class="text-right text-slate-200" data-field="eth_liquidity">{{ $metric['eth_liquidity'] }}</span>
+                        <span class="text-center text-theme" data-field="eth_value">{{ $metric['eth_value'] }}</span>
+                        <span class="text-right text-theme" data-field="eth_liquidity">{{ $metric['eth_liquidity'] }}</span>
                     </div>
-                    <p class="mt-2 text-xs text-slate-500" data-field="updated_at">更新: {{ $metric['updated_at'] }}</p>
+                    <p class="mt-2 text-xs text-theme-secondary" data-field="updated_at">更新: {{ $metric['updated_at'] }}</p>
                 </div>
             </article>
         @endforeach

@@ -1,4 +1,4 @@
-<section class="rounded-2xl border border-white/10 bg-slate-900/70 p-5">
+<section class="rounded-2xl border border-theme bg-theme-card p-5">
   @php
     $statusLabels = [
       'open' => '持有中',
@@ -7,10 +7,10 @@
     ];
   @endphp
 
-  <h2 class="text-base font-semibold">持仓产品</h2>
+  <h2 class="text-base font-semibold text-theme">持仓产品</h2>
 
   @if (count($positions) === 0)
-    <div class="mt-4 rounded-xl border border-dashed border-white/20 bg-slate-950/40 p-4 text-sm text-slate-400">
+    <div class="mt-4 rounded-xl border border-dashed border-theme bg-theme-secondary/20 p-4 text-sm text-theme-secondary">
       暂无持仓产品
     </div>
   @else
@@ -19,7 +19,7 @@
         @php
           $panelId = 'position-profit-panel-'.$position['id'];
         @endphp
-        <li class="rounded-xl border border-white/10 bg-slate-950/40 p-4">
+        <li class="rounded-xl border border-theme bg-theme-secondary/20 p-4">
           <button
             type="button"
             class="w-full text-left"
@@ -29,27 +29,27 @@
             aria-controls="{{ $panelId }}"
           >
             <div class="flex items-center justify-between gap-3">
-              <p class="font-medium text-slate-100">{{ $position['name'] }}</p>
-              <span class="rounded-full border border-white/15 px-2 py-0.5 text-xs text-slate-300" data-status-key="{{ $position['status'] }}">{{ $statusLabels[$position['status']] ?? $position['status'] }}</span>
+              <p class="font-medium text-theme">{{ $position['name'] }}</p>
+              <span class="rounded-full border border-theme px-2 py-0.5 text-xs text-theme-secondary" data-status-key="{{ $position['status'] }}">{{ $statusLabels[$position['status']] ?? $position['status'] }}</span>
             </div>
           </button>
 
           <div class="mt-2 flex items-center justify-between gap-3">
-            <p class="text-sm text-slate-300">本金：{{ $position['principal'] }}</p>
-            <a href="/me/positions/{{ $position['id'] }}" class="text-sm text-cyan-300 underline underline-offset-4">查看订单</a>
+            <p class="text-sm text-theme-secondary">本金：{{ $position['principal'] }}</p>
+            <a href="/me/positions/{{ $position['id'] }}" class="text-sm text-[rgb(var(--theme-primary))] underline underline-offset-4">查看订单</a>
           </div>
 
-          <div id="{{ $panelId }}" class="mt-3 hidden border-t border-white/10 pt-3">
-            <div class="rounded-lg border border-white/10 bg-slate-900/50 p-3">
-              <p class="text-xs text-cyan-300">最近3天收益</p>
-              <div class="mt-2 space-y-1 text-xs text-slate-300">
+          <div id="{{ $panelId }}" class="mt-3 hidden border-t border-theme pt-3">
+            <div class="rounded-lg border border-theme bg-theme-card p-3">
+              <p class="text-xs text-[rgb(var(--theme-primary))]">最近3天收益</p>
+              <div class="mt-2 space-y-1 text-xs text-theme-secondary">
                 @if (count($position['recent_profits']) === 0)
-                  <p class="text-slate-500">暂无收益记录</p>
+                  <p class="text-theme-secondary">暂无收益记录</p>
                 @else
                   @foreach ($position['recent_profits'] as $row)
                     <div class="flex items-center justify-between">
                       <span>{{ $row['date'] }}</span>
-                      <span class="text-emerald-300">{{ $row['profit'] }}</span>
+                      <span class="text-[rgb(var(--theme-accent))]">{{ $row['profit'] }}</span>
                     </div>
                   @endforeach
                 @endif

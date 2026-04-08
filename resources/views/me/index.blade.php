@@ -1,12 +1,12 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="{{ config('themes.active') }}">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>我的 | Icon Market</title>
   @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="min-h-screen bg-slate-950 text-slate-100">
+<body class="min-h-screen bg-theme text-theme">
   <x-nav.top />
 
   <main class="mx-auto w-full max-w-7xl px-2 pb-28 pt-8 md:pb-10">
@@ -42,18 +42,18 @@
 
           <div>
             <label class="mb-1 block text-sm" for="password">密码</label>
-            <input id="password" type="password" name="password" class="w-full rounded-lg border border-white/15 bg-slate-950 px-3 py-2" required>
+            <input id="password" type="password" name="password" class="w-full rounded-lg border border-theme bg-theme-secondary px-3 py-2" required>
             @error('password')
-              <p class="mt-1 text-sm text-rose-300">{{ $message }}</p>
+              <p class="mt-1 text-sm text-[rgb(var(--theme-rose))]">{{ $message }}</p>
             @enderror
           </div>
 
           <div>
             <label class="mb-1 block text-sm" for="password_confirmation">确认密码</label>
-            <input id="password_confirmation" type="password" name="password_confirmation" class="w-full rounded-lg border border-white/15 bg-slate-950 px-3 py-2" required>
+            <input id="password_confirmation" type="password" name="password_confirmation" class="w-full rounded-lg border border-theme bg-theme-secondary px-3 py-2" required>
           </div>
 
-          <button class="w-full rounded-lg bg-cyan-400 px-4 py-2.5 font-semibold text-slate-950">确认注册</button>
+          <button class="w-full rounded-lg bg-[rgb(var(--theme-primary))] px-4 py-2.5 font-semibold text-theme-secondary">确认注册</button>
         </form>
       </div>
     </dialog>

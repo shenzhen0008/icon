@@ -11,3 +11,41 @@
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
+
+/* 默认主题变量（科技风格） */
+:root {
+    --theme-bg: 15 23 42; /* slate-950 */
+    --theme-bg-secondary: 30 41 59; /* slate-900 */
+    --theme-bg-card: 30 41 59 / 0.7; /* slate-900/70 */
+    --theme-text: 241 245 249; /* slate-100 */
+    --theme-text-secondary: 148 163 184; /* slate-400 */
+    --theme-border: 255 255 255 / 0.1; /* white/10 */
+    --theme-primary: 6 182 212; /* cyan-400 */
+    --theme-on-primary: 0 0 0; /* black */
+    --theme-accent: 37 99 235; /* blue-600 */
+    --theme-rose: 251 113 133; /* rose-400 */
+}
+
+/* 商务风格 */
+[data-theme="business"] {
+    --theme-bg: 255 255 255; /* white */
+    --theme-bg-secondary: 243 244 246; /* gray-100 */
+    --theme-bg-card: 255 255 255 / 0.9; /* white/90 */
+    --theme-text: 31 41 55; /* gray-800 */
+    --theme-text-secondary: 107 114 128; /* gray-500 */
+    --theme-border: 0 0 0 / 0.1; /* black/10 */
+    --theme-primary: 37 99 235; /* blue-600 */
+    --theme-on-primary: 255 255 255; /* white */
+    --theme-accent: 59 130 246; /* blue-500 */
+    --theme-rose: 239 68 68; /* red-500 */
+}
+
+/* 工具类 */
+.bg-theme { background-color: rgb(var(--theme-bg)); }
+.bg-theme-secondary { background-color: rgb(var(--theme-bg-secondary)); }
+.bg-theme-card { background-color: rgb(var(--theme-bg-card)); }
+.text-theme { color: rgb(var(--theme-text)); }
+.text-theme-secondary { color: rgb(var(--theme-text-secondary)); }
+.text-theme-on-primary { color: rgb(var(--theme-on-primary)); }
+.border-theme { border-color: rgb(var(--theme-border)); }
+.shadow-theme { --tw-shadow-color: rgb(var(--theme-primary) / 0.1); --tw-shadow: var(--tw-shadow-colored); }

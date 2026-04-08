@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="{{ config('themes.active') }}">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,33 +7,33 @@
   <title>Stream Chat Agent | Icon Market</title>
   @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="min-h-screen bg-slate-950 text-slate-100">
+<body class="min-h-screen bg-theme text-theme">
   <x-nav.top />
 
   <main class="mx-auto w-full max-w-6xl px-6 pb-28 pt-8 md:pb-10">
     @if ($streamEnabled)
-      <section class="grid overflow-hidden rounded-2xl border border-cyan-400/20 bg-slate-900/70 shadow-xl shadow-cyan-500/10 md:grid-cols-[17rem_1fr]">
-        <aside class="border-r border-white/10">
-          <div class="border-b border-white/10 px-4 py-3 text-xs text-slate-400">会话列表</div>
+      <section class="grid overflow-hidden rounded-2xl border border-[rgb(var(--theme-primary))]/20 bg-theme-card shadow-xl shadow-[rgb(var(--theme-primary))]/10 md:grid-cols-[17rem_1fr]">
+        <aside class="border-r border-theme">
+          <div class="border-b border-theme px-4 py-3 text-xs text-theme-secondary">会话列表</div>
           <div id="agent-channel-list" class="h-[calc(100vh-19rem)] min-h-[360px] overflow-y-auto"></div>
         </aside>
         <div class="flex min-h-[420px] flex-col">
-          <div id="agent-status" class="border-b border-white/10 px-4 py-3 text-xs text-slate-400">正在连接客服工作台...</div>
+          <div id="agent-status" class="border-b border-theme px-4 py-3 text-xs text-theme-secondary">正在连接客服工作台...</div>
           <div id="agent-messages" class="h-[calc(100vh-24rem)] min-h-[260px] overflow-y-auto px-4 py-4"></div>
-          <form id="agent-chat-form" class="border-t border-white/10 p-3">
+          <form id="agent-chat-form" class="border-t border-theme p-3">
             <div class="flex items-center gap-2">
-              <label for="agent-chat-file" class="inline-flex cursor-pointer items-center rounded-lg border border-white/15 px-3 py-2 text-xs text-slate-300 transition hover:border-cyan-300 hover:text-cyan-200">图片</label>
+              <label for="agent-chat-file" class="inline-flex cursor-pointer items-center rounded-lg border border-theme px-3 py-2 text-xs text-theme-secondary transition hover:border-[rgb(var(--theme-primary))] hover:text-[rgb(var(--theme-primary))]">图片</label>
               <input id="agent-chat-file" type="file" accept="image/*" class="hidden">
               <input
                 id="agent-chat-input"
                 type="text"
                 maxlength="500"
                 placeholder="输入回复内容..."
-                class="w-full rounded-lg border border-white/15 bg-slate-950 px-3 py-2 text-sm text-slate-100 placeholder:text-slate-500 focus:border-cyan-300 focus:outline-none"
+                class="w-full rounded-lg border border-theme bg-theme-secondary px-3 py-2 text-sm text-theme placeholder:text-theme-secondary focus:border-[rgb(var(--theme-primary))] focus:outline-none"
               >
               <button
                 type="submit"
-                class="rounded-lg bg-cyan-400 px-4 py-2 text-sm font-semibold text-slate-950 transition hover:bg-cyan-300"
+                class="rounded-lg bg-[rgb(var(--theme-primary))] px-4 py-2 text-sm font-semibold text-theme-secondary transition hover:bg-[rgb(var(--theme-primary))]/80"
               >发送</button>
             </div>
           </form>

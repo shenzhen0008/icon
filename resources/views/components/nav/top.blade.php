@@ -1,26 +1,48 @@
-<header class="sticky top-0 z-30 border-b border-white/10 bg-slate-950/90 backdrop-blur">
+<header class="sticky top-0 z-30 border-b border-theme bg-theme-secondary/90 backdrop-blur">
   <div class="mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-4">
-    <a href="/" class="text-sm font-semibold tracking-[0.2em] text-cyan-300">ICON MARKET</a>
+    <a href="/" class="text-sm font-semibold tracking-[0.2em] text-[rgb(var(--theme-primary))]">ICON MARKET</a>
 
     <nav class="hidden items-center gap-6 text-sm md:flex">
-      <a href="/" class="{{ request()->is('/') ? 'text-cyan-200' : 'text-slate-300 hover:text-cyan-200' }}">首页</a>
-      <a href="/admin" class="{{ request()->is('admin') || request()->is('admin/*') ? 'text-cyan-200' : 'text-slate-300 hover:text-cyan-200' }}">后台</a>
-      <a href="/products" class="{{ request()->is('products') || request()->is('products/*') ? 'text-cyan-200' : 'text-slate-300 hover:text-cyan-200' }}">产品</a>
-      <a href="/recharge" class="{{ request()->is('recharge') ? 'text-cyan-200' : 'text-slate-300 hover:text-cyan-200' }}">充值</a>
-      <a href="/me" class="{{ request()->is('me') ? 'text-cyan-200' : 'text-slate-300 hover:text-cyan-200' }}">我的</a>
-      <a href="/support" class="{{ request()->is('support') ? 'text-cyan-200' : 'text-slate-300 hover:text-cyan-200' }}">客服</a>
-      <a href="/stream-chat" class="{{ request()->is('stream-chat') ? 'text-cyan-200' : 'text-slate-300 hover:text-cyan-200' }}">
+      <a href="/" class="{{ request()->is('/') ? 'text-[rgb(var(--theme-primary))]' : 'text-theme-secondary hover:text-[rgb(var(--theme-primary))]' }}">首页</a>
+      <a href="/admin" class="{{ request()->is('admin') || request()->is('admin/*') ? 'text-[rgb(var(--theme-primary))]' : 'text-theme-secondary hover:text-[rgb(var(--theme-primary))]' }}">后台</a>
+      <a href="/products" class="{{ request()->is('products') || request()->is('products/*') ? 'text-[rgb(var(--theme-primary))]' : 'text-theme-secondary hover:text-[rgb(var(--theme-primary))]' }}">产品</a>
+      <a href="/recharge" class="{{ request()->is('recharge') ? 'text-[rgb(var(--theme-primary))]' : 'text-theme-secondary hover:text-[rgb(var(--theme-primary))]' }}">充值</a>
+      <a href="/me" class="{{ request()->is('me') ? 'text-[rgb(var(--theme-primary))]' : 'text-theme-secondary hover:text-[rgb(var(--theme-primary))]' }}">我的</a>
+      <a href="/support" class="{{ request()->is('support') ? 'text-[rgb(var(--theme-primary))]' : 'text-theme-secondary hover:text-[rgb(var(--theme-primary))]' }}">客服</a>
+      <a href="/stream-chat" class="{{ request()->is('stream-chat') ? 'text-[rgb(var(--theme-primary))]' : 'text-theme-secondary hover:text-[rgb(var(--theme-primary))]' }}">
         <span class="relative inline-flex items-center gap-1">
           Stream Chat
-          <span data-stream-chat-unread-dot class="hidden h-2 w-2 rounded-full bg-rose-400"></span>
+          <span data-stream-chat-unread-dot class="hidden h-2 w-2 rounded-full bg-[rgb(var(--theme-rose))]"></span>
         </span>
       </a>
       @auth
-        <a href="/stream-chat-agent" class="{{ request()->is('stream-chat-agent') ? 'text-cyan-200' : 'text-slate-300 hover:text-cyan-200' }}">Stream Agent</a>
+        <a href="/stream-chat-agent" class="{{ request()->is('stream-chat-agent') ? 'text-[rgb(var(--theme-primary))]' : 'text-theme-secondary hover:text-[rgb(var(--theme-primary))]' }}">Stream Agent</a>
       @endauth
     </nav>
+
+    <!-- 主题切换按钮 - PC端在导航栏，移动端在顶部栏 -->
+    <button id="theme-toggle" class="md:ml-4 rounded-full p-2 text-theme-secondary hover:text-[rgb(var(--theme-primary))] transition md:inline-flex md:items-center md:justify-center">
+      <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+      </svg>
+    </button>
   </div>
 </header>
+
+<script>
+  // 主题切换功能
+  document.getElementById('theme-toggle').addEventListener('click', () => {
+    const html = document.documentElement;
+    const currentTheme = html.getAttribute('data-theme');
+    const newTheme = currentTheme === 'tech' ? 'business' : 'tech';
+    html.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+  });
+
+  // 页面加载时恢复主题
+  const savedTheme = localStorage.getItem('theme') || 'tech';
+  document.documentElement.setAttribute('data-theme', savedTheme);
+</script>
 
 <script type="module">
   if (!window.location.pathname.startsWith('/stream-chat') && !window.IconMarketStreamNotify?.ready) {

@@ -55,4 +55,18 @@ class GlobalNavigationTest extends TestCase
             ->assertSee('Stream Agent')
             ->assertSee('/stream-chat-agent');
     }
+
+    public function test_mobile_navigation_uses_theme_variable_classes(): void
+    {
+        $this->get('/')
+            ->assertOk()
+            ->assertSee('border-theme')
+            ->assertSee('bg-theme-secondary/90')
+            ->assertSee('text-theme-secondary')
+            ->assertSee('text-[rgb(var(--theme-primary))]')
+            ->assertDontSee('bg-slate-950/95')
+            ->assertDontSee('text-cyan-300')
+            ->assertDontSee('text-slate-300')
+            ->assertDontSee('border-white/10');
+    }
 }

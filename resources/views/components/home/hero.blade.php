@@ -1,30 +1,30 @@
-<section id="home-data-panel" class="mb-8 overflow-hidden rounded-2xl border border-white/10 bg-slate-950/80 p-5 shadow-xl shadow-cyan-500/10">
+<section id="home-data-panel" class="mb-8 overflow-hidden rounded-2xl border border-theme bg-theme-card p-5 shadow-xl shadow-theme">
     <div class="flex items-start justify-between gap-4">
         <div>
-            <h1 class="text-3xl font-semibold text-white">Welcome To Icon Market</h1>
-            <p class="mt-2 text-sm text-slate-300">Demo/Live are sample data modes for now.</p>
+            <h1 class="text-3xl font-semibold text-theme">Welcome To Icon Market</h1>
+            <p class="mt-2 text-sm text-theme-secondary">Demo/Live are sample data modes for now.</p>
         </div>
-        <span id="hero-mode-badge" class="inline-flex w-20 justify-center rounded-full border border-slate-500/40 bg-slate-700/30 px-3 py-1 text-sm text-slate-200">DAMO</span>
+        <span id="hero-mode-badge" class="inline-flex w-20 justify-center rounded-full border border-theme bg-theme-secondary/30 px-3 py-1 text-sm text-theme">DAMO</span>
     </div>
 
-    <div class="mt-5 rounded-xl border border-white/10 bg-slate-900/60 p-4">
+    <div class="mt-5 rounded-xl border border-theme bg-theme-secondary/60 p-4">
         <div class="grid grid-cols-2 gap-3">
             <div class="min-w-0 pr-3">
-                <p class="text-sm text-slate-400 whitespace-nowrap">Total earnings (USDT)</p>
-                <p id="hero-total-earnings" class="mt-2 h-8 overflow-hidden text-ellipsis whitespace-nowrap font-mono text-xl font-semibold leading-none tabular-nums text-white sm:h-9 sm:text-3xl">$0.00</p>
+                <p class="text-sm text-theme-secondary whitespace-nowrap">Total earnings (USDT)</p>
+                <p id="hero-total-earnings" class="mt-2 h-8 overflow-hidden text-ellipsis whitespace-nowrap font-mono text-xl font-semibold leading-none tabular-nums text-theme sm:h-9 sm:text-3xl">$0.00</p>
             </div>
-            <div class="min-w-0 border-l border-white/10 pl-3">
-                <p class="text-sm text-slate-400 whitespace-nowrap">Earnings 24h (USDT)</p>
-                <p id="hero-earnings-24h" class="mt-2 h-8 overflow-hidden text-ellipsis whitespace-nowrap font-mono text-xl font-semibold leading-none tabular-nums text-white sm:h-9 sm:text-3xl">$0.00</p>
+            <div class="min-w-0 border-l border-theme pl-3">
+                <p class="text-sm text-theme-secondary whitespace-nowrap">Earnings 24h (USDT)</p>
+                <p id="hero-earnings-24h" class="mt-2 h-8 overflow-hidden text-ellipsis whitespace-nowrap font-mono text-xl font-semibold leading-none tabular-nums text-theme sm:h-9 sm:text-3xl">$0.00</p>
             </div>
         </div>
     </div>
 
     <div class="mt-5 grid grid-cols-2 gap-3">
-        <button id="hero-damo-btn" type="button" class="inline-flex items-center justify-center rounded-xl bg-slate-700 px-4 py-3 text-sm font-semibold text-slate-100 transition hover:bg-slate-600">
+        <button id="hero-damo-btn" type="button" class="inline-flex items-center justify-center rounded-xl bg-theme-secondary px-4 py-3 text-sm font-semibold text-theme transition hover:bg-theme-secondary/80">
             DAMO
         </button>
-        <button id="hero-live-btn" type="button" class="inline-flex items-center justify-center rounded-xl bg-slate-700 px-4 py-3 text-sm font-semibold text-slate-100 transition hover:bg-slate-600">
+        <button id="hero-live-btn" type="button" class="inline-flex items-center justify-center rounded-xl bg-theme-secondary px-4 py-3 text-sm font-semibold text-theme transition hover:bg-theme-secondary/80">
             LIVE
         </button>
     </div>
