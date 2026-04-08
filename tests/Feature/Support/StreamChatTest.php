@@ -17,6 +17,8 @@ class StreamChatTest extends TestCase
             ->assertSee('bg-theme text-theme')
             ->assertSee('top-[4.25rem]')
             ->assertSee('bottom-[calc(4.25rem+env(safe-area-inset-bottom))]')
+            ->assertSee('flex min-w-0 items-center gap-2')
+            ->assertSee('flex-1 min-w-0 rounded-lg border border-theme')
             ->assertSee('stream-chat-file')
             ->assertSee('stream-chat-sound-prompt');
     }

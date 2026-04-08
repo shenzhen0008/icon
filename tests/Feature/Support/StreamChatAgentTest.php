@@ -20,6 +20,8 @@ class StreamChatAgentTest extends TestCase
         $this->actingAs($user)
             ->get('/stream-chat-agent')
             ->assertOk()
+            ->assertSee('flex min-w-0 items-center gap-2')
+            ->assertSee('flex-1 min-w-0 rounded-lg border border-theme')
             ->assertSee('agent-chat-file')
             ->assertSee('agent-chat-sound-prompt')
             ->assertSee('agent-mobile-list-view')

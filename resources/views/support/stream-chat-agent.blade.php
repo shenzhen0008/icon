@@ -7,7 +7,7 @@
   <title>Stream Chat Agent | Icon Market</title>
   @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="min-h-screen bg-theme text-theme">
+<body class="min-h-screen overflow-x-hidden bg-theme text-theme">
   <x-nav.top />
 
   <main class="mx-auto w-full max-w-6xl px-6 pb-28 pt-8 md:pb-10">
@@ -25,7 +25,7 @@
           <div id="agent-status" class="border-b border-theme px-4 py-3 text-xs text-theme-secondary">正在连接客服工作台...</div>
           <div id="agent-messages" class="h-[calc(100vh-24rem)] min-h-[260px] overflow-y-auto px-4 py-4"></div>
           <form id="agent-chat-form" class="border-t border-theme p-3">
-            <div class="flex items-center gap-2">
+            <div class="flex min-w-0 items-center gap-2">
               <label for="agent-chat-file" class="inline-flex shrink-0 cursor-pointer items-center whitespace-nowrap rounded-lg border border-theme px-3 py-2 text-xs text-theme-secondary transition hover:border-[rgb(var(--theme-primary))] hover:text-[rgb(var(--theme-primary))]">图片</label>
               <input id="agent-chat-file" type="file" accept="image/*" class="hidden">
               <input
@@ -33,7 +33,7 @@
                 type="text"
                 maxlength="500"
                 placeholder="输入回复内容..."
-                class="w-full rounded-lg border border-theme bg-theme-secondary px-3 py-2 text-sm text-theme placeholder:text-theme-secondary focus:border-[rgb(var(--theme-primary))] focus:outline-none"
+                class="flex-1 min-w-0 rounded-lg border border-theme bg-theme-secondary px-3 py-2 text-sm text-theme placeholder:text-theme-secondary focus:border-[rgb(var(--theme-primary))] focus:outline-none"
               >
               <button
                 type="submit"

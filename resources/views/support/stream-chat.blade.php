@@ -7,7 +7,7 @@
   <title>Stream Chat | Icon Market</title>
   @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="min-h-screen overflow-hidden bg-theme text-theme md:overflow-auto">
+<body class="min-h-screen overflow-x-hidden overflow-y-hidden bg-theme text-theme md:overflow-auto">
   <x-nav.top />
 
   <main class="fixed inset-x-0 top-[4.25rem] bottom-[calc(4.25rem+env(safe-area-inset-bottom))] w-full overflow-hidden md:static md:mx-auto md:w-full md:max-w-6xl md:px-6 md:pb-10 md:pt-8">
@@ -16,7 +16,7 @@
         <div id="stream-chat-status" class="border-b border-theme px-4 py-3 text-xs text-theme-secondary">正在连接客服...</div>
         <div id="stream-chat-messages" class="min-h-0 flex-1 overflow-y-auto px-4 py-4"></div>
         <form id="stream-chat-form" class="shrink-0 border-t border-theme p-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] md:pb-3">
-          <div class="flex items-center gap-2">
+          <div class="flex min-w-0 items-center gap-2">
             <label for="stream-chat-file" class="inline-flex shrink-0 cursor-pointer items-center whitespace-nowrap rounded-lg border border-theme px-3 py-2 text-xs text-theme-secondary transition hover:border-[rgb(var(--theme-primary))] hover:text-[rgb(var(--theme-primary))]">图片</label>
             <input id="stream-chat-file" type="file" accept="image/*" class="hidden">
             <input
@@ -24,7 +24,7 @@
               type="text"
               maxlength="500"
               placeholder="请输入消息..."
-              class="w-full rounded-lg border border-theme bg-theme-secondary px-3 py-2 text-sm text-theme placeholder:text-theme-secondary focus:border-[rgb(var(--theme-primary))] focus:outline-none"
+              class="flex-1 min-w-0 rounded-lg border border-theme bg-theme-secondary px-3 py-2 text-sm text-theme placeholder:text-theme-secondary focus:border-[rgb(var(--theme-primary))] focus:outline-none"
             >
             <button
               type="submit"
