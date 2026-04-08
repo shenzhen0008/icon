@@ -321,6 +321,64 @@ CREATE TABLE `daily_settlements` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `recharge_receivers`
+--
+
+DROP TABLE IF EXISTS `recharge_receivers`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `recharge_receivers` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `asset_code` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `asset_name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `network` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `address` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `is_active` tinyint(1) NOT NULL DEFAULT '1',
+  `sort` int(10) unsigned NOT NULL DEFAULT '0',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `recharge_receivers_asset_code_unique` (`asset_code`),
+  KEY `recharge_receivers_is_active_sort_index` (`is_active`,`sort`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `recharge_payment_requests`
+--
+
+DROP TABLE IF EXISTS `recharge_payment_requests`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `recharge_payment_requests` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) unsigned NOT NULL,
+  `contact_account` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `asset_code` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'USDT',
+  `payment_amount` decimal(16,2) NOT NULL,
+  `currency` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'USDT',
+  `network` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'TRC20',
+  `receipt_address` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `receipt_image_path` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'pending',
+  `user_note` text COLLATE utf8mb4_unicode_ci,
+  `submitted_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `reviewed_by` bigint(20) unsigned DEFAULT NULL,
+  `reviewed_at` timestamp NULL DEFAULT NULL,
+  `review_note` text COLLATE utf8mb4_unicode_ci,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `recharge_payment_requests_status_submitted_at_index` (`status`,`submitted_at`),
+  KEY `recharge_payment_requests_user_id_submitted_at_index` (`user_id`,`submitted_at`),
+  KEY `recharge_payment_requests_asset_code_submitted_at_index` (`asset_code`,`submitted_at`),
+  KEY `recharge_payment_requests_reviewed_by_foreign` (`reviewed_by`),
+  CONSTRAINT `recharge_payment_requests_reviewed_by_foreign` FOREIGN KEY (`reviewed_by`) REFERENCES `users` (`id`) ON DELETE SET NULL,
+  CONSTRAINT `recharge_payment_requests_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `balance_ledgers`
 --
 

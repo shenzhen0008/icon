@@ -1,8 +1,8 @@
 <header id="top-nav" class="sticky top-0 z-30 border-b border-theme bg-theme-secondary/90 backdrop-blur">
-  <div class="mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-4">
-    <a href="/" class="text-sm font-semibold tracking-[0.2em] text-[rgb(var(--theme-primary))]">ICON MARKET</a>
+  <div class="mx-auto flex w-full max-w-6xl items-center justify-between px-[clamp(0.75rem,3.5vw,1.5rem)] py-[clamp(0.6rem,2.5vw,1rem)]">
+    <a href="/" class="text-[clamp(0.72rem,2.8vw,0.95rem)] font-semibold tracking-[0.2em] text-[rgb(var(--theme-primary))]">ICON MARKET</a>
 
-    <nav class="hidden items-center gap-6 text-sm md:flex">
+    <nav class="hidden items-center gap-[clamp(0.8rem,3vw,1.5rem)] text-[clamp(0.72rem,2.3vw,0.92rem)] md:flex">
       <a href="/" class="{{ request()->is('/') ? 'text-[rgb(var(--theme-primary))]' : 'text-theme-secondary hover:text-[rgb(var(--theme-primary))]' }}">首页</a>
       <a href="/products" class="{{ request()->is('products') || request()->is('products/*') ? 'text-[rgb(var(--theme-primary))]' : 'text-theme-secondary hover:text-[rgb(var(--theme-primary))]' }}">产品</a>
       <a href="/recharge" class="{{ request()->is('recharge') ? 'text-[rgb(var(--theme-primary))]' : 'text-theme-secondary hover:text-[rgb(var(--theme-primary))]' }}">充值</a>
@@ -20,8 +20,8 @@
     </nav>
 
     <!-- 主题切换按钮 - PC端在导航栏，移动端在顶部栏 -->
-    <button id="theme-toggle" class="md:ml-4 rounded-full p-2 text-theme-secondary hover:text-[rgb(var(--theme-primary))] transition md:inline-flex md:items-center md:justify-center">
-      <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <button id="theme-toggle" class="md:ml-4 rounded-full p-[clamp(0.35rem,1.6vw,0.5rem)] text-theme-secondary hover:text-[rgb(var(--theme-primary))] transition md:inline-flex md:items-center md:justify-center">
+      <svg class="h-[clamp(1rem,4vw,1.25rem)] w-[clamp(1rem,4vw,1.25rem)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
       </svg>
     </button>

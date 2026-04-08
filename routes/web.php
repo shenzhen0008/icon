@@ -17,6 +17,7 @@ use App\Modules\Support\Http\Controllers\StreamChatAgentTokenController;
 use App\Modules\Support\Http\Controllers\StreamChatGuestTokenController;
 use App\Modules\Support\Http\Controllers\StreamChatNotifyTokenController;
 use App\Modules\Balance\Http\Controllers\RechargePageController;
+use App\Modules\Balance\Http\Controllers\SubmitRechargePaymentRequestController;
 use App\Modules\Support\Http\Controllers\StreamChatPageController;
 use App\Modules\User\Http\Controllers\SensitivePageController;
 use Illuminate\Support\Facades\Route;
@@ -42,6 +43,7 @@ Route::middleware('guest')->group(function (): void {
 
 Route::middleware('auth')->group(function (): void {
     Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
+    Route::post('/recharge/requests', SubmitRechargePaymentRequestController::class);
     Route::post('/positions/purchase', PurchasePositionController::class);
     Route::get('/me/positions/{position}', PositionOrderPageController::class);
     Route::post('/me/positions/{position}/redemption-requests', SubmitPositionRedemptionRequestController::class);
