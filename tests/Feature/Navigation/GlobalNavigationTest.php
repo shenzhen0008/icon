@@ -69,4 +69,12 @@ class GlobalNavigationTest extends TestCase
             ->assertDontSee('text-slate-300')
             ->assertDontSee('border-white/10');
     }
+
+    public function test_home_page_declares_saved_theme_variable_only_once(): void
+    {
+        $response = $this->get('/');
+
+        $response->assertOk();
+        $this->assertSame(1, substr_count($response->getContent(), 'const savedTheme'));
+    }
 }
