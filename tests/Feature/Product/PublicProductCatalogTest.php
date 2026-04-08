@@ -84,7 +84,7 @@ class PublicProductCatalogTest extends TestCase
         $response->assertSee('/images/products/symbols/symbol-04.png');
     }
 
-    public function test_guest_can_view_product_detail_and_is_prompted_to_login_for_purchase(): void
+    public function test_guest_can_view_product_detail_and_is_prompted_to_activate_for_purchase(): void
     {
         $product = Product::query()->create([
             'name' => 'Mobile AMM',
@@ -119,9 +119,31 @@ class PublicProductCatalogTest extends TestCase
         $response->assertSee('产品介绍');
         $response->assertSee('这是产品介绍内容');
         $response->assertSee('/images/products/symbols/symbol-01.png');
-        $response->assertSee('去登录');
+        $response->assertSee('设置密码并注册');
+        $response->assertSee('id="activate-modal"', false);
         $response->assertSee('text-theme-on-primary');
-        $response->assertDontSee('text-theme-secondary">去登录');
+        $response->assertDontSee('text-theme-secondary">设置密码并注册');
+    }
+
+    public function test_guest_activation_from_product_detail_redirects_back_to_current_product_page(): void
+    {
+        $product = Product::query()->create([
+            'name' => 'Mobile AMM',
+            'code' => 'MAMM',
+            'unit_price' => 1000,
+            'is_active' => true,
+        ]);
+
+        $this->get('/products/'.$product->id)->assertOk();
+
+        $response = $this->from('/products/'.$product->id)->post('/register', [
+            'password' => 'password1234',
+            'password_confirmation' => 'password1234',
+            'redirect_to' => '/products/'.$product->id,
+        ]);
+
+        $response->assertRedirect('/products/'.$product->id);
+        $this->assertAuthenticated();
     }
 
     public function test_authenticated_user_sees_theme_text_class_on_purchase_button_in_product_detail(): void

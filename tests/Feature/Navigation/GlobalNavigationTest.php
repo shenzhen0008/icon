@@ -80,6 +80,8 @@ class GlobalNavigationTest extends TestCase
 
         $response->assertOk();
         $this->assertSame(1, substr_count($response->getContent(), 'const savedTheme'));
+        $response->assertSee("const streamNotifyBootstrapKey = 'stream_chat_notify_bootstrap_ready';", false);
+        $response->assertSee("localStorage.getItem(streamNotifyBootstrapKey) === '1'", false);
     }
 
     public function test_public_pages_disable_mobile_zoom_via_viewport_meta(): void

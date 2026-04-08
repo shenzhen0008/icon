@@ -43,6 +43,11 @@ class RegisteredUserController extends Controller
         $request->session()->regenerate();
         $this->temporaryAccountService->clearFromSession($request);
 
-        return redirect('/me');
+        $redirectTo = (string) $request->input('redirect_to', '/me');
+        if (! str_starts_with($redirectTo, '/') || str_starts_with($redirectTo, '//')) {
+            $redirectTo = '/me';
+        }
+
+        return redirect($redirectTo);
     }
 }

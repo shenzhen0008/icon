@@ -70,8 +70,8 @@
       <h2 class="text-base font-semibold text-theme">购买</h2>
 
       @if ($isGuest)
-        <p class="mt-3 text-sm text-theme-secondary">请先登录后购买。</p>
-        <a href="/login" class="mt-4 flex h-[clamp(1.9rem,7vw,2.2rem)] w-[clamp(7rem,42vw,9rem)] items-center justify-center rounded-lg bg-[rgb(var(--theme-primary))] px-[clamp(0.6rem,2.5vw,0.9rem)] text-[clamp(0.7rem,3vw,0.9rem)] font-semibold text-theme-on-primary mx-auto">去登录</a>
+        <p class="mt-3 text-sm text-theme-secondary">请先激活临时账号后购买。</p>
+        <button id="open-activate-modal" class="mt-4 mx-auto flex h-[clamp(1.9rem,7vw,2.2rem)] w-[clamp(7rem,42vw,9rem)] items-center justify-center rounded-lg bg-[rgb(var(--theme-primary))] px-[clamp(0.6rem,2.5vw,0.9rem)] text-[clamp(0.7rem,3vw,0.9rem)] font-semibold text-theme-on-primary">设置密码并注册</button>
       @else
         <p class="mt-3 text-sm text-theme-secondary">当前余额：{{ $balance }}</p>
 
@@ -92,6 +92,50 @@
       @endif
     </section>
   </main>
+
+  @if ($isGuest)
+    <dialog id="activate-modal" class="w-full max-w-md rounded-2xl border border-white/10 bg-slate-900 p-0 text-slate-100 backdrop:bg-black/70">
+      <div class="p-6">
+        <div class="mb-4 flex items-center justify-between">
+          <h2 class="text-lg font-semibold">设置密码注册</h2>
+          <button id="close-activate-modal" class="rounded px-2 py-1 text-slate-300 hover:bg-white/10">关闭</button>
+        </div>
+
+        <form method="POST" action="/register" class="space-y-4">
+          @csrf
+          <input type="hidden" name="redirect_to" value="/products/{{ $product['id'] }}">
+
+          <div>
+            <label class="mb-1 block text-sm" for="password">密码</label>
+            <input id="password" type="password" name="password" class="w-full rounded-lg border border-theme bg-theme-secondary px-3 py-2" required>
+            @error('password')
+              <p class="mt-1 text-sm text-[rgb(var(--theme-rose))]">{{ $message }}</p>
+            @enderror
+          </div>
+
+          <div>
+            <label class="mb-1 block text-sm" for="password_confirmation">确认密码</label>
+            <input id="password_confirmation" type="password" name="password_confirmation" class="w-full rounded-lg border border-theme bg-theme-secondary px-3 py-2" required>
+          </div>
+
+          <button class="w-full rounded-lg bg-[rgb(var(--theme-primary))] px-4 py-2.5 font-semibold text-theme-on-primary">确认注册</button>
+        </form>
+      </div>
+    </dialog>
+
+    <script>
+      const modal = document.getElementById('activate-modal');
+      const openBtn = document.getElementById('open-activate-modal');
+      const closeBtn = document.getElementById('close-activate-modal');
+
+      openBtn?.addEventListener('click', () => modal?.showModal());
+      closeBtn?.addEventListener('click', () => modal?.close());
+
+      @if ($errors->has('password'))
+        modal?.showModal();
+      @endif
+    </script>
+  @endif
 
   <x-nav.mobile />
 </body>

@@ -23,7 +23,13 @@ class StreamChatTest extends TestCase
             ->assertSee('flex min-w-0 items-center gap-2')
             ->assertSee('flex-1 min-w-0 rounded-lg border border-theme')
             ->assertSee('stream-chat-file')
-            ->assertSee('stream-chat-sound-prompt');
+            ->assertSee('stream-chat-sound-prompt')
+            ->assertSee('await channel.watch();', false)
+            ->assertSee("localStorage.setItem(streamNotifyBootstrapKey, '1');", false)
+            ->assertSeeInOrder([
+                'await channel.watch();',
+                "localStorage.setItem(streamNotifyBootstrapKey, '1');",
+            ], false);
     }
 
     public function test_guest_can_get_stream_chat_token_payload(): void

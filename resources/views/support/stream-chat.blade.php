@@ -67,6 +67,7 @@
       const soundDismissEl = document.getElementById('stream-chat-sound-dismiss');
       const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content ?? '';
       const pendingUploads = new Map();
+      const streamNotifyBootstrapKey = 'stream_chat_notify_bootstrap_ready';
       let currentUserId = '';
       let soundEnabled = localStorage.getItem('stream_chat_sound_enabled') === '1';
       const audioCtx = window.AudioContext ? new window.AudioContext() : null;
@@ -238,6 +239,7 @@
         });
 
         await channel.watch();
+        localStorage.setItem(streamNotifyBootstrapKey, '1');
         renderHistory(channel.state.messages);
 
         channel.on('message.new', (event) => {

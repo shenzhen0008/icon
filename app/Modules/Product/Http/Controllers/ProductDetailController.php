@@ -4,17 +4,26 @@ namespace App\Modules\Product\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Modules\Product\Models\Product;
+use App\Modules\User\Services\TemporaryAccountService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 
 class ProductDetailController extends Controller
 {
+    public function __construct(private readonly TemporaryAccountService $temporaryAccountService)
+    {
+    }
+
     public function __invoke(Request $request, Product $product): View
     {
         abort_unless($product->is_active, 404);
 
         $user = $request->user();
         $balance = $user === null ? null : (float) $user->balance;
+
+        if ($user === null) {
+            $this->temporaryAccountService->ensureGuestTempUsername($request);
+        }
 
         return view('products.show', [
             'product' => [

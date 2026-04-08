@@ -67,7 +67,10 @@
 </script>
 
 <script type="module">
-  if (!window.location.pathname.startsWith('/stream-chat') && !window.IconMarketStreamNotify?.ready) {
+  const streamNotifyBootstrapKey = 'stream_chat_notify_bootstrap_ready';
+  const shouldBootstrapNotify = localStorage.getItem(streamNotifyBootstrapKey) === '1';
+
+  if (!window.location.pathname.startsWith('/stream-chat') && shouldBootstrapNotify && !window.IconMarketStreamNotify?.ready) {
         const state = {
           ready: true,
           client: null,
@@ -152,6 +155,10 @@
           const tokenRes = await fetch('/stream-chat/notify-token', {
             headers: { Accept: 'application/json' },
           });
+          if (tokenRes.status === 404) {
+            localStorage.removeItem(streamNotifyBootstrapKey);
+            return;
+          }
           if (!tokenRes.ok) {
             scheduleReconnect();
             return;

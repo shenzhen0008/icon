@@ -88,9 +88,13 @@ cd /www/wwwroot/bitcon.yunqueapp.com
 
 # 拉取修复代码
 git pull origin main
-
+# 迁移新数据表
+/www/server/php/83/bin/php artisan migrate --force
 # 清理缓存
-/www/server/php/83/bin/php artisan config:clear
-/www/server/php/83/bin/php artisan view:clear
-/www/server/php/83/bin/php artisan route:clear
-/www/server/php/83/bin/php artisan cache:clear
+/www/server/php/83/bin/php artisan optimize:clear
+
+
+# 管理后台
+https://xxxxxx.com/admin
+# 客服后台
+https://xxxxxx.com/stream-chat-agent
