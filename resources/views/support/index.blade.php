@@ -9,7 +9,7 @@
 <body class="min-h-screen bg-theme text-theme">
   <x-nav.top />
 
-  <main class="mx-auto w-full max-w-6xl px-6 pb-28 pt-8 md:pb-10">
+  <main class="mx-auto w-full max-w-6xl px-6 pb-[calc(var(--mobile-nav-height,4.25rem)+1.5rem+env(safe-area-inset-bottom))] pt-8 md:pb-10">
     <div class="mb-5">
       <p class="text-xs uppercase tracking-[0.24em] text-[rgb(var(--theme-primary))]">Support</p>
       <h1 class="mt-2 text-2xl font-semibold">客服中心</h1>

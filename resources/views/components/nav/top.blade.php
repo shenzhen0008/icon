@@ -1,4 +1,4 @@
-<header class="sticky top-0 z-30 border-b border-theme bg-theme-secondary/90 backdrop-blur">
+<header id="top-nav" class="sticky top-0 z-30 border-b border-theme bg-theme-secondary/90 backdrop-blur">
   <div class="mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-4">
     <a href="/" class="text-sm font-semibold tracking-[0.2em] text-[rgb(var(--theme-primary))]">ICON MARKET</a>
 
@@ -42,6 +42,20 @@
   // 页面加载时恢复主题
   const savedTheme = localStorage.getItem('theme') || 'tech';
   document.documentElement.setAttribute('data-theme', savedTheme);
+
+  // 同步顶部/底部导航的实际高度，避免移动端不同浏览器下写死高度导致布局溢出。
+  const syncLayoutInsets = () => {
+    const topNav = document.getElementById('top-nav');
+    const mobileNav = document.getElementById('mobile-nav');
+    const topHeight = topNav ? `${topNav.offsetHeight}px` : '68px';
+    const mobileHeight = mobileNav ? `${mobileNav.offsetHeight}px` : '68px';
+    document.documentElement.style.setProperty('--top-nav-height', topHeight);
+    document.documentElement.style.setProperty('--mobile-nav-height', mobileHeight);
+  };
+
+  syncLayoutInsets();
+  window.addEventListener('load', syncLayoutInsets);
+  window.addEventListener('resize', syncLayoutInsets);
 </script>
 
 <script type="module">

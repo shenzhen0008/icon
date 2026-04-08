@@ -10,7 +10,7 @@
 <body class="min-h-screen overflow-x-hidden overflow-y-hidden bg-theme text-theme md:overflow-auto">
   <x-nav.top />
 
-  <main class="fixed inset-x-0 top-[4.25rem] bottom-[calc(4.25rem+env(safe-area-inset-bottom))] w-full overflow-hidden md:static md:mx-auto md:w-full md:max-w-6xl md:px-6 md:pb-10 md:pt-8">
+  <main class="fixed inset-x-0 top-[var(--top-nav-height,4.25rem)] bottom-[calc(var(--mobile-nav-height,4.25rem)+env(safe-area-inset-bottom))] w-full overflow-hidden md:static md:mx-auto md:w-full md:max-w-6xl md:px-6 md:pb-10 md:pt-8">
     @if ($streamEnabled)
       <section class="flex h-full flex-col overflow-hidden rounded-none border border-[rgb(var(--theme-primary))]/20 bg-theme-card shadow-none md:rounded-2xl md:shadow-xl md:shadow-[rgb(var(--theme-primary))]/10">
         <div id="stream-chat-status" class="border-b border-theme px-4 py-3 text-xs text-theme-secondary">正在连接客服...</div>
