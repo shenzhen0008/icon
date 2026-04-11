@@ -105,9 +105,11 @@ class PurchaseProductTest extends TestCase
         $this->from('/products/'.$product->id)->actingAs($user)->post('/positions/purchase', [
             'product_id' => $product->id,
             'shares' => 4,
-        ])->assertRedirect('/products/'.$product->id)
-            ->assertSessionHasErrors(['shares']);
+        ])->assertRedirect('/recharge');
 
+        $user->refresh();
+        $this->assertSame('3000.00', number_format((float) $user->balance, 2, '.', ''));
+        $this->assertDatabaseCount('positions', 0);
         $this->assertDatabaseCount('balance_ledgers', 0);
     }
 

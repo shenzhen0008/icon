@@ -3,6 +3,7 @@
 namespace App\Modules\Position\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Modules\Position\Exceptions\InsufficientBalanceException;
 use App\Modules\Position\Http\Requests\PurchasePositionRequest;
 use App\Modules\Position\Services\PurchasePositionService;
 use Illuminate\Http\RedirectResponse;
@@ -21,11 +22,15 @@ class PurchasePositionController extends Controller
             abort(401);
         }
 
-        $this->purchasePositionService->purchase(
-            $user,
-            (int) $request->validated('product_id'),
-            (int) $request->validated('shares'),
-        );
+        try {
+            $this->purchasePositionService->purchase(
+                $user,
+                (int) $request->validated('product_id'),
+                (int) $request->validated('shares'),
+            );
+        } catch (InsufficientBalanceException) {
+            return redirect('/recharge');
+        }
 
         return back();
     }

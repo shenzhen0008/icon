@@ -4,6 +4,7 @@ namespace App\Modules\Position\Services;
 
 use App\Models\User;
 use App\Modules\Balance\Models\BalanceLedger;
+use App\Modules\Position\Exceptions\InsufficientBalanceException;
 use App\Modules\Position\Models\Position;
 use App\Modules\Product\Models\Product;
 use Illuminate\Support\Facades\DB;
@@ -55,9 +56,7 @@ class PurchasePositionService
             $freshUser = User::query()->lockForUpdate()->findOrFail($user->id);
 
             if ((float) $freshUser->balance < $amount) {
-                throw ValidationException::withMessages([
-                    'shares' => '当前余额不足，无法完成购买。',
-                ]);
+                throw new InsufficientBalanceException('当前余额不足，无法完成购买。');
             }
 
             $beforeBalance = (float) $freshUser->balance;

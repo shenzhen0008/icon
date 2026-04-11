@@ -4,6 +4,7 @@ use App\Modules\User\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Modules\User\Http\Controllers\Auth\ConfirmablePasswordController;
 use App\Modules\User\Http\Controllers\Auth\RegisteredUserController;
 use App\Modules\Exchange\Http\Controllers\ExchangeMetricsFeedController;
+use App\Modules\Help\Http\Controllers\HelpPageController;
 use App\Modules\Product\Http\Controllers\ProductDetailController;
 use App\Modules\Product\Http\Controllers\PublicProductCatalogController;
 use App\Modules\User\Http\Controllers\HomeController;
@@ -24,6 +25,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomeController::class);
 Route::get('/exchange-metrics', ExchangeMetricsFeedController::class);
+Route::get('/help', HelpPageController::class);
 Route::get('/products', PublicProductCatalogController::class);
 Route::get('/products/{product}', ProductDetailController::class);
 Route::get('/recharge', RechargePageController::class);

@@ -73,9 +73,13 @@ class MyCenterPageTest extends TestCase
             ->assertSee('收益状态')
             ->assertSee('持仓产品')
             ->assertSee('正式账号')
+            ->assertSee('账户余额')
+            ->assertSee('充值')
+            ->assertSee('/recharge')
             ->assertSee('AbC123xYz987QwErT654X')
             ->assertSee('退出登录')
             ->assertDontSee('这是管理员备注')
+            ->assertDontSee('前往充值')
             ->assertDontSee('设置密码并注册');
     }
 
