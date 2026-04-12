@@ -175,4 +175,29 @@ class GlobalNavigationTest extends TestCase
                 ->assertSee($viewport);
         }
     }
+
+    public function test_frontend_pages_use_unified_desktop_main_container_width(): void
+    {
+        $product = Product::query()->create([
+            'name' => 'Product Layout Guard',
+            'code' => 'PLG',
+            'unit_price' => 1000,
+            'is_active' => true,
+        ]);
+
+        foreach (['/', '/products', '/products/'.$product->id, '/help', '/support', '/me'] as $uri) {
+            $this->get($uri)
+                ->assertOk()
+                ->assertSee('max-w-4xl', false)
+                ->assertDontSee('max-w-5xl', false)
+                ->assertDontSee('max-w-7xl', false)
+                ->assertDontSee('max-w-6xl', false);
+        }
+
+        $this->get('/stream-chat')
+            ->assertOk()
+            ->assertSee('md:max-w-4xl', false)
+            ->assertDontSee('md:max-w-5xl', false)
+            ->assertDontSee('md:max-w-6xl', false);
+    }
 }

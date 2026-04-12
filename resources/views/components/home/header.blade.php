@@ -1,4 +1,4 @@
-<header class="mx-auto hidden w-full max-w-6xl items-center justify-between px-6 py-6 md:flex">
+<header class="mx-auto hidden w-full max-w-4xl items-center justify-between px-6 py-6 md:flex">
     <a href="/" class="text-scale-ui font-semibold tracking-[0.2em] text-cyan-300">ICON MARKET</a>
     <nav class="text-scale-ui flex items-center gap-6 text-slate-300">
         <a href="/" class="transition hover:text-cyan-200">首页</a>

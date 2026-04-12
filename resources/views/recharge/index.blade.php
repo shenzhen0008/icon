@@ -16,7 +16,7 @@
 
   <x-nav.top />
 
-  <main class="mx-auto w-full max-w-7xl px-4 pb-28 pt-8 md:pb-10">
+  <main class="mx-auto w-full max-w-4xl px-4 pb-28 pt-8 md:pb-10">
     <section class="rounded-3xl border border-[rgb(var(--theme-primary))]/20 bg-gradient-to-br from-[rgb(var(--theme-primary))]/10 to-[rgb(var(--theme-accent))]/10 p-6 shadow-xl shadow-[rgb(var(--theme-primary))]/10">
       <h1 class="text-scale-display font-semibold text-theme">充值</h1>
       <p class="mt-2 text-scale-body text-theme-secondary">请选择币种后向对应地址付款，完成后上传付款截图，管理员将手动核实并入账。</p>

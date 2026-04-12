@@ -10,20 +10,15 @@
   <x-layout.background-glow />
   <x-nav.top />
 
-  <main class="mx-auto w-full max-w-7xl px-2 pb-28 pt-8 md:pb-10">
-    <div class="grid gap-5 lg:grid-cols-3">
-      <div class="order-last lg:order-none lg:col-span-1">
-        <x-me.account-panel :profile="$profile" :is-guest="$isGuest" />
-      </div>
+  <main class="mx-auto w-full max-w-4xl px-4 pb-28 pt-8 md:pb-10">
+    <div class="space-y-5">
+      <x-me.profit-panel :summary="$summary" />
+      <x-me.positions-panel :positions="$positions" />
+      <x-me.account-panel :profile="$profile" :is-guest="$isGuest" />
 
-      <div class="order-first space-y-5 lg:order-none lg:col-span-2">
-        <x-me.profit-panel :summary="$summary" />
-        <x-me.positions-panel :positions="$positions" />
-
-        @if ($isGuest)
-          <x-me.guest-auth-panel />
-        @endif
-      </div>
+      @if ($isGuest)
+        <x-me.guest-auth-panel />
+      @endif
     </div>
 
   </main>

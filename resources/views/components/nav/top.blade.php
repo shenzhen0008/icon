@@ -1,5 +1,5 @@
 <header id="top-nav" class="sticky top-0 z-30 border-b border-theme bg-theme-secondary/90 backdrop-blur">
-  <div class="mx-auto flex w-full max-w-6xl items-center justify-between px-[clamp(0.75rem,3.5vw,1.5rem)] py-[clamp(0.6rem,2.5vw,1rem)]">
+  <div class="mx-auto flex w-full max-w-4xl items-center justify-between px-[clamp(0.75rem,3.5vw,1.5rem)] py-[clamp(0.6rem,2.5vw,1rem)]">
     <a href="/" class="text-scale-ui font-semibold tracking-[0.2em] text-[rgb(var(--theme-primary))]">ICON MARKET</a>
 
     <nav class="hidden items-center gap-[clamp(0.8rem,3vw,1.5rem)] text-scale-ui md:flex">

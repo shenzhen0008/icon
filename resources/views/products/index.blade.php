@@ -10,7 +10,7 @@
   <x-layout.background-glow />
   <x-nav.top />
 
-  <main class="mx-auto w-full max-w-7xl px-4 pb-28 pt-6 md:pb-10 md:pt-8">
+  <main class="mx-auto w-full max-w-4xl px-4 pb-28 pt-6 md:pb-10 md:pt-8">
     <section class="mb-6 overflow-hidden rounded-3xl border border-[rgb(var(--theme-primary))]/20 bg-gradient-to-br from-[rgb(var(--theme-primary))]/10 to-[rgb(var(--theme-accent))]/10 p-5 shadow-xl shadow-[rgb(var(--theme-primary))]/10">
       <div class="space-y-4 rounded-2xl border border-theme bg-theme-card px-4 py-5 text-theme-secondary">
         <div class="flex items-center justify-between">
@@ -80,7 +80,7 @@
                 <div class="flex flex-nowrap items-center gap-2 overflow-x-auto overflow-y-hidden whitespace-nowrap pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                   @foreach ($product['symbol_icon_paths'] as $iconPath)
                     <span class="flex h-[clamp(1.5rem,5.2vw,1.9rem)] w-[clamp(1.5rem,5.2vw,1.9rem)] shrink-0 items-center justify-center overflow-hidden rounded-full border border-theme bg-theme-card">
-                      <img src="{{ $iconPath }}" alt="" class="h-[clamp(0.95rem,3.4vw,1.2rem)] w-[clamp(0.95rem,3.4vw,1.2rem)] object-contain">
+                      <img src="{{ $iconPath }}" alt="" class="h-[clamp(1.27rem,4.53vw,1.6rem)] w-[clamp(1.27rem,4.53vw,1.6rem)] object-contain">
                     </span>
                   @endforeach
                 </div>

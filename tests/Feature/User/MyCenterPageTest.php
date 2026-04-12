@@ -83,6 +83,14 @@ class MyCenterPageTest extends TestCase
             ->assertDontSee('设置密码并注册');
     }
 
+    public function test_my_center_places_account_panel_after_positions_panel(): void
+    {
+        $response = $this->get('/me');
+
+        $response->assertOk()
+            ->assertSeeInOrder(['收益状态', '持仓产品', '账号信息']);
+    }
+
     public function test_my_center_shows_redeeming_positions_but_hides_redeemed_positions(): void
     {
         $user = User::factory()->create();

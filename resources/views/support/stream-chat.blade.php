@@ -12,7 +12,7 @@
   <x-nav.top />
 
   <main
-    class="fixed inset-x-0 w-full overflow-hidden md:static md:mx-auto md:w-full md:max-w-6xl md:px-6 md:pb-10 md:pt-8"
+    class="fixed inset-x-0 w-full overflow-hidden md:static md:mx-auto md:w-full md:max-w-4xl md:px-6 md:pb-10 md:pt-8"
     style="top: var(--top-nav-height, 4.25rem); bottom: max(calc(var(--mobile-nav-height, 4.25rem) + env(safe-area-inset-bottom)), var(--chat-keyboard-inset, 0px));"
   >
     @if ($streamEnabled)
