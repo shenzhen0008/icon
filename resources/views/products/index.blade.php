@@ -76,11 +76,11 @@
                 </div>
               </div>
 
-              <div class="mt-2.5 rounded-2xl border border-theme bg-theme-secondary/20 px-2 py-1">
-                <div class="flex flex-nowrap items-center gap-2 overflow-x-auto overflow-y-hidden whitespace-nowrap pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              <div class="mt-2.5 rounded-2xl border border-theme bg-theme-secondary/20 px-2 py-[0.2rem]">
+                <div class="flex flex-nowrap items-center gap-2 overflow-x-auto overflow-y-hidden whitespace-nowrap pb-0 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                   @foreach ($product['symbol_icon_paths'] as $iconPath)
-                    <span class="flex h-[clamp(1.5rem,5.2vw,1.9rem)] w-[clamp(1.5rem,5.2vw,1.9rem)] shrink-0 items-center justify-center overflow-hidden rounded-full border border-theme bg-theme-card">
-                      <img src="{{ $iconPath }}" alt="" class="h-[clamp(1.69rem,6.04vw,2.13rem)] w-[clamp(1.69rem,6.04vw,2.13rem)] object-contain">
+                    <span class="flex h-[clamp(1.95rem,6.8vw,2.45rem)] w-[clamp(1.95rem,6.8vw,2.45rem)] shrink-0 items-center justify-center overflow-hidden rounded-full border border-theme bg-theme-card">
+                      <img src="{{ $iconPath }}" alt="" class="h-[clamp(1.45rem,5.2vw,1.82rem)] w-[clamp(1.45rem,5.2vw,1.82rem)] object-contain">
                     </span>
                   @endforeach
                 </div>
