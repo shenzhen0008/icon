@@ -22,13 +22,13 @@
             @if (!empty($product['product_icon_path']))
               <img src="{{ $product['product_icon_path'] }}" alt="" class="h-[clamp(1.125rem,4vw,1.5rem)] w-[clamp(1.125rem,4vw,1.5rem)] object-contain">
             @else
-              <span class="text-[10px] font-semibold uppercase text-[rgb(var(--theme-primary))]">{{ strtoupper(substr($product['code'], 0, 2)) }}</span>
+              <span class="text-fluid-2xs font-semibold uppercase text-[rgb(var(--theme-primary))]">{{ strtoupper(substr($product['code'], 0, 2)) }}</span>
             @endif
           </div>
-          <h1 class="truncate text-[clamp(1rem,3.8vw,1.3rem)] font-semibold">{{ $product['name'] }}</h1>
+          <h1 class="text-fluid-title-lg truncate font-semibold">{{ $product['name'] }}</h1>
         </div>
         @if ($product['purchase_limit'] !== null)
-          <p class="shrink-0 text-[clamp(0.625rem,2.8vw,0.75rem)] text-theme-secondary">限购 <span class="font-semibold text-[rgb(var(--theme-primary))]">{{ $product['purchase_limit'] }}</span> 份</p>
+          <p class="text-fluid-2xs shrink-0 text-theme-secondary">限购 <span class="font-semibold text-[rgb(var(--theme-primary))]">{{ $product['purchase_limit'] }}</span> 份</p>
         @endif
       </div>
 
@@ -36,16 +36,16 @@
 
       <div class="mt-4 flex items-start gap-2">
         <div class="shrink-0 text-left pr-2">
-          <p class="text-[clamp(0.625rem,2.8vw,0.75rem)] text-theme-secondary">限额(USDT)</p>
-          <p class="mt-1 whitespace-nowrap text-[clamp(0.75rem,3.2vw,0.95rem)] font-medium text-theme">{{ $product['limit_range'] }}</p>
+          <p class="text-fluid-2xs text-theme-secondary">限额(USDT)</p>
+          <p class="text-fluid-value mt-1 whitespace-nowrap font-medium text-theme">{{ $product['limit_range'] }}</p>
         </div>
         <div class="min-w-0 flex-1 text-center">
-          <p class="text-[clamp(0.625rem,2.8vw,0.75rem)] text-theme-secondary">收益率</p>
-          <p class="mt-1 whitespace-nowrap text-[clamp(0.75rem,3.2vw,0.95rem)] font-medium text-theme">{{ $product['rate_range'] }}</p>
+          <p class="text-fluid-2xs text-theme-secondary">收益率</p>
+          <p class="text-fluid-value mt-1 whitespace-nowrap font-medium text-theme">{{ $product['rate_range'] }}</p>
         </div>
         <div class="min-w-0 flex-1 text-right">
-          <p class="text-[clamp(0.625rem,2.8vw,0.75rem)] text-theme-secondary">周期</p>
-          <p class="mt-1 whitespace-nowrap text-[clamp(0.75rem,3.2vw,0.95rem)] font-medium text-theme">{{ $product['cycle_label'] }}</p>
+          <p class="text-fluid-2xs text-theme-secondary">周期</p>
+          <p class="text-fluid-value mt-1 whitespace-nowrap font-medium text-theme">{{ $product['cycle_label'] }}</p>
         </div>
       </div>
 
@@ -72,7 +72,7 @@
 
       @if ($isGuest)
         <p class="mt-3 text-sm text-theme-secondary">请先激活临时账号后购买。</p>
-        <button id="open-activate-modal" class="mt-4 mx-auto flex h-[clamp(1.9rem,7vw,2.2rem)] w-[clamp(7rem,42vw,9rem)] items-center justify-center rounded-lg bg-[rgb(var(--theme-primary))] px-[clamp(0.6rem,2.5vw,0.9rem)] text-[clamp(0.7rem,3vw,0.9rem)] font-semibold text-theme-on-primary">设置密码并注册</button>
+        <button id="open-activate-modal" class="text-fluid-action mt-4 mx-auto flex h-[clamp(1.9rem,7vw,2.2rem)] w-[clamp(7rem,42vw,9rem)] items-center justify-center rounded-lg bg-[rgb(var(--theme-primary))] px-[clamp(0.6rem,2.5vw,0.9rem)] font-semibold text-theme-on-primary">设置密码并注册</button>
       @else
         <p class="mt-3 text-sm text-theme-secondary">当前余额：{{ $balance }}</p>
 
@@ -83,7 +83,7 @@
             <label class="mb-1 block text-xs text-theme-secondary">购买份数</label>
             <input type="number" min="1" step="1" name="shares" class="w-full rounded-lg border border-theme bg-theme-secondary px-3 py-2 text-sm text-theme" required>
           </div>
-          <button class="h-[clamp(1.9rem,7vw,2.2rem)] w-[clamp(7rem,42vw,9rem)] self-center rounded-lg bg-[rgb(var(--theme-primary))] px-[clamp(0.6rem,2.5vw,0.9rem)] text-[clamp(0.7rem,3vw,0.9rem)] font-semibold text-theme-on-primary mx-auto sm:w-[clamp(7.5rem,20vw,10rem)] sm:self-auto sm:mx-0">
+          <button class="text-fluid-action h-[clamp(1.9rem,7vw,2.2rem)] w-[clamp(7rem,42vw,9rem)] self-center rounded-lg bg-[rgb(var(--theme-primary))] px-[clamp(0.6rem,2.5vw,0.9rem)] font-semibold text-theme-on-primary mx-auto sm:w-[clamp(7.5rem,20vw,10rem)] sm:self-auto sm:mx-0">
             立即购买
           </button>
         </form>

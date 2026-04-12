@@ -1,8 +1,8 @@
 <header id="top-nav" class="sticky top-0 z-30 border-b border-theme bg-theme-secondary/90 backdrop-blur">
   <div class="mx-auto flex w-full max-w-6xl items-center justify-between px-[clamp(0.75rem,3.5vw,1.5rem)] py-[clamp(0.6rem,2.5vw,1rem)]">
-    <a href="/" class="text-[clamp(0.72rem,2.8vw,0.95rem)] font-semibold tracking-[0.2em] text-[rgb(var(--theme-primary))]">ICON MARKET</a>
+    <a href="/" class="text-fluid-brand font-semibold tracking-[0.2em] text-[rgb(var(--theme-primary))]">ICON MARKET</a>
 
-    <nav class="hidden items-center gap-[clamp(0.8rem,3vw,1.5rem)] text-[clamp(0.72rem,2.3vw,0.92rem)] md:flex">
+    <nav class="hidden items-center gap-[clamp(0.8rem,3vw,1.5rem)] text-fluid-nav md:flex">
       <a href="/" class="{{ request()->is('/') ? 'text-[rgb(var(--theme-primary))]' : 'text-theme-secondary hover:text-[rgb(var(--theme-primary))]' }}">首页</a>
       <a href="/products" class="{{ request()->is('products') || request()->is('products/*') ? 'text-[rgb(var(--theme-primary))]' : 'text-theme-secondary hover:text-[rgb(var(--theme-primary))]' }}">产品</a>
       <a href="/help" class="{{ request()->is('help') ? 'text-[rgb(var(--theme-primary))]' : 'text-theme-secondary hover:text-[rgb(var(--theme-primary))]' }}">帮助</a>
@@ -37,7 +37,7 @@
             aria-hidden="true"
             data-language-current-flag
           >
-          <span class="text-[0.72rem] font-medium uppercase leading-none text-theme-secondary" data-language-current-code>ZH</span>
+          <span class="text-fluid-nav font-medium uppercase leading-none text-theme-secondary" data-language-current-code>ZH</span>
         </button>
         <div
           id="language-menu"

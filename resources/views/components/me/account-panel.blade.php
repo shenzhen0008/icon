@@ -22,7 +22,7 @@
       <div class="flex items-center justify-center rounded-xl border border-[rgb(var(--theme-rose))]/20 bg-[rgb(var(--theme-rose))]/10 p-3">
         <form method="POST" action="/logout" class="w-full">
           @csrf
-          <button class="mx-auto flex h-[clamp(1.9rem,7vw,2.2rem)] w-full max-w-[9.5rem] items-center justify-center whitespace-nowrap rounded-lg bg-[rgb(var(--theme-rose))] px-4 py-2 text-sm font-semibold text-theme-on-primary">退出登录</button>
+          <button class="text-fluid-action mx-auto flex h-[clamp(1.9rem,7vw,2.2rem)] w-full max-w-[9.5rem] items-center justify-center whitespace-nowrap rounded-lg bg-[rgb(var(--theme-rose))] px-4 py-2 font-semibold text-theme-on-primary">退出登录</button>
         </form>
       </div>
     @endif

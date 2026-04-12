@@ -4,7 +4,7 @@
             <span class="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-cyan-400/20 text-xs font-bold text-cyan-200 ring-1 ring-cyan-300/30">
                 IM
             </span>
-            <span class="text-sm font-semibold tracking-[0.16em] text-cyan-300">ICON MARKET</span>
+            <span class="text-fluid-brand font-semibold tracking-[0.16em] text-cyan-300">ICON MARKET</span>
         </div>
         <button
             type="button"

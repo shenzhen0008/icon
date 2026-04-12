@@ -38,7 +38,7 @@
 
                     <div class="mt-2 grid grid-cols-3 items-center gap-2">
                         <span class="flex items-center gap-2 text-theme-secondary">
-                            <span class="flex h-6 w-6 items-center justify-center overflow-hidden rounded-full bg-theme-secondary/80 text-[10px] font-semibold text-theme">
+                            <span class="text-fluid-2xs flex h-6 w-6 items-center justify-center overflow-hidden rounded-full bg-theme-secondary/80 font-semibold text-theme">
                                 <img
                                     src="/images/assets/bitcoin.svg"
                                     alt="Bitcoin logo"
@@ -55,7 +55,7 @@
                     </div>
                     <div class="mt-2 grid grid-cols-3 items-center gap-2">
                         <span class="flex items-center gap-2 text-theme-secondary">
-                            <span class="flex h-6 w-6 items-center justify-center overflow-hidden rounded-full bg-theme-secondary/80 text-[10px] font-semibold text-theme">
+                            <span class="text-fluid-2xs flex h-6 w-6 items-center justify-center overflow-hidden rounded-full bg-theme-secondary/80 font-semibold text-theme">
                                 <img
                                     src="/images/assets/ethereum.svg"
                                     alt="Ethereum logo"

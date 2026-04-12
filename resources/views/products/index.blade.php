@@ -47,15 +47,15 @@
                     @if (!empty($product['product_icon_path']))
                       <img src="{{ $product['product_icon_path'] }}" alt="" class="h-[clamp(1.125rem,4vw,1.5rem)] w-[clamp(1.125rem,4vw,1.5rem)] object-contain">
                     @else
-                      <span class="text-[10px] font-semibold uppercase text-theme">{{ strtoupper(substr($product['code'], 0, 2)) }}</span>
+                      <span class="text-fluid-2xs font-semibold uppercase text-theme">{{ strtoupper(substr($product['code'], 0, 2)) }}</span>
                     @endif
                   </div>
                   <div class="min-w-0">
-                    <h3 class="truncate text-[clamp(0.95rem,3.6vw,1.2rem)] font-semibold leading-none text-theme">{{ $product['name'] }}</h3>
+                    <h3 class="text-fluid-title truncate font-semibold leading-none text-theme">{{ $product['name'] }}</h3>
                   </div>
                 </div>
                 @if ($product['purchase_limit'] !== null)
-                  <p class="shrink-0 text-[clamp(0.625rem,2.8vw,0.75rem)] text-[rgb(var(--theme-primary))]">限购 <span class="font-semibold text-[rgb(var(--theme-accent))]">{{ $product['purchase_limit'] }}</span> 份</p>
+                  <p class="text-fluid-2xs shrink-0 text-[rgb(var(--theme-primary))]">限购 <span class="font-semibold text-[rgb(var(--theme-accent))]">{{ $product['purchase_limit'] }}</span> 份</p>
                 @endif
               </div>
 
@@ -63,16 +63,16 @@
 
               <div class="mt-3 flex items-start gap-2">
                 <div class="shrink-0 text-left pr-2">
-                  <p class="text-[clamp(0.625rem,2.8vw,0.75rem)] text-theme-secondary">限额(USDT)</p>
-                  <p class="mt-1 whitespace-nowrap text-[clamp(0.75rem,3.2vw,0.95rem)] font-medium text-theme">{{ $product['limit_range'] }}</p>
+                  <p class="text-fluid-2xs text-theme-secondary">限额(USDT)</p>
+                  <p class="text-fluid-value mt-1 whitespace-nowrap font-medium text-theme">{{ $product['limit_range'] }}</p>
                 </div>
                 <div class="min-w-0 flex-1 text-center">
-                  <p class="text-[clamp(0.625rem,2.8vw,0.75rem)] text-theme-secondary">收益率</p>
-                  <p class="mt-1 whitespace-nowrap text-[clamp(0.75rem,3.2vw,0.95rem)] font-medium text-theme">{{ $product['rate_range'] }}</p>
+                  <p class="text-fluid-2xs text-theme-secondary">收益率</p>
+                  <p class="text-fluid-value mt-1 whitespace-nowrap font-medium text-theme">{{ $product['rate_range'] }}</p>
                 </div>
                 <div class="min-w-0 flex-1 text-right">
-                  <p class="text-[clamp(0.625rem,2.8vw,0.75rem)] text-theme-secondary">周期</p>
-                  <p class="mt-1 whitespace-nowrap text-[clamp(0.75rem,3.2vw,0.95rem)] font-medium text-theme">{{ $product['cycle_label'] }}</p>
+                  <p class="text-fluid-2xs text-theme-secondary">周期</p>
+                  <p class="text-fluid-value mt-1 whitespace-nowrap font-medium text-theme">{{ $product['cycle_label'] }}</p>
                 </div>
               </div>
 
@@ -86,7 +86,7 @@
                 </div>
               </div>
 
-              <a href="/products/{{ $product['id'] }}" class="mt-2.5 flex h-[clamp(1.9rem,7vw,2.2rem)] w-[clamp(7rem,42vw,9rem)] items-center justify-center rounded-2xl bg-[rgb(var(--theme-primary))] px-[clamp(0.6rem,2.5vw,0.9rem)] text-[clamp(0.7rem,3vw,0.9rem)] font-semibold text-theme-on-primary shadow-lg shadow-[rgb(var(--theme-primary))]/20 transition hover:bg-[rgb(var(--theme-primary))]/90 mx-auto">
+              <a href="/products/{{ $product['id'] }}" class="text-fluid-action mt-2.5 flex h-[clamp(1.9rem,7vw,2.2rem)] w-[clamp(7rem,42vw,9rem)] items-center justify-center rounded-2xl bg-[rgb(var(--theme-primary))] px-[clamp(0.6rem,2.5vw,0.9rem)] font-semibold text-theme-on-primary shadow-lg shadow-[rgb(var(--theme-primary))]/20 transition hover:bg-[rgb(var(--theme-primary))]/90 mx-auto">
                 立即购买
               </a>
             </article>

@@ -38,7 +38,7 @@
               >
               <button
                 type="submit"
-                class="whitespace-nowrap rounded-lg bg-[rgb(var(--theme-primary))] px-4 py-2 text-sm font-semibold text-theme-secondary transition hover:bg-[rgb(var(--theme-primary))]/80"
+                class="text-fluid-action whitespace-nowrap rounded-lg bg-[rgb(var(--theme-primary))] px-4 py-2 font-semibold text-theme-secondary transition hover:bg-[rgb(var(--theme-primary))]/80"
               >发送</button>
             </div>
           </form>
@@ -370,7 +370,7 @@
           const hideButton = document.createElement('button');
           hideButton.type = 'button';
           hideButton.setAttribute('data-agent-hide-channel', '1');
-          hideButton.className = 'ml-2 inline-flex shrink-0 items-center rounded border border-theme px-1.5 py-0.5 text-[10px] text-theme-secondary hover:border-[rgb(var(--theme-rose))] hover:text-[rgb(var(--theme-rose))]';
+          hideButton.className = 'text-fluid-2xs ml-2 inline-flex shrink-0 items-center rounded border border-theme px-1.5 py-0.5 text-theme-secondary hover:border-[rgb(var(--theme-rose))] hover:text-[rgb(var(--theme-rose))]';
           hideButton.textContent = '删除';
           hideButton.addEventListener('click', async (event) => {
             event.preventDefault();

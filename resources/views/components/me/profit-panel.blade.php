@@ -19,7 +19,7 @@
         <p class="text-theme-secondary">账户余额</p>
         <p class="mt-1 text-base font-semibold text-theme">{{ $summary['balance'] }}</p>
       </div>
-      <a href="/recharge" class="absolute bottom-3 right-3 inline-flex h-10 min-w-[5.25rem] items-center justify-center rounded-lg border border-[rgb(var(--theme-primary))]/35 bg-[rgb(var(--theme-primary))]/14 px-4 text-[0.95rem] font-semibold text-[rgb(var(--theme-primary))] transition hover:border-[rgb(var(--theme-primary))] hover:bg-[rgb(var(--theme-primary))]/20">
+      <a href="/recharge" class="text-fluid-action absolute bottom-3 right-3 inline-flex h-10 min-w-[5.25rem] items-center justify-center rounded-lg border border-[rgb(var(--theme-primary))]/35 bg-[rgb(var(--theme-primary))]/14 px-4 font-semibold text-[rgb(var(--theme-primary))] transition hover:border-[rgb(var(--theme-primary))] hover:bg-[rgb(var(--theme-primary))]/20">
         充值
       </a>
     </div>

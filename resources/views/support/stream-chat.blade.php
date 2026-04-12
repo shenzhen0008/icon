@@ -32,7 +32,7 @@
             >
             <button
               type="submit"
-              class="whitespace-nowrap rounded-lg bg-[rgb(var(--theme-primary))] px-4 py-2 text-sm font-semibold text-theme-on-primary transition hover:bg-[rgb(var(--theme-primary))]/80"
+              class="text-fluid-action whitespace-nowrap rounded-lg bg-[rgb(var(--theme-primary))] px-4 py-2 font-semibold text-theme-on-primary transition hover:bg-[rgb(var(--theme-primary))]/80"
             >发送</button>
           </div>
         </form>
