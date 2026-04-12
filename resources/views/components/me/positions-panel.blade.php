@@ -7,10 +7,10 @@
     ];
   @endphp
 
-  <h2 class="text-base font-semibold text-theme">持仓产品</h2>
+  <h2 class="text-scale-body font-semibold text-theme">持仓产品</h2>
 
   @if (count($positions) === 0)
-    <div class="mt-4 rounded-xl border border-dashed border-theme bg-theme-secondary/20 p-4 text-sm text-theme-secondary">
+    <div class="mt-4 rounded-xl border border-dashed border-theme bg-theme-secondary/20 p-4 text-scale-body text-theme-secondary">
       暂无持仓产品
     </div>
   @else
@@ -30,19 +30,19 @@
           >
             <div class="flex items-center justify-between gap-3">
               <p class="font-medium text-theme">{{ $position['name'] }}</p>
-              <span class="rounded-full border border-theme px-2 py-0.5 text-xs text-theme-secondary" data-status-key="{{ $position['status'] }}">{{ $statusLabels[$position['status']] ?? $position['status'] }}</span>
+              <span class="rounded-full border border-theme px-2 py-0.5 text-scale-micro text-theme-secondary" data-status-key="{{ $position['status'] }}">{{ $statusLabels[$position['status']] ?? $position['status'] }}</span>
             </div>
           </button>
 
           <div class="mt-2 flex items-center justify-between gap-3">
-            <p class="text-sm text-theme-secondary">本金：{{ $position['principal'] }}</p>
-            <a href="/me/positions/{{ $position['id'] }}" class="text-sm text-[rgb(var(--theme-primary))] underline underline-offset-4">查看订单</a>
+            <p class="text-scale-body text-theme-secondary">本金：{{ $position['principal'] }}</p>
+            <a href="/me/positions/{{ $position['id'] }}" class="text-scale-body text-[rgb(var(--theme-primary))] underline underline-offset-4">查看订单</a>
           </div>
 
           <div id="{{ $panelId }}" class="mt-3 hidden border-t border-theme pt-3">
             <div class="rounded-lg border border-theme bg-theme-card p-3">
-              <p class="text-xs text-[rgb(var(--theme-primary))]">最近3天收益</p>
-              <div class="mt-2 space-y-1 text-xs text-theme-secondary">
+              <p class="text-scale-micro text-[rgb(var(--theme-primary))]">最近3天收益</p>
+              <div class="mt-2 space-y-1 text-scale-micro text-theme-secondary">
                 @if (count($position['recent_profits']) === 0)
                   <p class="text-theme-secondary">暂无收益记录</p>
                 @else

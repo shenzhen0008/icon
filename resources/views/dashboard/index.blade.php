@@ -11,7 +11,7 @@
     <x-nav.top />
 
     <main class="mx-auto max-w-2xl px-6 pb-28 pt-8 md:pb-10">
-        <h1 class="mb-2 text-2xl font-semibold">用户中心</h1>
+        <h1 class="mb-2 text-scale-display font-semibold">用户中心</h1>
         <p class="text-theme-secondary">当前用户：{{ $user?->username }}</p>
 
         <div class="mt-6 flex gap-3">

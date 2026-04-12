@@ -14,17 +14,15 @@
 
 /* 全站前台流体字号：基于 rem 的文本/按钮/间距会随屏宽自适应。 */
 html {
-    font-size: clamp(13px, calc(1.8vw + 6px), 16px);
+    font-size: clamp(14.5px, calc(1.45vw + 7.2px), 17px);
 }
 
 :root {
-    --font-fluid-2xs: clamp(0.625rem, 2.8vw, 0.75rem);
-    --font-fluid-xs: clamp(0.7rem, 3vw, 0.9rem);
-    --font-fluid-nav: clamp(0.72rem, 2.3vw, 0.92rem);
-    --font-fluid-brand: clamp(0.72rem, 2.8vw, 0.95rem);
-    --font-fluid-title: clamp(0.95rem, 3.6vw, 1.2rem);
-    --font-fluid-title-lg: clamp(1rem, 3.8vw, 1.3rem);
-    --font-fluid-value: clamp(0.75rem, 3.2vw, 0.95rem);
+    --font-scale-micro: clamp(0.76rem, 2.75vw, 0.86rem);
+    --font-scale-body: clamp(0.92rem, 3.15vw, 1.04rem);
+    --font-scale-ui: clamp(0.95rem, 3.3vw, 1.09rem);
+    --font-scale-title: clamp(1.12rem, 3.95vw, 1.44rem);
+    --font-scale-display: clamp(1.45rem, 5.4vw, 2.2rem);
 }
 
 /* 默认主题变量（科技风格） */
@@ -65,12 +63,9 @@ html {
 .border-theme { border-color: rgb(var(--theme-border)); }
 .shadow-theme { --tw-shadow-color: rgb(var(--theme-primary) / 0.1); --tw-shadow: var(--tw-shadow-colored); }
 
-/* 流体字号 utility，统一导航、按钮、产品卡片等高频场景。 */
-.text-fluid-2xs { font-size: var(--font-fluid-2xs); }
-.text-fluid-xs { font-size: var(--font-fluid-xs); }
-.text-fluid-nav { font-size: var(--font-fluid-nav); }
-.text-fluid-brand { font-size: var(--font-fluid-brand); }
-.text-fluid-title { font-size: var(--font-fluid-title); }
-.text-fluid-title-lg { font-size: var(--font-fluid-title-lg); }
-.text-fluid-value { font-size: var(--font-fluid-value); }
-.text-fluid-action { font-size: var(--font-fluid-xs); }
+/* 五档字号体系：微字、正文、UI、标题、大标题。 */
+.text-scale-micro { font-size: var(--font-scale-micro); }
+.text-scale-body { font-size: var(--font-scale-body); }
+.text-scale-ui { font-size: var(--font-scale-ui); }
+.text-scale-title { font-size: var(--font-scale-title); }
+.text-scale-display { font-size: var(--font-scale-display); }

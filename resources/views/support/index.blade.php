@@ -12,17 +12,17 @@
 
   <main class="mx-auto w-full max-w-6xl px-6 pb-[calc(var(--mobile-nav-height,4.25rem)+1.5rem+env(safe-area-inset-bottom))] pt-8 md:pb-10">
     <div class="mb-5">
-      <p class="text-fluid-2xs uppercase tracking-[0.24em] text-[rgb(var(--theme-primary))]">Support</p>
-      <h1 class="mt-2 text-2xl font-semibold">客服中心</h1>
-      <p class="mt-1 text-sm text-theme-secondary">在站内页面直接联系在线客服。</p>
+      <p class="text-scale-micro uppercase tracking-[0.24em] text-[rgb(var(--theme-primary))]">Support</p>
+      <h1 class="mt-2 text-scale-display font-semibold">客服中心</h1>
+      <p class="mt-1 text-scale-body text-theme-secondary">在站内页面直接联系在线客服。</p>
     </div>
 
     @if ($tawkEnabled && filled($embedUrl))
-      <section class="rounded-2xl border border-[rgb(var(--theme-primary))]/20 bg-theme-card p-6 text-sm text-theme-secondary shadow-xl shadow-[rgb(var(--theme-primary))]/10">
+      <section class="rounded-2xl border border-[rgb(var(--theme-primary))]/20 bg-theme-card p-6 text-scale-body text-theme-secondary shadow-xl shadow-[rgb(var(--theme-primary))]/10">
         客服已接入。点击页面右下角聊天入口即可开始会话。
       </section>
     @else
-      <section class="rounded-2xl border border-dashed border-theme bg-theme-card p-8 text-sm text-theme-secondary">
+      <section class="rounded-2xl border border-dashed border-theme bg-theme-card p-8 text-scale-body text-theme-secondary">
         客服系统暂未配置完成，请稍后再试。
       </section>
     @endif

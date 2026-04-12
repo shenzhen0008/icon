@@ -67,6 +67,37 @@ bash scripts/deploy.sh
 - 在 `.env` 中设置 `APP_THEME=business` 可切换到商务风格。
 - 前端支持实时切换（首页右下角按钮），并保存到浏览器 localStorage。
 
+### 字体规范（5 档）
+当前项目前端字体统一使用 5 档语义类，禁止在 Blade 中新增 `text-sm`、`text-xl`、`text-[...]` 这类直接字号写法。
+
+统一入口：
+- 根字号：`resources/css/app.css` 中 `html { font-size: clamp(...) }`
+- 5 档类：`text-scale-micro` / `text-scale-body` / `text-scale-ui` / `text-scale-title` / `text-scale-display`
+
+使用规范：
+
+| 类名 | 用途 | 推荐场景 | 不要用于 |
+|---|---|---|---|
+| `text-scale-micro` | 微字 | 标签、角标、状态提示、次要辅助说明 | 正文段落、按钮主文案 |
+| `text-scale-body` | 正文 | 页面段落、表单标签、列表说明、默认内容文本 | 大标题、金额主数值 |
+| `text-scale-ui` | 交互文案 | 按钮、导航、Tab、可点击入口文案 | 长段正文、主标题 |
+| `text-scale-title` | 小标题 | 卡片标题、模块标题、关键数值标题 | 页面主标题（H1） |
+| `text-scale-display` | 大标题 | 页面主标题、首页关键数据大数字 | 次要信息、表单说明 |
+
+落地示例：
+```blade
+<h1 class="text-scale-display font-semibold">产品市场</h1>
+<h2 class="text-scale-title font-semibold">可购买产品</h2>
+<p class="text-scale-body text-theme-secondary">请选择产品后继续操作。</p>
+<button class="text-scale-ui font-semibold">立即购买</button>
+<span class="text-scale-micro text-theme-secondary">更新于 2 分钟前</span>
+```
+
+PR 自检（字体相关）：
+1. 页面中不新增 `text-sm`/`text-xl`/`text-[...]` 直接字号类。
+2. 仅从 5 档语义类中选字号。
+3. 大标题只用 `text-scale-display`，按钮只用 `text-scale-ui`，正文默认 `text-scale-body`。
+
 
 ## 推送到 GitHub
 

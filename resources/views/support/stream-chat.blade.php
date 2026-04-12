@@ -17,36 +17,36 @@
   >
     @if ($streamEnabled)
       <section class="flex h-full flex-col overflow-hidden rounded-none border border-[rgb(var(--theme-primary))]/20 bg-theme-card shadow-none md:rounded-2xl md:shadow-xl md:shadow-[rgb(var(--theme-primary))]/10">
-        <div id="stream-chat-status" class="border-b border-theme px-4 py-3 text-xs text-theme-secondary">正在连接客服...</div>
+        <div id="stream-chat-status" class="border-b border-theme px-4 py-3 text-scale-micro text-theme-secondary">正在连接客服...</div>
         <div id="stream-chat-messages" class="min-h-0 flex-1 overflow-y-auto px-4 py-4"></div>
         <form id="stream-chat-form" class="shrink-0 border-t border-theme p-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] md:pb-3">
           <div class="flex min-w-0 items-center gap-2">
-            <label for="stream-chat-file" class="inline-flex shrink-0 cursor-pointer items-center whitespace-nowrap rounded-lg border border-theme px-3 py-2 text-xs text-theme-secondary transition hover:border-[rgb(var(--theme-primary))] hover:text-[rgb(var(--theme-primary))]">图片</label>
+            <label for="stream-chat-file" class="inline-flex shrink-0 cursor-pointer items-center whitespace-nowrap rounded-lg border border-theme px-3 py-2 text-scale-micro text-theme-secondary transition hover:border-[rgb(var(--theme-primary))] hover:text-[rgb(var(--theme-primary))]">图片</label>
             <input id="stream-chat-file" type="file" accept="image/*" class="hidden">
             <input
               id="stream-chat-input"
               type="text"
               maxlength="500"
               placeholder="请输入消息..."
-              class="flex-1 min-w-0 rounded-lg border border-theme bg-theme-secondary px-3 py-2 text-base text-theme placeholder:text-theme-secondary focus:border-[rgb(var(--theme-primary))] focus:outline-none md:text-sm"
+              class="flex-1 min-w-0 rounded-lg border border-theme bg-theme-secondary px-3 py-2 text-scale-body text-theme placeholder:text-theme-secondary focus:border-[rgb(var(--theme-primary))] focus:outline-none text-scale-body"
             >
             <button
               type="submit"
-              class="text-fluid-action whitespace-nowrap rounded-lg bg-[rgb(var(--theme-primary))] px-4 py-2 font-semibold text-theme-on-primary transition hover:bg-[rgb(var(--theme-primary))]/80"
+              class="text-scale-ui whitespace-nowrap rounded-lg bg-[rgb(var(--theme-primary))] px-4 py-2 font-semibold text-theme-on-primary transition hover:bg-[rgb(var(--theme-primary))]/80"
             >发送</button>
           </div>
         </form>
       </section>
 
       <aside id="stream-chat-sound-prompt" class="fixed right-3 top-20 z-40 hidden w-56 rounded-xl border border-[rgb(var(--theme-primary))]/30 bg-theme-card p-3 shadow-lg shadow-[rgb(var(--theme-primary))]/20 md:right-6 md:top-24">
-        <p class="text-xs text-theme-secondary">开启消息提醒音？收到新消息时会播放提示音。</p>
+        <p class="text-scale-micro text-theme-secondary">开启消息提醒音？收到新消息时会播放提示音。</p>
         <div class="mt-2 flex items-center justify-end gap-2">
-          <button id="stream-chat-sound-dismiss" type="button" class="rounded-lg border border-theme px-2.5 py-1 text-xs text-theme-secondary hover:border-[rgb(var(--theme-primary))]">稍后</button>
-          <button id="stream-chat-sound-enable" type="button" class="rounded-lg bg-[rgb(var(--theme-primary))] px-2.5 py-1 text-xs font-semibold text-theme-on-primary hover:bg-[rgb(var(--theme-primary))]/80">开启</button>
+          <button id="stream-chat-sound-dismiss" type="button" class="rounded-lg border border-theme px-2.5 py-1 text-scale-micro text-theme-secondary hover:border-[rgb(var(--theme-primary))]">稍后</button>
+          <button id="stream-chat-sound-enable" type="button" class="rounded-lg bg-[rgb(var(--theme-primary))] px-2.5 py-1 text-scale-micro font-semibold text-theme-on-primary hover:bg-[rgb(var(--theme-primary))]/80">开启</button>
         </div>
       </aside>
     @else
-      <section class="rounded-2xl border border-dashed border-theme bg-theme-card p-8 text-sm text-theme-secondary">
+      <section class="rounded-2xl border border-dashed border-theme bg-theme-card p-8 text-scale-body text-theme-secondary">
         Stream Chat 尚未配置完成，请先设置 API Key 和 Secret。
       </section>
     @endif
@@ -98,15 +98,15 @@
         container.className = 'max-w-[82%]';
 
         const sender = document.createElement('div');
-        sender.className = `mb-1 text-xs ${isSelf ? 'text-right text-[rgb(var(--theme-primary))]' : 'text-theme-secondary'}`;
+        sender.className = `mb-1 text-scale-micro ${isSelf ? 'text-right text-[rgb(var(--theme-primary))]' : 'text-theme-secondary'}`;
         sender.textContent = `${displayName}:`;
         container.appendChild(sender);
 
         if (message.text) {
           const wrapper = document.createElement('div');
           wrapper.className = isSelf
-            ? 'rounded-lg bg-[rgb(var(--theme-primary))]/20 px-3 py-2 text-sm text-theme'
-            : 'rounded-lg bg-theme-secondary/80 px-3 py-2 text-sm text-theme';
+            ? 'rounded-lg bg-[rgb(var(--theme-primary))]/20 px-3 py-2 text-scale-body text-theme'
+            : 'rounded-lg bg-theme-secondary/80 px-3 py-2 text-scale-body text-theme';
           wrapper.textContent = message.text;
           container.appendChild(wrapper);
         }
@@ -142,7 +142,7 @@
         container.className = 'max-w-[82%]';
 
         const sender = document.createElement('div');
-        sender.className = 'mb-1 text-right text-xs text-[rgb(var(--theme-primary))]';
+        sender.className = 'mb-1 text-right text-scale-micro text-[rgb(var(--theme-primary))]';
         sender.textContent = '我:';
         container.appendChild(sender);
 
@@ -151,7 +151,7 @@
         container.appendChild(skeleton);
 
         const hint = document.createElement('div');
-        hint.className = 'mt-1 text-right text-xs text-theme-secondary';
+        hint.className = 'mt-1 text-right text-scale-micro text-theme-secondary';
         hint.textContent = '图片上传中...';
         container.appendChild(hint);
 
@@ -298,7 +298,7 @@
               content.className = 'max-w-[82%]';
 
               const sender = document.createElement('div');
-              sender.className = 'mb-1 text-right text-xs text-[rgb(var(--theme-primary))]';
+              sender.className = 'mb-1 text-right text-scale-micro text-[rgb(var(--theme-primary))]';
               sender.textContent = '我:';
               content.appendChild(sender);
 
@@ -307,7 +307,7 @@
               content.appendChild(failedBlock);
 
               const failedHint = document.createElement('div');
-              failedHint.className = 'mt-1 text-right text-xs text-[rgb(var(--theme-rose))]';
+              failedHint.className = 'mt-1 text-right text-scale-micro text-[rgb(var(--theme-rose))]';
               failedHint.textContent = '图片发送失败，请重试。';
               content.appendChild(failedHint);
 

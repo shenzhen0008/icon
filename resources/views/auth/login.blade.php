@@ -11,24 +11,24 @@
     <x-nav.top />
 
     <main class="mx-auto max-w-md px-6 pb-28 pt-8 md:pb-10">
-        <h1 class="mb-6 text-2xl font-semibold">登录</h1>
+        <h1 class="mb-6 text-scale-display font-semibold">登录</h1>
 
         <form method="POST" action="/login" class="space-y-4 rounded-lg border border-theme bg-theme-secondary p-4">
             @csrf
 
             <div>
-                <label class="mb-1 block text-sm" for="username">用户名（21位）</label>
+                <label class="mb-1 block text-scale-body" for="username">用户名（21位）</label>
                 <input id="username" name="username" value="{{ old('username') }}" class="w-full rounded border border-theme bg-theme-secondary p-2" required>
-                @error('username')<p class="mt-1 text-sm text-[rgb(var(--theme-rose))]">{{ $message }}</p>@enderror
+                @error('username')<p class="mt-1 text-scale-body text-[rgb(var(--theme-rose))]">{{ $message }}</p>@enderror
             </div>
 
             <div>
-                <label class="mb-1 block text-sm" for="password">密码</label>
+                <label class="mb-1 block text-scale-body" for="password">密码</label>
                 <input id="password" type="password" name="password" class="w-full rounded border border-theme bg-theme-secondary p-2" required>
-                @error('password')<p class="mt-1 text-sm text-[rgb(var(--theme-rose))]">{{ $message }}</p>@enderror
+                @error('password')<p class="mt-1 text-scale-body text-[rgb(var(--theme-rose))]">{{ $message }}</p>@enderror
             </div>
 
-            <label class="flex items-center gap-2 text-sm">
+            <label class="flex items-center gap-2 text-scale-body">
                 <input type="checkbox" name="remember" value="1" class="rounded border-theme bg-theme-secondary">
                 记住我
             </label>

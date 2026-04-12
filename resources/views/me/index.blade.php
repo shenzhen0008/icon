@@ -34,7 +34,7 @@
     <dialog id="activate-modal" class="w-full max-w-md rounded-2xl border border-white/10 bg-slate-900 p-0 text-slate-100 backdrop:bg-black/70">
       <div class="p-6">
         <div class="mb-4 flex items-center justify-between">
-          <h2 class="text-lg font-semibold">设置密码注册</h2>
+          <h2 class="text-scale-title font-semibold">设置密码注册</h2>
           <button id="close-activate-modal" class="rounded px-2 py-1 text-slate-300 hover:bg-white/10">关闭</button>
         </div>
 
@@ -42,15 +42,15 @@
           @csrf
 
           <div>
-            <label class="mb-1 block text-sm" for="password">密码</label>
+            <label class="mb-1 block text-scale-body" for="password">密码</label>
             <input id="password" type="password" name="password" class="w-full rounded-lg border border-theme bg-theme-secondary px-3 py-2" required>
             @error('password')
-              <p class="mt-1 text-sm text-[rgb(var(--theme-rose))]">{{ $message }}</p>
+              <p class="mt-1 text-scale-body text-[rgb(var(--theme-rose))]">{{ $message }}</p>
             @enderror
           </div>
 
           <div>
-            <label class="mb-1 block text-sm" for="password_confirmation">确认密码</label>
+            <label class="mb-1 block text-scale-body" for="password_confirmation">确认密码</label>
             <input id="password_confirmation" type="password" name="password_confirmation" class="w-full rounded-lg border border-theme bg-theme-secondary px-3 py-2" required>
           </div>
 

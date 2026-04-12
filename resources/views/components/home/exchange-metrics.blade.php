@@ -1,6 +1,6 @@
 <section class="mt-8 rounded-2xl border border-theme bg-theme-card p-5">
     <div class="mb-4 flex items-center justify-between gap-3">
-        <h2 class="text-lg font-semibold text-theme">实时操盘平台</h2>
+        <h2 class="text-scale-title font-semibold text-theme">实时操盘平台</h2>
     </div>
 
     <div id="exchange-metrics-list" class="-mx-5 space-y-3">
@@ -13,7 +13,7 @@
                     data-code="{{ $metric['exchange_code'] }}"
                 >
                     <span class="flex items-center gap-3">
-                        <span class="flex h-8 w-8 items-center justify-center overflow-hidden rounded-full bg-theme-secondary text-xs font-semibold text-theme-secondary">
+                        <span class="flex h-8 w-8 items-center justify-center overflow-hidden rounded-full bg-theme-secondary text-scale-micro font-semibold text-theme-secondary">
                             <img
                                 src="{{ $metric['logo_url'] }}"
                                 alt="{{ $metric['exchange_name'] }} logo"
@@ -29,8 +29,8 @@
                     <span class="font-semibold text-[rgb(var(--theme-primary))]" data-field="profit_value">{{ $metric['profit_value'] }}</span>
                 </button>
 
-                <div class="hidden border-t border-theme px-4 py-3 text-sm" data-detail-row="{{ $metric['exchange_code'] }}">
-                    <div class="grid grid-cols-3 border-b border-theme pb-2 text-xs text-theme-secondary">
+                <div class="hidden border-t border-theme px-4 py-3 text-scale-body" data-detail-row="{{ $metric['exchange_code'] }}">
+                    <div class="grid grid-cols-3 border-b border-theme pb-2 text-scale-micro text-theme-secondary">
                         <span>Currency</span>
                         <span class="text-center">24h Volume</span>
                         <span class="text-right">Liquidity</span>
@@ -38,7 +38,7 @@
 
                     <div class="mt-2 grid grid-cols-3 items-center gap-2">
                         <span class="flex items-center gap-2 text-theme-secondary">
-                            <span class="text-fluid-2xs flex h-6 w-6 items-center justify-center overflow-hidden rounded-full bg-theme-secondary/80 font-semibold text-theme">
+                            <span class="text-scale-micro flex h-6 w-6 items-center justify-center overflow-hidden rounded-full bg-theme-secondary/80 font-semibold text-theme">
                                 <img
                                     src="/images/assets/bitcoin.svg"
                                     alt="Bitcoin logo"
@@ -55,7 +55,7 @@
                     </div>
                     <div class="mt-2 grid grid-cols-3 items-center gap-2">
                         <span class="flex items-center gap-2 text-theme-secondary">
-                            <span class="text-fluid-2xs flex h-6 w-6 items-center justify-center overflow-hidden rounded-full bg-theme-secondary/80 font-semibold text-theme">
+                            <span class="text-scale-micro flex h-6 w-6 items-center justify-center overflow-hidden rounded-full bg-theme-secondary/80 font-semibold text-theme">
                                 <img
                                     src="/images/assets/ethereum.svg"
                                     alt="Ethereum logo"
@@ -70,7 +70,7 @@
                         <span class="text-center text-theme" data-field="eth_value">{{ $metric['eth_value'] }}</span>
                         <span class="text-right text-theme" data-field="eth_liquidity">{{ $metric['eth_liquidity'] }}</span>
                     </div>
-                    <p class="mt-2 text-xs text-theme-secondary" data-field="updated_at">更新: {{ $metric['updated_at'] }}</p>
+                    <p class="mt-2 text-scale-micro text-theme-secondary" data-field="updated_at">更新: {{ $metric['updated_at'] }}</p>
                 </div>
             </article>
         @endforeach

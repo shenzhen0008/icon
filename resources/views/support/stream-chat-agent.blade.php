@@ -15,30 +15,30 @@
     @if ($streamEnabled)
       <section class="grid overflow-hidden rounded-2xl border border-[rgb(var(--theme-primary))]/20 bg-theme-card shadow-xl shadow-[rgb(var(--theme-primary))]/10 md:grid-cols-[17rem_1fr]">
         <aside id="agent-mobile-list-view" class="md:border-r md:border-theme">
-          <div class="border-b border-theme px-4 py-3 text-xs text-theme-secondary">会话列表</div>
+          <div class="border-b border-theme px-4 py-3 text-scale-micro text-theme-secondary">会话列表</div>
           <div id="agent-channel-list" class="h-[calc(var(--app-vh,100dvh)-19rem)] min-h-[360px] overflow-y-auto"></div>
         </aside>
         <div id="agent-mobile-chat-view" class="hidden min-h-[420px] flex-col md:flex">
-          <div class="flex items-center justify-between border-b border-theme px-4 py-3 text-xs text-theme-secondary md:hidden">
-            <button id="agent-mobile-back" type="button" class="inline-flex items-center gap-1 rounded-lg border border-theme px-2.5 py-1.5 text-xs text-theme-secondary hover:border-[rgb(var(--theme-primary))] hover:text-[rgb(var(--theme-primary))]">返回列表</button>
-            <button id="agent-open-channel-drawer" type="button" class="inline-flex items-center gap-1 rounded-lg border border-theme px-2.5 py-1.5 text-xs text-theme-secondary hover:border-[rgb(var(--theme-primary))] hover:text-[rgb(var(--theme-primary))]">切换会话</button>
+          <div class="flex items-center justify-between border-b border-theme px-4 py-3 text-scale-micro text-theme-secondary md:hidden">
+            <button id="agent-mobile-back" type="button" class="inline-flex items-center gap-1 rounded-lg border border-theme px-2.5 py-1.5 text-scale-micro text-theme-secondary hover:border-[rgb(var(--theme-primary))] hover:text-[rgb(var(--theme-primary))]">返回列表</button>
+            <button id="agent-open-channel-drawer" type="button" class="inline-flex items-center gap-1 rounded-lg border border-theme px-2.5 py-1.5 text-scale-micro text-theme-secondary hover:border-[rgb(var(--theme-primary))] hover:text-[rgb(var(--theme-primary))]">切换会话</button>
           </div>
-          <div id="agent-status" class="border-b border-theme px-4 py-3 text-xs text-theme-secondary">正在连接客服工作台...</div>
+          <div id="agent-status" class="border-b border-theme px-4 py-3 text-scale-micro text-theme-secondary">正在连接客服工作台...</div>
           <div id="agent-messages" class="h-[calc(var(--app-vh,100dvh)-24rem)] min-h-[260px] overflow-y-auto px-4 py-4"></div>
           <form id="agent-chat-form" class="border-t border-theme p-3">
             <div class="flex min-w-0 items-center gap-2">
-              <label for="agent-chat-file" class="inline-flex shrink-0 cursor-pointer items-center whitespace-nowrap rounded-lg border border-theme px-3 py-2 text-xs text-theme-secondary transition hover:border-[rgb(var(--theme-primary))] hover:text-[rgb(var(--theme-primary))]">图片</label>
+              <label for="agent-chat-file" class="inline-flex shrink-0 cursor-pointer items-center whitespace-nowrap rounded-lg border border-theme px-3 py-2 text-scale-micro text-theme-secondary transition hover:border-[rgb(var(--theme-primary))] hover:text-[rgb(var(--theme-primary))]">图片</label>
               <input id="agent-chat-file" type="file" accept="image/*" class="hidden">
               <input
                 id="agent-chat-input"
                 type="text"
                 maxlength="500"
                 placeholder="输入回复内容..."
-                class="flex-1 min-w-0 rounded-lg border border-theme bg-theme-secondary px-3 py-2 text-base text-theme placeholder:text-theme-secondary focus:border-[rgb(var(--theme-primary))] focus:outline-none md:text-sm"
+                class="flex-1 min-w-0 rounded-lg border border-theme bg-theme-secondary px-3 py-2 text-scale-body text-theme placeholder:text-theme-secondary focus:border-[rgb(var(--theme-primary))] focus:outline-none text-scale-body"
               >
               <button
                 type="submit"
-                class="text-fluid-action whitespace-nowrap rounded-lg bg-[rgb(var(--theme-primary))] px-4 py-2 font-semibold text-theme-secondary transition hover:bg-[rgb(var(--theme-primary))]/80"
+                class="text-scale-ui whitespace-nowrap rounded-lg bg-[rgb(var(--theme-primary))] px-4 py-2 font-semibold text-theme-secondary transition hover:bg-[rgb(var(--theme-primary))]/80"
               >发送</button>
             </div>
           </form>
@@ -49,22 +49,22 @@
         <button id="agent-channel-drawer-mask" type="button" class="absolute inset-0 bg-black/45"></button>
         <section class="absolute inset-x-0 bottom-0 max-h-[70vh] overflow-hidden rounded-t-2xl border border-theme bg-theme-card shadow-2xl shadow-[rgb(var(--theme-primary))]/20">
           <div class="flex items-center justify-between border-b border-theme px-4 py-3">
-            <p class="text-sm font-semibold text-theme">切换会话</p>
-            <button id="agent-close-channel-drawer" type="button" class="rounded-lg border border-theme px-2.5 py-1 text-xs text-theme-secondary hover:border-[rgb(var(--theme-primary))] hover:text-[rgb(var(--theme-primary))]">关闭</button>
+            <p class="text-scale-body font-semibold text-theme">切换会话</p>
+            <button id="agent-close-channel-drawer" type="button" class="rounded-lg border border-theme px-2.5 py-1 text-scale-micro text-theme-secondary hover:border-[rgb(var(--theme-primary))] hover:text-[rgb(var(--theme-primary))]">关闭</button>
           </div>
           <div id="agent-channel-drawer-list" class="max-h-[55vh] overflow-y-auto"></div>
         </section>
       </div>
 
       <aside id="agent-chat-sound-prompt" class="fixed right-3 top-20 z-40 hidden w-56 rounded-xl border border-[rgb(var(--theme-primary))]/30 bg-theme-card p-3 shadow-lg shadow-[rgb(var(--theme-primary))]/20 md:right-6 md:top-24">
-        <p class="text-xs text-theme-secondary">开启消息提醒音？收到访客新消息时会播放提示音。</p>
+        <p class="text-scale-micro text-theme-secondary">开启消息提醒音？收到访客新消息时会播放提示音。</p>
         <div class="mt-2 flex items-center justify-end gap-2">
-          <button id="agent-chat-sound-dismiss" type="button" class="rounded-lg border border-theme px-2.5 py-1 text-xs text-theme-secondary hover:border-[rgb(var(--theme-primary))]">稍后</button>
-          <button id="agent-chat-sound-enable" type="button" class="rounded-lg bg-[rgb(var(--theme-primary))] px-2.5 py-1 text-xs font-semibold text-theme-on-primary hover:bg-[rgb(var(--theme-primary))]/80">开启</button>
+          <button id="agent-chat-sound-dismiss" type="button" class="rounded-lg border border-theme px-2.5 py-1 text-scale-micro text-theme-secondary hover:border-[rgb(var(--theme-primary))]">稍后</button>
+          <button id="agent-chat-sound-enable" type="button" class="rounded-lg bg-[rgb(var(--theme-primary))] px-2.5 py-1 text-scale-micro font-semibold text-theme-on-primary hover:bg-[rgb(var(--theme-primary))]/80">开启</button>
         </div>
       </aside>
     @else
-      <section class="rounded-2xl border border-dashed border-theme bg-theme-card p-8 text-sm text-theme-secondary">
+      <section class="rounded-2xl border border-dashed border-theme bg-theme-card p-8 text-scale-body text-theme-secondary">
         Stream Chat 尚未配置完成，请先设置 API Key 和 Secret。
       </section>
     @endif
@@ -167,15 +167,15 @@
         content.className = 'max-w-[80%]';
 
         const sender = document.createElement('div');
-        sender.className = `mb-1 text-xs ${isAgent ? 'text-right text-[rgb(var(--theme-primary))]' : 'text-theme-secondary'}`;
+        sender.className = `mb-1 text-scale-micro ${isAgent ? 'text-right text-[rgb(var(--theme-primary))]' : 'text-theme-secondary'}`;
         sender.textContent = `${displayName}:`;
         content.appendChild(sender);
 
         if (message.text) {
           const bubble = document.createElement('div');
           bubble.className = isAgent
-            ? 'rounded-lg bg-[rgb(var(--theme-primary))]/20 px-3 py-2 text-sm text-theme'
-            : 'rounded-lg bg-theme-secondary/80 px-3 py-2 text-sm text-theme';
+            ? 'rounded-lg bg-[rgb(var(--theme-primary))]/20 px-3 py-2 text-scale-body text-theme'
+            : 'rounded-lg bg-theme-secondary/80 px-3 py-2 text-scale-body text-theme';
           bubble.textContent = message.text;
           content.appendChild(bubble);
         }
@@ -263,7 +263,7 @@
         content.className = 'max-w-[80%]';
 
         const sender = document.createElement('div');
-        sender.className = 'mb-1 text-right text-xs text-[rgb(var(--theme-primary))]';
+        sender.className = 'mb-1 text-right text-scale-micro text-[rgb(var(--theme-primary))]';
         sender.textContent = '我:';
         content.appendChild(sender);
 
@@ -272,7 +272,7 @@
         content.appendChild(skeleton);
 
         const hint = document.createElement('div');
-        hint.className = 'mt-1 text-right text-xs text-theme-secondary';
+        hint.className = 'mt-1 text-right text-scale-micro text-theme-secondary';
         hint.textContent = '图片上传中...';
         content.appendChild(hint);
 
@@ -341,7 +341,7 @@
 
         if (channels.length === 0) {
           const empty = document.createElement('div');
-          empty.className = 'px-4 py-4 text-sm text-theme-secondary';
+          empty.className = 'px-4 py-4 text-scale-body text-theme-secondary';
           empty.textContent = '暂无访客会话。';
           container.appendChild(empty);
           return;
@@ -352,7 +352,7 @@
           btn.type = 'button';
           btn.dataset.agentChannelItem = '1';
           btn.dataset.channelId = channel.id;
-          btn.className = 'block w-full border-b border-theme px-4 py-3 text-left text-sm text-theme transition hover:bg-theme-secondary';
+          btn.className = 'block w-full border-b border-theme px-4 py-3 text-left text-scale-body text-theme transition hover:bg-theme-secondary';
 
           const row = document.createElement('span');
           row.className = 'flex items-center justify-between gap-2';
@@ -370,7 +370,7 @@
           const hideButton = document.createElement('button');
           hideButton.type = 'button';
           hideButton.setAttribute('data-agent-hide-channel', '1');
-          hideButton.className = 'text-fluid-2xs ml-2 inline-flex shrink-0 items-center rounded border border-theme px-1.5 py-0.5 text-theme-secondary hover:border-[rgb(var(--theme-rose))] hover:text-[rgb(var(--theme-rose))]';
+          hideButton.className = 'text-scale-micro ml-2 inline-flex shrink-0 items-center rounded border border-theme px-1.5 py-0.5 text-theme-secondary hover:border-[rgb(var(--theme-rose))] hover:text-[rgb(var(--theme-rose))]';
           hideButton.textContent = '删除';
           hideButton.addEventListener('click', async (event) => {
             event.preventDefault();
@@ -599,7 +599,7 @@
               content.className = 'max-w-[80%]';
 
               const sender = document.createElement('div');
-              sender.className = 'mb-1 text-right text-xs text-[rgb(var(--theme-primary))]';
+              sender.className = 'mb-1 text-right text-scale-micro text-[rgb(var(--theme-primary))]';
               sender.textContent = '我:';
               content.appendChild(sender);
 
@@ -608,7 +608,7 @@
               content.appendChild(failedBlock);
 
               const failedHint = document.createElement('div');
-              failedHint.className = 'mt-1 text-right text-xs text-[rgb(var(--theme-rose))]';
+              failedHint.className = 'mt-1 text-right text-scale-micro text-[rgb(var(--theme-rose))]';
               failedHint.textContent = '图片发送失败，请重试。';
               content.appendChild(failedHint);
 

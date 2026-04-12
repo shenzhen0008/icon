@@ -14,21 +14,24 @@ class TypographySystemTest extends TestCase
         $css = file_get_contents(resource_path('css/app.css'));
 
         $this->assertIsString($css);
-        $this->assertStringContainsString('.text-fluid-nav', $css);
-        $this->assertStringContainsString('.text-fluid-action', $css);
-        $this->assertStringContainsString('.text-fluid-2xs', $css);
+        $this->assertStringContainsString('.text-scale-ui', $css);
+        $this->assertStringContainsString('.text-scale-title', $css);
+        $this->assertStringContainsString('.text-scale-micro', $css);
+        $this->assertStringContainsString('.text-scale-body', $css);
+        $this->assertStringContainsString('.text-scale-display', $css);
 
         $this->get('/')
             ->assertOk()
-            ->assertSee('text-fluid-brand', false)
-            ->assertSee('text-fluid-nav', false);
+            ->assertSee('text-scale-ui', false)
+            ->assertSee('text-scale-display', false);
 
         $this->get('/support')
             ->assertOk()
-            ->assertSee('text-fluid-2xs', false);
+            ->assertSee('text-scale-micro', false);
 
         $this->get('/me')
             ->assertOk()
-            ->assertSee('text-fluid-action', false);
+            ->assertSee('text-scale-ui', false)
+            ->assertSee('text-scale-body', false);
     }
 }

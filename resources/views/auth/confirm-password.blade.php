@@ -11,15 +11,15 @@
     <x-nav.top />
 
     <main class="mx-auto max-w-md px-6 pb-28 pt-8 md:pb-10">
-        <h1 class="mb-6 text-2xl font-semibold">确认密码</h1>
+        <h1 class="mb-6 text-scale-display font-semibold">确认密码</h1>
 
         <form method="POST" action="/confirm-password" class="space-y-4 rounded-lg border border-theme bg-theme-secondary p-4">
             @csrf
 
             <div>
-                <label class="mb-1 block text-sm" for="password">密码</label>
+                <label class="mb-1 block text-scale-body" for="password">密码</label>
                 <input id="password" type="password" name="password" class="w-full rounded border border-theme bg-theme-secondary p-2" required>
-                @error('password')<p class="mt-1 text-sm text-[rgb(var(--theme-rose))]">{{ $message }}</p>@enderror
+                @error('password')<p class="mt-1 text-scale-body text-[rgb(var(--theme-rose))]">{{ $message }}</p>@enderror
             </div>
 
             <button class="w-full rounded bg-[rgb(var(--theme-primary))] px-4 py-2 font-medium text-theme-secondary">确认</button>

@@ -20,24 +20,24 @@
 
   <main class="mx-auto w-full max-w-4xl px-4 pb-28 pt-6 md:pb-10 md:pt-8">
     <section class="rounded-2xl border border-theme bg-theme-card p-5">
-      <h1 class="text-xl font-semibold">订单详情</h1>
+      <h1 class="text-scale-title font-semibold">订单详情</h1>
 
       @if ($can_apply_redemption)
         <form method="POST" action="/me/positions/{{ $position['id'] }}/redemption-requests" class="mt-4" onsubmit="return confirm('产品赎回后产品价值将会回到账户余额不会得到收益');">
           @csrf
-          <button class="text-fluid-action mt-2.5 mx-auto flex h-[clamp(1.9rem,7vw,2.2rem)] w-[clamp(7rem,42vw,9rem)] items-center justify-center rounded-2xl bg-[rgb(var(--theme-primary))] px-[clamp(0.6rem,2.5vw,0.9rem)] font-semibold text-theme-on-primary shadow-lg shadow-[rgb(var(--theme-primary))]/20 transition hover:bg-[rgb(var(--theme-primary))]/90">申请赎回</button>
+          <button class="text-scale-ui mt-2.5 mx-auto flex h-[clamp(1.9rem,7vw,2.2rem)] w-[clamp(7rem,42vw,9rem)] items-center justify-center rounded-2xl bg-[rgb(var(--theme-primary))] px-[clamp(0.6rem,2.5vw,0.9rem)] font-semibold text-theme-on-primary shadow-lg shadow-[rgb(var(--theme-primary))]/20 transition hover:bg-[rgb(var(--theme-primary))]/90">申请赎回</button>
         </form>
       @elseif ($redemption_request_status === 'pending')
-        <p class="mt-4 text-sm text-amber-300">赎回申请待审核，当前持仓已暂停收益。</p>
+        <p class="mt-4 text-scale-body text-amber-300">赎回申请待审核，当前持仓已暂停收益。</p>
       @elseif ($position['status'] === 'redeemed')
-        <p class="mt-4 text-sm text-emerald-300">该持仓已赎回完成。</p>
+        <p class="mt-4 text-scale-body text-emerald-300">该持仓已赎回完成。</p>
       @endif
 
       @error('position')
-        <p class="mt-3 text-sm text-[rgb(var(--theme-rose))]">{{ $message }}</p>
+        <p class="mt-3 text-scale-body text-[rgb(var(--theme-rose))]">{{ $message }}</p>
       @enderror
 
-      <dl class="mt-4 grid grid-cols-2 gap-3 text-sm">
+      <dl class="mt-4 grid grid-cols-2 gap-3 text-scale-body">
         <div class="rounded-lg border border-theme bg-theme-secondary/40 p-3">
           <dt class="text-theme-secondary">订单ID</dt>
           <dd class="mt-1 text-theme">{{ $position['id'] }}</dd>
@@ -58,15 +58,15 @@
     </section>
 
     <section class="mt-6 rounded-2xl border border-theme bg-theme-card p-5">
-      <h2 class="text-base font-semibold">每日收益</h2>
+      <h2 class="text-scale-body font-semibold">每日收益</h2>
 
       @if (count($daily_profits) === 0)
-        <div class="mt-4 rounded-xl border border-dashed border-theme bg-theme-secondary/40 p-4 text-sm text-theme-secondary">
+        <div class="mt-4 rounded-xl border border-dashed border-theme bg-theme-secondary/40 p-4 text-scale-body text-theme-secondary">
           暂无每日收益记录
         </div>
       @else
         <div class="mt-4 overflow-hidden rounded-xl border border-theme">
-          <table class="min-w-full text-sm">
+          <table class="min-w-full text-scale-body">
             <thead class="bg-theme-secondary/80 text-theme-secondary">
               <tr>
                 <th class="px-4 py-3 text-left font-medium">结算日期</th>
