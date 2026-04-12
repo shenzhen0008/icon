@@ -105,7 +105,7 @@ class GlobalNavigationTest extends TestCase
         $this->assertStringContainsString('href="/help"', $mobileNavMarkup);
         $this->assertStringContainsString('Stream', $mobileNavMarkup);
         $this->assertStringContainsString('grid-cols-5', $mobileNavMarkup);
-        $this->assertStringContainsString('text-scale-title', $mobileNavMarkup);
+        $this->assertStringContainsString('text-scale-ui', $mobileNavMarkup);
         $this->assertStringNotContainsString('>客服<', $mobileNavMarkup);
     }
 
