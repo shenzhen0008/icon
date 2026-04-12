@@ -80,7 +80,7 @@
                 <div class="flex flex-nowrap items-center gap-2 overflow-x-auto overflow-y-hidden whitespace-nowrap pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                   @foreach ($product['symbol_icon_paths'] as $iconPath)
                     <span class="flex h-[clamp(1.5rem,5.2vw,1.9rem)] w-[clamp(1.5rem,5.2vw,1.9rem)] shrink-0 items-center justify-center overflow-hidden rounded-full border border-theme bg-theme-card">
-                      <img src="{{ $iconPath }}" alt="" class="h-[clamp(1.27rem,4.53vw,1.6rem)] w-[clamp(1.27rem,4.53vw,1.6rem)] object-contain">
+                      <img src="{{ $iconPath }}" alt="" class="h-[clamp(1.69rem,6.04vw,2.13rem)] w-[clamp(1.69rem,6.04vw,2.13rem)] object-contain">
                     </span>
                   @endforeach
                 </div>
