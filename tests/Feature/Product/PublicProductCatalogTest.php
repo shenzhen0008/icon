@@ -84,8 +84,8 @@ class PublicProductCatalogTest extends TestCase
         $response->assertSee('/images/products/symbols/symbol-04.png');
         $response->assertSee('h-[clamp(1.95rem,6.8vw,2.45rem)] w-[clamp(1.95rem,6.8vw,2.45rem)]', false);
         $response->assertSee('h-[clamp(1.45rem,5.2vw,1.82rem)] w-[clamp(1.45rem,5.2vw,1.82rem)]', false);
-        $response->assertSee('rounded-2xl border border-theme bg-theme-secondary/20 px-2 py-[0.2rem]', false);
-        $response->assertSee('overflow-x-auto overflow-y-hidden whitespace-nowrap pb-0', false);
+        $response->assertSee('rounded-2xl border border-theme bg-theme-secondary/20 px-2 py-[0.1rem]', false);
+        $response->assertSee('overflow-x-auto overflow-y-hidden whitespace-nowrap pb-[0.05rem]', false);
     }
 
     public function test_guest_can_view_product_detail_and_is_prompted_to_activate_for_purchase(): void
