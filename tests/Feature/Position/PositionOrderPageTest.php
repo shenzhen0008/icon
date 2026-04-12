@@ -61,6 +61,7 @@ class PositionOrderPageTest extends TestCase
         $response->assertSee('20.00');
         $response->assertSee('18.30');
         $response->assertSee('申请赎回');
+        $response->assertSee('mt-2.5 mx-auto flex h-[clamp(1.9rem,7vw,2.2rem)] w-[clamp(7rem,42vw,9rem)] items-center justify-center rounded-2xl bg-[rgb(var(--theme-primary))]', false);
         $response->assertSee('产品赎回后产品价值将会回到账户余额不会得到收益');
     }
 

@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\RechargePaymentRequests\Tables;
 
 use App\Modules\Balance\Models\RechargePaymentRequest;
+use App\Modules\Balance\Services\ReviewRechargePaymentRequestService;
 use Filament\Actions\Action;
 use Filament\Forms\Components\Textarea;
 use Filament\Notifications\Notification;
@@ -72,12 +73,11 @@ class RechargePaymentRequestsTable
                             ->maxLength(500),
                     ])
                     ->action(function (RechargePaymentRequest $record, array $data): void {
-                        $record->update([
-                            'status' => 'processed',
-                            'reviewed_by' => auth()->id(),
-                            'reviewed_at' => now(),
-                            'review_note' => $data['review_note'] ?? null,
-                        ]);
+                        app(ReviewRechargePaymentRequestService::class)->markProcessed(
+                            $record->id,
+                            (int) auth()->id(),
+                            $data['review_note'] ?? null,
+                        );
 
                         Notification::make()
                             ->title('充值申请已标记为已处理')
@@ -96,12 +96,11 @@ class RechargePaymentRequestsTable
                             ->maxLength(500),
                     ])
                     ->action(function (RechargePaymentRequest $record, array $data): void {
-                        $record->update([
-                            'status' => 'rejected',
-                            'reviewed_by' => auth()->id(),
-                            'reviewed_at' => now(),
-                            'review_note' => $data['review_note'] ?? null,
-                        ]);
+                        app(ReviewRechargePaymentRequestService::class)->reject(
+                            $record->id,
+                            (int) auth()->id(),
+                            $data['review_note'] ?? null,
+                        );
 
                         Notification::make()
                             ->title('充值申请已驳回')

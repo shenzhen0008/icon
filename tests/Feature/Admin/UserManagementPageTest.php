@@ -74,4 +74,20 @@ class UserManagementPageTest extends TestCase
         $this->assertDatabaseMissing('positions', ['id' => $position->id]);
         $this->assertDatabaseCount('balance_ledgers', 0);
     }
+
+    public function test_user_remark_can_be_persisted_via_mass_assignment(): void
+    {
+        $user = User::factory()->create([
+            'remark' => null,
+        ]);
+
+        $user->update([
+            'remark' => '需要人工跟进',
+        ]);
+
+        $this->assertDatabaseHas('users', [
+            'id' => $user->id,
+            'remark' => '需要人工跟进',
+        ]);
+    }
 }
