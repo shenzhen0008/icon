@@ -1,7 +1,6 @@
 <section class="mt-8 rounded-2xl border border-theme bg-theme-card p-5">
     <div class="mb-4 flex items-center justify-between gap-3">
         <h2 class="text-lg font-semibold text-theme">实时操盘平台</h2>
-        <p class="text-xs text-theme-secondary">每 2 秒刷新</p>
     </div>
 
     <div id="exchange-metrics-list" class="-mx-5 space-y-3">

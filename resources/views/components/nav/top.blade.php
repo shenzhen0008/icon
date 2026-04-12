@@ -28,24 +28,31 @@
           aria-haspopup="true"
           aria-expanded="false"
           aria-controls="language-menu"
-          class="inline-flex items-center justify-center rounded-full p-[0.4rem] text-theme transition hover:bg-[rgb(var(--theme-primary))]/10"
+          class="inline-flex items-center justify-center gap-1 rounded-full p-[0.4rem] text-theme transition hover:bg-[rgb(var(--theme-primary))]/10"
         >
-          <img src="{{ asset('images/assets/globe.svg') }}" alt="" class="h-[1.35rem] w-[1.35rem] shrink-0 object-contain" aria-hidden="true">
+          <img
+            src="{{ asset('images/flags/cn.svg') }}"
+            alt=""
+            class="h-4 w-5 shrink-0 rounded-[2px] object-cover"
+            aria-hidden="true"
+            data-language-current-flag
+          >
+          <span class="text-[0.72rem] font-medium uppercase leading-none text-theme-secondary" data-language-current-code>ZH</span>
         </button>
         <div
           id="language-menu"
-          class="absolute left-0 top-full z-40 mt-2 hidden min-w-[13rem] overflow-hidden rounded-lg border border-theme bg-theme-card py-1 shadow-xl shadow-[rgb(var(--theme-primary))]/10"
+          class="absolute right-0 top-full z-40 mt-2 hidden w-max max-w-[calc(100vw-1rem)] overflow-hidden rounded-lg border border-theme bg-theme-card py-1 shadow-xl shadow-[rgb(var(--theme-primary))]/10"
           role="menu"
           aria-labelledby="language-toggle"
         >
-          <button type="button" class="flex w-full items-center px-4 py-2 text-left text-sm text-theme-secondary transition hover:bg-theme-secondary/50 hover:text-theme" role="menuitem">中文</button>
-          <button type="button" class="flex w-full items-center px-4 py-2 text-left text-sm text-theme-secondary transition hover:bg-theme-secondary/50 hover:text-theme" role="menuitem">English</button>
-          <button type="button" class="flex w-full items-center px-4 py-2 text-left text-sm text-theme-secondary transition hover:bg-theme-secondary/50 hover:text-theme" role="menuitem">日本語</button>
-          <button type="button" class="flex w-full items-center px-4 py-2 text-left text-sm text-theme-secondary transition hover:bg-theme-secondary/50 hover:text-theme" role="menuitem">한국어</button>
-          <button type="button" class="flex w-full items-center px-4 py-2 text-left text-sm text-theme-secondary transition hover:bg-theme-secondary/50 hover:text-theme" role="menuitem">Deutsch</button>
-          <button type="button" class="flex w-full items-center px-4 py-2 text-left text-sm text-theme-secondary transition hover:bg-theme-secondary/50 hover:text-theme" role="menuitem">Français</button>
-          <button type="button" class="flex w-full items-center px-4 py-2 text-left text-sm text-theme-secondary transition hover:bg-theme-secondary/50 hover:text-theme" role="menuitem">Português (Brasil)</button>
-          <button type="button" class="flex w-full items-center px-4 py-2 text-left text-sm text-theme-secondary transition hover:bg-theme-secondary/50 hover:text-theme" role="menuitem">Español</button>
+          <button type="button" class="flex w-full items-center gap-3 px-4 py-2 text-left text-sm text-theme-secondary transition hover:bg-theme-secondary/50 hover:text-theme" role="menuitem" data-language-option data-language-code="ZH" data-language-flag="{{ asset('images/flags/cn.svg') }}"><img src="{{ asset('images/flags/cn.svg') }}" alt="" class="h-4 w-5 shrink-0 rounded-[2px] object-cover" aria-hidden="true"><span>中文</span></button>
+          <button type="button" class="flex w-full items-center gap-3 px-4 py-2 text-left text-sm text-theme-secondary transition hover:bg-theme-secondary/50 hover:text-theme" role="menuitem" data-language-option data-language-code="EN" data-language-flag="{{ asset('images/flags/us.svg') }}"><img src="{{ asset('images/flags/us.svg') }}" alt="" class="h-4 w-5 shrink-0 rounded-[2px] object-cover" aria-hidden="true"><span>English</span></button>
+          <button type="button" class="flex w-full items-center gap-3 px-4 py-2 text-left text-sm text-theme-secondary transition hover:bg-theme-secondary/50 hover:text-theme" role="menuitem" data-language-option data-language-code="JA" data-language-flag="{{ asset('images/flags/jp.svg') }}"><img src="{{ asset('images/flags/jp.svg') }}" alt="" class="h-4 w-5 shrink-0 rounded-[2px] object-cover" aria-hidden="true"><span>日本語</span></button>
+          <button type="button" class="flex w-full items-center gap-3 px-4 py-2 text-left text-sm text-theme-secondary transition hover:bg-theme-secondary/50 hover:text-theme" role="menuitem" data-language-option data-language-code="KO" data-language-flag="{{ asset('images/flags/kr.svg') }}"><img src="{{ asset('images/flags/kr.svg') }}" alt="" class="h-4 w-5 shrink-0 rounded-[2px] object-cover" aria-hidden="true"><span>한국어</span></button>
+          <button type="button" class="flex w-full items-center gap-3 px-4 py-2 text-left text-sm text-theme-secondary transition hover:bg-theme-secondary/50 hover:text-theme" role="menuitem" data-language-option data-language-code="DE" data-language-flag="{{ asset('images/flags/de.svg') }}"><img src="{{ asset('images/flags/de.svg') }}" alt="" class="h-4 w-5 shrink-0 rounded-[2px] object-cover" aria-hidden="true"><span>Deutsch</span></button>
+          <button type="button" class="flex w-full items-center gap-3 px-4 py-2 text-left text-sm text-theme-secondary transition hover:bg-theme-secondary/50 hover:text-theme" role="menuitem" data-language-option data-language-code="FR" data-language-flag="{{ asset('images/flags/fr.svg') }}"><img src="{{ asset('images/flags/fr.svg') }}" alt="" class="h-4 w-5 shrink-0 rounded-[2px] object-cover" aria-hidden="true"><span>Français</span></button>
+          <button type="button" class="flex w-full items-center gap-3 px-4 py-2 text-left text-sm text-theme-secondary transition hover:bg-theme-secondary/50 hover:text-theme" role="menuitem" data-language-option data-language-code="PT" data-language-flag="{{ asset('images/flags/br.svg') }}"><img src="{{ asset('images/flags/br.svg') }}" alt="" class="h-4 w-5 shrink-0 rounded-[2px] object-cover" aria-hidden="true"><span>Português</span></button>
+          <button type="button" class="flex w-full items-center gap-3 px-4 py-2 text-left text-sm text-theme-secondary transition hover:bg-theme-secondary/50 hover:text-theme" role="menuitem" data-language-option data-language-code="ES" data-language-flag="{{ asset('images/flags/es.svg') }}"><img src="{{ asset('images/flags/es.svg') }}" alt="" class="h-4 w-5 shrink-0 rounded-[2px] object-cover" aria-hidden="true"><span>Español</span></button>
         </div>
       </div>
       <button
@@ -53,9 +60,7 @@
         type="button"
         class="inline-flex items-center justify-center rounded-full p-[0.4rem] text-theme transition hover:bg-[rgb(var(--theme-primary))]/10"
       >
-        <svg class="h-[1.35rem] w-[1.35rem] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
-        </svg>
+        <img src="{{ asset('images/assets/sun.svg') }}" alt="" class="h-[1.35rem] w-[1.35rem] shrink-0 object-contain" aria-hidden="true">
       </button>
     </div>
   </div>
@@ -64,6 +69,9 @@
 <script>
   const languageToggle = document.getElementById('language-toggle');
   const languageMenu = document.getElementById('language-menu');
+  const languageCurrentFlag = document.querySelector('[data-language-current-flag]');
+  const languageCurrentCode = document.querySelector('[data-language-current-code]');
+  const languageOptions = document.querySelectorAll('[data-language-option]');
 
   const closeLanguageMenu = () => {
     if (!languageToggle || !languageMenu) return;
@@ -81,6 +89,20 @@
   languageToggle?.addEventListener('click', (event) => {
     event.stopPropagation();
     toggleLanguageMenu();
+  });
+
+  languageOptions.forEach((option) => {
+    option.addEventListener('click', () => {
+      const nextFlag = option.getAttribute('data-language-flag');
+      const nextCode = option.getAttribute('data-language-code');
+      if (nextFlag && languageCurrentFlag instanceof HTMLImageElement) {
+        languageCurrentFlag.src = nextFlag;
+      }
+      if (nextCode && languageCurrentCode) {
+        languageCurrentCode.textContent = nextCode;
+      }
+      closeLanguageMenu();
+    });
   });
 
   document.addEventListener('click', (event) => {
