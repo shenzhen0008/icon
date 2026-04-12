@@ -19,16 +19,80 @@
       @endauth
     </nav>
 
-    <!-- 主题切换按钮 - PC端在导航栏，移动端在顶部栏 -->
-    <button id="theme-toggle" class="md:ml-4 rounded-full p-[clamp(0.35rem,1.6vw,0.5rem)] text-theme-secondary hover:text-[rgb(var(--theme-primary))] transition md:inline-flex md:items-center md:justify-center">
-      <svg class="h-[clamp(1rem,4vw,1.25rem)] w-[clamp(1rem,4vw,1.25rem)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
-      </svg>
-    </button>
+    <div class="ml-3 inline-flex items-center gap-2 md:ml-4">
+      <div class="relative">
+        <button
+          id="language-toggle"
+          type="button"
+          aria-label="切换语言"
+          aria-haspopup="true"
+          aria-expanded="false"
+          aria-controls="language-menu"
+          class="inline-flex items-center justify-center rounded-full p-[0.4rem] text-theme transition hover:bg-[rgb(var(--theme-primary))]/10"
+        >
+          <img src="{{ asset('images/assets/globe.svg') }}" alt="" class="h-[1.35rem] w-[1.35rem] shrink-0 object-contain" aria-hidden="true">
+        </button>
+        <div
+          id="language-menu"
+          class="absolute left-0 top-full z-40 mt-2 hidden min-w-[13rem] overflow-hidden rounded-lg border border-theme bg-theme-card py-1 shadow-xl shadow-[rgb(var(--theme-primary))]/10"
+          role="menu"
+          aria-labelledby="language-toggle"
+        >
+          <button type="button" class="flex w-full items-center px-4 py-2 text-left text-sm text-theme-secondary transition hover:bg-theme-secondary/50 hover:text-theme" role="menuitem">中文</button>
+          <button type="button" class="flex w-full items-center px-4 py-2 text-left text-sm text-theme-secondary transition hover:bg-theme-secondary/50 hover:text-theme" role="menuitem">English</button>
+          <button type="button" class="flex w-full items-center px-4 py-2 text-left text-sm text-theme-secondary transition hover:bg-theme-secondary/50 hover:text-theme" role="menuitem">日本語</button>
+          <button type="button" class="flex w-full items-center px-4 py-2 text-left text-sm text-theme-secondary transition hover:bg-theme-secondary/50 hover:text-theme" role="menuitem">한국어</button>
+          <button type="button" class="flex w-full items-center px-4 py-2 text-left text-sm text-theme-secondary transition hover:bg-theme-secondary/50 hover:text-theme" role="menuitem">Deutsch</button>
+          <button type="button" class="flex w-full items-center px-4 py-2 text-left text-sm text-theme-secondary transition hover:bg-theme-secondary/50 hover:text-theme" role="menuitem">Français</button>
+          <button type="button" class="flex w-full items-center px-4 py-2 text-left text-sm text-theme-secondary transition hover:bg-theme-secondary/50 hover:text-theme" role="menuitem">Português (Brasil)</button>
+          <button type="button" class="flex w-full items-center px-4 py-2 text-left text-sm text-theme-secondary transition hover:bg-theme-secondary/50 hover:text-theme" role="menuitem">Español</button>
+        </div>
+      </div>
+      <button
+        id="theme-toggle"
+        type="button"
+        class="inline-flex items-center justify-center rounded-full p-[0.4rem] text-theme transition hover:bg-[rgb(var(--theme-primary))]/10"
+      >
+        <svg class="h-[1.35rem] w-[1.35rem] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+        </svg>
+      </button>
+    </div>
   </div>
 </header>
 
 <script>
+  const languageToggle = document.getElementById('language-toggle');
+  const languageMenu = document.getElementById('language-menu');
+
+  const closeLanguageMenu = () => {
+    if (!languageToggle || !languageMenu) return;
+    languageMenu.classList.add('hidden');
+    languageToggle.setAttribute('aria-expanded', 'false');
+  };
+
+  const toggleLanguageMenu = () => {
+    if (!languageToggle || !languageMenu) return;
+    const nextExpanded = languageMenu.classList.contains('hidden');
+    languageMenu.classList.toggle('hidden', !nextExpanded);
+    languageToggle.setAttribute('aria-expanded', nextExpanded ? 'true' : 'false');
+  };
+
+  languageToggle?.addEventListener('click', (event) => {
+    event.stopPropagation();
+    toggleLanguageMenu();
+  });
+
+  document.addEventListener('click', (event) => {
+    if (!languageToggle || !languageMenu) return;
+    if (languageToggle.contains(event.target) || languageMenu.contains(event.target)) return;
+    closeLanguageMenu();
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') closeLanguageMenu();
+  });
+
   // 主题切换功能
   document.getElementById('theme-toggle').addEventListener('click', () => {
     const html = document.documentElement;
@@ -39,7 +103,7 @@
   });
 
   // 页面加载时恢复主题
-  const savedTheme = localStorage.getItem('theme') || 'tech';
+  const savedTheme = localStorage.getItem('theme') || 'business';
   document.documentElement.setAttribute('data-theme', savedTheme);
 
   // 同步顶部/底部导航与可视区域数据，避免移动端键盘弹起后布局溢出。

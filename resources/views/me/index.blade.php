@@ -7,6 +7,7 @@
   @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="min-h-screen bg-theme text-theme">
+  <x-layout.background-glow />
   <x-nav.top />
 
   <main class="mx-auto w-full max-w-7xl px-2 pb-28 pt-8 md:pb-10">

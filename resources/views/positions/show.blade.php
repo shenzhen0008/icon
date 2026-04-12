@@ -7,6 +7,7 @@
   @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="min-h-screen bg-theme text-theme">
+  <x-layout.background-glow />
   <x-nav.top />
 
   @php

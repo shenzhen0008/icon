@@ -1,6 +1,6 @@
 <?php
 
 return [
-    'active' => env('APP_THEME', 'tech'),
+    'active' => env('APP_THEME', 'business'),
     'available' => ['tech', 'business'],
 ];

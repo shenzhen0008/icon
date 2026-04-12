@@ -8,6 +8,7 @@
   @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="min-h-screen overflow-x-hidden overflow-y-hidden bg-theme text-theme md:overflow-auto">
+  <x-layout.background-glow />
   <x-nav.top />
 
   <main

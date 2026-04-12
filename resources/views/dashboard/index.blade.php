@@ -6,7 +6,8 @@
     <title>Dashboard</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="bg-theme text-theme">
+<body class="min-h-screen bg-theme text-theme">
+    <x-layout.background-glow />
     <x-nav.top />
 
     <main class="mx-auto max-w-2xl px-6 pb-28 pt-8 md:pb-10">

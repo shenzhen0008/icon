@@ -104,6 +104,8 @@ class GlobalNavigationTest extends TestCase
         $this->assertStringContainsString('>帮助<', $mobileNavMarkup);
         $this->assertStringContainsString('href="/help"', $mobileNavMarkup);
         $this->assertStringContainsString('Stream', $mobileNavMarkup);
+        $this->assertStringContainsString('grid-cols-5', $mobileNavMarkup);
+        $this->assertStringContainsString('text-[clamp(0.75rem,3.4vw,0.88rem)]', $mobileNavMarkup);
         $this->assertStringNotContainsString('>客服<', $mobileNavMarkup);
     }
 
@@ -113,6 +115,29 @@ class GlobalNavigationTest extends TestCase
 
         $response->assertOk();
         $this->assertSame(1, substr_count($response->getContent(), 'const savedTheme'));
+        $response->assertSee('id="language-toggle"', false);
+        $response->assertSee('id="language-menu"', false);
+        $response->assertSee('id="theme-toggle"', false);
+        $response->assertSee('aria-label="切换语言"', false);
+        $response->assertSee('中文');
+        $response->assertSee('English');
+        $response->assertSee('日本語');
+        $response->assertSee('한국어');
+        $response->assertSee('Deutsch');
+        $response->assertSee('Français');
+        $response->assertSee('Português (Brasil)');
+        $response->assertSee('Español');
+        $response->assertSee('/images/assets/globe.svg', false);
+        $response->assertDontSee('商务');
+        $response->assertDontSee('科技');
+        $response->assertDontSee('切换主题');
+        $response->assertDontSee('min-h-[2.75rem]', false);
+        $response->assertSee('rounded-full', false);
+        $response->assertSee('p-[0.4rem]', false);
+        $response->assertDontSee('p-[0.55rem]', false);
+        $response->assertSee('h-[1.35rem] w-[1.35rem]', false);
+        $response->assertSee('data-theme="business"', false);
+        $response->assertSee("const savedTheme = localStorage.getItem('theme') || 'business';", false);
         $response->assertSee("const streamNotifyBootstrapKey = 'stream_chat_notify_bootstrap_ready';", false);
         $response->assertSee("localStorage.getItem(streamNotifyBootstrapKey) === '1'", false);
     }
