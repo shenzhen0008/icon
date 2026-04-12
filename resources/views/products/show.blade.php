@@ -91,11 +91,11 @@
   </main>
 
   @if ($isGuest)
-    <dialog id="activate-modal" class="w-full max-w-md rounded-2xl border border-white/10 bg-slate-900 p-0 text-slate-100 backdrop:bg-black/70">
-      <div class="p-6">
+    <dialog id="activate-modal" class="theme-modal">
+      <div class="p-5 md:p-6">
         <div class="mb-4 flex items-center justify-between">
           <h2 class="text-scale-title font-semibold">设置密码注册</h2>
-          <button id="close-activate-modal" class="rounded px-2 py-1 text-slate-300 hover:bg-white/10">关闭</button>
+          <button id="close-activate-modal" class="rounded-lg px-2.5 py-1.5 text-theme-secondary hover:bg-theme-secondary/60">关闭</button>
         </div>
 
         <form method="POST" action="/register" class="space-y-4">
@@ -127,6 +127,16 @@
 
       openBtn?.addEventListener('click', () => modal?.showModal());
       closeBtn?.addEventListener('click', () => modal?.close());
+      modal?.addEventListener('click', (event) => {
+        const rect = modal.getBoundingClientRect();
+        const isInside =
+          event.clientX >= rect.left &&
+          event.clientX <= rect.right &&
+          event.clientY >= rect.top &&
+          event.clientY <= rect.bottom;
+
+        if (!isInside) modal.close();
+      });
 
       @if ($errors->has('password'))
         modal?.showModal();

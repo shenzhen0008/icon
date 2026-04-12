@@ -69,3 +69,28 @@ html {
 .text-scale-ui { font-size: var(--font-scale-ui); }
 .text-scale-title { font-size: var(--font-scale-title); }
 .text-scale-display { font-size: var(--font-scale-display); }
+
+/* 统一主题弹窗：跟随主题变量，移动端保持居中并留出安全边距。 */
+dialog.theme-modal {
+    width: min(92vw, 28rem);
+    max-height: calc(100dvh - 2rem);
+    margin: auto;
+    padding: 0;
+    border: 1px solid rgb(var(--theme-border));
+    border-radius: 1rem;
+    background-color: rgb(var(--theme-bg-card));
+    color: rgb(var(--theme-text));
+    overflow: hidden;
+    box-shadow: 0 24px 60px rgb(var(--theme-primary) / 0.22);
+}
+
+dialog.theme-modal::backdrop {
+    background: rgb(0 0 0 / 0.62);
+}
+
+@media (max-width: 768px) {
+    dialog.theme-modal {
+        width: min(94vw, 28rem);
+        max-height: calc(100dvh - 1.25rem);
+    }
+}
