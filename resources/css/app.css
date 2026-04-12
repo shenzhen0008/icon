@@ -18,8 +18,8 @@ html {
 }
 
 :root {
-    --font-scale-micro: clamp(0.78rem, 2.85vw, 0.88rem);
-    --font-scale-body: clamp(0.94rem, 3.25vw, 1.06rem);
+    --font-scale-micro: clamp(0.8rem, 2.95vw, 0.9rem);
+    --font-scale-body: clamp(0.96rem, 3.35vw, 1.08rem);
     --font-scale-ui: clamp(0.97rem, 3.4vw, 1.12rem);
     --font-scale-title: clamp(1.12rem, 3.95vw, 1.44rem);
     --font-scale-display: clamp(1.45rem, 5.4vw, 2.2rem);
