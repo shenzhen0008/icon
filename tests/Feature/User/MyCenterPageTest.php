@@ -3,9 +3,6 @@
 namespace Tests\Feature\User;
 
 use App\Models\User;
-use App\Modules\Position\Models\Position;
-use App\Modules\Product\Models\Product;
-use App\Modules\Settlement\Models\DailySettlement;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
@@ -21,7 +18,7 @@ class MyCenterPageTest extends TestCase
         $response->assertOk();
         $response->assertSee('账号信息');
         $response->assertSee('收益状态');
-        $response->assertSee('持仓产品');
+        $response->assertDontSee('持仓产品');
         $response->assertSee('临时账号');
         $response->assertSee('设置密码并注册');
         $response->assertDontSee('退出登录');
@@ -71,7 +68,7 @@ class MyCenterPageTest extends TestCase
             ->assertOk()
             ->assertSee('账号信息')
             ->assertSee('收益状态')
-            ->assertSee('持仓产品')
+            ->assertDontSee('持仓产品')
             ->assertSee('正式账号')
             ->assertSee('账户余额')
             ->assertSee('充值')
@@ -83,116 +80,11 @@ class MyCenterPageTest extends TestCase
             ->assertDontSee('设置密码并注册');
     }
 
-    public function test_my_center_places_account_panel_after_positions_panel(): void
+    public function test_my_center_places_account_panel_after_profit_panel(): void
     {
         $response = $this->get('/me');
 
         $response->assertOk()
-            ->assertSeeInOrder(['收益状态', '持仓产品', '账号信息']);
-    }
-
-    public function test_my_center_shows_redeeming_positions_but_hides_redeemed_positions(): void
-    {
-        $user = User::factory()->create();
-
-        $product = Product::query()->create([
-            'name' => 'Mobile AMM',
-            'code' => 'MAMM',
-            'unit_price' => 1000,
-            'is_active' => true,
-        ]);
-
-        Position::query()->create([
-            'user_id' => $user->id,
-            'product_id' => $product->id,
-            'principal' => 1000,
-            'status' => 'open',
-            'opened_at' => now(),
-        ]);
-
-        Position::query()->create([
-            'user_id' => $user->id,
-            'product_id' => $product->id,
-            'principal' => 2000,
-            'status' => 'redeeming',
-            'opened_at' => now(),
-        ]);
-
-        Position::query()->create([
-            'user_id' => $user->id,
-            'product_id' => $product->id,
-            'principal' => 3000,
-            'status' => 'redeemed',
-            'opened_at' => now(),
-        ]);
-
-        $this->actingAs($user)
-            ->get('/me')
-            ->assertOk()
-            ->assertSee('持有中')
-            ->assertSee('赎回中')
-            ->assertDontSee('已赎回');
-    }
-
-    public function test_my_center_position_card_shows_latest_three_daily_profits(): void
-    {
-        $user = User::factory()->create();
-
-        $product = Product::query()->create([
-            'name' => 'Mobile AMM',
-            'code' => 'MAMM',
-            'unit_price' => 1000,
-            'is_active' => true,
-        ]);
-
-        $position = Position::query()->create([
-            'user_id' => $user->id,
-            'product_id' => $product->id,
-            'principal' => 1000,
-            'status' => 'open',
-            'opened_at' => now(),
-        ]);
-
-        DailySettlement::query()->create([
-            'user_id' => $user->id,
-            'product_id' => $product->id,
-            'position_id' => $position->id,
-            'settlement_date' => '2026-04-01',
-            'rate' => 0.01,
-            'profit' => 10,
-        ]);
-        DailySettlement::query()->create([
-            'user_id' => $user->id,
-            'product_id' => $product->id,
-            'position_id' => $position->id,
-            'settlement_date' => '2026-04-02',
-            'rate' => 0.01,
-            'profit' => 11,
-        ]);
-        DailySettlement::query()->create([
-            'user_id' => $user->id,
-            'product_id' => $product->id,
-            'position_id' => $position->id,
-            'settlement_date' => '2026-04-03',
-            'rate' => 0.01,
-            'profit' => 12,
-        ]);
-        DailySettlement::query()->create([
-            'user_id' => $user->id,
-            'product_id' => $product->id,
-            'position_id' => $position->id,
-            'settlement_date' => '2026-04-04',
-            'rate' => 0.01,
-            'profit' => 13,
-        ]);
-
-        $this->actingAs($user)
-            ->get('/me')
-            ->assertOk()
-            ->assertSee('最近3天收益')
-            ->assertSee('04-04')
-            ->assertSee('04-03')
-            ->assertSee('04-02')
-            ->assertDontSee('04-01');
+            ->assertSeeInOrder(['收益状态', '账号信息']);
     }
 }

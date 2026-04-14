@@ -33,7 +33,7 @@ class ExchangeMetricsFeedController extends Controller
                 'btc_liquidity' => (string) $metric->btc_liquidity,
                 'eth_value' => '$'.number_format((float) $metric->eth_value, 2, '.', ','),
                 'eth_liquidity' => (string) $metric->eth_liquidity,
-                'profit_value' => number_format((float) $metric->profit_value, 0, '.', ''),
+                'profit_value' => number_format((float) $metric->profit_value, 2, '.', ','),
                 'updated_at' => $metric->updated_at?->toDateTimeString() ?? '--',
             ])
             ->values()

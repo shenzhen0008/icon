@@ -85,31 +85,12 @@
         const summaryTotalProfit = document.getElementById('summary-total-profit');
 
         const rowCache = new Map();
+        const parseNumeric = (value) => Number(String(value ?? '0').replace(/,/g, '').replace(/[^0-9.-]/g, '')) || 0;
 
-        const formatProfit = (value) => Number(value || 0).toLocaleString('en-US', {
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 0,
+        const formatProfit = (value) => parseNumeric(value).toLocaleString('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
         });
-
-        const animateValue = (node, nextRaw, duration = 600) => {
-            const start = Number((node.textContent || '0').replace(/,/g, '')) || 0;
-            const end = Number(nextRaw) || 0;
-            const delta = end - start;
-
-            if (Math.abs(delta) < 0.0001) {
-                node.textContent = formatProfit(end);
-                return;
-            }
-
-            const startAt = performance.now();
-            const tick = (time) => {
-                const progress = Math.min(1, (time - startAt) / duration);
-                const current = Math.round(start + (delta * progress));
-                node.textContent = formatProfit(current);
-                if (progress < 1) requestAnimationFrame(tick);
-            };
-            requestAnimationFrame(tick);
-        };
 
         const bindRows = () => {
             list.querySelectorAll('[data-toggle-row]').forEach((button) => {
@@ -143,9 +124,9 @@
                 rows.forEach((row) => {
                     const refs = rowCache.get(row.exchange_code);
                     if (!refs) return;
-                    totalProfit += Number(row.profit_value || 0);
-                    participantCount += Number(row.btc_liquidity || 0) + Number(row.eth_liquidity || 0);
-                    if (refs.profit) animateValue(refs.profit, row.profit_value);
+                    totalProfit += parseNumeric(row.profit_value || 0);
+                    participantCount += parseNumeric(row.btc_liquidity || 0) + parseNumeric(row.eth_liquidity || 0);
+                    if (refs.profit) refs.profit.textContent = formatProfit(row.profit_value);
                     if (refs.btc) refs.btc.textContent = row.btc_value;
                     if (refs.btcLiquidity) refs.btcLiquidity.textContent = row.btc_liquidity;
                     if (refs.eth) refs.eth.textContent = row.eth_value;
@@ -157,7 +138,7 @@
                     summaryParticipantCount.textContent = Number(participantCount || 0).toLocaleString('en-US');
                 }
                 if (summaryTotalProfit) {
-                    summaryTotalProfit.textContent = `$${formatProfit(totalProfit)}`;
+                    summaryTotalProfit.textContent = `${formatProfit(totalProfit)} USDT`;
                 }
             } catch (_) {
                 // Keep silent in MVP, next interval will retry.
@@ -165,6 +146,6 @@
         };
 
         bindRows();
-        setInterval(refresh, 2000);
+        setInterval(refresh, 3000);
     })();
 </script>

@@ -69,6 +69,9 @@ class PublicProductCatalogTest extends TestCase
         $response->assertSee('今日预计收益');
         $response->assertSee('累计收益');
         $response->assertSee('订单数量');
+        $response->assertSee('规则');
+        $response->assertSee('href="/products/rules"', false);
+        $response->assertSee('订单');
         $response->assertSee('自动质押');
         $response->assertSee('限购');
         $response->assertSee('份');

@@ -34,7 +34,7 @@ class HomeController extends Controller
                 'btc_liquidity' => (string) $metric->btc_liquidity,
                 'eth_value' => '$'.number_format((float) $metric->eth_value, 2, '.', ','),
                 'eth_liquidity' => (string) $metric->eth_liquidity,
-                'profit_value' => number_format((float) $metric->profit_value, 0, '.', ''),
+                'profit_value' => number_format((float) $metric->profit_value, 2, '.', ','),
                 'updated_at' => $metric->updated_at?->toDateTimeString() ?? '--',
             ])
             ->all();
@@ -50,7 +50,7 @@ class HomeController extends Controller
                     '.',
                     ','
                 ),
-                'total_profit' => '$'.number_format($totalProfit, 0, '.', ','),
+                'total_profit' => number_format($totalProfit, 2, '.', ',').' USDT',
                 'earnings_24h' => '$'.number_format(round($totalProfit * 0.024, 2), 2, '.', ','),
             ],
         ]);

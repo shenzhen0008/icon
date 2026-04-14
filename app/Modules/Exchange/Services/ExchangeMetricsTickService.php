@@ -31,7 +31,7 @@ class ExchangeMetricsTickService
     private function randomDelta(float $base): float
     {
         $effectiveBase = max($base, 1.0);
-        $ratio = random_int(-20, 20) / 10000; // -0.20% ~ +0.20%
+        $ratio = random_int(-5, 20) / 10000; // -0.05% ~ +0.20%
 
         return $effectiveBase * $ratio;
     }
@@ -52,17 +52,20 @@ class ExchangeMetricsTickService
             return;
         }
 
-        /** @var ExchangeMetric $target */
-        $target = $metrics->random();
-        $field = random_int(0, 1) === 0 ? 'btc_liquidity' : 'eth_liquidity';
-        $delta = random_int(1, 2) * (random_int(0, 1) === 0 ? -1 : 1);
-        $current = (int) $target->{$field};
-        $next = max(0, $current + $delta);
+        $targets = $metrics->shuffle()->take(min($metrics->count(), random_int(2, 3)));
 
-        $target->update([
-            $field => $next,
-            'updated_at' => now(),
-        ]);
+        /** @var ExchangeMetric $target */
+        foreach ($targets as $target) {
+            $field = random_int(0, 1) === 0 ? 'btc_liquidity' : 'eth_liquidity';
+            $delta = random_int(1, 2) * (random_int(0, 1) === 0 ? -1 : 1);
+            $current = (int) $target->{$field};
+            $next = max(0, $current + $delta);
+
+            $target->update([
+                $field => $next,
+                'updated_at' => now(),
+            ]);
+        }
 
         Cache::put(
             self::LIQUIDITY_NEXT_AT_CACHE_KEY,

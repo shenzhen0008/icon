@@ -1,10 +1,10 @@
 <section id="home-data-panel" class="mb-8 overflow-hidden rounded-2xl border border-theme bg-theme-card p-5 shadow-xl shadow-theme">
     <div class="flex items-start justify-between gap-4">
         <div>
-            <h1 class="text-scale-display font-semibold text-theme">Welcome To Icon Market</h1>
-            <p class="mt-2 text-scale-body text-theme-secondary">Demo/Live are sample data modes for now.</p>
+            <h1 class="text-scale-display font-semibold text-theme">Welcome to AI Smart Contracts</h1>
+            <p class="mt-2 text-scale-body text-theme-secondary">Artificial intelligence trading</p>
         </div>
-        <span id="hero-mode-badge" class="inline-flex w-20 justify-center rounded-full border border-theme bg-theme-secondary/30 px-3 py-1 text-scale-body text-theme">DAMO</span>
+        <span id="hero-mode-badge" class="inline-flex w-20 justify-center rounded-full border border-theme bg-theme-secondary/30 px-3 py-1 text-scale-body text-theme">demo</span>
     </div>
 
     <div class="mt-5 rounded-xl border border-theme bg-theme-secondary/60 p-4">
@@ -22,7 +22,7 @@
 
     <div class="mt-5 grid grid-cols-2 gap-3">
         <button id="hero-damo-btn" type="button" class="inline-flex items-center justify-center rounded-xl bg-theme-secondary px-4 py-3 text-scale-body font-semibold text-theme transition hover:bg-theme-secondary/80">
-            DAMO
+            DEMO
         </button>
         <button id="hero-live-btn" type="button" class="inline-flex items-center justify-center rounded-xl bg-theme-secondary px-4 py-3 text-scale-body font-semibold text-theme transition hover:bg-theme-secondary/80">
             LIVE
@@ -43,7 +43,7 @@
 
         const formatMoney = (value) => `$${Number(value).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
         const dataset = {
-            damo: { total: 0, day: 0, badge: '#damo' },
+            damo: { total: 0, day: 0, badge: '#demo' },
             live: { total: 100.25, day: 50.25, badge: '#live' },
         };
 

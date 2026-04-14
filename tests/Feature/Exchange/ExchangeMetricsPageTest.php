@@ -10,6 +10,17 @@ class ExchangeMetricsPageTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function test_home_page_uses_demo_mode_label_copy(): void
+    {
+        $this->get('/')
+            ->assertOk()
+            ->assertSee('Welcome to AI Smart Contracts')
+            ->assertSee('Artificial intelligence trading')
+            ->assertSee('DEMO')
+            ->assertSee('#demo')
+            ->assertDontSee('#damo');
+    }
+
     public function test_home_page_displays_exchange_metrics_section(): void
     {
         ExchangeMetric::query()
@@ -25,7 +36,8 @@ class ExchangeMetricsPageTest extends TestCase
 
         $this->get('/')
             ->assertOk()
-            ->assertSee('总盘数据')
+            ->assertSee('Open transaction!')
+            ->assertSee('2000+ base factor library with AI support to more catch derivative factors, one step ahead!')
             ->assertSee('Number of people')
             ->assertSee('总盘获利值')
             ->assertSee('实时操盘平台')
@@ -33,7 +45,12 @@ class ExchangeMetricsPageTest extends TestCase
             ->assertSee('Currency')
             ->assertSee('24h Volume')
             ->assertSee('Liquidity')
-            ->assertSee('2057');
+            ->assertDontSee('总盘数据')
+            ->assertDontSee('基于下方所有交易所实时汇总。')
+            ->assertSee('2,057.31')
+            ->assertSee('2,057.31 USDT')
+            ->assertDontSee('$2,057')
+            ->assertDontSee('$2057');
     }
 
     public function test_exchange_metrics_feed_returns_active_rows(): void
@@ -70,7 +87,17 @@ class ExchangeMetricsPageTest extends TestCase
 
         $response->assertJsonFragment([
             'exchange_code' => 'binance',
-            'profit_value' => '2057',
+            'profit_value' => '2,057.15',
         ]);
+    }
+
+    public function test_home_page_refresh_updates_profit_without_animation_script(): void
+    {
+        $this->get('/')
+            ->assertOk()
+            ->assertDontSee('requestAnimationFrame', false)
+            ->assertDontSee('animateValue', false)
+            ->assertSee('setInterval(refresh, 3000);', false)
+            ->assertDontSee('setInterval(refresh, 2000);', false);
     }
 }

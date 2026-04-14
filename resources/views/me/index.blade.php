@@ -13,7 +13,6 @@
   <main class="mx-auto w-full max-w-4xl px-4 pb-28 pt-8 md:pb-10">
     <div class="space-y-5">
       <x-me.profit-panel :summary="$summary" />
-      <x-me.positions-panel :positions="$positions" />
       <x-me.account-panel :profile="$profile" :is-guest="$isGuest" />
 
       @if ($isGuest)

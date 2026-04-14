@@ -12,6 +12,21 @@
 
   <main class="mx-auto w-full max-w-4xl px-4 pb-28 pt-6 md:pb-10 md:pt-8">
     <section class="mb-6 overflow-hidden rounded-3xl border border-[rgb(var(--theme-primary))]/20 bg-gradient-to-br from-[rgb(var(--theme-primary))]/10 to-[rgb(var(--theme-accent))]/10 p-5 shadow-xl shadow-[rgb(var(--theme-primary))]/10">
+      <div class="mb-4 grid grid-cols-2 gap-3">
+        <a
+          href="/products/rules"
+          class="flex h-12 items-center justify-center rounded-2xl border border-[rgb(var(--theme-primary))]/20 bg-theme-card px-4 text-scale-body font-semibold text-theme shadow-lg shadow-[rgb(var(--theme-primary))]/10 transition hover:border-[rgb(var(--theme-primary))]/40 hover:text-[rgb(var(--theme-primary))]"
+        >
+          规则
+        </a>
+        <a
+          href="/me/orders"
+          class="flex h-12 items-center justify-center rounded-2xl border border-[rgb(var(--theme-primary))]/20 bg-theme-card px-4 text-scale-body font-semibold text-theme shadow-lg shadow-[rgb(var(--theme-primary))]/10 transition hover:border-[rgb(var(--theme-primary))]/40 hover:text-[rgb(var(--theme-primary))]"
+        >
+          订单
+        </a>
+      </div>
+
       <div class="space-y-4 rounded-2xl border border-theme bg-theme-card px-4 py-5 text-theme-secondary">
         <div class="flex items-center justify-between">
           <p class="text-scale-body text-theme-secondary">今日预计收益</p>
