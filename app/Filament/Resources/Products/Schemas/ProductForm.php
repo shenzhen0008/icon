@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Products\Schemas;
 
 use Filament\Forms\Components\TagsInput;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -39,8 +40,16 @@ class ProductForm
                         Toggle::make('is_active')
                             ->label('是否上架')
                             ->default(true),
+                        Select::make('trade_mode')
+                            ->label('交易模式')
+                            ->options([
+                                'direct' => '正式商品（立即购买）',
+                                'reserve' => '预订商品（立即预订）',
+                            ])
+                            ->default('direct')
+                            ->required(),
                         TextInput::make('unit_price')
-                            ->label('每份价格(USDT)')
+                            ->label('参考单价(USDT)')
                             ->numeric()
                             ->step(0.01)
                             ->required(),
@@ -48,9 +57,6 @@ class ProductForm
                 Section::make('产品参数')
                     ->columns(3)
                     ->schema([
-                        TextInput::make('purchase_limit')
-                            ->label('限购份数')
-                            ->numeric(),
                         TextInput::make('limit_min_usdt')
                             ->label('最低限额(USDT)')
                             ->numeric()

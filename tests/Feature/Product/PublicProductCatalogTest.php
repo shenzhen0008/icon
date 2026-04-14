@@ -21,7 +21,6 @@ class PublicProductCatalogTest extends TestCase
             'unit_price' => 1000,
             'is_active' => true,
             'sort' => 20,
-            'purchase_limit' => 1,
             'limit_min_usdt' => 3000,
             'limit_max_usdt' => 50000,
             'rate_min_percent' => 1.20,
@@ -37,7 +36,6 @@ class PublicProductCatalogTest extends TestCase
             'unit_price' => 2000,
             'is_active' => true,
             'sort' => 0,
-            'purchase_limit' => 2,
             'limit_min_usdt' => 1000,
             'limit_max_usdt' => 10000,
             'rate_min_percent' => 1.83,
@@ -73,8 +71,6 @@ class PublicProductCatalogTest extends TestCase
         $response->assertSee('href="/products/rules"', false);
         $response->assertSee('订单');
         $response->assertSee('自动质押');
-        $response->assertSee('限购');
-        $response->assertSee('份');
         $response->assertSee('限额(USDT)');
         $response->assertSee('收益率');
         $response->assertSee('周期');
@@ -98,7 +94,6 @@ class PublicProductCatalogTest extends TestCase
             'code' => 'MAMM',
             'unit_price' => 1000,
             'is_active' => true,
-            'purchase_limit' => 2,
             'limit_min_usdt' => 1000,
             'limit_max_usdt' => 10000,
             'rate_min_percent' => 1.15,
@@ -116,7 +111,6 @@ class PublicProductCatalogTest extends TestCase
 
         $response->assertOk();
         $response->assertSee('Mobile AMM');
-        $response->assertSee('限购');
         $response->assertSee('限额(USDT)');
         $response->assertSee('1,000-10,000');
         $response->assertSee('收益率');
@@ -162,7 +156,6 @@ class PublicProductCatalogTest extends TestCase
             'code' => 'MAMM',
             'unit_price' => 1000,
             'is_active' => true,
-            'purchase_limit' => 2,
             'limit_min_usdt' => 1000,
             'limit_max_usdt' => 10000,
             'rate_min_percent' => 1.15,
@@ -188,7 +181,6 @@ class PublicProductCatalogTest extends TestCase
             'unit_price' => 2000,
             'is_active' => true,
             'sort' => 0,
-            'purchase_limit' => 2,
             'limit_min_usdt' => 1000,
             'limit_max_usdt' => 10000,
             'rate_min_percent' => 1.83,
@@ -215,7 +207,6 @@ class PublicProductCatalogTest extends TestCase
             'unit_price' => 2000,
             'is_active' => true,
             'sort' => 0,
-            'purchase_limit' => 2,
             'limit_min_usdt' => 1000,
             'limit_max_usdt' => 10000,
             'rate_min_percent' => 1.83,
@@ -257,5 +248,29 @@ class PublicProductCatalogTest extends TestCase
         $response->assertSee('$120.50');
         $response->assertSee('$200.50');
         $response->assertSee('1');
+    }
+
+    public function test_reserve_mode_product_renders_preorder_actions_on_catalog_and_detail(): void
+    {
+        $product = Product::query()->create([
+            'name' => 'Reserve Product',
+            'code' => 'RSP',
+            'unit_price' => 1200,
+            'is_active' => true,
+            'trade_mode' => 'reserve',
+        ]);
+
+        $this->get('/products')
+            ->assertOk()
+            ->assertSee('立即预订');
+
+        $user = User::factory()->create();
+
+        $this->actingAs($user)
+            ->get('/products/'.$product->id)
+            ->assertOk()
+            ->assertSee('预订')
+            ->assertSee('立即预订')
+            ->assertDontSee('立即购买');
     }
 }

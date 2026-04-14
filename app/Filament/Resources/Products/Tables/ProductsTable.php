@@ -26,8 +26,10 @@ class ProductsTable
                 TextColumn::make('code')
                     ->label('产品代码')
                     ->searchable(),
-                TextColumn::make('purchase_limit')
-                    ->label('限购'),
+                TextColumn::make('trade_mode')
+                    ->label('交易模式')
+                    ->badge()
+                    ->formatStateUsing(fn (string $state): string => $state === 'reserve' ? '预订商品' : '正式商品'),
                 TextColumn::make('limit_min_usdt')
                     ->label('最低限额')
                     ->numeric(decimalPlaces: 2),

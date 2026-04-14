@@ -16,7 +16,6 @@ class Product extends Model
         'description',
         'code',
         'unit_price',
-        'purchase_limit',
         'limit_min_usdt',
         'limit_max_usdt',
         'rate_min_percent',
@@ -24,6 +23,7 @@ class Product extends Model
         'cycle_days',
         'product_icon_path',
         'symbol_icon_paths',
+        'trade_mode',
         'is_active',
         'sort',
     ];
@@ -37,6 +37,7 @@ class Product extends Model
             'rate_min_percent' => 'decimal:2',
             'rate_max_percent' => 'decimal:2',
             'symbol_icon_paths' => 'array',
+            'trade_mode' => 'string',
             'is_active' => 'bool',
         ];
     }

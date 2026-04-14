@@ -12,16 +12,20 @@ use Illuminate\Validation\ValidationException;
 
 class PurchasePositionService
 {
-    public function purchase(User $user, int $productId, int $shares): Position
+    public function purchase(User $user, int $productId, float $amount, bool $enforceDirectMode = true): Position
     {
-        return DB::transaction(function () use ($user, $productId, $shares): Position {
+        return DB::transaction(function () use ($user, $productId, $amount, $enforceDirectMode): Position {
             /** @var Product $product */
             $product = Product::query()
                 ->whereKey($productId)
                 ->where('is_active', true)
                 ->firstOrFail();
 
-            $amount = (float) $product->unit_price * $shares;
+            if ($enforceDirectMode && $product->trade_mode === 'reserve') {
+                throw ValidationException::withMessages([
+                    'amount' => '预订商品不支持直接购买，请先提交预订申请。',
+                ]);
+            }
 
             $openPositions = Position::query()
                 ->where('user_id', $user->id)
@@ -30,18 +34,11 @@ class PurchasePositionService
                 ->lockForUpdate()
                 ->get(['id', 'principal']);
 
-            $currentPurchaseCount = $openPositions->count();
             $currentPrincipal = (float) $openPositions->sum(static fn (Position $position): float => (float) $position->principal);
-
-            if ($product->purchase_limit !== null && $currentPurchaseCount >= (int) $product->purchase_limit) {
-                throw ValidationException::withMessages([
-                    'shares' => '该产品购买次数已达上限。',
-                ]);
-            }
 
             if ($product->limit_min_usdt !== null && $amount < (float) $product->limit_min_usdt) {
                 throw ValidationException::withMessages([
-                    'shares' => '购买金额低于产品最低限额。',
+                    'amount' => '购买金额低于产品最低限额。',
                 ]);
             }
 
@@ -49,7 +46,7 @@ class PurchasePositionService
 
             if ($product->limit_max_usdt !== null && $nextPrincipal > (float) $product->limit_max_usdt) {
                 throw ValidationException::withMessages([
-                    'shares' => '购买后累计金额超过产品上限。',
+                    'amount' => '购买后累计金额超过产品上限。',
                 ]);
             }
 

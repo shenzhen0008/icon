@@ -11,9 +11,9 @@
         <li class="rounded-xl border border-theme bg-theme-secondary/20 p-4">
           <div class="flex items-center justify-between gap-3">
             <p class="font-medium text-theme">{{ $product['name'] }} <span class="text-scale-micro text-theme-secondary">({{ $product['code'] }})</span></p>
-            <span class="rounded-full border border-theme px-2 py-0.5 text-scale-micro text-theme-secondary">单价: {{ $product['unit_price'] }}</span>
+            <span class="rounded-full border border-theme px-2 py-0.5 text-scale-micro text-theme-secondary">限额: {{ $product['limit_range'] }} USDT</span>
           </div>
-          <p class="mt-2 text-scale-micro text-theme-secondary">按份购买，余额不足时会提示失败。</p>
+          <p class="mt-2 text-scale-micro text-theme-secondary">按金额购买，余额不足时会提示失败。</p>
 
           @if ($isGuest)
             <p class="mt-3 text-scale-body text-theme-secondary">登录后可进入详情页购买。</p>

@@ -197,7 +197,6 @@ CREATE TABLE `products` (
   `description` text COLLATE utf8mb4_unicode_ci,
   `code` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `unit_price` decimal(16,2) NOT NULL DEFAULT '1000.00',
-  `purchase_limit` int(10) unsigned DEFAULT NULL,
   `limit_min_usdt` decimal(16,2) DEFAULT NULL,
   `limit_max_usdt` decimal(16,2) DEFAULT NULL,
   `rate_min_percent` decimal(8,2) DEFAULT NULL,
@@ -206,12 +205,14 @@ CREATE TABLE `products` (
   `product_icon_path` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `symbol_icon_paths` json DEFAULT NULL,
   `is_active` tinyint(1) NOT NULL DEFAULT '1',
+  `trade_mode` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'direct',
   `sort` int(10) unsigned NOT NULL DEFAULT '0',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `products_code_unique` (`code`),
-  KEY `products_is_active_sort_index` (`is_active`,`sort`)
+  KEY `products_is_active_sort_index` (`is_active`,`sort`),
+  KEY `products_active_mode_sort_id_index` (`is_active`,`trade_mode`,`sort`,`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -258,6 +259,40 @@ CREATE TABLE `positions` (
   KEY `positions_product_id_status_index` (`product_id`,`status`),
   CONSTRAINT `positions_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE,
   CONSTRAINT `positions_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `product_reservations`
+--
+
+DROP TABLE IF EXISTS `product_reservations`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `product_reservations` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) unsigned NOT NULL,
+  `product_id` bigint(20) unsigned NOT NULL,
+  `amount_usdt` decimal(16,2) NOT NULL DEFAULT '0.00',
+  `status` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'pending',
+  `reviewed_by` bigint(20) unsigned DEFAULT NULL,
+  `reviewed_at` timestamp NULL DEFAULT NULL,
+  `review_note` text COLLATE utf8mb4_unicode_ci,
+  `approved_at` timestamp NULL DEFAULT NULL,
+  `converted_at` timestamp NULL DEFAULT NULL,
+  `converted_position_id` bigint(20) unsigned DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `reservations_user_status_created_index` (`user_id`,`status`,`created_at`),
+  KEY `reservations_product_status_created_index` (`product_id`,`status`,`created_at`),
+  KEY `reservations_status_created_index` (`status`,`created_at`),
+  KEY `product_reservations_reviewed_by_foreign` (`reviewed_by`),
+  KEY `product_reservations_converted_position_id_foreign` (`converted_position_id`),
+  CONSTRAINT `product_reservations_converted_position_id_foreign` FOREIGN KEY (`converted_position_id`) REFERENCES `positions` (`id`) ON DELETE SET NULL,
+  CONSTRAINT `product_reservations_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `product_reservations_reviewed_by_foreign` FOREIGN KEY (`reviewed_by`) REFERENCES `users` (`id`) ON DELETE SET NULL,
+  CONSTRAINT `product_reservations_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

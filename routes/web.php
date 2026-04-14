@@ -13,6 +13,8 @@ use App\Modules\User\Http\Controllers\MyCenterController;
 use App\Modules\Position\Http\Controllers\PositionOrderPageController;
 use App\Modules\Position\Http\Controllers\PositionOrdersPageController;
 use App\Modules\Position\Http\Controllers\PurchasePositionController;
+use App\Modules\Reservation\Http\Controllers\CancelProductReservationController;
+use App\Modules\Reservation\Http\Controllers\SubmitProductReservationController;
 use App\Modules\Redemption\Http\Controllers\SubmitPositionRedemptionRequestController;
 use App\Modules\Support\Http\Controllers\SupportPageController;
 use App\Modules\Support\Http\Controllers\StreamChatAgentPageController;
@@ -50,6 +52,8 @@ Route::middleware('auth')->group(function (): void {
     Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
     Route::post('/recharge/requests', SubmitRechargePaymentRequestController::class);
     Route::post('/positions/purchase', PurchasePositionController::class);
+    Route::post('/products/{product}/reservations', SubmitProductReservationController::class);
+    Route::post('/me/reservations/{reservation}/cancel', CancelProductReservationController::class);
     Route::get('/me/orders', PositionOrdersPageController::class);
     Route::get('/me/positions/{position}', PositionOrderPageController::class);
     Route::post('/me/positions/{position}/redemption-requests', SubmitPositionRedemptionRequestController::class);

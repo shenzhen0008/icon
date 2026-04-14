@@ -69,9 +69,6 @@
                     <h3 class="text-scale-title truncate font-semibold leading-none text-theme">{{ $product['name'] }}</h3>
                   </div>
                 </div>
-                @if ($product['purchase_limit'] !== null)
-                  <p class="text-scale-micro shrink-0 text-[rgb(var(--theme-primary))]">限购 <span class="font-semibold text-[rgb(var(--theme-accent))]">{{ $product['purchase_limit'] }}</span> 份</p>
-                @endif
               </div>
 
               <div class="mt-3 h-px bg-theme/30"></div>
@@ -102,7 +99,7 @@
               </div>
 
               <a href="/products/{{ $product['id'] }}" class="text-scale-ui mt-2.5 flex h-[clamp(1.9rem,7vw,2.2rem)] w-[clamp(7rem,42vw,9rem)] items-center justify-center rounded-2xl bg-[rgb(var(--theme-primary))] px-[clamp(0.6rem,2.5vw,0.9rem)] font-semibold text-theme-on-primary shadow-lg shadow-[rgb(var(--theme-primary))]/20 transition hover:bg-[rgb(var(--theme-primary))]/90 mx-auto">
-                立即购买
+                {{ $product['trade_mode'] === 'reserve' ? '立即预订' : '立即购买' }}
               </a>
             </article>
           @endforeach

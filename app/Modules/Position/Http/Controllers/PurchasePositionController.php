@@ -26,7 +26,7 @@ class PurchasePositionController extends Controller
             $this->purchasePositionService->purchase(
                 $user,
                 (int) $request->validated('product_id'),
-                (int) $request->validated('shares'),
+                (float) $request->validated('amount'),
             );
         } catch (InsufficientBalanceException) {
             return redirect('/recharge');

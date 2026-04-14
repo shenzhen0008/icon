@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Modules\Position\Http\Requests;
+namespace App\Modules\Reservation\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class PurchasePositionRequest extends FormRequest
+class StoreProductReservationRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -17,7 +17,6 @@ class PurchasePositionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'product_id' => ['required', 'integer', 'exists:products,id'],
             'amount' => ['required', 'numeric', 'min:0.01'],
         ];
     }

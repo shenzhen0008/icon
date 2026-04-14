@@ -4,12 +4,16 @@ namespace App\Modules\Position\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Modules\Position\Services\ListUserPositionsService;
+use App\Modules\Reservation\Services\ListUserReservationsService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 
 class PositionOrdersPageController extends Controller
 {
-    public function __construct(private readonly ListUserPositionsService $listUserPositionsService)
+    public function __construct(
+        private readonly ListUserPositionsService $listUserPositionsService,
+        private readonly ListUserReservationsService $listUserReservationsService,
+    )
     {
     }
 
@@ -20,6 +24,7 @@ class PositionOrdersPageController extends Controller
 
         return view('orders.index', [
             'positions' => $this->listUserPositionsService->handle($user),
+            'reservations' => $this->listUserReservationsService->handle($user),
         ]);
     }
 }

@@ -26,6 +26,7 @@ class GlobalNavigationTest extends TestCase
                 ->assertSee('首页')
                 ->assertSee('产品')
                 ->assertSee('帮助')
+                ->assertSee('分享')
                 ->assertSee('我的')
                 ->assertSee('客服')
                 ->assertSee('/help')
@@ -43,6 +44,7 @@ class GlobalNavigationTest extends TestCase
             ->assertSee('首页')
             ->assertSee('产品')
             ->assertSee('帮助')
+            ->assertSee('分享')
             ->assertSee('我的')
             ->assertSee('客服')
             ->assertSee('/help')
@@ -60,6 +62,7 @@ class GlobalNavigationTest extends TestCase
             ->assertSee('首页')
             ->assertSee('产品')
             ->assertSee('帮助')
+            ->assertSee('分享')
             ->assertSee('我的')
             ->assertSee('客服')
             ->assertSee('/help')
@@ -103,8 +106,9 @@ class GlobalNavigationTest extends TestCase
 
         $this->assertStringContainsString('>帮助<', $mobileNavMarkup);
         $this->assertStringContainsString('href="/help"', $mobileNavMarkup);
+        $this->assertStringContainsString('>分享<', $mobileNavMarkup);
         $this->assertStringContainsString('Stream', $mobileNavMarkup);
-        $this->assertStringContainsString('grid-cols-5', $mobileNavMarkup);
+        $this->assertStringContainsString('grid-cols-6', $mobileNavMarkup);
         $this->assertStringContainsString('text-scale-ui', $mobileNavMarkup);
         $this->assertStringNotContainsString('>客服<', $mobileNavMarkup);
     }

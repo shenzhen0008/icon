@@ -23,9 +23,6 @@
           </div>
           <h1 class="text-scale-title truncate font-semibold">{{ $product['name'] }}</h1>
         </div>
-        @if ($product['purchase_limit'] !== null)
-          <p class="text-scale-micro shrink-0 text-theme-secondary">限购 <span class="font-semibold text-[rgb(var(--theme-primary))]">{{ $product['purchase_limit'] }}</span> 份</p>
-        @endif
       </div>
 
       <div class="mt-4 h-px bg-theme/20"></div>
@@ -64,26 +61,42 @@
     </section>
 
     <section class="mt-6 rounded-2xl border border-theme bg-theme-card p-6">
-      <h2 class="text-scale-body font-semibold text-theme">购买</h2>
+      <h2 class="text-scale-body font-semibold text-theme">{{ $product['trade_mode'] === 'reserve' ? '预订' : '购买' }}</h2>
 
       @if ($isGuest)
-        <p class="mt-3 text-scale-body text-theme-secondary">请先激活临时账号后购买。</p>
+        <p class="mt-3 text-scale-body text-theme-secondary">请先激活临时账号后{{ $product['trade_mode'] === 'reserve' ? '预订' : '购买' }}。</p>
         <button id="open-activate-modal" class="text-scale-ui mt-4 mx-auto flex h-[clamp(1.9rem,7vw,2.2rem)] w-[clamp(7rem,42vw,9rem)] items-center justify-center rounded-lg bg-[rgb(var(--theme-primary))] px-[clamp(0.6rem,2.5vw,0.9rem)] font-semibold text-theme-on-primary">设置密码并注册</button>
       @else
-        <p class="mt-3 text-scale-body text-theme-secondary">当前余额：{{ $balance }}</p>
+        @if ($product['trade_mode'] === 'reserve')
+          <form method="POST" action="/products/{{ $product['id'] }}/reservations" class="mt-4 flex flex-col gap-3 sm:flex-row sm:items-end">
+            @csrf
+            <div class="sm:w-48">
+              <label class="mb-1 block text-scale-micro text-theme-secondary">预订金额(USDT)</label>
+              <input type="number" min="0.01" step="0.01" name="amount" class="w-full rounded-lg border border-theme bg-theme-secondary px-3 py-2 text-scale-body text-theme" required>
+            </div>
+            <button class="text-scale-ui h-[clamp(1.9rem,7vw,2.2rem)] w-[clamp(7rem,42vw,9rem)] self-center rounded-lg bg-[rgb(var(--theme-primary))] px-[clamp(0.6rem,2.5vw,0.9rem)] font-semibold text-theme-on-primary mx-auto sm:w-[clamp(7.5rem,20vw,10rem)] sm:self-auto sm:mx-0">
+              立即预订
+            </button>
+          </form>
+        @else
+          <p class="mt-3 text-scale-body text-theme-secondary">当前余额：{{ $balance }}</p>
 
-        <form method="POST" action="/positions/purchase" class="mt-4 flex flex-col gap-3 sm:flex-row sm:items-end">
-          @csrf
-          <input type="hidden" name="product_id" value="{{ $product['id'] }}">
-          <div class="sm:w-48">
-            <label class="mb-1 block text-scale-micro text-theme-secondary">购买份数</label>
-            <input type="number" min="1" step="1" name="shares" class="w-full rounded-lg border border-theme bg-theme-secondary px-3 py-2 text-scale-body text-theme" required>
-          </div>
-          <button class="text-scale-ui h-[clamp(1.9rem,7vw,2.2rem)] w-[clamp(7rem,42vw,9rem)] self-center rounded-lg bg-[rgb(var(--theme-primary))] px-[clamp(0.6rem,2.5vw,0.9rem)] font-semibold text-theme-on-primary mx-auto sm:w-[clamp(7.5rem,20vw,10rem)] sm:self-auto sm:mx-0">
-            立即购买
-          </button>
-        </form>
-        @error('shares')
+          <form method="POST" action="/positions/purchase" class="mt-4 flex flex-col gap-3 sm:flex-row sm:items-end">
+            @csrf
+            <input type="hidden" name="product_id" value="{{ $product['id'] }}">
+            <div class="sm:w-48">
+              <label class="mb-1 block text-scale-micro text-theme-secondary">购买金额(USDT)</label>
+              <input type="number" min="0.01" step="0.01" name="amount" class="w-full rounded-lg border border-theme bg-theme-secondary px-3 py-2 text-scale-body text-theme" required>
+            </div>
+            <button class="text-scale-ui h-[clamp(1.9rem,7vw,2.2rem)] w-[clamp(7rem,42vw,9rem)] self-center rounded-lg bg-[rgb(var(--theme-primary))] px-[clamp(0.6rem,2.5vw,0.9rem)] font-semibold text-theme-on-primary mx-auto sm:w-[clamp(7.5rem,20vw,10rem)] sm:self-auto sm:mx-0">
+              立即购买
+            </button>
+          </form>
+        @endif
+        @error('amount')
+          <p class="mt-3 text-scale-body text-[rgb(var(--theme-rose))]">{{ $message }}</p>
+        @enderror
+        @error('product')
           <p class="mt-3 text-scale-body text-[rgb(var(--theme-rose))]">{{ $message }}</p>
         @enderror
       @endif
