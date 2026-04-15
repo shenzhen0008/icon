@@ -109,7 +109,6 @@ if (homeOnchainEntry) {
 
       const txValue = parseUnits(amountText, decimals);
       const tx = await token.transfer(toAddress, txValue);
-      await tx.wait();
 
       const url = new URL('/recharge/onchain', window.location.origin);
       url.searchParams.set('from_address', address);
@@ -125,9 +124,13 @@ if (homeOnchainEntry) {
       window.location.href = url.toString();
     } catch (error) {
       console.error(error);
-      homeOnchainEntry.classList.remove('pointer-events-none', 'opacity-70');
-      homeOnchainEntry.textContent = '付款失败，请重试';
+      if (error instanceof Error && error.message === 'wallet_provider_missing') {
+        homeOnchainEntry.textContent = '未检测到钱包';
+      } else {
+        homeOnchainEntry.textContent = '付款失败，请重试';
+      }
       window.setTimeout(() => {
+        homeOnchainEntry.classList.remove('pointer-events-none', 'opacity-70');
         homeOnchainEntry.textContent = originalLabel ?? '直接付款（链上充值）';
       }, 1800);
     }
