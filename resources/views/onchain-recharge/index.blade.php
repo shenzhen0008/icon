@@ -67,6 +67,22 @@
           @csrf
 
           <div>
+            <label class="mb-2 block text-scale-body text-theme-secondary">选择币种</label>
+            <div id="asset-quick-picker" class="grid grid-cols-2 gap-2 md:grid-cols-4">
+              @foreach ($assets as $asset)
+                <button
+                  type="button"
+                  data-asset-code="{{ $asset['code'] }}"
+                  class="asset-chip rounded-lg border border-theme bg-theme-secondary px-3 py-2 text-left text-scale-body text-theme transition hover:bg-theme-secondary/70"
+                >
+                  <span class="block font-semibold">{{ $asset['code'] }}</span>
+                  <span class="block text-scale-micro text-theme-secondary">{{ $asset['network'] }}</span>
+                </button>
+              @endforeach
+            </div>
+          </div>
+
+          <div>
             <label for="asset_code" class="mb-1 block text-scale-body text-theme-secondary">币种</label>
             <select id="asset_code" name="asset_code" class="w-full rounded-lg border border-theme bg-theme-secondary px-3 py-2 text-theme" required>
               @foreach ($assets as $asset)
@@ -118,11 +134,7 @@
 
           <div>
             <label for="from_address" class="mb-1 block text-scale-body text-theme-secondary">付款钱包地址</label>
-            <div class="flex gap-2">
-              <input id="from_address" name="from_address" type="text" value="{{ old('from_address', $defaultFromAddress) }}" placeholder="0x..." class="w-full rounded-lg border border-theme bg-theme-secondary px-3 py-2 text-theme">
-              <button type="button" id="connect-wallet-btn" class="shrink-0 rounded-lg border border-[rgb(var(--theme-primary))]/40 px-3 py-2 text-scale-body text-[rgb(var(--theme-primary))] hover:bg-[rgb(var(--theme-primary))]/10">连接钱包</button>
-            </div>
-            <button type="button" id="connect-walletconnect-btn" class="mt-2 w-full rounded-lg border border-theme px-3 py-2 text-scale-body text-theme-secondary hover:bg-theme-secondary/40">WalletConnect 连接</button>
+            <input id="from_address" name="from_address" type="text" value="{{ old('from_address', $defaultFromAddress) }}" placeholder="点击确认充值时自动连接钱包并回填地址" class="w-full rounded-lg border border-theme bg-theme-secondary px-3 py-2 text-theme">
             <p id="wallet-connect-feedback" class="mt-1 hidden text-scale-micro text-[rgb(var(--theme-primary))]"></p>
             @error('from_address')
               <p class="mt-1 text-scale-body text-[rgb(var(--theme-rose))]">{{ $message }}</p>
@@ -130,7 +142,7 @@
           </div>
 
           <div class="rounded-xl border border-theme bg-theme-secondary/30 p-3">
-            <button type="button" id="pay-direct-btn" class="w-full rounded-lg border border-[rgb(var(--theme-primary))]/40 px-3 py-2 text-scale-body font-semibold text-[rgb(var(--theme-primary))] hover:bg-[rgb(var(--theme-primary))]/10">拉起钱包直接付款（USDT）</button>
+            <button type="button" id="pay-direct-btn" class="w-full rounded-lg border border-[rgb(var(--theme-primary))]/40 px-3 py-2 text-scale-body font-semibold text-[rgb(var(--theme-primary))] hover:bg-[rgb(var(--theme-primary))]/10">确认充值并拉起钱包付款</button>
             <p id="pay-feedback" class="mt-2 hidden text-scale-micro text-[rgb(var(--theme-primary))]"></p>
           </div>
 

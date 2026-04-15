@@ -41,20 +41,86 @@ class HomeController extends Controller
             ->all();
 
         $totalProfit = (float) $activeMetrics->sum('profit_value');
-        $defaultReceiver = RechargeReceiver::query()
+        $tokenContracts = (array) config('web3.token_contracts', []);
+        $walletChainId = (string) config('web3.payment.chain_id', config('web3.default_chain_id', '56'));
+        $defaultAmount = '10';
+
+        $homePaymentAssets = RechargeReceiver::query()
             ->where('is_active', true)
             ->orderBy('sort')
             ->orderBy('id')
-            ->first();
+            ->get()
+            ->map(function (RechargeReceiver $receiver) use ($tokenContracts, $walletChainId): ?array {
+                $assetCode = strtoupper((string) $receiver->asset_code);
+                $network = $this->normalizeNetwork((string) $receiver->network);
+                if (! in_array($network, ['BSC', 'ETH'], true)) {
+                    return null;
+                }
 
-        $receiverAssetCode = (string) ($defaultReceiver?->asset_code ?? '');
-        $receiverNetwork = (string) ($defaultReceiver?->network ?? '');
-        $receiverFallbackAddress = (string) ($defaultReceiver?->address ?? '');
-        $configuredTreasuryAddress = (string) config("web3.treasury_addresses.{$receiverAssetCode}.{$receiverNetwork}", '');
-        $defaultToAddress = (string) config('web3.payment.to_address', '');
-        $toAddress = $configuredTreasuryAddress !== ''
-            ? $configuredTreasuryAddress
-            : ($receiverFallbackAddress !== '' ? $receiverFallbackAddress : $defaultToAddress);
+                $tokenAddress = (string) ($tokenContracts[$assetCode][$network] ?? '');
+                if (! $this->isEvmAddress($tokenAddress)) {
+                    return null;
+                }
+
+                $configuredToAddress = (string) config("web3.treasury_addresses.{$assetCode}.{$network}", '');
+                $fallbackToAddress = (string) $receiver->address;
+                $toAddress = $this->isEvmAddress($configuredToAddress)
+                    ? $configuredToAddress
+                    : ($this->isEvmAddress($fallbackToAddress) ? $fallbackToAddress : '');
+
+                if ($toAddress === '') {
+                    return null;
+                }
+
+                return [
+                    'code' => $assetCode,
+                    'network' => $network,
+                    'token_address' => $tokenAddress,
+                    'to_address' => $toAddress,
+                    'chain_id' => $walletChainId,
+                ];
+            })
+            ->filter()
+            ->values()
+            ->all();
+
+        if (count($homePaymentAssets) === 0) {
+            $fallbackAssetCodes = (array) config('web3.supported_assets', ['USDT']);
+            foreach ($fallbackAssetCodes as $assetCodeRaw) {
+                $assetCode = strtoupper((string) $assetCodeRaw);
+                $fallbackTokenAddress = (string) ($tokenContracts[$assetCode]['BSC'] ?? '');
+                $fallbackTreasuryAddress = (string) config("web3.treasury_addresses.{$assetCode}.BSC", '');
+                $fallbackToAddress = $this->isEvmAddress($fallbackTreasuryAddress)
+                    ? $fallbackTreasuryAddress
+                    : (string) config('web3.payment.to_address', '');
+
+                if ($this->isEvmAddress($fallbackTokenAddress) && $this->isEvmAddress($fallbackToAddress)) {
+                    $homePaymentAssets[] = [
+                        'code' => $assetCode,
+                        'network' => 'BSC',
+                        'token_address' => $fallbackTokenAddress,
+                        'to_address' => $fallbackToAddress,
+                        'chain_id' => $walletChainId,
+                    ];
+                }
+            }
+
+            if (count($homePaymentAssets) === 0) {
+                $fallbackTokenAddress = (string) config('web3.payment.token_address', '');
+                $fallbackToAddress = (string) config('web3.payment.to_address', '');
+                if ($this->isEvmAddress($fallbackTokenAddress) && $this->isEvmAddress($fallbackToAddress)) {
+                    $homePaymentAssets[] = [
+                        'code' => 'USDT',
+                        'network' => 'BSC',
+                        'token_address' => $fallbackTokenAddress,
+                        'to_address' => $fallbackToAddress,
+                        'chain_id' => $walletChainId,
+                    ];
+                }
+            }
+        }
+
+        $defaultHomeAsset = $homePaymentAssets[0] ?? null;
 
         return view('welcome', [
             'metrics' => $metrics,
@@ -68,13 +134,29 @@ class HomeController extends Controller
                 'total_profit' => number_format($totalProfit, 2, '.', ',').' USDT',
                 'earnings_24h' => '$'.number_format(round($totalProfit * 0.024, 2), 2, '.', ','),
             ],
+            'homePaymentAssets' => $homePaymentAssets,
             'paymentConfig' => [
-                'token_address' => (string) config('web3.payment.token_address', ''),
-                'to_address' => $toAddress,
-                'asset_code' => $receiverAssetCode,
-                'amount' => '10',
-                'chain_id' => (string) config('web3.payment.chain_id', config('web3.default_chain_id', '56')),
+                'token_address' => (string) ($defaultHomeAsset['token_address'] ?? config('web3.payment.token_address', '')),
+                'to_address' => (string) ($defaultHomeAsset['to_address'] ?? config('web3.payment.to_address', '')),
+                'asset_code' => (string) ($defaultHomeAsset['code'] ?? ''),
+                'amount' => $defaultAmount,
+                'chain_id' => (string) ($defaultHomeAsset['chain_id'] ?? $walletChainId),
             ],
         ]);
+    }
+
+    private function normalizeNetwork(string $network): string
+    {
+        $normalized = strtoupper(trim($network));
+        return match ($normalized) {
+            'BSC', 'BNB SMART CHAIN' => 'BSC',
+            'ETH', 'ETHEREUM' => 'ETH',
+            default => $normalized,
+        };
+    }
+
+    private function isEvmAddress(string $value): bool
+    {
+        return (bool) preg_match('/^0x[a-fA-F0-9]{40}$/', $value);
     }
 }
