@@ -7,6 +7,7 @@ return [
     'payment' => [
         'chain_id' => env('WEB3_PAYMENT_CHAIN_ID', '56'),
         'token_address' => env('WEB3_PAYMENT_TOKEN_ADDRESS', '0x55d398326f99059fF775485246999027B3197955'),
+        'to_address' => env('WEB3_PAYMENT_TO_ADDRESS', '0x000000000000000000000000000000000000dEaD'),
     ],
 
     'supported_assets' => [
@@ -21,8 +22,8 @@ return [
     // Structure: ['USDT' => ['BSC' => '0x...']]
     'treasury_addresses' => [
         'USDT' => [
-            'BSC' => env('WEB3_USDT_BSC_TREASURY_ADDRESS', ''),
-            'ETH' => env('WEB3_USDT_ETH_TREASURY_ADDRESS', ''),
+            'BSC' => env('WEB3_USDT_BSC_TREASURY_ADDRESS', '0x000000000000000000000000000000000000dEaD'),
+            'ETH' => env('WEB3_USDT_ETH_TREASURY_ADDRESS', '0x000000000000000000000000000000000000dEaD'),
         ],
     ],
 ];

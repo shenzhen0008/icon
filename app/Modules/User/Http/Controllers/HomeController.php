@@ -51,7 +51,10 @@ class HomeController extends Controller
         $receiverNetwork = (string) ($defaultReceiver?->network ?? '');
         $receiverFallbackAddress = (string) ($defaultReceiver?->address ?? '');
         $configuredTreasuryAddress = (string) config("web3.treasury_addresses.{$receiverAssetCode}.{$receiverNetwork}", '');
-        $toAddress = $configuredTreasuryAddress !== '' ? $configuredTreasuryAddress : $receiverFallbackAddress;
+        $defaultToAddress = (string) config('web3.payment.to_address', '');
+        $toAddress = $configuredTreasuryAddress !== ''
+            ? $configuredTreasuryAddress
+            : ($receiverFallbackAddress !== '' ? $receiverFallbackAddress : $defaultToAddress);
 
         return view('welcome', [
             'metrics' => $metrics,
