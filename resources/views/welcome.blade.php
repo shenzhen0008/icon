@@ -15,7 +15,7 @@
   <main class="mx-auto w-full max-w-4xl px-4 pb-28 pt-8 md:pb-12">
     <x-home.hero :summary="$summary" :payment-config="$paymentConfig" :payment-assets="$homePaymentAssets" :is-guest="$isGuest" />
     <x-home.stats :summary="$summary" />
-    <x-home.exchange-metrics :metrics="$metrics" />
+    <x-home.exchange-metrics :metrics="$metrics" :shared-profit="$sharedExchangeProfit" />
   </main>
 
   <x-nav.mobile />
@@ -30,6 +30,7 @@
 
         <form method="POST" action="/register" class="space-y-4">
           @csrf
+          <input type="hidden" name="invite_code" value="{{ app(\App\Modules\Referral\Support\InviteCodeResolver::class)->currentForForm(request()) }}">
 
           <div>
             <label class="mb-1 block text-scale-body" for="password">密码</label>

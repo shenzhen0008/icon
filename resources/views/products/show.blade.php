@@ -28,7 +28,7 @@
       <div class="mt-4 h-px bg-theme/20"></div>
 
       <div class="mt-4 flex items-start gap-2">
-        <div class="shrink-0 text-left pr-2">
+        <div class="min-w-0 flex-1 text-left">
           <p class="text-scale-micro text-theme-secondary">限额(USDT)</p>
           <p class="text-scale-ui mt-1 whitespace-nowrap font-medium text-theme">{{ $product['limit_range'] }}</p>
         </div>
@@ -85,7 +85,7 @@
             @csrf
             <input type="hidden" name="product_id" value="{{ $product['id'] }}">
             <div class="sm:w-48">
-              <label class="mb-1 block text-scale-micro text-theme-secondary">购买金额(USDT)</label>
+              <label class="mb-1 block text-scale-micro text-theme-secondary">托管金额(USDT)</label>
               <input type="number" min="0.01" step="0.01" name="amount" class="w-full rounded-lg border border-theme bg-theme-secondary px-3 py-2 text-scale-body text-theme" required>
             </div>
             <button class="text-scale-ui h-[clamp(1.9rem,7vw,2.2rem)] w-[clamp(7rem,42vw,9rem)] self-center rounded-lg bg-[rgb(var(--theme-primary))] px-[clamp(0.6rem,2.5vw,0.9rem)] font-semibold text-theme-on-primary mx-auto sm:w-[clamp(7.5rem,20vw,10rem)] sm:self-auto sm:mx-0">
@@ -114,6 +114,7 @@
         <form method="POST" action="/register" class="space-y-4">
           @csrf
           <input type="hidden" name="redirect_to" value="/products/{{ $product['id'] }}">
+          <input type="hidden" name="invite_code" value="{{ app(\App\Modules\Referral\Support\InviteCodeResolver::class)->currentForForm(request()) }}">
 
           <div>
             <label class="mb-1 block text-scale-body" for="password">密码</label>

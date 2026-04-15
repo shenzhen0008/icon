@@ -1,4 +1,15 @@
-<section class="mt-8 rounded-2xl border border-theme bg-theme-card p-5">
+@props([
+    'metrics' => [],
+    'sharedProfit' => [],
+])
+
+<section
+    class="mt-8 rounded-2xl border border-theme bg-theme-card p-5"
+    data-shared-profit-base-value="{{ $sharedProfit['base_value'] ?? '0.00' }}"
+    data-shared-profit-step-seconds="{{ $sharedProfit['step_seconds'] ?? 3 }}"
+    data-shared-profit-min-delta="{{ $sharedProfit['min_delta'] ?? '0.00' }}"
+    data-shared-profit-max-delta="{{ $sharedProfit['max_delta'] ?? '0.00' }}"
+>
     <div class="mb-4 flex items-center justify-between gap-3">
         <h2 class="text-scale-title font-semibold text-theme">实时操盘平台</h2>
     </div>
@@ -70,7 +81,7 @@
                         <span class="text-center text-theme" data-field="eth_value">{{ $metric['eth_value'] }}</span>
                         <span class="text-right text-theme" data-field="eth_liquidity">{{ $metric['eth_liquidity'] }}</span>
                     </div>
-                    <p class="mt-2 text-scale-micro text-theme-secondary" data-field="updated_at">更新: {{ $metric['updated_at'] }}</p>
+                    <p class="mt-2 text-scale-micro text-theme-secondary" data-field="updated_at">更新: --</p>
                 </div>
             </article>
         @endforeach
@@ -81,80 +92,52 @@
     (() => {
         const list = document.getElementById('exchange-metrics-list');
         if (!list) return;
-        const summaryParticipantCount = document.getElementById('summary-participant-count');
-        const summaryTotalProfit = document.getElementById('summary-total-profit');
-        const summaryDisplayMultiplier = 10;
+        const section = list.closest('section[data-shared-profit-base-value]');
+        const updatedFields = Array.from(list.querySelectorAll('[data-field="updated_at"]'));
+        const profitFields = Array.from(list.querySelectorAll('[data-field="profit_value"]'));
 
-        const rowCache = new Map();
-        const parseNumeric = (value) => Number(String(value ?? '0').replace(/,/g, '').replace(/[^0-9.-]/g, '')) || 0;
-
-        const formatProfit = (value) => parseNumeric(value).toLocaleString('en-US', {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-        });
-        const formatParticipantCount = (value) => Number(value || 0).toLocaleString('en-US');
-        const applyDisplayMultiplier = (value) => parseNumeric(value) * summaryDisplayMultiplier;
-
-        const bindRows = () => {
-            list.querySelectorAll('[data-toggle-row]').forEach((button) => {
-                const code = button.dataset.code;
-                if (!code) return;
-
-                const detail = list.querySelector(`[data-detail-row="${code}"]`);
-                const profit = button.querySelector('[data-field="profit_value"]');
-                const btc = detail?.querySelector('[data-field="btc_value"]');
-                const btcLiquidity = detail?.querySelector('[data-field="btc_liquidity"]');
-                const eth = detail?.querySelector('[data-field="eth_value"]');
-                const ethLiquidity = detail?.querySelector('[data-field="eth_liquidity"]');
-                const updated = detail?.querySelector('[data-field="updated_at"]');
-
-                rowCache.set(code, { profit, btc, btcLiquidity, eth, ethLiquidity, updated });
-                button.addEventListener('click', () => detail?.classList.toggle('hidden'));
+        const refreshUpdatedAt = () => {
+            const now = new Date();
+            const timestamp = now.toLocaleString('sv-SE', { hour12: false }).replace('T', ' ');
+            updatedFields.forEach((field) => {
+                field.textContent = `更新: ${timestamp}`;
             });
         };
 
-        const refresh = async () => {
-            try {
-                const response = await fetch('/exchange-metrics', {
-                    headers: { 'X-Requested-With': 'XMLHttpRequest' },
-                });
-                if (!response.ok) return;
-                const payload = await response.json();
-                const rows = payload?.data || [];
-                let totalProfit = 0;
-                let participantCount = 0;
-
-                rows.forEach((row) => {
-                    const refs = rowCache.get(row.exchange_code);
-                    if (!refs) return;
-                    totalProfit += parseNumeric(row.profit_value || 0);
-                    participantCount += parseNumeric(row.btc_liquidity || 0) + parseNumeric(row.eth_liquidity || 0);
-                    if (refs.profit) refs.profit.textContent = formatProfit(row.profit_value);
-                    if (refs.btc) refs.btc.textContent = row.btc_value;
-                    if (refs.btcLiquidity) refs.btcLiquidity.textContent = row.btc_liquidity;
-                    if (refs.eth) refs.eth.textContent = row.eth_value;
-                    if (refs.ethLiquidity) refs.ethLiquidity.textContent = row.eth_liquidity;
-                    if (refs.updated) refs.updated.textContent = `更新: ${row.updated_at}`;
-                });
-
-                if (summaryParticipantCount) {
-                    summaryParticipantCount.textContent = formatParticipantCount(applyDisplayMultiplier(participantCount));
-                }
-                if (summaryTotalProfit) {
-                    summaryTotalProfit.textContent = `${formatProfit(applyDisplayMultiplier(totalProfit))} USDT`;
-                }
-            } catch (_) {
-                // Keep silent in MVP, next interval will retry.
+        const startProfitTicker = () => {
+            if (!section || profitFields.length === 0 || typeof window.startBaseAnchoredTicker !== 'function') {
+                return;
             }
+
+            window.startBaseAnchoredTicker({
+                elements: profitFields,
+                baseValue: section.dataset.sharedProfitBaseValue,
+                minDelta: section.dataset.sharedProfitMinDelta,
+                maxDelta: section.dataset.sharedProfitMaxDelta,
+                stepSeconds: Number(section.dataset.sharedProfitStepSeconds || 3),
+                precision: 2,
+            });
         };
 
-        bindRows();
-        if (summaryParticipantCount) {
-            summaryParticipantCount.textContent = formatParticipantCount(applyDisplayMultiplier(summaryParticipantCount.textContent));
-        }
-        if (summaryTotalProfit) {
-            summaryTotalProfit.textContent = `${formatProfit(applyDisplayMultiplier(summaryTotalProfit.textContent))} USDT`;
-        }
-        setInterval(refresh, 3000);
+        const ensureProfitTicker = () => {
+            if (typeof window.startBaseAnchoredTicker === 'function') {
+                startProfitTicker();
+                return;
+            }
+
+            window.addEventListener('base-anchored-ticker:ready', startProfitTicker, { once: true });
+        };
+
+        list.querySelectorAll('[data-toggle-row]').forEach((button) => {
+            const code = button.dataset.code;
+            if (!code) return;
+
+            const detail = list.querySelector(`[data-detail-row="${code}"]`);
+            button.addEventListener('click', () => detail?.classList.toggle('hidden'));
+        });
+
+        refreshUpdatedAt();
+        ensureProfitTicker();
+        setInterval(refreshUpdatedAt, 1000);
     })();
 </script>

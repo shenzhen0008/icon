@@ -3,6 +3,7 @@
 namespace App\Modules\User\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Modules\Referral\Services\BindReferrerOnRegisterService;
 use App\Modules\User\Http\Requests\Auth\ActivateAccountRequest;
 use App\Modules\User\Services\AccountActivationService;
 use App\Modules\User\Services\TemporaryAccountService;
@@ -16,6 +17,7 @@ class RegisteredUserController extends Controller
     public function __construct(
         private readonly TemporaryAccountService $temporaryAccountService,
         private readonly AccountActivationService $accountActivationService,
+        private readonly BindReferrerOnRegisterService $bindReferrerOnRegisterService,
     ) {
     }
 
@@ -38,6 +40,8 @@ class RegisteredUserController extends Controller
             $temporaryUsername,
             (string) $request->validated('password'),
         );
+
+        $this->bindReferrerOnRegisterService->handle($user, $request);
 
         Auth::login($user, true);
         $request->session()->regenerate();

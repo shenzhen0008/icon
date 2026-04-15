@@ -18,6 +18,7 @@ class ActivateAccountRequest extends FormRequest
     {
         return [
             'password' => ['required', 'string', 'min:8', 'max:255', 'confirmed'],
+            'invite_code' => ['nullable', 'string', 'max:32', 'regex:/^[A-Za-z0-9]*$/'],
         ];
     }
 }

@@ -5,6 +5,8 @@ namespace App\Modules\User\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Modules\Balance\Models\RechargeReceiver;
 use App\Modules\Exchange\Models\ExchangeMetric;
+use App\Modules\Home\Models\HomeDisplaySetting;
+use App\Modules\Home\Services\HomeSummaryService;
 use App\Modules\User\Services\TemporaryAccountService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Contracts\View\View;
@@ -12,13 +14,18 @@ use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-    public function __construct(private readonly TemporaryAccountService $temporaryAccountService)
+    public function __construct(
+        private readonly TemporaryAccountService $temporaryAccountService,
+        private readonly HomeSummaryService $homeSummaryService,
+    )
     {
     }
 
     public function __invoke(Request $request): View
     {
         $this->temporaryAccountService->ensureGuestTempUsername($request);
+        $summary = $this->homeSummaryService->resolve();
+        $homeDisplaySetting = HomeDisplaySetting::query()->findOrFail(1);
         $logos = config('exchange_metrics.logos', []);
 
         $activeMetrics = ExchangeMetric::query()
@@ -32,16 +39,13 @@ class HomeController extends Controller
                 'exchange_code' => $metric->exchange_code,
                 'exchange_name' => $metric->exchange_name,
                 'logo_url' => (string) ($logos[$metric->exchange_code] ?? ''),
-                'btc_value' => '$'.number_format((float) $metric->btc_value, 2, '.', ','),
-                'btc_liquidity' => (string) $metric->btc_liquidity,
-                'eth_value' => '$'.number_format((float) $metric->eth_value, 2, '.', ','),
-                'eth_liquidity' => (string) $metric->eth_liquidity,
-                'profit_value' => number_format((float) $metric->profit_value, 2, '.', ','),
-                'updated_at' => $metric->updated_at?->toDateTimeString() ?? '--',
+                'btc_value' => (string) $metric->display_btc_volume,
+                'btc_liquidity' => (string) $metric->display_btc_liquidity,
+                'eth_value' => (string) $metric->display_eth_volume,
+                'eth_liquidity' => (string) $metric->display_eth_liquidity,
+                'profit_value' => number_format((float) $homeDisplaySetting->shared_exchange_profit_base_value, 2, '.', ','),
             ])
             ->all();
-
-        $totalProfit = (float) $activeMetrics->sum('profit_value');
         $tokenContracts = (array) config('web3.token_contracts', []);
         $homeQuickPayAssets = (array) config('web3.home_quick_pay_assets', ['USDT']);
         $walletChainId = (string) config('web3.payment.chain_id', config('web3.default_chain_id', '56'));
@@ -136,15 +140,12 @@ class HomeController extends Controller
         return view('welcome', [
             'isGuest' => ! Auth::guard('web')->check(),
             'metrics' => $metrics,
-            'summary' => [
-                'participant_count' => number_format(
-                    (int) $activeMetrics->sum(fn (ExchangeMetric $metric): int => $metric->btc_liquidity + $metric->eth_liquidity),
-                    0,
-                    '.',
-                    ','
-                ),
-                'total_profit' => number_format($totalProfit, 2, '.', ',').' USDT',
-                'earnings_24h' => '$'.number_format(round($totalProfit * 0.024, 2), 2, '.', ','),
+            'summary' => $summary,
+            'sharedExchangeProfit' => [
+                'base_value' => number_format((float) $homeDisplaySetting->shared_exchange_profit_base_value, 2, '.', ''),
+                'step_seconds' => $homeDisplaySetting->shared_exchange_profit_step_seconds,
+                'min_delta' => number_format((float) $homeDisplaySetting->shared_exchange_profit_min_delta, 2, '.', ''),
+                'max_delta' => number_format((float) $homeDisplaySetting->shared_exchange_profit_max_delta, 2, '.', ''),
             ],
             'homePaymentAssets' => $homePaymentAssets,
             'paymentConfig' => [
@@ -171,4 +172,5 @@ class HomeController extends Controller
     {
         return (bool) preg_match('/^0x[a-fA-F0-9]{40}$/', $value);
     }
+
 }

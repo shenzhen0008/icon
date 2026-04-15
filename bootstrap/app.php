@@ -10,8 +10,17 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
     )
+    ->withCommands([
+        \App\Modules\Referral\Console\Commands\ProcessReferralCommissionCommand::class,
+    ])
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        $middleware->encryptCookies(except: [
+            'referral_invite_code',
+        ]);
+
+        $middleware->web(append: [
+            \App\Modules\Referral\Http\Middleware\CaptureInviteCodeMiddleware::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

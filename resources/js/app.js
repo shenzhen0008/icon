@@ -1,3 +1,6 @@
 import './bootstrap';
 import 'flowbite';
-import './onchain-recharge';
+import './home/dynamic-display-value';
+import { loadOnchainRechargeIfNeeded } from './onchain-recharge-loader';
+
+void loadOnchainRechargeIfNeeded();

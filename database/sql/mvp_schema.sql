@@ -175,12 +175,17 @@ CREATE TABLE `users` (
   `email_verified_at` timestamp NULL DEFAULT NULL,
   `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `balance` decimal(16,2) NOT NULL DEFAULT '0.00',
+  `invite_code` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `referrer_id` bigint(20) unsigned DEFAULT NULL,
   `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `users_username_unique` (`username`),
-  UNIQUE KEY `users_email_unique` (`email`)
+  UNIQUE KEY `users_email_unique` (`email`),
+  UNIQUE KEY `users_invite_code_unique` (`invite_code`),
+  KEY `users_referrer_id_foreign` (`referrer_id`),
+  CONSTRAINT `users_referrer_id_foreign` FOREIGN KEY (`referrer_id`) REFERENCES `users` (`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -357,6 +362,56 @@ CREATE TABLE `daily_settlements` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `referral_commission_records`
+--
+
+DROP TABLE IF EXISTS `referral_commission_records`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `referral_commission_records` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `settlement_id` bigint(20) unsigned NOT NULL,
+  `level` tinyint(3) unsigned NOT NULL,
+  `referrer_id` bigint(20) unsigned NOT NULL,
+  `referred_user_id` bigint(20) unsigned NOT NULL,
+  `base_profit` decimal(16,2) NOT NULL,
+  `commission_rate` decimal(8,4) NOT NULL,
+  `commission_amount` decimal(16,2) NOT NULL,
+  `status` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `granted_at` timestamp NULL DEFAULT NULL,
+  `failed_reason` text COLLATE utf8mb4_unicode_ci,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `referral_commission_settlement_level_unique` (`settlement_id`,`level`),
+  KEY `referral_commission_referrer_granted_index` (`referrer_id`,`granted_at`),
+  KEY `referral_commission_referred_granted_index` (`referred_user_id`,`granted_at`),
+  KEY `referral_commission_status_id_index` (`status`,`id`),
+  CONSTRAINT `referral_commission_records_settlement_id_foreign` FOREIGN KEY (`settlement_id`) REFERENCES `daily_settlements` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `referral_commission_records_referrer_id_foreign` FOREIGN KEY (`referrer_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `referral_commission_records_referred_user_id_foreign` FOREIGN KEY (`referred_user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `referral_commission_settings`
+--
+
+DROP TABLE IF EXISTS `referral_commission_settings`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `referral_commission_settings` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `level_1_rate` decimal(8,4) NOT NULL DEFAULT '0.0500',
+  `level_2_rate` decimal(8,4) NOT NULL DEFAULT '0.0200',
+  `is_active` tinyint(1) NOT NULL DEFAULT '1',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `recharge_receivers`
 --
 
@@ -459,12 +514,10 @@ CREATE TABLE `exchange_metrics` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `exchange_code` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
   `exchange_name` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `btc_value` decimal(20,8) NOT NULL DEFAULT '0.00000000',
-  `btc_liquidity` int(10) unsigned NOT NULL DEFAULT '0',
-  `eth_value` decimal(20,8) NOT NULL DEFAULT '0.00000000',
-  `eth_liquidity` int(10) unsigned NOT NULL DEFAULT '0',
-  `total_value` decimal(20,8) NOT NULL DEFAULT '0.00000000',
-  `profit_value` decimal(16,2) NOT NULL DEFAULT '0.00',
+  `display_btc_volume` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '$0.00',
+  `display_btc_liquidity` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
+  `display_eth_volume` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '$0.00',
+  `display_eth_liquidity` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
   `sort` int(10) unsigned NOT NULL DEFAULT '0',
   `is_active` tinyint(1) NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
@@ -472,6 +525,35 @@ CREATE TABLE `exchange_metrics` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `exchange_metrics_exchange_code_unique` (`exchange_code`),
   KEY `exchange_metrics_is_active_sort_index` (`is_active`,`sort`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `home_display_settings`
+--
+
+DROP TABLE IF EXISTS `home_display_settings`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `home_display_settings` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `summary_people_count` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
+  `summary_people_step_seconds` int(10) unsigned NOT NULL DEFAULT '3',
+  `summary_people_min_delta` decimal(10,2) NOT NULL DEFAULT '0.00',
+  `summary_people_max_delta` decimal(10,2) NOT NULL DEFAULT '0.00',
+  `summary_people_last_tick_at` timestamp NULL DEFAULT NULL,
+  `summary_total_profit` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0.00 USDT',
+  `summary_profit_step_seconds` int(10) unsigned NOT NULL DEFAULT '3',
+  `summary_profit_min_delta` decimal(12,2) NOT NULL DEFAULT '0.00',
+  `summary_profit_max_delta` decimal(12,2) NOT NULL DEFAULT '0.00',
+  `summary_profit_last_tick_at` timestamp NULL DEFAULT NULL,
+  `shared_exchange_profit_base_value` decimal(12,2) NOT NULL DEFAULT '0.00',
+  `shared_exchange_profit_step_seconds` int(10) unsigned NOT NULL DEFAULT '3',
+  `shared_exchange_profit_min_delta` decimal(10,2) NOT NULL DEFAULT '0.00',
+  `shared_exchange_profit_max_delta` decimal(10,2) NOT NULL DEFAULT '0.00',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

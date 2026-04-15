@@ -35,40 +35,20 @@ class ExchangeMetricForm
                             ->label('启用')
                             ->default(true),
                     ]),
-                Section::make('盘口数据')
+                Section::make('展示数据')
                     ->columns(2)
                     ->schema([
-                        TextInput::make('btc_value')
-                            ->label('BTC 价格')
-                            ->numeric()
-                            ->step('0.00000001')
+                        TextInput::make('display_btc_volume')
+                            ->label('BTC 24h Volume')
                             ->required(),
-                        TextInput::make('btc_liquidity')
-                            ->label('BTC 流动性')
-                            ->numeric()
-                            ->default(0)
+                        TextInput::make('display_btc_liquidity')
+                            ->label('BTC Liquidity')
                             ->required(),
-                        TextInput::make('eth_value')
-                            ->label('ETH 价格')
-                            ->numeric()
-                            ->step('0.00000001')
+                        TextInput::make('display_eth_volume')
+                            ->label('ETH 24h Volume')
                             ->required(),
-                        TextInput::make('eth_liquidity')
-                            ->label('ETH 流动性')
-                            ->numeric()
-                            ->default(0)
-                            ->required(),
-                        TextInput::make('total_value')
-                            ->label('总价值')
-                            ->numeric()
-                            ->step('0.00000001')
-                            ->default(0)
-                            ->required(),
-                        TextInput::make('profit_value')
-                            ->label('利润值')
-                            ->numeric()
-                            ->step('0.01')
-                            ->default(0)
+                        TextInput::make('display_eth_liquidity')
+                            ->label('ETH Liquidity')
                             ->required(),
                     ]),
             ]);

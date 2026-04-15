@@ -98,6 +98,28 @@ PR 自检（字体相关）：
 2. 仅从 5 档语义类中选字号。
 3. 大标题只用 `text-scale-display`，按钮只用 `text-scale-ui`，正文默认 `text-scale-body`。
 
+### 推荐返利 MVP
+推荐返利功能支持两级提成，邀请码通过 `invite_code` 参数进入站点后，会使用 session、signed cookie 和注册表单隐藏字段兜底保存，适配钱包内置浏览器。
+
+后台配置：
+- 入口：`/admin/referral-commission-settings/1/edit`
+- 比例存储为小数，例如 `0.05` 表示 5%，`0.02` 表示 2%
+- 校验规则：`0 <= 二级比例 <= 一级比例 < 1`
+
+环境变量：
+```env
+REFERRAL_ENABLED=true
+REFERRAL_GO_LIVE_DATE=2026-04-15
+REFERRAL_BUSINESS_TIMEZONE=Asia/Shanghai
+```
+
+批量发放命令：
+```bash
+php artisan referral:commission-process
+```
+
+部署后如果启用该功能，需要先执行数据库迁移，再在后台确认提成比例配置。
+
 
 ## 推送到 GitHub
 

@@ -6,7 +6,7 @@
       <a href="/" class="{{ request()->is('/') ? 'text-[rgb(var(--theme-primary))]' : 'text-theme-secondary hover:text-[rgb(var(--theme-primary))]' }}">首页</a>
       <a href="/products" class="{{ request()->is('products') || request()->is('products/*') ? 'text-[rgb(var(--theme-primary))]' : 'text-theme-secondary hover:text-[rgb(var(--theme-primary))]' }}">产品</a>
       <a href="/help" class="{{ request()->is('help') ? 'text-[rgb(var(--theme-primary))]' : 'text-theme-secondary hover:text-[rgb(var(--theme-primary))]' }}">帮助</a>
-      <button type="button" data-share-entry class="text-theme-secondary transition hover:text-[rgb(var(--theme-primary))]">分享</button>
+      <a href="/referral" class="{{ request()->is('referral') ? 'text-[rgb(var(--theme-primary))]' : 'text-theme-secondary hover:text-[rgb(var(--theme-primary))]' }}">分享</a>
       <a href="/me" class="{{ request()->is('me') ? 'text-[rgb(var(--theme-primary))]' : 'text-theme-secondary hover:text-[rgb(var(--theme-primary))]' }}">我的</a>
       <a href="/support" class="{{ request()->is('support') ? 'text-[rgb(var(--theme-primary))]' : 'text-theme-secondary hover:text-[rgb(var(--theme-primary))]' }}">客服</a>
       <a href="/stream-chat" class="{{ request()->is('stream-chat') ? 'text-[rgb(var(--theme-primary))]' : 'text-theme-secondary hover:text-[rgb(var(--theme-primary))]' }}">
@@ -114,36 +114,6 @@
 
   document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') closeLanguageMenu();
-  });
-
-  document.querySelectorAll('[data-share-entry]').forEach((button) => {
-    button.addEventListener('click', async () => {
-      const sharePayload = {
-        title: document.title,
-        text: 'Icon Market',
-        url: window.location.href,
-      };
-
-      if (typeof navigator.share === 'function') {
-        try {
-          await navigator.share(sharePayload);
-          return;
-        } catch (error) {
-          if (error instanceof DOMException && error.name === 'AbortError') return;
-        }
-      }
-
-      try {
-        if (navigator.clipboard?.writeText) {
-          await navigator.clipboard.writeText(window.location.href);
-          alert('链接已复制');
-          return;
-        }
-      } catch (error) {
-      }
-
-      alert(window.location.href);
-    });
   });
 
   // 主题切换功能

@@ -26,6 +26,7 @@
         </div>
     </div>
 
+    {{--
     <div class="mt-5 space-y-3">
         <button
             id="home-onchain-entry"
@@ -67,6 +68,7 @@
             @endif
         </div>
     </div>
+    --}}
 
     <div class="mt-5 grid grid-cols-2 gap-3">
         <button id="hero-damo-btn" type="button" class="inline-flex items-center justify-center rounded-xl bg-theme-secondary px-4 py-3 text-scale-body font-semibold text-theme transition hover:bg-theme-secondary/80">

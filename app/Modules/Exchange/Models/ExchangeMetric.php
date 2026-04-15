@@ -12,12 +12,10 @@ class ExchangeMetric extends Model
     protected $fillable = [
         'exchange_code',
         'exchange_name',
-        'btc_value',
-        'btc_liquidity',
-        'eth_value',
-        'eth_liquidity',
-        'total_value',
-        'profit_value',
+        'display_btc_volume',
+        'display_btc_liquidity',
+        'display_eth_volume',
+        'display_eth_liquidity',
         'sort',
         'is_active',
     ];
@@ -25,12 +23,6 @@ class ExchangeMetric extends Model
     protected function casts(): array
     {
         return [
-            'btc_value' => 'decimal:8',
-            'btc_liquidity' => 'int',
-            'eth_value' => 'decimal:8',
-            'eth_liquidity' => 'int',
-            'total_value' => 'decimal:8',
-            'profit_value' => 'decimal:2',
             'sort' => 'int',
             'is_active' => 'bool',
         ];

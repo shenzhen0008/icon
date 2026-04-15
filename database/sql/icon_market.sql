@@ -102,12 +102,10 @@ CREATE TABLE `exchange_metrics` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `exchange_code` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
   `exchange_name` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `btc_value` decimal(20,8) NOT NULL DEFAULT '0.00000000',
-  `btc_liquidity` int(10) UNSIGNED NOT NULL DEFAULT '0',
-  `eth_value` decimal(20,8) NOT NULL DEFAULT '0.00000000',
-  `eth_liquidity` int(10) UNSIGNED NOT NULL DEFAULT '0',
-  `total_value` decimal(20,8) NOT NULL DEFAULT '0.00000000',
-  `profit_value` decimal(16,2) NOT NULL DEFAULT '0.00',
+  `display_btc_volume` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '$0.00',
+  `display_btc_liquidity` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
+  `display_eth_volume` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '$0.00',
+  `display_eth_liquidity` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
   `sort` int(10) UNSIGNED NOT NULL DEFAULT '0',
   `is_active` tinyint(1) NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
@@ -118,13 +116,46 @@ CREATE TABLE `exchange_metrics` (
 -- 转存表中的数据 `exchange_metrics`
 --
 
-INSERT INTO `exchange_metrics` (`id`, `exchange_code`, `exchange_name`, `btc_value`, `btc_liquidity`, `eth_value`, `eth_liquidity`, `total_value`, `profit_value`, `sort`, `is_active`, `created_at`, `updated_at`) VALUES
-(1, 'binance', 'Binance', 3638119640.15000000, 962, 1841624841.81000000, 983, 5479744481.96000000, 2066.11, 10, 1, '2026-04-04 08:18:10', '2026-04-04 18:44:14'),
-(2, 'huobi', 'Huobi', 2951022330.24000000, 960, 1528801122.43000000, 997, 4479823452.67000000, 2001.97, 20, 1, '2026-04-04 08:18:10', '2026-04-04 18:44:14'),
-(3, 'gate', 'Gate', 2105520066.90000000, 937, 1314476998.22000000, 961, 3419997065.12000000, 2364.19, 30, 1, '2026-04-04 08:18:10', '2026-04-04 18:44:14'),
-(4, 'okx', 'OKX', 3170045155.12000000, 958, 1714422107.66000000, 998, 4884467262.78000000, 2022.49, 40, 1, '2026-04-04 08:18:10', '2026-04-04 18:44:14'),
-(5, 'kucoin', 'KuCoin', 1569000444.40000000, 884, 947004412.18000000, 939, 2516004856.58000000, 2033.97, 50, 1, '2026-04-04 08:18:10', '2026-04-04 18:44:14'),
-(6, 'kraken', 'Kraken', 1890012333.77000000, 917, 1020004555.18000000, 966, 2910016888.95000000, 2318.25, 60, 1, '2026-04-04 08:18:10', '2026-04-04 18:16:07');
+INSERT INTO `exchange_metrics` (`id`, `exchange_code`, `exchange_name`, `display_btc_volume`, `display_btc_liquidity`, `display_eth_volume`, `display_eth_liquidity`, `sort`, `is_active`, `created_at`, `updated_at`) VALUES
+(1, 'binance', 'Binance', '$3,638,119,640.15', '962', '$1,841,624,841.81', '983', 10, 1, '2026-04-04 08:18:10', '2026-04-04 18:44:14'),
+(2, 'huobi', 'Huobi', '$2,951,022,330.24', '960', '$1,528,801,122.43', '997', 20, 1, '2026-04-04 08:18:10', '2026-04-04 18:44:14'),
+(3, 'gate', 'Gate', '$2,105,520,066.90', '937', '$1,314,476,998.22', '961', 30, 1, '2026-04-04 08:18:10', '2026-04-04 18:44:14'),
+(4, 'okx', 'OKX', '$3,170,045,155.12', '958', '$1,714,422,107.66', '998', 40, 1, '2026-04-04 08:18:10', '2026-04-04 18:44:14'),
+(5, 'kucoin', 'KuCoin', '$1,569,000,444.40', '884', '$947,004,412.18', '939', 50, 1, '2026-04-04 08:18:10', '2026-04-04 18:44:14'),
+(6, 'kraken', 'Kraken', '$1,890,012,333.77', '917', '$1,020,004,555.18', '966', 60, 1, '2026-04-04 08:18:10', '2026-04-04 18:16:07');
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `home_display_settings`
+--
+
+CREATE TABLE `home_display_settings` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `summary_people_count` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
+  `summary_people_step_seconds` int(10) UNSIGNED NOT NULL DEFAULT '3',
+  `summary_people_min_delta` decimal(10,2) NOT NULL DEFAULT '0.00',
+  `summary_people_max_delta` decimal(10,2) NOT NULL DEFAULT '0.00',
+  `summary_people_last_tick_at` timestamp NULL DEFAULT NULL,
+  `summary_total_profit` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0.00 USDT',
+  `summary_profit_step_seconds` int(10) UNSIGNED NOT NULL DEFAULT '3',
+  `summary_profit_min_delta` decimal(12,2) NOT NULL DEFAULT '0.00',
+  `summary_profit_max_delta` decimal(12,2) NOT NULL DEFAULT '0.00',
+  `summary_profit_last_tick_at` timestamp NULL DEFAULT NULL,
+  `shared_exchange_profit_base_value` decimal(12,2) NOT NULL DEFAULT '0.00',
+  `shared_exchange_profit_step_seconds` int(10) UNSIGNED NOT NULL DEFAULT '3',
+  `shared_exchange_profit_min_delta` decimal(10,2) NOT NULL DEFAULT '0.00',
+  `shared_exchange_profit_max_delta` decimal(10,2) NOT NULL DEFAULT '0.00',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- 转存表中的数据 `home_display_settings`
+--
+
+INSERT INTO `home_display_settings` (`id`, `summary_people_count`, `summary_people_step_seconds`, `summary_people_min_delta`, `summary_people_max_delta`, `summary_people_last_tick_at`, `summary_total_profit`, `summary_profit_step_seconds`, `summary_profit_min_delta`, `summary_profit_max_delta`, `summary_profit_last_tick_at`, `shared_exchange_profit_base_value`, `shared_exchange_profit_step_seconds`, `shared_exchange_profit_min_delta`, `shared_exchange_profit_max_delta`, `created_at`, `updated_at`) VALUES
+(1, '11462', 3, '0.00', '0.00', NULL, '12806.98', 3, '0.00', '0.00', NULL, '2066.11', 3, '0.00', '0.00', '2026-04-16 12:00:00', '2026-04-16 12:00:00');
 
 -- --------------------------------------------------------
 
@@ -209,7 +240,12 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (13, '2026_04_04_155000_drop_min_balance_required_from_products_table', 8),
 (14, '2026_04_05_000000_create_exchange_metrics_table', 9),
 (15, '2026_04_05_020000_add_profit_value_to_exchange_metrics_table', 10),
-(16, '2026_04_05_030000_add_liquidity_columns_to_exchange_metrics_table', 11);
+(16, '2026_04_05_030000_add_liquidity_columns_to_exchange_metrics_table', 11),
+(17, '2026_04_16_120000_create_home_display_settings_table', 12),
+(18, '2026_04_16_121000_convert_exchange_metrics_to_display_fields', 12),
+(19, '2026_04_16_122000_add_dynamic_columns_to_home_display_settings_table', 13),
+(20, '2026_04_16_123000_drop_display_updated_at_from_exchange_metrics_table', 14),
+(21, '2026_04_16_124000_add_shared_profit_columns_and_drop_display_profit_from_exchange_metrics', 15);
 
 -- --------------------------------------------------------
 
@@ -382,6 +418,12 @@ ALTER TABLE `exchange_metrics`
   ADD KEY `exchange_metrics_is_active_sort_index` (`is_active`,`sort`);
 
 --
+-- 表的索引 `home_display_settings`
+--
+ALTER TABLE `home_display_settings`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- 表的索引 `failed_jobs`
 --
 ALTER TABLE `failed_jobs`
@@ -474,6 +516,12 @@ ALTER TABLE `daily_settlements`
 --
 ALTER TABLE `exchange_metrics`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- 使用表AUTO_INCREMENT `home_display_settings`
+--
+ALTER TABLE `home_display_settings`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- 使用表AUTO_INCREMENT `failed_jobs`

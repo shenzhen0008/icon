@@ -161,6 +161,7 @@
 
         <form method="POST" action="/register" class="space-y-4">
           @csrf
+          <input type="hidden" name="invite_code" value="{{ app(\App\Modules\Referral\Support\InviteCodeResolver::class)->currentForForm(request()) }}">
 
           <div>
             <label class="mb-1 block text-scale-body" for="password">密码</label>

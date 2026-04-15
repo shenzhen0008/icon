@@ -3,6 +3,7 @@
 namespace Tests\Feature\Exchange;
 
 use App\Modules\Exchange\Models\ExchangeMetric;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -23,15 +24,22 @@ class ExchangeMetricsPageTest extends TestCase
 
     public function test_home_page_displays_exchange_metrics_section(): void
     {
+        \DB::table('home_display_settings')->where('id', 1)->update([
+            'summary_people_count' => '88888',
+            'summary_total_profit' => '9999999',
+            'shared_exchange_profit_base_value' => '2057.31',
+            'shared_exchange_profit_step_seconds' => 3,
+            'shared_exchange_profit_min_delta' => '-5.00',
+            'shared_exchange_profit_max_delta' => '10.00',
+        ]);
+
         ExchangeMetric::query()
             ->where('exchange_code', 'binance')
             ->update([
-                'btc_value' => 1.5,
-                'btc_liquidity' => 947,
-                'eth_value' => 2.5,
-                'eth_liquidity' => 999,
-                'total_value' => 4.0,
-                'profit_value' => 2057.31,
+                'display_btc_volume' => '$1.50',
+                'display_btc_liquidity' => '947',
+                'display_eth_volume' => '$2.50',
+                'display_eth_liquidity' => '999',
             ]);
 
         $this->get('/')
@@ -45,59 +53,104 @@ class ExchangeMetricsPageTest extends TestCase
             ->assertSee('Currency')
             ->assertSee('24h Volume')
             ->assertSee('Liquidity')
+            ->assertSee('88,888')
+            ->assertSee('9,999,999.00 USDT')
             ->assertDontSee('总盘数据')
             ->assertDontSee('基于下方所有交易所实时汇总。')
             ->assertSee('2,057.31')
-            ->assertSee('2,057.31 USDT')
+            ->assertDontSee('2,057.31 USDT')
             ->assertDontSee('$2,057')
-            ->assertDontSee('$2057');
+            ->assertDontSee('$2057')
+            ->assertSee('data-shared-profit-base-value="2057.31"', false)
+            ->assertSee('data-shared-profit-step-seconds="3"', false)
+            ->assertSee('base-anchored-ticker:ready', false)
+            ->assertSee('new Date()', false)
+            ->assertDontSee('2026-04-16 12:34:56');
     }
 
-    public function test_exchange_metrics_feed_returns_active_rows(): void
+    public function test_home_page_advances_summary_values_when_step_seconds_has_elapsed(): void
     {
-        ExchangeMetric::query()
-            ->where('exchange_code', 'binance')
-            ->update([
-                'btc_value' => 3.12345678,
-                'btc_liquidity' => 947,
-                'eth_value' => 2.00000001,
-                'eth_liquidity' => 999,
-                'total_value' => 5.12345679,
-                'profit_value' => 2057.15,
-            ]);
+        Carbon::setTestNow('2026-04-16 12:00:03');
 
-        $response = $this->get('/exchange-metrics');
-        $response->assertOk();
-        $response->assertJsonStructure([
-            'data' => [
-                [
-                    'exchange_code',
-                    'exchange_name',
-                    'logo_url',
-                    'btc_value',
-                    'btc_liquidity',
-                    'eth_value',
-                    'eth_liquidity',
-                    'profit_value',
-                    'updated_at',
-                ],
-            ],
-            'server_time',
+        \DB::table('home_display_settings')->where('id', 1)->update([
+            'summary_people_count' => '100',
+            'summary_people_step_seconds' => 3,
+            'summary_people_min_delta' => '5.00',
+            'summary_people_max_delta' => '5.00',
+            'summary_people_last_tick_at' => '2026-04-16 12:00:00',
+            'summary_total_profit' => '2000.00',
+            'summary_profit_step_seconds' => 3,
+            'summary_profit_min_delta' => '10.00',
+            'summary_profit_max_delta' => '10.00',
+            'summary_profit_last_tick_at' => '2026-04-16 12:00:00',
         ]);
 
-        $response->assertJsonFragment([
-            'exchange_code' => 'binance',
-            'profit_value' => '2,057.15',
+        $this->get('/')
+            ->assertOk()
+            ->assertSee('105')
+            ->assertSee('2,010.00 USDT');
+
+        $this->assertDatabaseHas('home_display_settings', [
+            'id' => 1,
+            'summary_people_count' => '105',
+            'summary_total_profit' => '2010.00',
         ]);
+
+        Carbon::setTestNow();
     }
 
-    public function test_home_page_refresh_updates_profit_without_animation_script(): void
+    public function test_home_page_no_longer_uses_exchange_metrics_polling_script(): void
     {
         $this->get('/')
             ->assertOk()
             ->assertDontSee('requestAnimationFrame', false)
             ->assertDontSee('animateValue', false)
-            ->assertSee('setInterval(refresh, 3000);', false)
-            ->assertDontSee('setInterval(refresh, 2000);', false);
+            ->assertDontSee('/exchange-metrics', false)
+            ->assertDontSee('fetch(\'/exchange-metrics\'', false)
+            ->assertSee('setInterval(refreshSummary, 3000);', false)
+            ->assertSee("fetch('/home-summary'", false);
+    }
+
+    public function test_exchange_metrics_feed_route_is_removed(): void
+    {
+        $this->get('/exchange-metrics')
+            ->assertNotFound();
+    }
+
+    public function test_home_summary_feed_returns_latest_formatted_values(): void
+    {
+        Carbon::setTestNow('2026-04-16 12:00:03');
+
+        \DB::table('home_display_settings')->where('id', 1)->update([
+            'summary_people_count' => '100',
+            'summary_people_step_seconds' => 3,
+            'summary_people_min_delta' => '5.00',
+            'summary_people_max_delta' => '5.00',
+            'summary_people_last_tick_at' => '2026-04-16 12:00:00',
+            'summary_total_profit' => '2000.00',
+            'summary_profit_step_seconds' => 3,
+            'summary_profit_min_delta' => '10.00',
+            'summary_profit_max_delta' => '10.00',
+            'summary_profit_last_tick_at' => '2026-04-16 12:00:00',
+        ]);
+
+        $this->get('/home-summary')
+            ->assertOk()
+            ->assertJson([
+                'participant_count' => '105',
+                'total_profit' => '2,010.00',
+            ]);
+
+        Carbon::setTestNow();
+    }
+
+    public function test_home_page_hides_quick_pay_entry_until_next_release(): void
+    {
+        $this->get('/')
+            ->assertOk()
+            ->assertDontSee('id="home-onchain-entry"', false)
+            ->assertDontSee('直接付款（链上充值）')
+            ->assertDontSee('id="home-quick-pay-panel"', false)
+            ->assertDontSee('确认充值并拉起钱包付款');
     }
 }

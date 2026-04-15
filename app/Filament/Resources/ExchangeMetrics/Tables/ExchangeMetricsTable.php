@@ -24,22 +24,14 @@ class ExchangeMetricsTable
                     ->label('交易所名称')
                     ->searchable()
                     ->sortable(),
-                TextColumn::make('profit_value')
-                    ->label('利润值')
-                    ->numeric(decimalPlaces: 2)
-                    ->sortable(),
-                TextColumn::make('btc_value')
-                    ->label('BTC 价格')
-                    ->numeric(decimalPlaces: 2),
-                TextColumn::make('btc_liquidity')
-                    ->label('BTC 流动性')
-                    ->numeric(),
-                TextColumn::make('eth_value')
-                    ->label('ETH 价格')
-                    ->numeric(decimalPlaces: 2),
-                TextColumn::make('eth_liquidity')
-                    ->label('ETH 流动性')
-                    ->numeric(),
+                TextColumn::make('display_btc_volume')
+                    ->label('BTC 24h Volume'),
+                TextColumn::make('display_btc_liquidity')
+                    ->label('BTC Liquidity'),
+                TextColumn::make('display_eth_volume')
+                    ->label('ETH 24h Volume'),
+                TextColumn::make('display_eth_liquidity')
+                    ->label('ETH Liquidity'),
                 TextColumn::make('sort')
                     ->label('排序')
                     ->sortable(),
