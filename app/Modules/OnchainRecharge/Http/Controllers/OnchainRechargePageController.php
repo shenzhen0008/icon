@@ -30,9 +30,11 @@ class OnchainRechargePageController extends Controller
 
         return view('onchain-recharge.index', [
             'assets' => $assets,
-            'defaultAssetCode' => old('asset_code', $assetCodes[0] ?? null),
+            'defaultAssetCode' => old('asset_code', (string) ($request->query('asset_code') ?? ($assetCodes[0] ?? null))),
+            'defaultPaymentAmount' => (string) ($request->query('payment_amount') ?? ''),
             'defaultChainId' => (string) ($request->query('chain_id') ?? config('web3.payment.chain_id', config('web3.default_chain_id', '56'))),
             'defaultFromAddress' => (string) ($request->query('from_address') ?? ''),
+            'defaultTxHash' => (string) ($request->query('tx_hash') ?? ''),
             'paymentConfig' => [
                 'chain_id' => (string) config('web3.payment.chain_id', '56'),
                 'token_address' => (string) config('web3.payment.token_address', ''),

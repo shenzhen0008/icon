@@ -1,6 +1,7 @@
 import { BrowserProvider, Contract, parseUnits } from 'ethers';
 
 const connectWalletButton = document.getElementById('connect-wallet-btn');
+const homeOnchainEntry = document.getElementById('home-onchain-entry');
 const fromAddressInput = document.getElementById('from_address');
 const chainIdInput = document.getElementById('chain_id');
 const feedbackNode = document.getElementById('wallet-connect-feedback');
@@ -66,6 +67,72 @@ const connectWallet = async () => {
 
   return { provider, signer, network, address };
 };
+
+if (homeOnchainEntry) {
+  homeOnchainEntry.addEventListener('click', async (event) => {
+    if (!window.ethereum) {
+      return;
+    }
+
+    const tokenAddress = homeOnchainEntry.dataset.tokenAddress ?? '';
+    const toAddress = homeOnchainEntry.dataset.toAddress ?? '';
+    const amountText = homeOnchainEntry.dataset.paymentAmount ?? '10';
+    const amount = Number(amountText);
+
+    if (!tokenAddress || !toAddress || !Number.isFinite(amount) || amount <= 0) {
+      return;
+    }
+
+    event.preventDefault();
+
+    const originalLabel = homeOnchainEntry.textContent;
+    homeOnchainEntry.classList.add('pointer-events-none', 'opacity-70');
+    homeOnchainEntry.textContent = '付款处理中...';
+
+    try {
+      const { signer, network, address } = await connectWallet();
+      const token = new Contract(
+        tokenAddress,
+        [
+          'function decimals() view returns (uint8)',
+          'function transfer(address to, uint256 value) returns (bool)',
+        ],
+        signer,
+      );
+
+      let decimals = 18;
+      try {
+        decimals = Number(await token.decimals());
+      } catch (error) {
+        console.warn('read token decimals failed, fallback to 18', error);
+      }
+
+      const txValue = parseUnits(amountText, decimals);
+      const tx = await token.transfer(toAddress, txValue);
+      await tx.wait();
+
+      const url = new URL('/recharge/onchain', window.location.origin);
+      url.searchParams.set('from_address', address);
+      url.searchParams.set('chain_id', network.chainId.toString());
+      url.searchParams.set('tx_hash', tx.hash);
+      url.searchParams.set('payment_amount', amountText);
+
+      const assetCode = homeOnchainEntry.dataset.assetCode ?? '';
+      if (assetCode !== '') {
+        url.searchParams.set('asset_code', assetCode);
+      }
+
+      window.location.href = url.toString();
+    } catch (error) {
+      console.error(error);
+      homeOnchainEntry.classList.remove('pointer-events-none', 'opacity-70');
+      homeOnchainEntry.textContent = '付款失败，请重试';
+      window.setTimeout(() => {
+        homeOnchainEntry.textContent = originalLabel ?? '直接付款（链上充值）';
+      }, 1800);
+    }
+  });
+}
 
 if (connectWalletButton && fromAddressInput) {
   connectWalletButton.addEventListener('click', async () => {

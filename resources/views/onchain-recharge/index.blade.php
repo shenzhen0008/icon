@@ -86,7 +86,7 @@
           <div class="grid gap-4 md:grid-cols-2">
             <div>
               <label for="payment_amount" class="mb-1 block text-scale-body text-theme-secondary">付款金额</label>
-              <input id="payment_amount" name="payment_amount" type="number" step="0.01" min="0.01" value="{{ old('payment_amount') }}" class="w-full rounded-lg border border-theme bg-theme-secondary px-3 py-2 text-theme" required>
+              <input id="payment_amount" name="payment_amount" type="number" step="0.01" min="0.01" value="{{ old('payment_amount', $defaultPaymentAmount) }}" class="w-full rounded-lg border border-theme bg-theme-secondary px-3 py-2 text-theme" required>
               @error('payment_amount')
                 <p class="mt-1 text-scale-body text-[rgb(var(--theme-rose))]">{{ $message }}</p>
               @enderror
@@ -108,7 +108,7 @@
 
           <div>
             <label for="tx_hash" class="mb-1 block text-scale-body text-theme-secondary">交易哈希（Tx Hash）</label>
-            <input id="tx_hash" name="tx_hash" type="text" value="{{ old('tx_hash') }}" placeholder="0x..." class="w-full rounded-lg border border-theme bg-theme-secondary px-3 py-2 text-theme" required>
+            <input id="tx_hash" name="tx_hash" type="text" value="{{ old('tx_hash', $defaultTxHash) }}" placeholder="0x..." class="w-full rounded-lg border border-theme bg-theme-secondary px-3 py-2 text-theme" required>
             @error('tx_hash')
               <p class="mt-1 text-scale-body text-[rgb(var(--theme-rose))]">{{ $message }}</p>
             @enderror
