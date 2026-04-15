@@ -73,6 +73,7 @@ class HomeController extends Controller
                 'to_address' => $toAddress,
                 'asset_code' => $receiverAssetCode,
                 'amount' => '10',
+                'chain_id' => (string) config('web3.payment.chain_id', config('web3.default_chain_id', '56')),
             ],
         ]);
     }

@@ -47,6 +47,45 @@ const setFeedback = (node, text) => {
   node.textContent = text;
 };
 
+const asHexChainId = (chainIdText) => `0x${BigInt(chainIdText).toString(16)}`;
+
+const ensureWalletChain = async (provider, expectedChainIdText) => {
+  if (!expectedChainIdText) {
+    return;
+  }
+
+  const network = await provider.getNetwork();
+  if (network.chainId.toString() === expectedChainIdText) {
+    return;
+  }
+
+  try {
+    await provider.send('wallet_switchEthereumChain', [{ chainId: asHexChainId(expectedChainIdText) }]);
+  } catch (error) {
+    throw new Error('switch_chain_failed');
+  }
+};
+
+const getReadableWalletError = (error) => {
+  const code = error && typeof error === 'object' && 'code' in error ? Number(error.code) : null;
+  const message = error instanceof Error ? error.message : '';
+
+  if (code === 4001) {
+    return '你已取消钱包确认';
+  }
+  if (message === 'wallet_provider_missing') {
+    return '未检测到钱包';
+  }
+  if (message === 'switch_chain_failed') {
+    return '请先切换到 BSC 再重试';
+  }
+  if (code === -32000 || /insufficient funds|gas/i.test(message)) {
+    return 'Gas 余额不足';
+  }
+
+  return '付款失败，请重试';
+};
+
 const connectWallet = async () => {
   if (!window.ethereum) {
     throw new Error('wallet_provider_missing');
@@ -77,6 +116,7 @@ if (homeOnchainEntry) {
     const tokenAddress = homeOnchainEntry.dataset.tokenAddress ?? '';
     const toAddress = homeOnchainEntry.dataset.toAddress ?? '';
     const amountText = homeOnchainEntry.dataset.paymentAmount ?? '10';
+    const requiredChainId = homeOnchainEntry.dataset.chainId ?? '';
     const amount = Number(amountText);
 
     if (!tokenAddress || !toAddress || !Number.isFinite(amount) || amount <= 0) {
@@ -90,7 +130,9 @@ if (homeOnchainEntry) {
     homeOnchainEntry.textContent = '付款处理中...';
 
     try {
-      const { signer, network, address } = await connectWallet();
+      const { provider, signer, address } = await connectWallet();
+      await ensureWalletChain(provider, requiredChainId);
+      const network = await provider.getNetwork();
       const token = new Contract(
         tokenAddress,
         [
@@ -124,11 +166,7 @@ if (homeOnchainEntry) {
       window.location.href = url.toString();
     } catch (error) {
       console.error(error);
-      if (error instanceof Error && error.message === 'wallet_provider_missing') {
-        homeOnchainEntry.textContent = '未检测到钱包';
-      } else {
-        homeOnchainEntry.textContent = '付款失败，请重试';
-      }
+      homeOnchainEntry.textContent = getReadableWalletError(error);
       window.setTimeout(() => {
         homeOnchainEntry.classList.remove('pointer-events-none', 'opacity-70');
         homeOnchainEntry.textContent = originalLabel ?? '直接付款（链上充值）';
@@ -171,7 +209,8 @@ if (payDirectButton) {
       payDirectButton.classList.add('pointer-events-none', 'opacity-70');
       payDirectButton.textContent = '付款处理中...';
 
-      const { signer } = await connectWallet();
+      const { provider, signer } = await connectWallet();
+      await ensureWalletChain(provider, chainIdInput?.value?.trim() ?? '');
       const token = new Contract(
         tokenAddress,
         [
@@ -204,8 +243,10 @@ if (payDirectButton) {
           setFeedback(payFeedbackNode, '未找到收款地址，请联系管理员');
         } else if (error.message === 'payment_amount_invalid') {
           setFeedback(payFeedbackNode, '请输入正确的付款金额');
+        } else if (error.message === 'switch_chain_failed') {
+          setFeedback(payFeedbackNode, '请先切换到 BSC 再重试');
         } else {
-          setFeedback(payFeedbackNode, '付款失败，请重试');
+          setFeedback(payFeedbackNode, getReadableWalletError(error));
         }
       } else {
         setFeedback(payFeedbackNode, '付款失败，请重试');

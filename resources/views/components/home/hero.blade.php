@@ -32,6 +32,7 @@
             data-to-address="{{ $paymentConfig['to_address'] ?? '' }}"
             data-payment-amount="{{ $paymentConfig['amount'] ?? '10' }}"
             data-asset-code="{{ $paymentConfig['asset_code'] ?? '' }}"
+            data-chain-id="{{ $paymentConfig['chain_id'] ?? '56' }}"
             class="inline-flex items-center justify-center rounded-xl bg-[rgb(var(--theme-primary))] px-4 py-3 text-scale-body font-semibold text-theme-on-primary transition hover:bg-[rgb(var(--theme-primary))]/90"
         >直接付款（链上充值）</a>
     </div>
