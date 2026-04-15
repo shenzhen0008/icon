@@ -188,6 +188,15 @@ const connectWalletWithFallback = async (targetChainId = '') => {
     });
     return wallet;
   } catch (injectedError) {
+    const injectedMessage = injectedError instanceof Error ? injectedError.message : String(injectedError);
+    const shouldFallback = injectedMessage === 'wallet_provider_missing';
+    if (!shouldFallback) {
+      await reportClientEvent('connect_injected_failed_no_fallback', injectedError, {
+        reason: injectedMessage,
+      });
+      throw injectedError;
+    }
+
     try {
       const wallet = await connectWalletConnect(targetChainId === '' ? null : targetChainId);
       if (targetChainId !== '' && wallet.network.chainId.toString() !== targetChainId) {
@@ -200,7 +209,7 @@ const connectWalletWithFallback = async (targetChainId = '') => {
       return wallet;
     } catch (walletConnectError) {
       await reportClientEvent('connect_fallback_failed', walletConnectError, {
-        injected_error: injectedError instanceof Error ? injectedError.message : String(injectedError),
+        injected_error: injectedMessage,
       });
       throw walletConnectError;
     }

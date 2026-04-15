@@ -42,6 +42,7 @@ class HomeController extends Controller
 
         $totalProfit = (float) $activeMetrics->sum('profit_value');
         $tokenContracts = (array) config('web3.token_contracts', []);
+        $homeQuickPayAssets = (array) config('web3.home_quick_pay_assets', ['USDT']);
         $walletChainId = (string) config('web3.payment.chain_id', config('web3.default_chain_id', '56'));
         $defaultAmount = '10';
 
@@ -83,6 +84,13 @@ class HomeController extends Controller
             ->filter()
             ->values()
             ->all();
+
+        if (count($homeQuickPayAssets) > 0) {
+            $homePaymentAssets = array_values(array_filter(
+                $homePaymentAssets,
+                static fn (array $asset): bool => in_array(strtoupper((string) ($asset['code'] ?? '')), $homeQuickPayAssets, true)
+            ));
+        }
 
         if (count($homePaymentAssets) === 0) {
             $fallbackAssetCodes = (array) config('web3.supported_assets', ['USDT']);

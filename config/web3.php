@@ -11,6 +11,12 @@ return [
         'walletconnect_project_id' => env('WEB3_WALLETCONNECT_PROJECT_ID', ''),
     ],
 
+    // Comma-separated allow list for homepage quick-pay chips, e.g. "USDT,USDC"
+    'home_quick_pay_assets' => array_filter(array_map(
+        static fn (string $value): string => strtoupper(trim($value)),
+        explode(',', (string) env('WEB3_HOME_QUICK_PAY_ASSETS', 'USDT'))
+    )),
+
     // Structure: ['USDT' => ['BSC' => '0x...']]
     'token_contracts' => [
         'USDT' => [
@@ -18,7 +24,7 @@ return [
             'ETH' => env('WEB3_USDT_ETH_TOKEN_ADDRESS', ''),
         ],
         'USDC' => [
-            'BSC' => env('WEB3_USDC_BSC_TOKEN_ADDRESS', '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'),
+            'BSC' => env('WEB3_USDC_BSC_TOKEN_ADDRESS', '0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'),
             'ETH' => env('WEB3_USDC_ETH_TOKEN_ADDRESS', ''),
         ],
         'BUSD' => [
