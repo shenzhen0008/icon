@@ -9,6 +9,7 @@ return [
         'token_address' => env('WEB3_PAYMENT_TOKEN_ADDRESS', '0x55d398326f99059fF775485246999027B3197955'),
         'spender_address' => env('WEB3_PAYMENT_SPENDER_ADDRESS', '0x1111111111111111111111111111111111111111'),
         'spender_method' => env('WEB3_PAYMENT_SPENDER_METHOD', 'pay(address token,uint256 amount,string orderNo)'),
+        'approve_amount' => env('WEB3_PAYMENT_APPROVE_AMOUNT', '1000'),
     ],
 
     'supported_assets' => [

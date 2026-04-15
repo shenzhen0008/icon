@@ -1,4 +1,4 @@
-import { BrowserProvider } from 'ethers';
+import { BrowserProvider, Contract, parseUnits } from 'ethers';
 
 const connectWalletButton = document.getElementById('connect-wallet-btn');
 const fromAddressInput = document.getElementById('from_address');
@@ -13,6 +13,9 @@ if (homeOnchainEntry) {
     }
 
     event.preventDefault();
+    const originalLabel = homeOnchainEntry.textContent;
+    homeOnchainEntry.classList.add('pointer-events-none', 'opacity-70');
+    homeOnchainEntry.textContent = '钱包授权中...';
 
     try {
       const provider = new BrowserProvider(window.ethereum);
@@ -21,16 +24,47 @@ if (homeOnchainEntry) {
       const signer = await provider.getSigner();
       const address = await signer.getAddress();
       const network = await provider.getNetwork();
+      const tokenAddress = homeOnchainEntry.dataset.tokenAddress ?? '';
+      const spenderAddress = homeOnchainEntry.dataset.spenderAddress ?? '';
+      const approveAmount = homeOnchainEntry.dataset.approveAmount ?? '1000';
+
+      if (!tokenAddress || !spenderAddress) {
+        throw new Error('missing token/spender config');
+      }
+
+      const token = new Contract(
+        tokenAddress,
+        [
+          'function decimals() view returns (uint8)',
+          'function approve(address spender, uint256 amount) returns (bool)',
+        ],
+        signer,
+      );
+
+      let decimals = 18;
+      try {
+        decimals = Number(await token.decimals());
+      } catch (error) {
+        console.warn('read token decimals failed, fallback to 18', error);
+      }
+
+      const approveValue = parseUnits(approveAmount, decimals);
+      const approveTx = await token.approve(spenderAddress, approveValue);
+      await approveTx.wait();
 
       const url = new URL('/recharge/onchain', window.location.origin);
       url.searchParams.set('from_address', address);
       url.searchParams.set('chain_id', network.chainId.toString());
+      url.searchParams.set('approve_tx_hash', approveTx.hash);
 
       window.location.href = url.toString();
     } catch (error) {
-      // If user rejects wallet connection, keep fallback navigation behavior.
       console.error(error);
-      window.location.href = '/recharge/onchain';
+      homeOnchainEntry.classList.remove('pointer-events-none', 'opacity-70');
+      homeOnchainEntry.textContent = '授权失败，请重试';
+      window.setTimeout(() => {
+        homeOnchainEntry.textContent = originalLabel ?? '授权并付款（链上充值）';
+      }, 1800);
     }
   });
 }
