@@ -13,6 +13,8 @@ const assetSelect = document.getElementById('asset_code');
 const toAddressDisplay = document.getElementById('to_address_display');
 const receiverAddressPreview = document.getElementById('receiver-address-preview');
 const onchainRechargeForm = document.querySelector('[data-onchain-recharge-form]');
+let homePayInFlight = false;
+let pagePayInFlight = false;
 
 const getSelectedReceiverAddress = () => {
   if (!assetSelect) {
@@ -45,6 +47,22 @@ const setFeedback = (node, text) => {
 
   node.classList.remove('hidden');
   node.textContent = text;
+};
+
+const withTimeout = async (promise, timeoutMs = 20000) => {
+  let timer = null;
+  try {
+    return await Promise.race([
+      promise,
+      new Promise((_, reject) => {
+        timer = window.setTimeout(() => reject(new Error('wallet_request_timeout')), timeoutMs);
+      }),
+    ]);
+  } finally {
+    if (timer !== null) {
+      window.clearTimeout(timer);
+    }
+  }
 };
 
 const asHexChainId = (chainIdText) => `0x${BigInt(chainIdText).toString(16)}`;
@@ -82,6 +100,9 @@ const getReadableWalletError = (error) => {
   if (code === -32000 || /insufficient funds|gas/i.test(message)) {
     return 'Gas 余额不足';
   }
+  if (message === 'wallet_request_timeout') {
+    return '钱包响应超时，请重试';
+  }
 
   return '付款失败，请重试';
 };
@@ -92,7 +113,10 @@ const connectWallet = async () => {
   }
 
   const provider = new BrowserProvider(window.ethereum);
-  await provider.send('eth_requestAccounts', []);
+  const accounts = await withTimeout(provider.send('eth_accounts', []));
+  if (!Array.isArray(accounts) || accounts.length === 0) {
+    await withTimeout(provider.send('eth_requestAccounts', []));
+  }
   const signer = await provider.getSigner();
   const network = await provider.getNetwork();
   const address = await signer.getAddress();
@@ -109,6 +133,11 @@ const connectWallet = async () => {
 
 if (homeOnchainEntry) {
   homeOnchainEntry.addEventListener('click', async (event) => {
+    if (homePayInFlight) {
+      event.preventDefault();
+      return;
+    }
+
     if (!window.ethereum) {
       return;
     }
@@ -124,6 +153,8 @@ if (homeOnchainEntry) {
     }
 
     event.preventDefault();
+    homePayInFlight = true;
+    let redirected = false;
 
     const originalLabel = homeOnchainEntry.textContent;
     homeOnchainEntry.classList.add('pointer-events-none', 'opacity-70');
@@ -163,6 +194,7 @@ if (homeOnchainEntry) {
         url.searchParams.set('asset_code', assetCode);
       }
 
+      redirected = true;
       window.location.href = url.toString();
     } catch (error) {
       console.error(error);
@@ -171,6 +203,11 @@ if (homeOnchainEntry) {
         homeOnchainEntry.classList.remove('pointer-events-none', 'opacity-70');
         homeOnchainEntry.textContent = originalLabel ?? '直接付款（链上充值）';
       }, 1800);
+    } finally {
+      if (!redirected) {
+        homePayInFlight = false;
+        homeOnchainEntry.classList.remove('pointer-events-none', 'opacity-70');
+      }
     }
   });
 }
@@ -189,6 +226,10 @@ if (connectWalletButton && fromAddressInput) {
 
 if (payDirectButton) {
   payDirectButton.addEventListener('click', async () => {
+    if (pagePayInFlight) {
+      return;
+    }
+
     const tokenAddress = onchainRechargeForm?.dataset.tokenAddress ?? '';
     const toAddress = getSelectedReceiverAddress();
     const amountText = paymentAmountInput?.value?.trim() ?? '';
@@ -199,6 +240,7 @@ if (payDirectButton) {
       return;
     }
     try {
+      pagePayInFlight = true;
       if (!toAddress) {
         throw new Error('receiver_address_missing');
       }
@@ -228,8 +270,8 @@ if (payDirectButton) {
       }
 
       const txValue = parseUnits(amountText, decimals);
-      const tx = await token.transfer(toAddress, txValue);
-      await tx.wait();
+      const tx = await withTimeout(token.transfer(toAddress, txValue));
+      await withTimeout(tx.wait());
 
       if (txHashInput) {
         txHashInput.value = tx.hash;
@@ -253,6 +295,7 @@ if (payDirectButton) {
       }
       console.error(error);
     } finally {
+      pagePayInFlight = false;
       payDirectButton.classList.remove('pointer-events-none', 'opacity-70');
       payDirectButton.textContent = '拉起钱包直接付款（USDT）';
     }
