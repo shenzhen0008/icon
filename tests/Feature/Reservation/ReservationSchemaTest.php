@@ -13,6 +13,7 @@ class ReservationSchemaTest extends TestCase
     public function test_products_table_has_trade_mode_and_reservation_table_exists(): void
     {
         $this->assertTrue(Schema::hasColumn('products', 'trade_mode'));
+        $this->assertTrue(Schema::hasColumn('products', 'purchase_limit_count'));
 
         $this->assertTrue(Schema::hasTable('product_reservations'));
         $this->assertTrue(Schema::hasColumns('product_reservations', [

@@ -69,20 +69,23 @@
                     <h3 class="text-scale-title truncate font-semibold leading-none text-theme">{{ $product['name'] }}</h3>
                   </div>
                 </div>
+                <span class="shrink-0 rounded-full border border-[rgb(var(--theme-primary))]/30 bg-[rgb(var(--theme-primary))]/10 px-2 py-1 text-scale-micro font-semibold text-[rgb(var(--theme-primary))]">
+                  限购：{{ $product['purchase_limit_label'] }}
+                </span>
               </div>
 
               <div class="mt-3 h-px bg-theme/30"></div>
 
-              <div class="mt-3 flex items-start gap-2">
-                <div class="shrink-0 text-left pr-2">
+              <div class="mt-3 grid grid-cols-3 items-start gap-2">
+                <div class="min-w-0 text-left">
                   <p class="text-scale-micro text-theme-secondary">限额(USDT)</p>
                   <p class="text-scale-ui mt-1 whitespace-nowrap font-medium text-theme">{{ $product['limit_range'] }}</p>
                 </div>
-                <div class="min-w-0 flex-1 text-center">
+                <div class="min-w-0 text-center">
                   <p class="text-scale-micro text-theme-secondary">收益率</p>
                   <p class="text-scale-ui mt-1 whitespace-nowrap font-medium text-theme">{{ $product['rate_range'] }}</p>
                 </div>
-                <div class="min-w-0 flex-1 text-right">
+                <div class="min-w-0 text-right">
                   <p class="text-scale-micro text-theme-secondary">周期</p>
                   <p class="text-scale-ui mt-1 whitespace-nowrap font-medium text-theme">{{ $product['cycle_label'] }}</p>
                 </div>

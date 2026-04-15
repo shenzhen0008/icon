@@ -53,6 +53,7 @@ class PublicProductCatalogController extends Controller
                 'code' => $product->code,
                 'trade_mode' => $product->trade_mode,
                 'unit_price' => number_format((float) $product->unit_price, 2, '.', ''),
+                'purchase_limit_label' => $this->formatPurchaseLimitLabel($product->purchase_limit_count),
                 'limit_range' => $this->formatRange($product->limit_min_usdt, $product->limit_max_usdt),
                 'rate_range' => $this->formatPercentRange($product->rate_min_percent, $product->rate_max_percent),
                 'cycle_label' => $product->cycle_days === null ? '--' : $product->cycle_days.'天',
@@ -83,6 +84,15 @@ class PublicProductCatalogController extends Controller
         }
 
         return number_format((float) $min, 2, '.', '').'-'.number_format((float) $max, 2, '.', '').'%';
+    }
+
+    private function formatPurchaseLimitLabel(null|int $purchaseLimitCount): string
+    {
+        if ($purchaseLimitCount === null) {
+            return '不限次';
+        }
+
+        return (string) max(0, $purchaseLimitCount).'次';
     }
 
     /**

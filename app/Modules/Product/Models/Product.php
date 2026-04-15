@@ -16,6 +16,7 @@ class Product extends Model
         'description',
         'code',
         'unit_price',
+        'purchase_limit_count',
         'limit_min_usdt',
         'limit_max_usdt',
         'rate_min_percent',
@@ -32,6 +33,7 @@ class Product extends Model
     {
         return [
             'unit_price' => 'decimal:2',
+            'purchase_limit_count' => 'integer',
             'limit_min_usdt' => 'decimal:2',
             'limit_max_usdt' => 'decimal:2',
             'rate_min_percent' => 'decimal:2',

@@ -20,6 +20,12 @@ class RechargePaymentRequest extends Model
         'network',
         'receipt_address',
         'receipt_image_path',
+        'channel',
+        'tx_hash',
+        'chain_id',
+        'from_address',
+        'to_address',
+        'tx_submitted_at',
         'status',
         'user_note',
         'submitted_at',
@@ -33,6 +39,7 @@ class RechargePaymentRequest extends Model
         return [
             'payment_amount' => 'decimal:2',
             'submitted_at' => 'datetime',
+            'tx_submitted_at' => 'datetime',
             'reviewed_at' => 'datetime',
         ];
     }

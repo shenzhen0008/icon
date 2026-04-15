@@ -23,6 +23,8 @@ use App\Modules\Support\Http\Controllers\StreamChatGuestTokenController;
 use App\Modules\Support\Http\Controllers\StreamChatNotifyTokenController;
 use App\Modules\Balance\Http\Controllers\RechargePageController;
 use App\Modules\Balance\Http\Controllers\SubmitRechargePaymentRequestController;
+use App\Modules\OnchainRecharge\Http\Controllers\OnchainRechargePageController;
+use App\Modules\OnchainRecharge\Http\Controllers\SubmitOnchainRechargeRequestController;
 use App\Modules\Support\Http\Controllers\StreamChatPageController;
 use App\Modules\User\Http\Controllers\SensitivePageController;
 use Illuminate\Support\Facades\Route;
@@ -34,6 +36,7 @@ Route::get('/products', PublicProductCatalogController::class);
 Route::get('/products/rules', ProductRulesPageController::class);
 Route::get('/products/{product}', ProductDetailController::class);
 Route::get('/recharge', RechargePageController::class);
+Route::get('/recharge/onchain', OnchainRechargePageController::class);
 Route::get('/me', MyCenterController::class);
 Route::get('/support', SupportPageController::class);
 Route::get('/stream-chat', StreamChatPageController::class);
@@ -51,6 +54,7 @@ Route::middleware('guest')->group(function (): void {
 Route::middleware('auth')->group(function (): void {
     Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
     Route::post('/recharge/requests', SubmitRechargePaymentRequestController::class);
+    Route::post('/recharge/onchain/requests', SubmitOnchainRechargeRequestController::class);
     Route::post('/positions/purchase', PurchasePositionController::class);
     Route::post('/products/{product}/reservations', SubmitProductReservationController::class);
     Route::post('/me/reservations/{reservation}/cancel', CancelProductReservationController::class);

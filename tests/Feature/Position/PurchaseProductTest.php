@@ -145,6 +145,73 @@ class PurchaseProductTest extends TestCase
         $this->assertDatabaseCount('balance_ledgers', 3);
     }
 
+    public function test_purchase_fails_when_user_reaches_product_purchase_limit_count(): void
+    {
+        $user = User::factory()->create([
+            'balance' => 20000,
+        ]);
+
+        $product = Product::query()->create([
+            'name' => 'Product Limit',
+            'code' => 'PLM',
+            'unit_price' => 1000,
+            'is_active' => true,
+            'purchase_limit_count' => 2,
+        ]);
+
+        $this->from('/products/'.$product->id)->actingAs($user)->post('/positions/purchase', [
+            'product_id' => $product->id,
+            'amount' => 1000,
+        ])->assertRedirect('/products/'.$product->id);
+
+        $this->from('/products/'.$product->id)->actingAs($user)->post('/positions/purchase', [
+            'product_id' => $product->id,
+            'amount' => 1000,
+        ])->assertRedirect('/products/'.$product->id);
+
+        $this->from('/products/'.$product->id)->actingAs($user)->post('/positions/purchase', [
+            'product_id' => $product->id,
+            'amount' => 1000,
+        ])->assertRedirect('/products/'.$product->id)
+            ->assertSessionHasErrors(['amount']);
+
+        $this->assertDatabaseCount('positions', 2);
+        $this->assertDatabaseCount('balance_ledgers', 2);
+    }
+
+    public function test_purchase_limit_count_checks_cumulative_purchase_times(): void
+    {
+        $user = User::factory()->create([
+            'balance' => 12000,
+        ]);
+
+        $product = Product::query()->create([
+            'name' => 'Product Cumulative',
+            'code' => 'PCM',
+            'unit_price' => 1000,
+            'is_active' => true,
+            'purchase_limit_count' => 1,
+        ]);
+
+        Position::query()->create([
+            'user_id' => $user->id,
+            'product_id' => $product->id,
+            'principal' => 1000,
+            'status' => 'redeemed',
+            'opened_at' => now()->subDays(5),
+            'closed_at' => now()->subDays(2),
+        ]);
+
+        $this->from('/products/'.$product->id)->actingAs($user)->post('/positions/purchase', [
+            'product_id' => $product->id,
+            'amount' => 1000,
+        ])->assertRedirect('/products/'.$product->id)
+            ->assertSessionHasErrors(['amount']);
+
+        $this->assertDatabaseCount('positions', 1);
+        $this->assertDatabaseCount('balance_ledgers', 0);
+    }
+
     public function test_purchase_fails_when_total_amount_is_below_product_min_limit(): void
     {
         $user = User::factory()->create([

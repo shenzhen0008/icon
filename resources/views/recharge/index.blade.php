@@ -20,6 +20,9 @@
     <section class="rounded-3xl border border-[rgb(var(--theme-primary))]/20 bg-gradient-to-br from-[rgb(var(--theme-primary))]/10 to-[rgb(var(--theme-accent))]/10 p-6 shadow-xl shadow-[rgb(var(--theme-primary))]/10">
       <h1 class="text-scale-display font-semibold text-theme">充值</h1>
       <p class="mt-2 text-scale-body text-theme-secondary">请选择币种后向对应地址付款，完成后上传付款截图，管理员将手动核实并入账。</p>
+      @auth
+        <a href="/recharge/onchain" class="mt-3 inline-flex rounded-lg border border-[rgb(var(--theme-primary))]/40 px-3 py-1.5 text-scale-body text-[rgb(var(--theme-primary))] hover:bg-[rgb(var(--theme-primary))]/10">前往链上充值</a>
+      @endauth
 
       @if (count($assets) === 0)
         <div class="mt-6 rounded-xl border border-[rgb(var(--theme-rose))]/40 bg-[rgb(var(--theme-rose))]/10 p-3 text-scale-body text-theme">

@@ -83,6 +83,7 @@
         if (!list) return;
         const summaryParticipantCount = document.getElementById('summary-participant-count');
         const summaryTotalProfit = document.getElementById('summary-total-profit');
+        const summaryDisplayMultiplier = 10;
 
         const rowCache = new Map();
         const parseNumeric = (value) => Number(String(value ?? '0').replace(/,/g, '').replace(/[^0-9.-]/g, '')) || 0;
@@ -91,6 +92,8 @@
             minimumFractionDigits: 2,
             maximumFractionDigits: 2,
         });
+        const formatParticipantCount = (value) => Number(value || 0).toLocaleString('en-US');
+        const applyDisplayMultiplier = (value) => parseNumeric(value) * summaryDisplayMultiplier;
 
         const bindRows = () => {
             list.querySelectorAll('[data-toggle-row]').forEach((button) => {
@@ -135,10 +138,10 @@
                 });
 
                 if (summaryParticipantCount) {
-                    summaryParticipantCount.textContent = Number(participantCount || 0).toLocaleString('en-US');
+                    summaryParticipantCount.textContent = formatParticipantCount(applyDisplayMultiplier(participantCount));
                 }
                 if (summaryTotalProfit) {
-                    summaryTotalProfit.textContent = `${formatProfit(totalProfit)} USDT`;
+                    summaryTotalProfit.textContent = `${formatProfit(applyDisplayMultiplier(totalProfit))} USDT`;
                 }
             } catch (_) {
                 // Keep silent in MVP, next interval will retry.
@@ -146,6 +149,12 @@
         };
 
         bindRows();
+        if (summaryParticipantCount) {
+            summaryParticipantCount.textContent = formatParticipantCount(applyDisplayMultiplier(summaryParticipantCount.textContent));
+        }
+        if (summaryTotalProfit) {
+            summaryTotalProfit.textContent = `${formatProfit(applyDisplayMultiplier(summaryTotalProfit.textContent))} USDT`;
+        }
         setInterval(refresh, 3000);
     })();
 </script>

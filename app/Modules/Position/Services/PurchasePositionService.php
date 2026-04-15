@@ -27,6 +27,18 @@ class PurchasePositionService
                 ]);
             }
 
+            $purchasedCount = Position::query()
+                ->where('user_id', $user->id)
+                ->where('product_id', $product->id)
+                ->lockForUpdate()
+                ->count();
+
+            if ($product->purchase_limit_count !== null && $purchasedCount >= (int) $product->purchase_limit_count) {
+                throw ValidationException::withMessages([
+                    'amount' => '已达到该产品限购次数。',
+                ]);
+            }
+
             $openPositions = Position::query()
                 ->where('user_id', $user->id)
                 ->where('product_id', $product->id)

@@ -21,6 +21,7 @@ class PublicProductCatalogTest extends TestCase
             'unit_price' => 1000,
             'is_active' => true,
             'sort' => 20,
+            'purchase_limit_count' => 3,
             'limit_min_usdt' => 3000,
             'limit_max_usdt' => 50000,
             'rate_min_percent' => 1.20,
@@ -36,6 +37,7 @@ class PublicProductCatalogTest extends TestCase
             'unit_price' => 2000,
             'is_active' => true,
             'sort' => 0,
+            'purchase_limit_count' => null,
             'limit_min_usdt' => 1000,
             'limit_max_usdt' => 10000,
             'rate_min_percent' => 1.83,
@@ -72,6 +74,8 @@ class PublicProductCatalogTest extends TestCase
         $response->assertSee('订单');
         $response->assertSee('自动质押');
         $response->assertSee('限额(USDT)');
+        $response->assertSee('限购：不限次');
+        $response->assertSee('限购：3次');
         $response->assertSee('收益率');
         $response->assertSee('周期');
         $response->assertSee('1,000-10,000');

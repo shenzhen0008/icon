@@ -53,6 +53,12 @@ class ProductForm
                             ->numeric()
                             ->step(0.01)
                             ->required(),
+                        TextInput::make('purchase_limit_count')
+                            ->label('限购次数')
+                            ->numeric()
+                            ->integer()
+                            ->minValue(1)
+                            ->helperText('留空表示不限次'),
                     ]),
                 Section::make('产品参数')
                     ->columns(3)

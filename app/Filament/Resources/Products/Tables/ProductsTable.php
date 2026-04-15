@@ -30,6 +30,9 @@ class ProductsTable
                     ->label('交易模式')
                     ->badge()
                     ->formatStateUsing(fn (string $state): string => $state === 'reserve' ? '预订商品' : '正式商品'),
+                TextColumn::make('purchase_limit_count')
+                    ->label('限购次数')
+                    ->formatStateUsing(fn (?int $state): string => $state === null ? '不限次' : $state.'次'),
                 TextColumn::make('limit_min_usdt')
                     ->label('最低限额')
                     ->numeric(decimalPlaces: 2),
