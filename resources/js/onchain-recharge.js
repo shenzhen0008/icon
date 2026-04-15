@@ -227,15 +227,44 @@ const mapConnectErrorMessage = (error) => {
   return '连接钱包失败，请重试';
 };
 
+const toHexChainId = (value) => {
+  const normalized = String(value ?? '').trim();
+  if (normalized === '') {
+    return '';
+  }
+  return `0x${BigInt(normalized).toString(16)}`;
+};
+
+const trySwitchChain = async (provider, expectedChainId) => {
+  if (!expectedChainId) {
+    return;
+  }
+
+  const expectedHex = toHexChainId(expectedChainId);
+  if (expectedHex === '') {
+    return;
+  }
+
+  await provider.send('wallet_switchEthereumChain', [{ chainId: expectedHex }]);
+};
+
 const ensureConnectedWallet = async (expectedChainId = '') => {
   if (!connectedWallet) {
     throw new Error('wallet_not_connected');
   }
 
-  const network = await connectedWallet.provider.getNetwork();
-  connectedWallet.network = network;
-
   const expected = expectedChainId !== '' ? expectedChainId : (chainIdInput?.value?.trim() ?? '');
+  let network = await connectedWallet.provider.getNetwork();
+  if (expected !== '' && network.chainId.toString() !== expected) {
+    try {
+      await trySwitchChain(connectedWallet.provider, expected);
+      network = await connectedWallet.provider.getNetwork();
+    } catch (_error) {
+      throw new Error('wallet_chain_mismatch');
+    }
+  }
+
+  connectedWallet.network = network;
   if (expected !== '' && network.chainId.toString() !== expected) {
     throw new Error('wallet_chain_mismatch');
   }
@@ -253,7 +282,7 @@ const mapPayErrorMessage = (error) => {
   }
 
   if (error.message === 'wallet_chain_mismatch') {
-    return '钱包链与页面链ID不一致，请切换后重试';
+    return '钱包链不一致，自动切链失败，请手动切到目标链后重试';
   }
 
   if (error.message === 'asset_not_selected') {
