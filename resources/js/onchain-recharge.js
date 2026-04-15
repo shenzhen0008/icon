@@ -7,6 +7,8 @@ const homePayConfirmButton = document.getElementById('home-pay-confirm-btn');
 const homePaymentAmountInput = document.getElementById('home-payment-amount');
 const homePayFeedbackNode = document.getElementById('home-pay-feedback');
 const homeSelectedAssetNode = document.getElementById('home-selected-asset');
+const homeIsGuestInput = document.getElementById('home-is-guest');
+const homeActivateModal = document.getElementById('home-activate-modal');
 const fromAddressInput = document.getElementById('from_address');
 const chainIdInput = document.getElementById('chain_id');
 const feedbackNode = document.getElementById('wallet-connect-feedback');
@@ -23,6 +25,16 @@ const onchainRechargeForm = document.querySelector('[data-onchain-recharge-form]
 let connectedWallet = null;
 let walletConnectProvider = null;
 let homeSelectedAsset = null;
+
+const requireGuestActivationBeforeHomePay = () => {
+  const isGuest = homeIsGuestInput?.value === '1';
+  if (!isGuest) {
+    return false;
+  }
+
+  homeActivateModal?.showModal();
+  return true;
+};
 
 const getCsrfToken = () => document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') ?? '';
 
@@ -283,6 +295,50 @@ const sendErc20Transfer = async ({ wallet, tokenAddress, toAddress, amountText, 
   ]);
 };
 
+const autoSubmitOnchainRechargeRequest = async ({
+  assetCode,
+  amountText,
+  chainId,
+  fromAddress,
+  txHash,
+  userNote = null,
+}) => {
+  const response = await fetch('/recharge/onchain/requests/auto', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+      'X-CSRF-TOKEN': getCsrfToken(),
+    },
+    body: JSON.stringify({
+      asset_code: assetCode,
+      payment_amount: amountText,
+      chain_id: chainId,
+      from_address: fromAddress,
+      tx_hash: txHash,
+      user_note: userNote,
+    }),
+  });
+
+  if (response.status === 401) {
+    throw new Error('auto_submit_auth_required');
+  }
+
+  let data = {};
+  try {
+    data = await response.json();
+  } catch (_error) {
+    data = {};
+  }
+
+  if (!response.ok) {
+    const detailMessage = data?.message || Object.values(data?.errors ?? {})?.[0]?.[0] || 'auto_submit_failed';
+    throw new Error(String(detailMessage));
+  }
+
+  return data;
+};
+
 const ensureConnectedWallet = async (expectedChainId = '') => {
   if (!connectedWallet) {
     throw new Error('wallet_not_connected');
@@ -330,6 +386,10 @@ const mapPayErrorMessage = (error) => {
 
   if (error.message === 'payment_amount_invalid') {
     return '请输入正确的付款金额';
+  }
+
+  if (error.message === 'auto_submit_auth_required') {
+    return '请先登录账号，才能自动提交充值记录';
   }
 
   if ((error && typeof error === 'object' && 'code' in error && Number(error.code) === 4001) || /user rejected/i.test(error.message)) {
@@ -412,19 +472,26 @@ if (payDirectButton) {
         amount: amountText,
         tx_hash: txHash,
       });
-      await wallet.provider.waitForTransaction(txHash);
-      await reportClientEvent('pay_tx_confirmed', null, {
+      const fromAddress = await wallet.signer.getAddress();
+      const currentChainId = wallet.network.chainId.toString();
+      if (txHashInput) {
+        txHashInput.value = txHash;
+      }
+      await autoSubmitOnchainRechargeRequest({
+        assetCode: selectedAssetCode,
+        amountText,
+        chainId: currentChainId,
+        fromAddress,
+        txHash,
+      });
+      await reportClientEvent('auto_submit_success', null, {
         flow: 'onchain_page',
         provider: wallet.source,
         asset_code: selectedAssetCode,
         tx_hash: txHash,
       });
 
-      if (txHashInput) {
-        txHashInput.value = txHash;
-      }
-
-      setFeedback(payFeedbackNode, '付款交易已上链，交易哈希已自动填充，请提交申请。');
+      setFeedback(payFeedbackNode, '付款已发起，充值记录已自动提交，等待客服核账。');
     } catch (error) {
       setFeedback(payFeedbackNode, mapPayErrorMessage(error));
       console.error(error);
@@ -484,6 +551,10 @@ if (homeOnchainEntry && homeQuickPayPanel) {
 
 if (homePayConfirmButton) {
   homePayConfirmButton.addEventListener('click', async () => {
+    if (requireGuestActivationBeforeHomePay()) {
+      return;
+    }
+
     const amountText = homePaymentAmountInput?.value?.trim() ?? '10';
     const amount = Number(amountText);
     const selectedAsset = homeSelectedAsset;
@@ -538,21 +609,23 @@ if (homePayConfirmButton) {
         tx_hash: txHash,
       });
 
-      const url = new URL('/recharge/onchain', window.location.origin);
-      url.searchParams.set('from_address', await wallet.signer.getAddress());
-      url.searchParams.set('chain_id', wallet.network.chainId.toString());
-      url.searchParams.set('tx_hash', txHash);
-      url.searchParams.set('payment_amount', amountText);
-      url.searchParams.set('asset_code', selectedAsset.code);
-
-      await reportClientEvent('pay_tx_confirmed_pending_redirect', null, {
+      const fromAddress = await wallet.signer.getAddress();
+      const currentChainId = wallet.network.chainId.toString();
+      await autoSubmitOnchainRechargeRequest({
+        assetCode: selectedAsset.code,
+        amountText,
+        chainId: currentChainId,
+        fromAddress,
+        txHash,
+      });
+      await reportClientEvent('auto_submit_success', null, {
         flow: 'home_quick_pay',
         provider: wallet.source,
         asset_code: selectedAsset.code,
         tx_hash: txHash,
       });
 
-      window.location.href = url.toString();
+      setHomeFeedback('付款已发起，充值记录已自动提交，等待客服核账。');
     } catch (error) {
       setHomeFeedback(mapPayErrorMessage(error));
       await reportClientEvent('home_quick_pay_failed', error, {

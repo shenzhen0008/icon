@@ -26,6 +26,7 @@ use App\Modules\Balance\Http\Controllers\SubmitRechargePaymentRequestController;
 use App\Modules\OnchainRecharge\Http\Controllers\OnchainRechargePageController;
 use App\Modules\OnchainRecharge\Http\Controllers\ReportWalletClientEventController;
 use App\Modules\OnchainRecharge\Http\Controllers\SubmitOnchainRechargeRequestController;
+use App\Modules\OnchainRecharge\Http\Controllers\AutoSubmitOnchainRechargeRequestController;
 use App\Modules\Support\Http\Controllers\StreamChatPageController;
 use App\Modules\User\Http\Controllers\SensitivePageController;
 use Illuminate\Support\Facades\Route;
@@ -57,6 +58,7 @@ Route::middleware('auth')->group(function (): void {
     Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
     Route::post('/recharge/requests', SubmitRechargePaymentRequestController::class);
     Route::post('/recharge/onchain/requests', SubmitOnchainRechargeRequestController::class);
+    Route::post('/recharge/onchain/requests/auto', AutoSubmitOnchainRechargeRequestController::class);
     Route::post('/positions/purchase', PurchasePositionController::class);
     Route::post('/products/{product}/reservations', SubmitProductReservationController::class);
     Route::post('/me/reservations/{reservation}/cancel', CancelProductReservationController::class);

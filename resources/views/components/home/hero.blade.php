@@ -1,6 +1,7 @@
 @props([
     'paymentConfig' => [],
     'paymentAssets' => [],
+    'isGuest' => false,
 ])
 
 <section id="home-data-panel" class="mb-8 overflow-hidden rounded-2xl border border-theme bg-theme-card p-5 shadow-xl shadow-theme">
@@ -60,6 +61,7 @@
                         <div class="rounded-lg border border-theme bg-theme-card px-3 py-2 text-scale-micro text-theme-secondary">点击确认充值时自动连接钱包，失败将自动尝试 WalletConnect</div>
                     </div>
                     <button id="home-pay-confirm-btn" type="button" class="w-full rounded-lg border border-[rgb(var(--theme-primary))]/40 px-3 py-2 text-scale-body font-semibold text-[rgb(var(--theme-primary))] hover:bg-[rgb(var(--theme-primary))]/10">确认充值并拉起钱包付款</button>
+                    <input type="hidden" id="home-is-guest" value="{{ $isGuest ? '1' : '0' }}">
                     <p id="home-pay-feedback" class="hidden text-scale-micro text-[rgb(var(--theme-primary))]"></p>
                 </div>
             @endif

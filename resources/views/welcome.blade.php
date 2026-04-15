@@ -13,11 +13,64 @@
   <x-nav.top />
 
   <main class="mx-auto w-full max-w-4xl px-4 pb-28 pt-8 md:pb-12">
-    <x-home.hero :summary="$summary" :payment-config="$paymentConfig" :payment-assets="$homePaymentAssets" />
+    <x-home.hero :summary="$summary" :payment-config="$paymentConfig" :payment-assets="$homePaymentAssets" :is-guest="$isGuest" />
     <x-home.stats :summary="$summary" />
     <x-home.exchange-metrics :metrics="$metrics" />
   </main>
 
   <x-nav.mobile />
+
+  @if ($isGuest)
+    <dialog id="home-activate-modal" class="theme-modal">
+      <div class="p-5 md:p-6">
+        <div class="mb-4 flex items-center justify-between">
+          <h2 class="text-scale-title font-semibold">设置密码注册</h2>
+          <button id="close-home-activate-modal" class="rounded-lg px-2.5 py-1.5 text-theme-secondary hover:bg-theme-secondary/60">关闭</button>
+        </div>
+
+        <form method="POST" action="/register" class="space-y-4">
+          @csrf
+
+          <div>
+            <label class="mb-1 block text-scale-body" for="password">密码</label>
+            <input id="password" type="password" name="password" class="w-full rounded-lg border border-theme bg-theme-secondary px-3 py-2" required>
+            @error('password')
+              <p class="mt-1 text-scale-body text-[rgb(var(--theme-rose))]">{{ $message }}</p>
+            @enderror
+          </div>
+
+          <div>
+            <label class="mb-1 block text-scale-body" for="password_confirmation">确认密码</label>
+            <input id="password_confirmation" type="password" name="password_confirmation" class="w-full rounded-lg border border-theme bg-theme-secondary px-3 py-2" required>
+          </div>
+
+          <button class="w-full rounded-lg bg-[rgb(var(--theme-primary))] px-4 py-2.5 font-semibold text-theme-on-primary">确认注册</button>
+        </form>
+      </div>
+    </dialog>
+
+    <script>
+      (() => {
+        const modal = document.getElementById('home-activate-modal');
+        const closeBtn = document.getElementById('close-home-activate-modal');
+
+        closeBtn?.addEventListener('click', () => modal?.close());
+        modal?.addEventListener('click', (event) => {
+          const rect = modal.getBoundingClientRect();
+          const isInside =
+            event.clientX >= rect.left &&
+            event.clientX <= rect.right &&
+            event.clientY >= rect.top &&
+            event.clientY <= rect.bottom;
+
+          if (!isInside) modal.close();
+        });
+
+        @if ($errors->has('password'))
+          modal?.showModal();
+        @endif
+      })();
+    </script>
+  @endif
 </body>
 </html>

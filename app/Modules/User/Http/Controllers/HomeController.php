@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Modules\Balance\Models\RechargeReceiver;
 use App\Modules\Exchange\Models\ExchangeMetric;
 use App\Modules\User\Services\TemporaryAccountService;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 
@@ -93,7 +94,9 @@ class HomeController extends Controller
         }
 
         if (count($homePaymentAssets) === 0) {
-            $fallbackAssetCodes = (array) config('web3.supported_assets', ['USDT']);
+            $fallbackAssetCodes = count($homeQuickPayAssets) > 0
+                ? $homeQuickPayAssets
+                : (array) config('web3.supported_assets', ['USDT']);
             foreach ($fallbackAssetCodes as $assetCodeRaw) {
                 $assetCode = strtoupper((string) $assetCodeRaw);
                 $fallbackTokenAddress = (string) ($tokenContracts[$assetCode]['BSC'] ?? '');
@@ -131,6 +134,7 @@ class HomeController extends Controller
         $defaultHomeAsset = $homePaymentAssets[0] ?? null;
 
         return view('welcome', [
+            'isGuest' => ! Auth::guard('web')->check(),
             'metrics' => $metrics,
             'summary' => [
                 'participant_count' => number_format(
