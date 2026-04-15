@@ -36,8 +36,6 @@ class OnchainRechargePageController extends Controller
             'paymentConfig' => [
                 'chain_id' => (string) config('web3.payment.chain_id', '56'),
                 'token_address' => (string) config('web3.payment.token_address', ''),
-                'spender_address' => (string) config('web3.payment.spender_address', ''),
-                'spender_method' => (string) config('web3.payment.spender_method', ''),
             ],
         ]);
     }

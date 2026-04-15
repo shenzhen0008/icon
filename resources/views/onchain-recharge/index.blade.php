@@ -21,7 +21,7 @@
       <div class="flex items-center justify-between gap-3">
         <div>
           <h1 class="text-scale-display font-semibold text-theme">链上充值</h1>
-          <p class="mt-2 text-scale-body text-theme-secondary">授权并付款后提交交易哈希，客服核账后入账。</p>
+          <p class="mt-2 text-scale-body text-theme-secondary">直接付款后提交交易哈希，客服核账后入账。</p>
         </div>
         <a href="/recharge" class="rounded-lg border border-theme px-3 py-2 text-scale-body text-theme-secondary hover:text-theme">返回普通充值</a>
       </div>
@@ -49,24 +49,31 @@
               <p class="mt-1 break-all rounded-lg border border-theme bg-theme-secondary px-3 py-2 font-mono text-scale-body text-theme">{{ $paymentConfig['token_address'] }}</p>
             </div>
             <div>
-              <p class="text-scale-micro text-theme-secondary">Spender Address</p>
-              <p class="mt-1 break-all rounded-lg border border-theme bg-theme-secondary px-3 py-2 font-mono text-scale-body text-theme">{{ $paymentConfig['spender_address'] }}</p>
-            </div>
-            <div>
-              <p class="text-scale-micro text-theme-secondary">Spender Method</p>
-              <p class="mt-1 break-all rounded-lg border border-theme bg-theme-secondary px-3 py-2 font-mono text-scale-body text-theme">{{ $paymentConfig['spender_method'] }}</p>
+              <p class="text-scale-micro text-theme-secondary">默认收款地址</p>
+              <p id="receiver-address-preview" class="mt-1 break-all rounded-lg border border-theme bg-theme-secondary px-3 py-2 font-mono text-scale-body text-theme">{{ $selectedAsset['address'] ?? '' }}</p>
             </div>
           </div>
         </div>
 
-        <form method="POST" action="/recharge/onchain/requests" class="mt-6 space-y-4 rounded-2xl border border-theme bg-theme-card p-5" data-onchain-recharge-form>
+        <form
+          method="POST"
+          action="/recharge/onchain/requests"
+          class="mt-6 space-y-4 rounded-2xl border border-theme bg-theme-card p-5"
+          data-onchain-recharge-form
+          data-token-address="{{ $paymentConfig['token_address'] }}"
+        >
           @csrf
 
           <div>
             <label for="asset_code" class="mb-1 block text-scale-body text-theme-secondary">币种</label>
             <select id="asset_code" name="asset_code" class="w-full rounded-lg border border-theme bg-theme-secondary px-3 py-2 text-theme" required>
               @foreach ($assets as $asset)
-                <option value="{{ $asset['code'] }}" @selected($selectedAssetCode === $asset['code'])>
+                <option
+                  value="{{ $asset['code'] }}"
+                  data-address="{{ $asset['address'] }}"
+                  data-network="{{ $asset['network'] }}"
+                  @selected($selectedAssetCode === $asset['code'])
+                >
                   {{ $asset['code'] }} / {{ $asset['network'] }}
                 </option>
               @endforeach
@@ -95,6 +102,11 @@
           </div>
 
           <div>
+            <label for="to_address_display" class="mb-1 block text-scale-body text-theme-secondary">收款地址</label>
+            <input id="to_address_display" type="text" value="{{ $selectedAsset['address'] ?? '' }}" class="w-full rounded-lg border border-theme bg-theme-secondary px-3 py-2 font-mono text-theme" readonly>
+          </div>
+
+          <div>
             <label for="tx_hash" class="mb-1 block text-scale-body text-theme-secondary">交易哈希（Tx Hash）</label>
             <input id="tx_hash" name="tx_hash" type="text" value="{{ old('tx_hash') }}" placeholder="0x..." class="w-full rounded-lg border border-theme bg-theme-secondary px-3 py-2 text-theme" required>
             @error('tx_hash')
@@ -112,6 +124,11 @@
             @error('from_address')
               <p class="mt-1 text-scale-body text-[rgb(var(--theme-rose))]">{{ $message }}</p>
             @enderror
+          </div>
+
+          <div class="rounded-xl border border-theme bg-theme-secondary/30 p-3">
+            <button type="button" id="pay-direct-btn" class="w-full rounded-lg border border-[rgb(var(--theme-primary))]/40 px-3 py-2 text-scale-body font-semibold text-[rgb(var(--theme-primary))] hover:bg-[rgb(var(--theme-primary))]/10">拉起钱包直接付款（USDT）</button>
+            <p id="pay-feedback" class="mt-2 hidden text-scale-micro text-[rgb(var(--theme-primary))]"></p>
           </div>
 
           <div>

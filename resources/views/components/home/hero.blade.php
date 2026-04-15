@@ -21,16 +21,7 @@
     </div>
 
     <div class="mt-5">
-        <a
-            id="home-onchain-entry"
-            href="/recharge/onchain"
-            data-token-address="{{ $paymentConfig['token_address'] ?? '' }}"
-            data-spender-address="{{ $paymentConfig['spender_address'] ?? '' }}"
-            data-approve-amount="{{ $paymentConfig['approve_amount'] ?? '1000' }}"
-            class="inline-flex items-center justify-center rounded-xl bg-[rgb(var(--theme-primary))] px-4 py-3 text-scale-body font-semibold text-theme-on-primary transition hover:bg-[rgb(var(--theme-primary))]/90"
-        >
-            授权并付款（链上充值）
-        </a>
+        <a id="home-onchain-entry" href="/recharge/onchain" class="inline-flex items-center justify-center rounded-xl bg-[rgb(var(--theme-primary))] px-4 py-3 text-scale-body font-semibold text-theme-on-primary transition hover:bg-[rgb(var(--theme-primary))]/90">直接付款（链上充值）</a>
     </div>
 
     <div class="mt-5 grid grid-cols-2 gap-3">

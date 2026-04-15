@@ -53,12 +53,6 @@ class HomeController extends Controller
                 'total_profit' => number_format($totalProfit, 2, '.', ',').' USDT',
                 'earnings_24h' => '$'.number_format(round($totalProfit * 0.024, 2), 2, '.', ','),
             ],
-            'paymentConfig' => [
-                'chain_id' => (string) config('web3.payment.chain_id', '56'),
-                'token_address' => (string) config('web3.payment.token_address', ''),
-                'spender_address' => (string) config('web3.payment.spender_address', ''),
-                'approve_amount' => (string) config('web3.payment.approve_amount', '1000'),
-            ],
         ]);
     }
 }
