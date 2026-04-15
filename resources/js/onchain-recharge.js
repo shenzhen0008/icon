@@ -1,4 +1,4 @@
-import { BrowserProvider, Contract, parseUnits } from 'ethers';
+import { BrowserProvider, Contract, Interface, parseUnits } from 'ethers';
 import EthereumProvider from '@walletconnect/ethereum-provider';
 
 const homeOnchainEntry = document.getElementById('home-onchain-entry');
@@ -180,7 +180,18 @@ const connectWalletWithFallback = async (targetChainId = '') => {
   try {
     const wallet = await connectInjectedWallet();
     if (targetChainId !== '' && wallet.network.chainId.toString() !== targetChainId) {
-      throw new Error('wallet_chain_mismatch');
+      try {
+        await trySwitchChain(wallet.provider, targetChainId);
+        wallet.network = await wallet.provider.getNetwork();
+        if (chainIdInput) {
+          chainIdInput.value = wallet.network.chainId.toString();
+        }
+      } catch (_error) {
+        throw new Error('wallet_chain_mismatch');
+      }
+      if (wallet.network.chainId.toString() !== targetChainId) {
+        throw new Error('wallet_chain_mismatch');
+      }
     }
     reportClientEvent('connect_injected_success', null, {
       provider: wallet.source,
@@ -257,6 +268,21 @@ const trySwitchChain = async (provider, expectedChainId) => {
   await provider.send('wallet_switchEthereumChain', [{ chainId: expectedHex }]);
 };
 
+const sendErc20Transfer = async ({ wallet, tokenAddress, toAddress, amountText, decimals }) => {
+  const signerAddress = await wallet.signer.getAddress();
+  const tokenInterface = new Interface(['function transfer(address to, uint256 value) returns (bool)']);
+  const data = tokenInterface.encodeFunctionData('transfer', [toAddress, parseUnits(amountText, decimals)]);
+
+  return wallet.provider.send('eth_sendTransaction', [
+    {
+      from: signerAddress,
+      to: tokenAddress,
+      data,
+      value: '0x0',
+    },
+  ]);
+};
+
 const ensureConnectedWallet = async (expectedChainId = '') => {
   if (!connectedWallet) {
     throw new Error('wallet_not_connected');
@@ -308,6 +334,10 @@ const mapPayErrorMessage = (error) => {
 
   if ((error && typeof error === 'object' && 'code' in error && Number(error.code) === 4001) || /user rejected/i.test(error.message)) {
     return '你已取消付款';
+  }
+
+  if (/connection request reset/i.test(error.message)) {
+    return '钱包请求被重置，请重试一次';
   }
 
   if (/insufficient funds|gas/i.test(error.message)) {
@@ -367,26 +397,31 @@ if (payDirectButton) {
         console.warn('read token decimals failed, fallback to 18', error);
       }
 
-      const txValue = parseUnits(amountText, decimals);
-      const tx = await token.transfer(toAddress, txValue);
+      const txHash = await sendErc20Transfer({
+        wallet,
+        tokenAddress,
+        toAddress,
+        amountText,
+        decimals,
+      });
       await reportClientEvent('pay_tx_sent', null, {
         flow: 'onchain_page',
         provider: wallet.source,
         asset_code: selectedAssetCode,
         to_address: toAddress,
         amount: amountText,
-        tx_hash: tx.hash,
+        tx_hash: txHash,
       });
-      await tx.wait();
+      await wallet.provider.waitForTransaction(txHash);
       await reportClientEvent('pay_tx_confirmed', null, {
         flow: 'onchain_page',
         provider: wallet.source,
         asset_code: selectedAssetCode,
-        tx_hash: tx.hash,
+        tx_hash: txHash,
       });
 
       if (txHashInput) {
-        txHashInput.value = tx.hash;
+        txHashInput.value = txHash;
       }
 
       setFeedback(payFeedbackNode, '付款交易已上链，交易哈希已自动填充，请提交申请。');
@@ -487,21 +522,26 @@ if (homePayConfirmButton) {
         console.warn('read token decimals failed, fallback to 18', error);
       }
 
-      const txValue = parseUnits(amountText, decimals);
-      const tx = await token.transfer(selectedAsset.toAddress, txValue);
+      const txHash = await sendErc20Transfer({
+        wallet,
+        tokenAddress: selectedAsset.tokenAddress,
+        toAddress: selectedAsset.toAddress,
+        amountText,
+        decimals,
+      });
       await reportClientEvent('pay_tx_sent', null, {
         flow: 'home_quick_pay',
         provider: wallet.source,
         asset_code: selectedAsset.code,
         to_address: selectedAsset.toAddress,
         amount: amountText,
-        tx_hash: tx.hash,
+        tx_hash: txHash,
       });
 
       const url = new URL('/recharge/onchain', window.location.origin);
       url.searchParams.set('from_address', await wallet.signer.getAddress());
       url.searchParams.set('chain_id', wallet.network.chainId.toString());
-      url.searchParams.set('tx_hash', tx.hash);
+      url.searchParams.set('tx_hash', txHash);
       url.searchParams.set('payment_amount', amountText);
       url.searchParams.set('asset_code', selectedAsset.code);
 
@@ -509,7 +549,7 @@ if (homePayConfirmButton) {
         flow: 'home_quick_pay',
         provider: wallet.source,
         asset_code: selectedAsset.code,
-        tx_hash: tx.hash,
+        tx_hash: txHash,
       });
 
       window.location.href = url.toString();
