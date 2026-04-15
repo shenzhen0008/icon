@@ -2,6 +2,7 @@
 <html lang="zh-CN" data-theme="{{ config('themes.active') }}">
 <head>
   <meta charset="UTF-8">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>链上充值 | Icon Market</title>
   @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -61,6 +62,7 @@
           class="mt-6 space-y-4 rounded-2xl border border-theme bg-theme-card p-5"
           data-onchain-recharge-form
           data-token-address="{{ $paymentConfig['token_address'] }}"
+          data-walletconnect-project-id="{{ $paymentConfig['walletconnect_project_id'] }}"
         >
           @csrf
 
@@ -120,6 +122,7 @@
               <input id="from_address" name="from_address" type="text" value="{{ old('from_address', $defaultFromAddress) }}" placeholder="0x..." class="w-full rounded-lg border border-theme bg-theme-secondary px-3 py-2 text-theme">
               <button type="button" id="connect-wallet-btn" class="shrink-0 rounded-lg border border-[rgb(var(--theme-primary))]/40 px-3 py-2 text-scale-body text-[rgb(var(--theme-primary))] hover:bg-[rgb(var(--theme-primary))]/10">连接钱包</button>
             </div>
+            <button type="button" id="connect-walletconnect-btn" class="mt-2 w-full rounded-lg border border-theme px-3 py-2 text-scale-body text-theme-secondary hover:bg-theme-secondary/40">WalletConnect 连接</button>
             <p id="wallet-connect-feedback" class="mt-1 hidden text-scale-micro text-[rgb(var(--theme-primary))]"></p>
             @error('from_address')
               <p class="mt-1 text-scale-body text-[rgb(var(--theme-rose))]">{{ $message }}</p>

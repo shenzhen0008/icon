@@ -8,6 +8,7 @@ return [
         'chain_id' => env('WEB3_PAYMENT_CHAIN_ID', '56'),
         'token_address' => env('WEB3_PAYMENT_TOKEN_ADDRESS', '0x55d398326f99059fF775485246999027B3197955'),
         'to_address' => env('WEB3_PAYMENT_TO_ADDRESS', '0x000000000000000000000000000000000000dEaD'),
+        'walletconnect_project_id' => env('WEB3_WALLETCONNECT_PROJECT_ID', ''),
     ],
 
     'supported_assets' => [
