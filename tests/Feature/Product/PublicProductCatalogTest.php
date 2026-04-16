@@ -126,6 +126,8 @@ class PublicProductCatalogTest extends TestCase
         $response->assertSee('/images/products/symbols/symbol-01.png');
         $response->assertSee('设置密码并注册');
         $response->assertSee('id="activate-modal"', false);
+        $response->assertSee('theme-pin-modal');
+        $response->assertSee('请输入 6 位数字密码');
         $response->assertSee('text-theme-on-primary');
         $response->assertDontSee('text-theme-secondary">设置密码并注册');
     }
@@ -142,8 +144,8 @@ class PublicProductCatalogTest extends TestCase
         $this->get('/products/'.$product->id)->assertOk();
 
         $response = $this->from('/products/'.$product->id)->post('/register', [
-            'password' => 'password1234',
-            'password_confirmation' => 'password1234',
+            'password' => '123456',
+            'password_confirmation' => '123456',
             'redirect_to' => '/products/'.$product->id,
         ]);
 

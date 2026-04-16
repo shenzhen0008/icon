@@ -111,9 +111,26 @@ dialog.theme-modal::backdrop {
     background: rgb(0 0 0 / 0.62);
 }
 
+dialog.theme-pin-modal {
+    width: min(96vw, 34rem);
+    height: min(92dvh, 44rem);
+    max-height: 92dvh;
+    border-radius: 1.25rem;
+}
+
 @media (max-width: 768px) {
     dialog.theme-modal {
         width: min(94vw, 28rem);
         max-height: calc(100dvh - 1.25rem);
+    }
+
+    dialog.theme-pin-modal {
+        width: 100vw;
+        height: 100dvh;
+        max-height: 100dvh;
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+        border-bottom: 0;
     }
 }

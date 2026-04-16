@@ -30,8 +30,8 @@ class AuthenticationFlowTest extends TestCase
         $tempUsername = session('temp_username');
 
         $response = $this->post('/register', [
-            'password' => 'password1234',
-            'password_confirmation' => 'password1234',
+            'password' => '123456',
+            'password_confirmation' => '123456',
         ]);
 
         $response->assertRedirect('/me');
@@ -39,7 +39,7 @@ class AuthenticationFlowTest extends TestCase
 
         $user = User::query()->where('username', $tempUsername)->first();
         $this->assertNotNull($user);
-        $this->assertTrue(Hash::check('password1234', $user->password));
+        $this->assertTrue(Hash::check('123456', $user->password));
         $this->assertNull(session('temp_username'));
     }
 
@@ -48,8 +48,8 @@ class AuthenticationFlowTest extends TestCase
         $this->get('/')->assertOk();
 
         $response = $this->post('/register', [
-            'password' => 'password1234',
-            'password_confirmation' => 'password1234',
+            'password' => '123456',
+            'password_confirmation' => '123456',
         ]);
 
         $response->assertRedirect('/me');
@@ -72,8 +72,8 @@ class AuthenticationFlowTest extends TestCase
     public function test_activation_without_temp_username_is_forbidden(): void
     {
         $this->post('/register', [
-            'password' => 'password1234',
-            'password_confirmation' => 'password1234',
+            'password' => '123456',
+            'password_confirmation' => '123456',
         ])->assertForbidden();
     }
 
@@ -82,8 +82,8 @@ class AuthenticationFlowTest extends TestCase
         $this->get('/')->assertOk();
 
         $this->from('/register')->post('/register', [
-            'password' => 'short',
-            'password_confirmation' => 'mismatch',
+            'password' => '12ab56',
+            'password_confirmation' => '12ab56',
         ])->assertRedirect('/register')
             ->assertSessionHasErrors(['password']);
     }

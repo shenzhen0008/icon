@@ -36,8 +36,8 @@ class BindReferrerOnRegisterTest extends TestCase
         $temporaryUsername = session('temp_username');
 
         $this->post('/register', [
-            'password' => 'password1234',
-            'password_confirmation' => 'password1234',
+            'password' => '123456',
+            'password_confirmation' => '123456',
             'invite_code' => 'REF123',
         ])->assertRedirect('/me');
 
@@ -46,7 +46,7 @@ class BindReferrerOnRegisterTest extends TestCase
         $this->assertSame($referrer->id, $user->referrer_id);
         $this->assertNotNull($user->invite_code);
         $this->assertNotSame('REF123', $user->invite_code);
-        $this->assertTrue(Hash::check('password1234', $user->password));
+        $this->assertTrue(Hash::check('123456', $user->password));
     }
 
     public function test_invalid_invite_code_does_not_bind_referrer(): void
@@ -55,8 +55,8 @@ class BindReferrerOnRegisterTest extends TestCase
         $temporaryUsername = session('temp_username');
 
         $this->post('/register', [
-            'password' => 'password1234',
-            'password_confirmation' => 'password1234',
+            'password' => '123456',
+            'password_confirmation' => '123456',
             'invite_code' => 'MISSING',
         ])->assertRedirect('/me');
 
@@ -76,8 +76,8 @@ class BindReferrerOnRegisterTest extends TestCase
         $temporaryUsername = session('temp_username');
 
         $this->post('/register', [
-            'password' => 'password1234',
-            'password_confirmation' => 'password1234',
+            'password' => '123456',
+            'password_confirmation' => '123456',
             'invite_code' => '',
         ])->assertRedirect('/me');
 
@@ -107,8 +107,8 @@ class BindReferrerOnRegisterTest extends TestCase
 
         $this->withUnencryptedCookie('referral_invite_code', $cookieValue)
             ->post('/register', [
-                'password' => 'password1234',
-                'password_confirmation' => 'password1234',
+                'password' => '123456',
+                'password_confirmation' => '123456',
                 'invite_code' => '',
             ])->assertRedirect('/me');
 

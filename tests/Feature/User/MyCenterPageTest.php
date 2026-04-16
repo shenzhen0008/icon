@@ -21,6 +21,8 @@ class MyCenterPageTest extends TestCase
         $response->assertDontSee('持仓产品');
         $response->assertSee('临时账号');
         $response->assertSee('设置密码并注册');
+        $response->assertSee('theme-pin-modal');
+        $response->assertSee('请输入 6 位数字密码');
         $response->assertDontSee('退出登录');
 
         $this->assertTrue(session()->has('temp_username'));
@@ -32,8 +34,8 @@ class MyCenterPageTest extends TestCase
         $tempUsername = session('temp_username');
 
         $response = $this->from('/me')->post('/register', [
-            'password' => 'password1234',
-            'password_confirmation' => 'password1234',
+            'password' => '123456',
+            'password_confirmation' => '123456',
         ]);
 
         $response->assertRedirect('/me');
@@ -41,7 +43,7 @@ class MyCenterPageTest extends TestCase
 
         $user = User::query()->where('username', $tempUsername)->first();
         $this->assertNotNull($user);
-        $this->assertTrue(Hash::check('password1234', $user->password));
+        $this->assertTrue(Hash::check('123456', $user->password));
     }
 
     public function test_activation_from_my_center_rejects_invalid_input(): void
@@ -49,8 +51,8 @@ class MyCenterPageTest extends TestCase
         $this->get('/me')->assertOk();
 
         $this->from('/me')->post('/register', [
-            'password' => 'short',
-            'password_confirmation' => 'mismatch',
+            'password' => '12ab56',
+            'password_confirmation' => '12ab56',
         ])->assertRedirect('/me')
             ->assertSessionHasErrors(['password']);
     }

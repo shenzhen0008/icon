@@ -17,7 +17,7 @@ class ActivateAccountRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'password' => ['required', 'string', 'min:8', 'max:255', 'confirmed'],
+            'password' => ['required', 'string', 'size:6', 'regex:/^\d{6}$/', 'confirmed'],
             'invite_code' => ['nullable', 'string', 'max:32', 'regex:/^[A-Za-z0-9]*$/'],
         ];
     }
