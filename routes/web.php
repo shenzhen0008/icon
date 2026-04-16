@@ -23,7 +23,11 @@ use App\Modules\Support\Http\Controllers\StreamChatGuestTokenController;
 use App\Modules\Support\Http\Controllers\StreamChatNotifyTokenController;
 use App\Modules\Balance\Http\Controllers\RechargePageController;
 use App\Modules\Balance\Http\Controllers\SubmitRechargePaymentRequestController;
+use App\Modules\Withdrawal\Http\Controllers\SubmitWithdrawalRequestController;
 use App\Modules\Home\Http\Controllers\HomeSummaryFeedController;
+use App\Modules\Home\Http\Controllers\HomeHeroPanelFeedController;
+use App\Modules\Home\Http\Controllers\HeroPanelTradeRecordsPageController;
+use App\Modules\Home\Http\Controllers\HeroPanelIncomeRecordsPageController;
 use App\Modules\OnchainRecharge\Http\Controllers\OnchainRechargePageController;
 use App\Modules\OnchainRecharge\Http\Controllers\ReportWalletClientEventController;
 use App\Modules\OnchainRecharge\Http\Controllers\SubmitOnchainRechargeRequestController;
@@ -37,6 +41,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomeController::class);
 Route::get('/home-summary', HomeSummaryFeedController::class);
+Route::get('/home-hero-panel', HomeHeroPanelFeedController::class);
 Route::get('/help', HelpPageController::class);
 Route::get('/products', PublicProductCatalogController::class);
 Route::get('/products/rules', ProductRulesPageController::class);
@@ -60,8 +65,11 @@ Route::middleware('guest')->group(function (): void {
 });
 
 Route::middleware('auth')->group(function (): void {
+    Route::get('/home/hero-panel/trade-records', HeroPanelTradeRecordsPageController::class);
+    Route::get('/home/hero-panel/income-records', HeroPanelIncomeRecordsPageController::class);
     Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
     Route::post('/recharge/requests', SubmitRechargePaymentRequestController::class);
+    Route::post('/withdrawal-requests', SubmitWithdrawalRequestController::class);
     Route::post('/recharge/onchain/requests', SubmitOnchainRechargeRequestController::class);
     Route::post('/recharge/onchain/requests/auto', AutoSubmitOnchainRechargeRequestController::class);
     Route::post('/positions/purchase', PurchasePositionController::class);

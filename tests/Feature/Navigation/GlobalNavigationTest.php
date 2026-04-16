@@ -11,6 +11,17 @@ class GlobalNavigationTest extends TestCase
 {
     use RefreshDatabase;
 
+    private function topNavMarkup(string $content): string
+    {
+        $topNavStart = strpos($content, '<header id="top-nav"');
+        $this->assertNotFalse($topNavStart);
+
+        $topNavEnd = strpos($content, '</header>', $topNavStart);
+        $this->assertNotFalse($topNavEnd);
+
+        return substr($content, $topNavStart, $topNavEnd - $topNavStart + 9);
+    }
+
     public function test_global_navigation_is_rendered_on_public_pages(): void
     {
         $product = Product::query()->create([
@@ -21,7 +32,7 @@ class GlobalNavigationTest extends TestCase
         ]);
 
         foreach (['/', '/products', '/products/'.$product->id, '/support', '/stream-chat', '/login', '/register'] as $uri) {
-            $this->get($uri)
+            $response = $this->get($uri)
                 ->assertOk()
                 ->assertSee('首页')
                 ->assertSee('产品')
@@ -34,9 +45,11 @@ class GlobalNavigationTest extends TestCase
                 ->assertSee('/support')
                 ->assertDontSee('后台')
                 ->assertDontSee('/admin')
-                ->assertSee('Stream Chat')
-                ->assertSee('/stream-chat')
                 ->assertDontSee('Stream Agent');
+
+            $topNavMarkup = $this->topNavMarkup($response->getContent());
+            $this->assertStringNotContainsString('Stream Chat', $topNavMarkup);
+            $this->assertStringNotContainsString('href="/stream-chat"', $topNavMarkup);
         }
 
         $this->get('/me')
@@ -48,15 +61,14 @@ class GlobalNavigationTest extends TestCase
             ->assertSee('我的')
             ->assertSee('客服')
             ->assertSee('/help')
-            ->assertSee('href="/recharge"', false)
-            ->assertSee('充值');
+            ->assertSee('/support');
     }
 
     public function test_global_navigation_is_rendered_on_confirm_password_page(): void
     {
         $user = User::factory()->create();
 
-        $this->actingAs($user)
+        $response = $this->actingAs($user)
             ->get('/confirm-password')
             ->assertOk()
             ->assertSee('首页')
@@ -70,10 +82,12 @@ class GlobalNavigationTest extends TestCase
             ->assertSee('/support')
             ->assertDontSee('后台')
             ->assertDontSee('/admin')
-            ->assertSee('Stream Chat')
-            ->assertSee('/stream-chat')
-            ->assertSee('Stream Agent')
-            ->assertSee('/stream-chat-agent');
+            ->assertDontSee('Stream Agent')
+            ->assertDontSee('/stream-chat-agent');
+
+        $topNavMarkup = $this->topNavMarkup($response->getContent());
+        $this->assertStringNotContainsString('Stream Chat', $topNavMarkup);
+        $this->assertStringNotContainsString('href="/stream-chat"', $topNavMarkup);
     }
 
     public function test_mobile_navigation_uses_theme_variable_classes(): void
@@ -107,8 +121,8 @@ class GlobalNavigationTest extends TestCase
         $this->assertStringContainsString('>帮助<', $mobileNavMarkup);
         $this->assertStringContainsString('href="/help"', $mobileNavMarkup);
         $this->assertStringContainsString('>分享<', $mobileNavMarkup);
-        $this->assertStringContainsString('Stream', $mobileNavMarkup);
-        $this->assertStringContainsString('grid-cols-6', $mobileNavMarkup);
+        $this->assertStringNotContainsString('Stream', $mobileNavMarkup);
+        $this->assertStringContainsString('grid-cols-5', $mobileNavMarkup);
         $this->assertStringContainsString('text-scale-ui', $mobileNavMarkup);
         $this->assertStringNotContainsString('>客服<', $mobileNavMarkup);
     }

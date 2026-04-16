@@ -12,11 +12,22 @@
 
   <main class="mx-auto w-full max-w-4xl px-4 pb-28 pt-6 md:pb-10 md:pt-8">
     <section class="rounded-3xl border border-theme bg-theme-card p-6 shadow-xl shadow-[rgb(var(--theme-primary))]/10">
-      <p class="text-scale-body font-semibold text-[rgb(var(--theme-primary))]">帮助中心</p>
-      <h1 class="mt-2 text-scale-display font-semibold text-theme">常见问题</h1>
-      <p class="mt-3 max-w-2xl text-scale-body leading-6 text-theme-secondary">
-        先把常用问题放在这里。点击问题展开答案，再点一次就会收起。
-      </p>
+      <div class="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+        <div>
+          <p class="text-scale-body font-semibold text-[rgb(var(--theme-primary))]">帮助中心</p>
+          <h1 class="mt-2 text-scale-display font-semibold text-theme">常见问题</h1>
+          <p class="mt-3 max-w-2xl text-scale-body leading-6 text-theme-secondary">
+            先把常用问题放在这里。点击问题展开答案，再点一次就会收起。
+          </p>
+        </div>
+
+        <a
+          href="/stream-chat"
+          class="inline-flex min-h-11 items-center justify-center rounded-lg bg-[rgb(var(--theme-primary))] px-5 py-3 text-scale-body font-semibold text-[rgb(var(--theme-on-primary))] transition hover:opacity-90"
+        >
+          在线客服
+        </a>
+      </div>
     </section>
 
     <section class="mt-6 space-y-3">

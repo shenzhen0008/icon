@@ -1,4 +1,4 @@
-<section class="rounded-2xl border border-theme bg-theme-card p-5">
+<x-ui.metric-split-card :use-split-layout="false" wrapper-class="home-data-panel">
   <h2 class="text-scale-body font-semibold text-theme">收益状态</h2>
 
   <div class="mt-4 grid grid-cols-2 gap-3 text-scale-body">
@@ -24,4 +24,4 @@
       </a>
     </div>
   </div>
-</section>
+</x-ui.metric-split-card>

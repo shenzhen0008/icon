@@ -18,9 +18,11 @@ class SubmitRechargePaymentRequestController extends Controller
         }
 
         $assetCode = (string) $request->validated('asset_code');
+        $allowedAssetCodes = (array) config('recharge.allowed_receive_assets', []);
         $receiver = RechargeReceiver::query()
             ->where('asset_code', $assetCode)
             ->where('is_active', true)
+            ->whereIn('asset_code', $allowedAssetCodes)
             ->first();
 
         if ($receiver === null) {

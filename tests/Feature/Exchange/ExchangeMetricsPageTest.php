@@ -13,13 +13,25 @@ class ExchangeMetricsPageTest extends TestCase
 
     public function test_home_page_uses_demo_mode_label_copy(): void
     {
-        $this->get('/')
+        $response = $this->get('/')
             ->assertOk()
             ->assertSee('Welcome to AI Smart Contracts')
             ->assertSee('Artificial intelligence trading')
+            ->assertSee('交易记录')
+            ->assertSee('收入记录')
+            ->assertSee('id="hero-trade-record-btn"', false)
+            ->assertSee('id="hero-income-record-btn"', false)
+            ->assertSee('href="/home/hero-panel/trade-records?mode=demo"', false)
+            ->assertSee('href="/home/hero-panel/income-records?mode=demo"', false)
             ->assertSee('DEMO')
             ->assertSee('#demo')
             ->assertDontSee('#damo');
+
+        $content = $response->getContent();
+        $this->assertTrue(
+            strpos($content, 'id="hero-trade-record-btn"') < strpos($content, 'mt-3 rounded-xl border border-theme bg-theme-secondary/60 p-4'),
+            'Record buttons should render outside and before the summary card container.'
+        );
     }
 
     public function test_home_page_displays_exchange_metrics_section(): void
@@ -66,6 +78,39 @@ class ExchangeMetricsPageTest extends TestCase
             ->assertSee('base-anchored-ticker:ready', false)
             ->assertSee('new Date()', false)
             ->assertDontSee('2026-04-16 12:34:56');
+    }
+
+    public function test_home_page_summary_values_use_smaller_type_scale_than_display_headings(): void
+    {
+        $response = $this->get('/')
+            ->assertOk();
+
+        $content = $response->getContent();
+
+        $this->assertStringContainsString(
+            'id="summary-participant-count"',
+            $content,
+        );
+        $this->assertStringContainsString(
+            'id="summary-total-profit"',
+            $content,
+        );
+        $this->assertStringContainsString(
+            'class="text-scale-title font-semibold text-[rgb(var(--theme-primary))]" id="summary-participant-count"',
+            $content,
+        );
+        $this->assertStringContainsString(
+            'class="text-scale-title font-semibold text-[rgb(var(--theme-accent))]" id="summary-total-profit"',
+            $content,
+        );
+        $this->assertStringNotContainsString(
+            'class="text-scale-display font-semibold text-[rgb(var(--theme-primary))]" id="summary-participant-count"',
+            $content,
+        );
+        $this->assertStringNotContainsString(
+            'class="text-scale-display font-semibold text-[rgb(var(--theme-accent))]" id="summary-total-profit"',
+            $content,
+        );
     }
 
     public function test_home_page_advances_summary_values_when_step_seconds_has_elapsed(): void

@@ -17,7 +17,7 @@ class MyCenterPageTest extends TestCase
 
         $response->assertOk();
         $response->assertSee('账号信息');
-        $response->assertSee('收益状态');
+        $response->assertSee('存取款方式');
         $response->assertDontSee('持仓产品');
         $response->assertSee('临时账号');
         $response->assertSee('设置密码并注册');
@@ -67,12 +67,12 @@ class MyCenterPageTest extends TestCase
             ->get('/me')
             ->assertOk()
             ->assertSee('账号信息')
-            ->assertSee('收益状态')
+            ->assertSee('存取款方式')
             ->assertDontSee('持仓产品')
             ->assertSee('正式账号')
-            ->assertSee('账户余额')
-            ->assertSee('充值')
-            ->assertSee('/recharge')
+            ->assertSee('加密货币存款')
+            ->assertSee('id="payment-method-form"', false)
+            ->assertSee('action="/recharge"', false)
             ->assertSee('AbC123xYz987QwErT654X')
             ->assertSee('退出登录')
             ->assertDontSee('这是管理员备注')
@@ -85,6 +85,15 @@ class MyCenterPageTest extends TestCase
         $response = $this->get('/me');
 
         $response->assertOk()
-            ->assertSeeInOrder(['收益状态', '账号信息']);
+            ->assertSeeInOrder(['存取款方式', '账号信息']);
+    }
+
+    public function test_my_center_uses_shared_home_hero_panel_mode_storage_key(): void
+    {
+        $this->get('/me')
+            ->assertOk()
+            ->assertSee("const modeStorageKey = 'home_hero_panel_mode';", false)
+            ->assertSee("localStorage.getItem(modeStorageKey)", false)
+            ->assertSee("setMode(savedMode === 'live' ? 'live' : 'damo');", false);
     }
 }

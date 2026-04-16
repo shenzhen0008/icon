@@ -16,136 +16,188 @@
 
   <x-nav.top />
 
+  @php
+    $mode = request()->query('mode', 'receive');
+    $mode = in_array($mode, ['receive', 'send', 'convert'], true) ? $mode : 'receive';
+  @endphp
+
   <main class="mx-auto w-full max-w-4xl px-4 pb-28 pt-8 md:pb-10">
+    <x-home.hero :payment-config="[]" :payment-assets="[]" :is-guest="$isGuest" :show-title="false" :show-subtitle="false" />
+
     <section class="rounded-3xl border border-[rgb(var(--theme-primary))]/20 bg-gradient-to-br from-[rgb(var(--theme-primary))]/10 to-[rgb(var(--theme-accent))]/10 p-6 shadow-xl shadow-[rgb(var(--theme-primary))]/10">
-      <h1 class="text-scale-display font-semibold text-theme">充值</h1>
-      <p class="mt-2 text-scale-body text-theme-secondary">请选择币种后向对应地址付款，完成后上传付款截图，管理员将手动核实并入账。</p>
-      @auth
-        <a href="/recharge/onchain" class="mt-3 inline-flex rounded-lg border border-[rgb(var(--theme-primary))]/40 px-3 py-1.5 text-scale-body text-[rgb(var(--theme-primary))] hover:bg-[rgb(var(--theme-primary))]/10">前往链上充值</a>
-      @endauth
-
-      @if (count($assets) === 0)
-        <div class="mt-6 rounded-xl border border-[rgb(var(--theme-rose))]/40 bg-[rgb(var(--theme-rose))]/10 p-3 text-scale-body text-theme">
-          收款配置缺失，请联系管理员。
+      <div class="rounded-2xl border border-theme bg-theme-card p-3" id="fund-mode-tabs" data-initial-mode="{{ $mode }}">
+        <div class="grid grid-cols-3 gap-2">
+          <button type="button" data-fund-mode-button="receive" class="rounded-lg border px-3 py-2 text-scale-body font-semibold transition">RECEIVE充值</button>
+          <button type="button" data-fund-mode-button="send" class="rounded-lg border px-3 py-2 text-scale-body font-semibold transition">SEND提款</button>
+          <button type="button" data-fund-mode-button="convert" class="rounded-lg border px-3 py-2 text-scale-body font-semibold transition">CONVERT兑换</button>
         </div>
-      @else
-        <div class="mt-6 rounded-2xl border border-theme bg-theme-card p-4">
-          <p class="text-scale-body text-theme-secondary">收款通道</p>
-          <div class="mt-3 flex flex-wrap gap-2" id="asset-selector" role="tablist" aria-label="币种选择">
-            @foreach ($assets as $asset)
-              @php $assetCode = $asset['code'] ?? ''; @endphp
-              <button
-                type="button"
-                data-asset-code="{{ $assetCode }}"
-                class="rounded-lg border px-3 py-1.5 text-scale-body font-medium transition {{ $assetCode === $selectedAssetCode ? 'border-[rgb(var(--theme-primary))] bg-[rgb(var(--theme-primary))]/15 text-[rgb(var(--theme-primary))]' : 'border-theme text-theme-secondary hover:border-[rgb(var(--theme-primary))]/40 hover:text-theme' }}"
-              >
-                {{ $assetCode }}
-              </button>
-            @endforeach
+      </div>
+
+      <div data-fund-mode-panel="receive" class="{{ $mode === 'receive' ? '' : 'hidden' }}">
+        @if (count($assets) === 0)
+          <div class="mt-6 rounded-xl border border-[rgb(var(--theme-rose))]/40 bg-[rgb(var(--theme-rose))]/10 p-3 text-scale-body text-theme">
+            收款配置缺失，请联系管理员。
           </div>
-        </div>
-
-        <div class="mt-4 grid gap-4 lg:grid-cols-2">
-          <div class="rounded-2xl border border-theme bg-theme-card p-4">
-            <p class="text-scale-body text-theme-secondary">当前币种</p>
-            <p class="mt-2 text-scale-title font-semibold text-[rgb(var(--theme-primary))]" id="asset-code">{{ $selectedAsset['code'] ?? '--' }}</p>
-
-            <dl class="mt-4 space-y-3 text-scale-body">
-              <div>
-                <dt class="text-theme-secondary">网络</dt>
-                <dd class="mt-1 font-medium text-theme" id="asset-network">{{ $selectedAsset['network'] ?? '--' }}</dd>
-              </div>
-              <div>
-                <dt class="text-theme-secondary">收款地址</dt>
-                <dd class="mt-1 break-all rounded-lg border border-theme bg-theme-secondary/70 p-2 text-theme" id="wallet-address">{{ $selectedAsset['address'] ?? '--' }}</dd>
-              </div>
-            </dl>
-
-            <button id="copy-wallet-address" class="mt-4 rounded-lg border border-[rgb(var(--theme-primary))]/40 px-4 py-2 text-scale-body text-[rgb(var(--theme-primary))] hover:bg-[rgb(var(--theme-primary))]/10">
-              复制收款地址
-            </button>
-            <p id="copy-feedback" class="mt-2 hidden text-scale-micro text-[rgb(var(--theme-primary))]">已复制</p>
-          </div>
-
-          <div class="rounded-2xl border border-theme bg-theme-card p-4">
-            <p class="text-scale-body text-theme-secondary">操作说明</p>
-            <ul class="mt-3 space-y-2 list-disc pl-5 text-scale-body text-theme-secondary">
-              <li>请确认付款币种、网络、地址完全一致。</li>
-              <li>付款成功后再提交申请，避免截图信息不完整。</li>
-              <li>管理员核实后会手动增加余额，请耐心等待。</li>
-            </ul>
-          </div>
-        </div>
-      @endif
-
-      @if (session('success'))
-        <div class="mt-6 rounded-xl border border-[rgb(var(--theme-primary))]/30 bg-[rgb(var(--theme-primary))]/10 p-3 text-scale-body text-[rgb(var(--theme-primary))]">
-          {{ session('success') }}
-        </div>
-      @endif
-
-      @if ($isGuest)
-        <div class="mt-6 rounded-2xl border border-theme bg-theme-card p-5">
-          <h2 class="text-scale-body font-semibold text-theme">快速注册</h2>
-          <p class="mt-2 text-scale-body text-theme-secondary">你当前是访客态，设置密码后即可将临时账号升级为正式账号。</p>
-
-          <div class="mt-4 flex flex-wrap items-center gap-3">
-            <button id="open-activate-modal" class="rounded-lg bg-[rgb(var(--theme-primary))] px-4 py-2 text-scale-body font-semibold text-theme-secondary">设置密码并注册</button>
-            <a href="/login" class="text-scale-body text-[rgb(var(--theme-primary))] underline underline-offset-4">已有账号？去登录</a>
-          </div>
-        </div>
-      @elseif (count($assets) > 0)
-        <form method="POST" action="/recharge/requests" enctype="multipart/form-data" class="mt-6 space-y-4 rounded-2xl border border-theme bg-theme-card p-5">
-          @csrf
-
-          <input type="hidden" name="asset_code" id="asset_code_input" value="{{ $selectedAssetCode }}">
-
-          <div>
-            <label class="mb-1 block text-scale-body text-theme-secondary">联系账号（用于人工核对）</label>
-            <p class="rounded-lg border border-theme bg-theme-secondary px-3 py-2 text-theme">{{ auth()->user()?->username ?? '--' }}</p>
-          </div>
-
-          <div>
-            <label for="payment_amount" class="mb-1 block text-scale-body text-theme-secondary">付款金额</label>
-            <input id="payment_amount" name="payment_amount" type="number" step="0.01" min="0.01" value="{{ old('payment_amount') }}" class="w-full rounded-lg border border-theme bg-theme-secondary px-3 py-2 text-theme" required>
-            @error('payment_amount')
-              <p class="mt-1 text-scale-body text-[rgb(var(--theme-rose))]">{{ $message }}</p>
-            @enderror
-          </div>
-
-          @error('asset_code')
-            <p class="text-scale-body text-[rgb(var(--theme-rose))]">{{ $message }}</p>
-          @enderror
-
-          <div>
-            <label for="receipt_image" class="mb-1 block text-scale-body text-theme-secondary">付款截图</label>
-            <div class="flex items-center gap-3 rounded-lg border border-theme bg-theme-secondary px-3 py-2">
-              <label for="receipt_image" class="cursor-pointer rounded-md border border-[rgb(var(--theme-primary))]/40 px-3 py-1.5 text-scale-body text-[rgb(var(--theme-primary))] hover:bg-[rgb(var(--theme-primary))]/10">
-                选择文件
-              </label>
-              <span id="receipt-image-name" class="text-scale-body text-theme-secondary">未选择文件</span>
+        @else
+          <div class="mt-6 rounded-2xl border border-theme bg-theme-card p-4">
+            <p class="text-scale-body text-theme-secondary">货币类型</p>
+            <div class="mt-3 flex flex-wrap gap-2" id="asset-selector" role="tablist" aria-label="币种选择">
+              @foreach ($assets as $asset)
+                @php $assetCode = $asset['code'] ?? ''; @endphp
+                <button
+                  type="button"
+                  data-asset-code="{{ $assetCode }}"
+                  class="rounded-lg border px-3 py-1.5 text-scale-body font-medium transition {{ $assetCode === $selectedAssetCode ? 'border-[rgb(var(--theme-primary))] bg-[rgb(var(--theme-primary))]/15 text-[rgb(var(--theme-primary))]' : 'border-theme text-theme-secondary hover:border-[rgb(var(--theme-primary))]/40 hover:text-theme' }}"
+                >
+                  {{ $assetCode }}
+                </button>
+              @endforeach
             </div>
-            <input id="receipt_image" name="receipt_image" type="file" accept="image/*" class="sr-only" required>
-            @error('receipt_image')
-              <p class="mt-1 text-scale-body text-[rgb(var(--theme-rose))]">{{ $message }}</p>
-            @enderror
+            <p class="mt-3 text-scale-body text-theme-secondary">
+              网络：<span id="asset-selector-network" class="font-medium text-theme">{{ ($selectedAsset['code'] ?? '--').' recharge：'.($selectedAsset['network'] ?? '--') }}</span>
+            </p>
           </div>
 
-          <div>
-            <label for="user_note" class="mb-1 block text-scale-body text-theme-secondary">备注（可选）</label>
-            <textarea id="user_note" name="user_note" rows="3" class="w-full rounded-lg border border-theme bg-theme-secondary px-3 py-2 text-theme" placeholder="例如：付款时间、末尾交易哈希等">{{ old('user_note') }}</textarea>
-            @error('user_note')
-              <p class="mt-1 text-scale-body text-[rgb(var(--theme-rose))]">{{ $message }}</p>
-            @enderror
-          </div>
+          <div class="mt-4 grid gap-4 lg:grid-cols-2">
+            <div class="rounded-2xl border border-theme bg-theme-card p-4">
+              <dl class="space-y-3 text-scale-body">
+                <div>
+                  <dt class="text-theme-secondary">收款地址</dt>
+                  <dd class="mt-1 break-all rounded-lg border border-theme bg-theme-secondary/70 p-2 text-theme" id="wallet-address">{{ $selectedAsset['address'] ?? '--' }}</dd>
+                </div>
+              </dl>
 
-          <button class="text-scale-ui mx-auto flex h-[clamp(1.9rem,7vw,2.2rem)] w-full items-center justify-center rounded-lg bg-[rgb(var(--theme-primary))] px-[clamp(0.6rem,2.5vw,0.9rem)] font-semibold text-theme-on-primary shadow-lg shadow-[rgb(var(--theme-primary))]/20 transition hover:bg-[rgb(var(--theme-primary))]/90">提交充值申请</button>
-        </form>
-      @else
-        <div class="mt-6 rounded-xl border border-[rgb(var(--theme-rose))]/40 bg-[rgb(var(--theme-rose))]/10 p-3 text-scale-body text-theme">
-          当前暂无可用收款账户，请联系管理员。
+              <button id="copy-wallet-address" class="mt-4 rounded-lg border border-[rgb(var(--theme-primary))]/40 px-4 py-2 text-scale-body text-[rgb(var(--theme-primary))] hover:bg-[rgb(var(--theme-primary))]/10">
+                复制收款地址
+              </button>
+              <p id="copy-feedback" class="mt-2 hidden text-scale-micro text-[rgb(var(--theme-primary))]">已复制</p>
+            </div>
+          </div>
+        @endif
+
+        @if (session('success'))
+          <div class="mt-6 rounded-xl border border-[rgb(var(--theme-primary))]/30 bg-[rgb(var(--theme-primary))]/10 p-3 text-scale-body text-[rgb(var(--theme-primary))]">
+            {{ session('success') }}
+          </div>
+        @endif
+
+        @if ($isGuest)
+          <div class="mt-6 rounded-2xl border border-theme bg-theme-card p-5">
+            <h2 class="text-scale-body font-semibold text-theme">快速注册</h2>
+            <p class="mt-2 text-scale-body text-theme-secondary">你当前是访客态，设置密码后即可将临时账号升级为正式账号。</p>
+
+            <div class="mt-4 flex flex-wrap items-center gap-3">
+              <button id="open-activate-modal" class="rounded-lg bg-[rgb(var(--theme-primary))] px-4 py-2 text-scale-body font-semibold text-theme-secondary">设置密码并注册</button>
+              <a href="/login" class="text-scale-body text-[rgb(var(--theme-primary))] underline underline-offset-4">已有账号？去登录</a>
+            </div>
+          </div>
+        @elseif (count($assets) > 0)
+          <form method="POST" action="/recharge/requests" enctype="multipart/form-data" class="mt-6 space-y-4 rounded-2xl border border-theme bg-theme-card p-5">
+            @csrf
+
+            <input type="hidden" name="asset_code" id="asset_code_input" value="{{ $selectedAssetCode }}">
+
+            <div>
+              <label class="mb-1 block text-scale-body text-theme-secondary">联系账号（用于人工核对）</label>
+              <p class="rounded-lg border border-theme bg-theme-secondary px-3 py-2 text-theme">{{ auth()->user()?->username ?? '--' }}</p>
+            </div>
+
+            <div>
+              <label for="payment_amount" class="mb-1 block text-scale-body text-theme-secondary">付款金额</label>
+              <input id="payment_amount" name="payment_amount" type="number" step="0.01" min="0.01" value="{{ old('payment_amount') }}" class="w-full rounded-lg border border-theme bg-theme-secondary px-3 py-2 text-theme" required>
+              @error('payment_amount')
+                <p class="mt-1 text-scale-body text-[rgb(var(--theme-rose))]">{{ $message }}</p>
+              @enderror
+            </div>
+
+            @error('asset_code')
+              <p class="text-scale-body text-[rgb(var(--theme-rose))]">{{ $message }}</p>
+            @enderror
+
+            <div>
+              <label for="receipt_image" class="mb-1 block text-scale-body text-theme-secondary">付款截图</label>
+              <div class="flex items-center gap-3 rounded-lg border border-theme bg-theme-secondary px-3 py-2">
+                <label for="receipt_image" class="cursor-pointer rounded-md border border-[rgb(var(--theme-primary))]/40 px-3 py-1.5 text-scale-body text-[rgb(var(--theme-primary))] hover:bg-[rgb(var(--theme-primary))]/10">
+                  选择文件
+                </label>
+                <span id="receipt-image-name" class="text-scale-body text-theme-secondary">未选择文件</span>
+              </div>
+              <input id="receipt_image" name="receipt_image" type="file" accept="image/*" class="sr-only" required>
+              @error('receipt_image')
+                <p class="mt-1 text-scale-body text-[rgb(var(--theme-rose))]">{{ $message }}</p>
+              @enderror
+            </div>
+
+            <button class="text-scale-ui mx-auto flex h-[clamp(1.9rem,7vw,2.2rem)] w-full items-center justify-center rounded-lg bg-[rgb(var(--theme-primary))] px-[clamp(0.6rem,2.5vw,0.9rem)] font-semibold text-theme-on-primary shadow-lg shadow-[rgb(var(--theme-primary))]/20 transition hover:bg-[rgb(var(--theme-primary))]/90">提交充值申请</button>
+          </form>
+        @else
+          <div class="mt-6 rounded-xl border border-[rgb(var(--theme-rose))]/40 bg-[rgb(var(--theme-rose))]/10 p-3 text-scale-body text-theme">
+            当前暂无可用收款账户，请联系管理员。
+          </div>
+        @endif
+
+        <div class="mt-6">
+          <p class="text-scale-body text-theme-secondary">操作说明</p>
+          <p class="mt-2 text-scale-body text-theme-secondary">请不要将其他类型的资产发送到上述地址。这样做可能会导致您的资产损失。成功发送后，网络节点需要确认收到相应的资产。因此，一旦您完成转移，请通过平台提交成功转移的屏幕截图，并等待系统审查和确认。系统审核后，资金将自动添加到您的AI帐户中。如果您有任何疑问，请联系在线客服进行验证。</p>
         </div>
-      @endif
+      </div>
+
+      <div data-fund-mode-panel="send" class="{{ $mode === 'send' ? '' : 'hidden' }}">
+        <div class="mt-6 rounded-2xl border border-theme bg-theme-card p-5">
+          <h2 class="text-scale-title font-semibold text-theme">提款（SEND）</h2>
+          <p class="mt-2 text-scale-body text-theme-secondary">用于将账户余额发起提款申请，平台审核后出款。</p>
+
+          @if ($isGuest)
+            <p class="mt-4 rounded-lg border border-[rgb(var(--theme-rose))]/35 bg-[rgb(var(--theme-rose))]/10 px-3 py-2 text-scale-body text-theme">提款需要先登录或注册账号。</p>
+          @else
+            <form method="POST" action="/withdrawal-requests" class="mt-4 space-y-4">
+              @csrf
+              <input type="hidden" name="asset_code" value="USDT">
+              <input type="hidden" name="network" value="TRC20">
+
+              <div>
+                <label class="mb-1 block text-scale-body text-theme-secondary">可提余额（USDT）</label>
+                <p class="rounded-lg border border-theme bg-theme-secondary px-3 py-2 text-theme">{{ number_format((float) (auth()->user()?->balance ?? 0), 2, '.', ',') }}</p>
+              </div>
+              <div>
+                <label for="destination_address" class="mb-1 block text-scale-body text-theme-secondary">收款地址</label>
+                <input id="destination_address" name="destination_address" type="text" value="{{ old('destination_address') }}" class="w-full rounded-lg border border-theme bg-theme-secondary px-3 py-2 text-theme" required>
+                @error('destination_address')
+                  <p class="mt-1 text-scale-body text-[rgb(var(--theme-rose))]">{{ $message }}</p>
+                @enderror
+              </div>
+              <div>
+                <label for="withdrawal_amount" class="mb-1 block text-scale-body text-theme-secondary">提款金额</label>
+                <input id="withdrawal_amount" name="amount" type="number" step="0.01" min="0.01" value="{{ old('amount') }}" class="w-full rounded-lg border border-theme bg-theme-secondary px-3 py-2 text-theme" required>
+                @error('amount')
+                  <p class="mt-1 text-scale-body text-[rgb(var(--theme-rose))]">{{ $message }}</p>
+                @enderror
+              </div>
+
+              @if (session('success') && $mode === 'send')
+                <div class="rounded-xl border border-[rgb(var(--theme-primary))]/30 bg-[rgb(var(--theme-primary))]/10 p-3 text-scale-body text-[rgb(var(--theme-primary))]">
+                  {{ session('success') }}
+                </div>
+              @endif
+
+              <div class="rounded-lg border border-[rgb(var(--theme-primary))]/25 bg-[rgb(var(--theme-primary))]/8 px-3 py-2 text-scale-body text-theme-secondary">
+                提交后系统会立即冻结对应余额，管理员审核驳回后将自动退回账户余额。
+              </div>
+              <button class="text-scale-ui mx-auto flex h-[clamp(1.9rem,7vw,2.2rem)] w-full items-center justify-center rounded-lg bg-[rgb(var(--theme-primary))] px-[clamp(0.6rem,2.5vw,0.9rem)] font-semibold text-theme-on-primary shadow-lg shadow-[rgb(var(--theme-primary))]/20 transition hover:bg-[rgb(var(--theme-primary))]/90">提交提款申请</button>
+            </form>
+          @endif
+        </div>
+      </div>
+
+      <div data-fund-mode-panel="convert" class="{{ $mode === 'convert' ? '' : 'hidden' }}">
+        <div class="mt-6 rounded-2xl border border-theme bg-theme-card p-5">
+          <h2 class="text-scale-title font-semibold text-theme">兑换（CONVERT）</h2>
+          <p class="mt-2 text-scale-body text-theme-secondary">CONVERT 表示站内币种兑换，例如 USDT 与其他支持资产的互换。</p>
+          <div class="mt-4 rounded-lg border border-[rgb(var(--theme-primary))]/25 bg-[rgb(var(--theme-primary))]/8 px-3 py-2 text-scale-body text-theme-secondary">
+            当前仅完成模式定义与页面占位，兑换逻辑和汇率来源需后续业务规则确认后接入。
+          </div>
+        </div>
+      </div>
     </section>
   </main>
 
@@ -206,10 +258,48 @@
   @endif
 
   <script>
+    const fundModeTabs = document.getElementById('fund-mode-tabs');
+    const fundModeButtons = Array.from(document.querySelectorAll('[data-fund-mode-button]'));
+    const fundModePanels = Array.from(document.querySelectorAll('[data-fund-mode-panel]'));
+
+    const setFundMode = (mode) => {
+      fundModeButtons.forEach((button) => {
+        const isActive = button.getAttribute('data-fund-mode-button') === mode;
+        button.classList.toggle('border-[rgb(var(--theme-primary))]', isActive);
+        button.classList.toggle('bg-[rgb(var(--theme-primary))]', isActive);
+        button.classList.toggle('text-theme-on-primary', isActive);
+        button.classList.toggle('border-theme', !isActive);
+        button.classList.toggle('bg-theme-secondary/70', !isActive);
+        button.classList.toggle('text-theme-secondary', !isActive);
+      });
+
+      fundModePanels.forEach((panel) => {
+        const isActive = panel.getAttribute('data-fund-mode-panel') === mode;
+        panel.classList.toggle('hidden', !isActive);
+      });
+    };
+
+    const initialFundMode = fundModeTabs?.getAttribute('data-initial-mode') ?? 'receive';
+    setFundMode(initialFundMode);
+
+    fundModeTabs?.addEventListener('click', (event) => {
+      const target = event.target;
+      if (!(target instanceof HTMLElement)) {
+        return;
+      }
+
+      const button = target.closest('[data-fund-mode-button]');
+      const mode = button?.getAttribute('data-fund-mode-button');
+      if (!mode) {
+        return;
+      }
+
+      setFundMode(mode);
+    });
+
     const assets = @json($assets);
     const selector = document.getElementById('asset-selector');
-    const assetCodeNode = document.getElementById('asset-code');
-    const assetNetworkNode = document.getElementById('asset-network');
+    const assetSelectorNetworkNode = document.getElementById('asset-selector-network');
     const walletAddressNode = document.getElementById('wallet-address');
     const assetCodeInput = document.getElementById('asset_code_input');
     const receiptImageInput = document.getElementById('receipt_image');
@@ -233,8 +323,7 @@
         button.classList.toggle('text-theme-secondary', !isActive);
       });
 
-      if (assetCodeNode) assetCodeNode.textContent = asset.code ?? assetCode;
-      if (assetNetworkNode) assetNetworkNode.textContent = asset.network ?? '--';
+      if (assetSelectorNetworkNode) assetSelectorNetworkNode.textContent = `${asset.code ?? assetCode} recharge：${asset.network ?? '--'}`;
       if (walletAddressNode) walletAddressNode.textContent = asset.address ?? '--';
       if (assetCodeInput) assetCodeInput.value = assetCode;
     };

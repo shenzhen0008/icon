@@ -504,6 +504,37 @@ CREATE TABLE `balance_ledgers` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `withdrawal_requests`
+--
+
+DROP TABLE IF EXISTS `withdrawal_requests`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `withdrawal_requests` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) unsigned NOT NULL,
+  `asset_code` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'USDT',
+  `network` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'TRC20',
+  `destination_address` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `amount` decimal(16,2) NOT NULL,
+  `status` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'pending',
+  `submitted_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `reviewed_by` bigint(20) unsigned DEFAULT NULL,
+  `reviewed_at` timestamp NULL DEFAULT NULL,
+  `review_note` text COLLATE utf8mb4_unicode_ci,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `withdrawal_requests_status_submitted_at_index` (`status`,`submitted_at`),
+  KEY `withdrawal_requests_user_id_submitted_at_index` (`user_id`,`submitted_at`),
+  KEY `withdrawal_requests_asset_code_submitted_at_index` (`asset_code`,`submitted_at`),
+  KEY `withdrawal_requests_reviewed_by_foreign` (`reviewed_by`),
+  CONSTRAINT `withdrawal_requests_reviewed_by_foreign` FOREIGN KEY (`reviewed_by`) REFERENCES `users` (`id`) ON DELETE SET NULL,
+  CONSTRAINT `withdrawal_requests_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `exchange_metrics`
 --
 

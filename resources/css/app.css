@@ -77,6 +77,15 @@ html {
 .border-theme { border-color: rgb(var(--theme-border)); }
 .shadow-theme { --tw-shadow-color: rgb(var(--theme-primary) / 0.1); --tw-shadow: var(--tw-shadow-colored); }
 
+.home-data-panel {
+    overflow: hidden;
+    border-radius: 1rem;
+    border: 1px solid rgb(var(--theme-border));
+    background-color: rgb(var(--theme-bg-card));
+    padding: 1.25rem;
+    box-shadow: 0 20px 25px -5px rgb(var(--theme-primary) / 0.1), 0 8px 10px -6px rgb(var(--theme-primary) / 0.1);
+}
+
 /* 五档字号体系：微字、正文、UI、标题、大标题。 */
 .text-scale-micro { font-size: var(--font-scale-micro); }
 .text-scale-body { font-size: var(--font-scale-body); }

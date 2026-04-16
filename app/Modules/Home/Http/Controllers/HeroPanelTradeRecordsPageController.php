@@ -1,0 +1,55 @@
+<?php
+
+namespace App\Modules\Home\Http\Controllers;
+
+use App\Http\Controllers\Controller;
+use App\Modules\Home\Services\HomeHeroPanelService;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Validation\Rule;
+
+class HeroPanelTradeRecordsPageController extends Controller
+{
+    public function __construct(private readonly HomeHeroPanelService $homeHeroPanelService)
+    {
+    }
+
+    public function __invoke(Request $request): View
+    {
+        $validated = $request->validate([
+            'per_page' => ['nullable', 'integer', 'min:1', 'max:50'],
+            'mode' => ['nullable', 'string', Rule::in(['demo', 'live'])],
+        ]);
+
+        $perPage = (int) ($validated['per_page'] ?? 20);
+        $mode = (string) ($validated['mode'] ?? 'live');
+        /** @var \App\Models\User $user */
+        $user = auth('web')->user();
+
+        if ($mode === 'demo') {
+            $panel = $this->homeHeroPanelService->resolve('demo');
+            $records = (array) ($panel['trade_records'] ?? []);
+
+            return view('home.hero-panel-trade-records', [
+                'records' => $records,
+                'mode' => $mode,
+                'pagination' => null,
+            ]);
+        }
+
+        /** @var LengthAwarePaginator $pagination */
+        $pagination = $this->homeHeroPanelService
+            ->tradeRecordQuery($user->id)
+            ->paginate($perPage)
+            ->withQueryString();
+
+        $records = $this->homeHeroPanelService->mapTradeRecords($pagination->items());
+
+        return view('home.hero-panel-trade-records', [
+            'records' => $records,
+            'mode' => $mode,
+            'pagination' => $pagination,
+        ]);
+    }
+}

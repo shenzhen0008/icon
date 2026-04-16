@@ -2,29 +2,56 @@
     'paymentConfig' => [],
     'paymentAssets' => [],
     'isGuest' => false,
+    'showTitle' => true,
+    'showSubtitle' => true,
 ])
 
+@php
+    $availableBalance = number_format((float) (auth()->user()?->balance ?? 0), 2, '.', ',');
+@endphp
+
 <section id="home-data-panel" class="mb-8 overflow-hidden rounded-2xl border border-theme bg-theme-card p-5 shadow-xl shadow-theme">
-    <div class="flex items-start justify-between gap-4">
+    <div class="flex items-start gap-4">
         <div>
-            <h1 class="text-scale-display font-semibold text-theme">Welcome to AI Smart Contracts</h1>
-            <p class="mt-2 text-scale-body text-theme-secondary">Artificial intelligence trading</p>
+            @if ($showTitle)
+                <h1 class="text-scale-display font-semibold text-theme">Welcome to AI Smart Contracts</h1>
+            @endif
+            @if ($showSubtitle)
+                <p class="mt-2 text-scale-body text-theme-secondary">Artificial intelligence trading</p>
+            @endif
         </div>
-        <span id="hero-mode-badge" class="inline-flex w-20 justify-center rounded-full border border-theme bg-theme-secondary/30 px-3 py-1 text-scale-body text-theme">demo</span>
     </div>
 
-    <div class="mt-5 rounded-xl border border-theme bg-theme-secondary/60 p-4">
-        <div class="grid grid-cols-2 gap-3">
-            <div class="min-w-0 pr-3">
+    <div class="mt-5 grid grid-cols-2 gap-2">
+        <a id="hero-trade-record-btn" href="/home/hero-panel/trade-records?mode=demo" class="inline-flex items-center justify-center rounded-lg border border-theme bg-theme-secondary px-3 py-2 text-scale-body font-medium text-theme transition hover:bg-theme-secondary/80">
+            交易记录
+        </a>
+        <a id="hero-income-record-btn" href="/home/hero-panel/income-records?mode=demo" class="inline-flex items-center justify-center rounded-lg border border-theme bg-theme-secondary px-3 py-2 text-scale-body font-medium text-theme transition hover:bg-theme-secondary/80">
+            收入记录
+        </a>
+    </div>
+
+    <x-ui.metric-split-card
+        wrapper-class="mt-3 rounded-xl border border-theme bg-theme-secondary/60 p-4"
+    >
+        <x-slot:top>
+            <div class="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-3">
+                <p class="min-w-0 text-scale-body text-theme-secondary whitespace-nowrap">可用余额 (USDT)</p>
+                <p id="hero-available-balance" class="justify-self-center font-mono text-scale-title font-semibold leading-none tabular-nums text-theme">
+                    ${{ $availableBalance }}
+                </p>
+                <span id="hero-mode-badge" class="justify-self-end inline-flex w-20 justify-center rounded-full border border-theme bg-theme-secondary/30 px-3 py-1 text-scale-body text-theme">demo</span>
+            </div>
+        </x-slot:top>
+        <x-slot:left>
                 <p class="text-scale-body text-theme-secondary whitespace-nowrap">Total earnings (USDT)</p>
                 <p id="hero-total-earnings" class="mt-2 h-8 overflow-hidden text-ellipsis whitespace-nowrap font-mono text-scale-title font-semibold leading-none tabular-nums text-theme sm:h-9 text-scale-display">$0.00</p>
-            </div>
-            <div class="min-w-0 border-l border-theme pl-3">
+        </x-slot:left>
+        <x-slot:right>
                 <p class="text-scale-body text-theme-secondary whitespace-nowrap">Earnings 24h (USDT)</p>
                 <p id="hero-earnings-24h" class="mt-2 h-8 overflow-hidden text-ellipsis whitespace-nowrap font-mono text-scale-title font-semibold leading-none tabular-nums text-theme sm:h-9 text-scale-display">$0.00</p>
-            </div>
-        </div>
-    </div>
+        </x-slot:right>
+    </x-ui.metric-split-card>
 
     {{--
     <div class="mt-5 space-y-3">
@@ -86,26 +113,84 @@
         if (!panel) return;
 
         const modeBadge = document.getElementById('hero-mode-badge');
+        const availableBalance = document.getElementById('hero-available-balance');
         const totalEarnings = document.getElementById('hero-total-earnings');
         const earnings24h = document.getElementById('hero-earnings-24h');
         const damoBtn = document.getElementById('hero-damo-btn');
         const liveBtn = document.getElementById('hero-live-btn');
 
-        const formatMoney = (value) => `$${Number(value).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-        const dataset = {
-            damo: { total: 0, day: 0, badge: '#demo' },
-            live: { total: 100.25, day: 50.25, badge: '#live' },
+        const modeMap = {
+            damo: 'demo',
+            live: 'live',
         };
 
-        const setMode = (mode) => {
-            const selected = dataset[mode];
-            if (!selected) return;
+        const tradeRecordBtn = document.getElementById('hero-trade-record-btn');
+        const incomeRecordBtn = document.getElementById('hero-income-record-btn');
+        const formatMoney = (value) => Number(value || 0).toLocaleString('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+        });
+        const formatMoneyWithPrefix = (value) => `$${formatMoney(value)}`;
+        const modeStorageKey = 'home_hero_panel_mode';
 
-            if (modeBadge) modeBadge.textContent = selected.badge;
-            if (totalEarnings) totalEarnings.textContent = formatMoney(selected.total);
-            if (earnings24h) earnings24h.textContent = formatMoney(selected.day);
+        let currentPayload = null;
+        let currentMode = 'demo';
 
-            const damoActive = mode === 'damo';
+        const readSavedMode = () => {
+            try {
+                const savedMode = window.localStorage.getItem(modeStorageKey);
+                return savedMode === 'live' ? 'live' : 'demo';
+            } catch (error) {
+                return 'demo';
+            }
+        };
+
+        const persistMode = (mode) => {
+            try {
+                window.localStorage.setItem(modeStorageKey, mode);
+            } catch (error) {
+                // Ignore storage failures and keep the UI usable.
+            }
+        };
+
+        const fetchPanelData = async (mode) => {
+            const response = await fetch(`/home-hero-panel?mode=${encodeURIComponent(mode)}`, {
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                },
+            });
+
+            if (!response.ok) {
+                const errorBody = await response.json().catch(() => ({}));
+                throw new Error(errorBody?.message || `HTTP ${response.status}`);
+            }
+
+            return response.json();
+        };
+
+        const renderPanel = (payload) => {
+            if (!payload) return;
+
+            if (modeBadge) modeBadge.textContent = payload.badge ?? '#demo';
+            if (availableBalance) availableBalance.textContent = formatMoneyWithPrefix(payload.available_balance);
+            if (totalEarnings) totalEarnings.textContent = formatMoneyWithPrefix(payload.total_earnings);
+            if (earnings24h) earnings24h.textContent = formatMoneyWithPrefix(payload.earnings_24h);
+        };
+
+        const syncRecordLinks = (mode) => {
+            const suffix = `?mode=${encodeURIComponent(mode)}`;
+            if (tradeRecordBtn) tradeRecordBtn.setAttribute('href', `/home/hero-panel/trade-records${suffix}`);
+            if (incomeRecordBtn) incomeRecordBtn.setAttribute('href', `/home/hero-panel/income-records${suffix}`);
+        };
+
+        const setMode = async (uiMode) => {
+            const mode = modeMap[uiMode];
+            if (!mode) return;
+            currentMode = mode;
+            persistMode(mode);
+            syncRecordLinks(mode);
+
+            const damoActive = uiMode === 'damo';
             const setButtonActiveState = (button, active) => {
                 button?.classList.toggle('bg-gradient-to-r', active);
                 button?.classList.toggle('from-cyan-500', active);
@@ -121,11 +206,23 @@
 
             setButtonActiveState(damoBtn, damoActive);
             setButtonActiveState(liveBtn, !damoActive);
+
+            try {
+                const payload = await fetchPanelData(mode);
+                currentPayload = payload;
+                renderPanel(payload);
+            } catch (error) {
+                if (mode === 'live') {
+                    alert('LIVE 模式数据加载失败，请稍后重试。');
+                    setMode('damo');
+                }
+            }
         };
 
         damoBtn?.addEventListener('click', () => setMode('damo'));
         liveBtn?.addEventListener('click', () => setMode('live'));
 
-        setMode('damo');
+        const savedMode = readSavedMode();
+        setMode(savedMode === 'live' ? 'live' : 'damo');
     })();
 </script>

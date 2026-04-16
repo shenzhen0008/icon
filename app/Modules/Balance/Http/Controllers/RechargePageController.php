@@ -18,8 +18,10 @@ class RechargePageController extends Controller
     public function __invoke(Request $request): View
     {
         $isGuest = ! Auth::guard('web')->check();
+        $allowedAssetCodes = (array) config('recharge.allowed_receive_assets', []);
         $assets = RechargeReceiver::query()
             ->where('is_active', true)
+            ->whereIn('asset_code', $allowedAssetCodes)
             ->orderBy('sort')
             ->orderBy('id')
             ->get()

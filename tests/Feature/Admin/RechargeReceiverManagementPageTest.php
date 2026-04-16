@@ -35,7 +35,12 @@ class RechargeReceiverManagementPageTest extends TestCase
         $this->get('/admin/recharge-receivers/create')
             ->assertOk()
             ->assertSee('币种代码')
-            ->assertSee('收款地址');
+            ->assertSee('收款地址')
+            ->assertSee('USDT')
+            ->assertSee('USDC')
+            ->assertSee('BTC')
+            ->assertSee('ETH')
+            ->assertDontSee('DOGE');
 
         $this->get('/admin/recharge-receivers/'.$receiver->id.'/edit')
             ->assertOk()

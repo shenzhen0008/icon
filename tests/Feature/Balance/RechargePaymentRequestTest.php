@@ -23,13 +23,36 @@ class RechargePaymentRequestTest extends TestCase
 
         $this->get('/recharge')
             ->assertOk()
+            ->assertSee('RECEIVE充值')
+            ->assertSee('SEND提款')
+            ->assertSee('CONVERT兑换')
+            ->assertSee('data-fund-mode-button="receive"', false)
+            ->assertSee('data-fund-mode-button="send"', false)
+            ->assertSee('data-fund-mode-button="convert"', false)
+            ->assertSee('data-fund-mode-panel="receive"', false)
+            ->assertSee('data-fund-mode-panel="send"', false)
+            ->assertSee('data-fund-mode-panel="convert"', false)
             ->assertSee('USDT')
             ->assertSee('USDC')
             ->assertSee('BTC')
             ->assertSee('ETH')
-            ->assertSee('DOGE')
+            ->assertDontSee('DOGE')
             ->assertSee('设置密码并注册')
             ->assertSee('你当前是访客态，设置密码后即可将临时账号升级为正式账号。');
+    }
+
+    public function test_recharge_page_renders_same_compact_home_hero_panel_as_my_center(): void
+    {
+        $this->createReceiver('USDT', 'TRC20', 'T-usdt');
+
+        $this->get('/recharge')
+            ->assertOk()
+            ->assertSee('id="home-data-panel"', false)
+            ->assertSee('id="hero-mode-badge"', false)
+            ->assertSee('id="hero-damo-btn"', false)
+            ->assertSee('id="hero-live-btn"', false)
+            ->assertDontSee('Welcome to AI Smart Contracts')
+            ->assertDontSee('Artificial intelligence trading');
     }
 
     public function test_authenticated_user_can_submit_recharge_payment_request(): void
@@ -102,6 +125,31 @@ class RechargePaymentRequestTest extends TestCase
 
         $this->createReceiver('USDT', 'TRC20', 'T-usdt', isActive: true);
         $this->createReceiver('DOGE', 'Dogecoin', 'D-doge', isActive: false);
+
+        $this->get('/recharge')
+            ->assertOk()
+            ->assertSee('USDT')
+            ->assertDontSee('DOGE');
+
+        $user = User::factory()->create();
+
+        $this->actingAs($user)
+            ->from('/recharge')
+            ->post('/recharge/requests', [
+                'asset_code' => 'DOGE',
+                'payment_amount' => '10',
+                'receipt_image' => UploadedFile::fake()->image('receipt.png'),
+            ])
+            ->assertRedirect('/recharge')
+            ->assertSessionHasErrors(['asset_code']);
+    }
+
+    public function test_active_receiver_outside_allowed_receive_assets_is_hidden_and_cannot_be_submitted(): void
+    {
+        Storage::fake('public');
+
+        $this->createReceiver('USDT', 'TRC20', 'T-usdt', isActive: true);
+        $this->createReceiver('DOGE', 'Dogecoin', 'D-doge', isActive: true);
 
         $this->get('/recharge')
             ->assertOk()
