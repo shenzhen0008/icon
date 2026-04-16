@@ -133,18 +133,20 @@
     }
 
     const renderSlots = (slots, value, isActive) => {
-      const cursorIndex = Math.min(value.length, 5);
+      const activeIndex = value.length >= 6 ? 5 : value.length;
 
       slots.forEach((slot, index) => {
         const filled = index < value.length;
-        const showCursor = isActive && !filled && index === cursorIndex && value.length < 6;
+        const showActive = isActive && index === activeIndex;
 
-        slot.textContent = filled ? '•' : (showCursor ? '|' : '');
-        slot.classList.toggle('border-[rgb(var(--theme-primary))]', showCursor);
-        slot.classList.toggle('text-[rgb(var(--theme-primary))]', showCursor);
-        slot.classList.toggle('font-bold', showCursor);
-        slot.classList.toggle('border-theme', !showCursor);
-        slot.classList.toggle('text-theme', !showCursor);
+        slot.textContent = filled ? '•' : '';
+        slot.classList.toggle('border-[rgb(var(--theme-primary))]', showActive);
+        slot.classList.toggle('text-[rgb(var(--theme-primary))]', showActive);
+        slot.classList.toggle('ring-2', showActive);
+        slot.classList.toggle('ring-[rgb(var(--theme-primary))]/35', showActive);
+        slot.classList.toggle('border-theme', !showActive);
+        slot.classList.toggle('text-theme', !showActive);
+        slot.classList.toggle('ring-0', !showActive);
       });
     };
 
@@ -211,6 +213,28 @@
       modal.close();
     };
 
+    const adjustDialogForKeyboard = () => {
+      const viewport = window.visualViewport;
+      if (!viewport || !modal.open) {
+        return;
+      }
+
+      const focusedOnPin = document.activeElement === passwordInput || document.activeElement === confirmationInput;
+      if (!focusedOnPin) {
+        modal.style.removeProperty('transform');
+        return;
+      }
+
+      const keyboardHeight = Math.max(0, window.innerHeight - viewport.height - viewport.offsetTop);
+      if (keyboardHeight <= 0) {
+        modal.style.removeProperty('transform');
+        return;
+      }
+
+      const lift = Math.min(Math.round(keyboardHeight * 0.58), 260);
+      modal.style.transform = `translateY(-${lift}px)`;
+    };
+
     const showMismatchError = () => {
       if (errorNode) {
         errorNode.textContent = '两次 PIN 不一致，请重新确认';
@@ -251,6 +275,7 @@
       activeField = 'primary';
       passwordInput.setSelectionRange(passwordInput.value.length, passwordInput.value.length);
       renderAllSlots();
+      adjustDialogForKeyboard();
     });
     confirmationInput.addEventListener('input', () => {
       syncInput(confirmationInput);
@@ -265,6 +290,13 @@
       activeField = 'confirm';
       confirmationInput.setSelectionRange(confirmationInput.value.length, confirmationInput.value.length);
       renderAllSlots();
+      adjustDialogForKeyboard();
+    });
+    passwordInput.addEventListener('blur', () => {
+      window.setTimeout(adjustDialogForKeyboard, 30);
+    });
+    confirmationInput.addEventListener('blur', () => {
+      window.setTimeout(adjustDialogForKeyboard, 30);
     });
     form.addEventListener('submit', (event) => {
       syncInput(passwordInput);
@@ -305,6 +337,9 @@
     });
 
     modal.addEventListener('close', resetState);
+    modal.addEventListener('close', () => {
+      modal.style.removeProperty('transform');
+    });
 
     const observer = new MutationObserver(() => {
       if (!modal.open) {
@@ -313,12 +348,16 @@
 
       focusPinInput();
       updateSubmitState();
+      adjustDialogForKeyboard();
     });
 
     observer.observe(modal, {
       attributes: true,
       attributeFilter: ['open'],
     });
+
+    window.visualViewport?.addEventListener('resize', adjustDialogForKeyboard);
+    window.visualViewport?.addEventListener('scroll', adjustDialogForKeyboard);
 
     @if ($errors->has('password'))
       modal.showModal();
