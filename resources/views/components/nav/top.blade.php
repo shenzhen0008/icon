@@ -1,6 +1,23 @@
+@php
+  $currentPath = trim(request()->path(), '/');
+  $primaryNavPaths = ['', 'products', 'help', 'referral', 'me', 'support'];
+  $showTopNavBack = ! in_array($currentPath, $primaryNavPaths, true);
+@endphp
+
 <header id="top-nav" class="sticky top-0 z-30 border-b border-theme bg-theme-secondary/90 backdrop-blur">
   <div class="mx-auto flex w-full max-w-4xl items-center justify-between px-[clamp(0.75rem,3.5vw,1.5rem)] py-[clamp(0.6rem,2.5vw,1rem)]">
-    <a href="/" class="text-scale-ui font-semibold tracking-[0.2em] text-[rgb(var(--theme-primary))]">ICON MARKET</a>
+    @if ($showTopNavBack)
+      <a
+        href="/"
+        data-top-nav-back
+        aria-label="返回上一页"
+        class="ml-1 inline-flex h-9 w-9 items-center justify-center rounded-full text-[1.85rem] font-semibold leading-none text-[rgb(var(--theme-primary))] transition hover:bg-[rgb(var(--theme-primary))]/10"
+      >
+        &lt;
+      </a>
+    @else
+      <a href="/" class="text-[1.04rem] font-semibold tracking-[0.22em] leading-none text-[rgb(var(--theme-primary))] md:text-[1.1rem]">ICON MARKET</a>
+    @endif
 
     <nav class="hidden items-center gap-[clamp(0.8rem,3vw,1.5rem)] text-scale-ui md:flex">
       <a href="/" class="{{ request()->is('/') ? 'text-[rgb(var(--theme-primary))]' : 'text-theme-secondary hover:text-[rgb(var(--theme-primary))]' }}">首页</a>
@@ -25,11 +42,11 @@
           <img
             src="{{ asset('images/flags/cn.svg') }}"
             alt=""
-            class="h-4 w-5 shrink-0 rounded-[2px] object-cover"
+            class="h-4 w-5 shrink-0 rounded-[2px] object-cover scale-110"
             aria-hidden="true"
             data-language-current-flag
           >
-          <span class="text-scale-ui font-medium uppercase leading-none text-theme-secondary" data-language-current-code>ZH</span>
+          <span class="text-scale-ui inline-block font-semibold uppercase leading-none text-theme-secondary scale-110" data-language-current-code>ZH</span>
         </button>
         <div
           id="language-menu"
@@ -52,13 +69,14 @@
         type="button"
         class="inline-flex items-center justify-center rounded-full p-[0.4rem] text-theme transition hover:bg-[rgb(var(--theme-primary))]/10"
       >
-        <img src="{{ asset('images/assets/sun.svg') }}" alt="" class="h-[1.35rem] w-[1.35rem] shrink-0 object-contain" aria-hidden="true">
+        <img src="{{ asset('images/assets/sun.svg') }}" alt="" class="h-[1.35rem] w-[1.35rem] shrink-0 object-contain scale-110" aria-hidden="true">
       </button>
     </div>
   </div>
 </header>
 
 <script>
+  const topNavBackButton = document.querySelector('[data-top-nav-back]');
   const languageToggle = document.getElementById('language-toggle');
   const languageMenu = document.getElementById('language-menu');
   const languageCurrentFlag = document.querySelector('[data-language-current-flag]');
@@ -105,6 +123,16 @@
 
   document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') closeLanguageMenu();
+  });
+
+  topNavBackButton?.addEventListener('click', (event) => {
+    const fallbackUrl = topNavBackButton.getAttribute('href') || '/';
+    if (window.history.length > 1) {
+      event.preventDefault();
+      window.history.back();
+      return;
+    }
+    window.location.assign(fallbackUrl);
   });
 
   // 主题切换功能

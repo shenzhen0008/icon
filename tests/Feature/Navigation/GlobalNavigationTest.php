@@ -167,9 +167,11 @@ class GlobalNavigationTest extends TestCase
         $response->assertDontSee('切换主题');
         $response->assertDontSee('min-h-[2.75rem]', false);
         $response->assertSee('rounded-full', false);
+        $response->assertSee('text-[1.04rem] font-semibold tracking-[0.22em]', false);
         $response->assertSee('p-[0.4rem]', false);
-        $response->assertDontSee('p-[0.55rem]', false);
-        $response->assertSee('h-[1.35rem] w-[1.35rem]', false);
+        $response->assertDontSee('p-[0.5rem]', false);
+        $response->assertSee('h-4 w-5 shrink-0 rounded-[2px] object-cover scale-110', false);
+        $response->assertSee('h-[1.35rem] w-[1.35rem] shrink-0 object-contain scale-110', false);
         $response->assertSee('data-theme="business"', false);
         $response->assertSee("const savedTheme = localStorage.getItem('theme') || 'business';", false);
         $response->assertSee("const streamNotifyBootstrapKey = 'stream_chat_notify_bootstrap_ready';", false);
@@ -191,6 +193,34 @@ class GlobalNavigationTest extends TestCase
             $this->get($uri)
                 ->assertOk()
                 ->assertSee($viewport);
+        }
+    }
+
+    public function test_top_nav_shows_back_button_only_on_secondary_pages(): void
+    {
+        $product = Product::query()->create([
+            'name' => 'Product Back Nav',
+            'code' => 'PBN',
+            'unit_price' => 1000,
+            'is_active' => true,
+        ]);
+
+        foreach (['/', '/products', '/help', '/support'] as $uri) {
+            $response = $this->get($uri)->assertOk();
+            $topNavMarkup = $this->topNavMarkup($response->getContent());
+            $this->assertStringNotContainsString('data-top-nav-back', $topNavMarkup);
+            $this->assertStringNotContainsString('aria-label="返回上一页"', $topNavMarkup);
+        }
+
+        foreach (['/products/rules', '/products/'.$product->id, '/stream-chat'] as $uri) {
+            $response = $this->get($uri)->assertOk();
+            $topNavMarkup = $this->topNavMarkup($response->getContent());
+            $this->assertStringContainsString('data-top-nav-back', $topNavMarkup);
+            $this->assertStringContainsString('aria-label="返回上一页"', $topNavMarkup);
+            $this->assertStringContainsString('href="/"', $topNavMarkup);
+            $this->assertStringContainsString('h-9 w-9', $topNavMarkup);
+            $this->assertStringContainsString('text-[1.85rem]', $topNavMarkup);
+            $this->assertStringContainsString('ml-1', $topNavMarkup);
         }
     }
 

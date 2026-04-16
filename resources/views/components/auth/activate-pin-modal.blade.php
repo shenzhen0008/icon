@@ -58,7 +58,7 @@
               <span
                 data-pin-slot="primary"
                 data-pin-slot-index="{{ $index }}"
-                class="flex h-10 items-center justify-center rounded-lg border border-theme bg-theme-secondary text-lg font-semibold text-theme"
+                class="flex h-10 items-center justify-center rounded-lg border border-theme bg-theme-secondary text-2xl font-bold text-theme"
               ></span>
             @endfor
           </div>
@@ -89,7 +89,7 @@
               <span
                 data-pin-slot="confirm"
                 data-pin-slot-index="{{ $index }}"
-                class="flex h-10 items-center justify-center rounded-lg border border-theme bg-theme-secondary text-lg font-semibold text-theme"
+                class="flex h-10 items-center justify-center rounded-lg border border-theme bg-theme-secondary text-2xl font-bold text-theme"
               ></span>
             @endfor
           </div>
@@ -139,7 +139,7 @@
         const filled = index < value.length;
         const showActive = isActive && index === activeIndex;
 
-        slot.textContent = filled ? '•' : '';
+        slot.textContent = filled ? '●' : '';
         slot.classList.toggle('border-[rgb(var(--theme-primary))]', showActive);
         slot.classList.toggle('text-[rgb(var(--theme-primary))]', showActive);
         slot.classList.toggle('ring-2', showActive);
