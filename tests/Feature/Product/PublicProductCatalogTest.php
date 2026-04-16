@@ -127,7 +127,7 @@ class PublicProductCatalogTest extends TestCase
         $response->assertSee('设置密码并注册');
         $response->assertSee('id="activate-modal"', false);
         $response->assertSee('theme-pin-modal');
-        $response->assertSee('请输入并确认 6 位数字密码');
+        $response->assertSee('请输入并确认 6 位数字交易 PIN');
         $response->assertSee('输入 6 位 PIN');
         $response->assertSee('确认 6 位 PIN');
         $response->assertSee('text-theme-on-primary');

@@ -11,22 +11,22 @@
     <x-nav.top />
 
     <main class="mx-auto max-w-md px-6 pb-28 pt-8 md:pb-10">
-        <h1 class="mb-2 text-scale-display font-semibold">设置密码激活账号</h1>
+        <h1 class="mb-2 text-scale-display font-semibold">设置交易 PIN 激活账号</h1>
         <p class="mb-6 text-scale-body text-theme-secondary">临时用户名：{{ session(config('user.temp_username_session_key')) }}</p>
-        <p class="mb-6 text-scale-body text-theme-secondary">密码仅支持 6 位数字。</p>
+        <p class="mb-6 text-scale-body text-theme-secondary">交易 PIN 仅支持 6 位数字。</p>
 
         <form method="POST" action="/register" class="space-y-4 rounded-lg border border-theme bg-theme-secondary p-4">
             @csrf
             <input type="hidden" name="invite_code" value="{{ app(\App\Modules\Referral\Support\InviteCodeResolver::class)->currentForForm(request()) }}">
 
             <div>
-                <label class="mb-1 block text-scale-body" for="password">密码</label>
+                <label class="mb-1 block text-scale-body" for="password">交易 PIN</label>
                 <input id="password" type="password" name="password" inputmode="numeric" pattern="\d{6}" minlength="6" maxlength="6" class="w-full rounded border border-theme bg-theme-secondary p-2" required>
                 @error('password')<p class="mt-1 text-scale-body text-[rgb(var(--theme-rose))]">{{ $message }}</p>@enderror
             </div>
 
             <div>
-                <label class="mb-1 block text-scale-body" for="password_confirmation">确认密码</label>
+                <label class="mb-1 block text-scale-body" for="password_confirmation">确认交易 PIN</label>
                 <input id="password_confirmation" type="password" name="password_confirmation" inputmode="numeric" pattern="\d{6}" minlength="6" maxlength="6" class="w-full rounded border border-theme bg-theme-secondary p-2" required>
             </div>
 

@@ -88,6 +88,23 @@ class AuthenticationFlowTest extends TestCase
             ->assertSessionHasErrors(['password']);
     }
 
+    public function test_activation_is_rate_limited_after_too_many_failed_pin_attempts(): void
+    {
+        $this->get('/')->assertOk();
+
+        for ($attempt = 0; $attempt < 8; $attempt++) {
+            $this->from('/register')->post('/register', [
+                'password' => '12ab56',
+                'password_confirmation' => '12ab56',
+            ])->assertRedirect('/register');
+        }
+
+        $this->post('/register', [
+            'password' => '12ab56',
+            'password_confirmation' => '12ab56',
+        ])->assertStatus(429);
+    }
+
     public function test_user_can_login_with_username_and_remember_me(): void
     {
         $user = User::factory()->create([

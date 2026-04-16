@@ -21,4 +21,26 @@ class ActivateAccountRequest extends FormRequest
             'invite_code' => ['nullable', 'string', 'max:32', 'regex:/^[A-Za-z0-9]*$/'],
         ];
     }
+
+    /**
+     * @return array<string, string>
+     */
+    public function attributes(): array
+    {
+        return [
+            'password' => '交易 PIN',
+        ];
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'password.size' => '交易 PIN 必须为 6 位数字。',
+            'password.regex' => '交易 PIN 必须为 6 位数字。',
+            'password.confirmed' => '两次输入的交易 PIN 不一致。',
+        ];
+    }
 }

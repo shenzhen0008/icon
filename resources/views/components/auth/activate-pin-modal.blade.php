@@ -19,7 +19,7 @@
 <dialog id="{{ $modalId }}" class="theme-modal theme-pin-modal">
   <div class="p-5 md:p-6">
     <div class="mb-5 flex items-center justify-between">
-      <h2 class="text-scale-title font-semibold">设置 6 位数字密码</h2>
+      <h2 class="text-scale-title font-semibold">设置交易 PIN</h2>
       <button id="{{ $closeButtonId }}" class="rounded-lg px-2.5 py-1.5 text-theme-secondary hover:bg-theme-secondary/60">关闭</button>
     </div>
 
@@ -32,7 +32,7 @@
       <input id="{{ $passwordHiddenInputId }}" type="hidden" name="password" value="">
       <input id="{{ $passwordConfirmationHiddenInputId }}" type="hidden" name="password_confirmation" value="">
 
-      <p class="text-scale-body text-theme-secondary">请输入并确认 6 位数字密码</p>
+      <p class="text-scale-body text-theme-secondary">请输入并确认 6 位数字交易 PIN</p>
 
       <div>
         <label for="{{ $passwordInputId }}" class="mb-1.5 block text-scale-body">输入 6 位 PIN</label>
@@ -126,10 +126,32 @@
     const submitButton = document.getElementById(@json($submitButtonId));
     const primarySlots = modal ? Array.from(modal.querySelectorAll('[data-pin-slot="primary"]')) : [];
     const confirmSlots = modal ? Array.from(modal.querySelectorAll('[data-pin-slot="confirm"]')) : [];
+    let activeField = 'primary';
 
     if (!modal || !form || !passwordInput || !confirmationInput || !passwordHiddenInput || !confirmationHiddenInput || !submitButton) {
       return;
     }
+
+    const renderSlots = (slots, value, isActive) => {
+      const cursorIndex = Math.min(value.length, 5);
+
+      slots.forEach((slot, index) => {
+        const filled = index < value.length;
+        const showCursor = isActive && !filled && index === cursorIndex && value.length < 6;
+
+        slot.textContent = filled ? '•' : (showCursor ? '|' : '');
+        slot.classList.toggle('border-[rgb(var(--theme-primary))]', showCursor);
+        slot.classList.toggle('text-[rgb(var(--theme-primary))]', showCursor);
+        slot.classList.toggle('font-bold', showCursor);
+        slot.classList.toggle('border-theme', !showCursor);
+        slot.classList.toggle('text-theme', !showCursor);
+      });
+    };
+
+    const renderAllSlots = () => {
+      renderSlots(primarySlots, passwordInput.value, activeField === 'primary');
+      renderSlots(confirmSlots, confirmationInput.value, activeField === 'confirm');
+    };
 
     const resetState = () => {
       if (errorNode) {
@@ -141,20 +163,14 @@
       confirmationHiddenInput.value = '';
       submitButton.removeAttribute('disabled');
       submitButton.classList.remove('opacity-60', 'cursor-not-allowed');
-      renderSlots(primarySlots, '');
-      renderSlots(confirmSlots, '');
+      activeField = 'primary';
+      renderAllSlots();
     };
 
     const sanitizePin = (value) => value.replace(/\D/g, '').slice(0, 6);
 
     const syncInput = (input) => {
       input.value = sanitizePin(input.value);
-    };
-
-    const renderSlots = (slots, value) => {
-      slots.forEach((slot, index) => {
-        slot.textContent = index < value.length ? '•' : '';
-      });
     };
 
     const updateSubmitState = () => {
@@ -165,12 +181,17 @@
     };
 
     const focusPinInput = () => {
+      activeField = 'primary';
       passwordInput.focus();
+      passwordInput.setSelectionRange(passwordInput.value.length, passwordInput.value.length);
+      renderAllSlots();
     };
 
     const focusConfirmationInput = () => {
+      activeField = 'confirm';
       confirmationInput.focus();
       confirmationInput.setSelectionRange(confirmationInput.value.length, confirmationInput.value.length);
+      renderAllSlots();
     };
 
     const moveToConfirmationWhenPrimaryComplete = () => {
@@ -211,7 +232,8 @@
       if (errorNode) {
         errorNode.textContent = '';
       }
-      renderSlots(primarySlots, passwordInput.value);
+      activeField = 'primary';
+      renderAllSlots();
       moveToConfirmationWhenPrimaryComplete();
       updateSubmitState();
     });
@@ -219,24 +241,35 @@
     passwordInput.addEventListener('paste', () => {
       window.setTimeout(() => {
         syncInput(passwordInput);
-        renderSlots(primarySlots, passwordInput.value);
+        activeField = 'primary';
+        renderAllSlots();
         moveToConfirmationWhenPrimaryComplete();
         updateSubmitState();
       }, 0);
+    });
+    passwordInput.addEventListener('focus', () => {
+      activeField = 'primary';
+      passwordInput.setSelectionRange(passwordInput.value.length, passwordInput.value.length);
+      renderAllSlots();
     });
     confirmationInput.addEventListener('input', () => {
       syncInput(confirmationInput);
       if (errorNode) {
         errorNode.textContent = '';
       }
-      renderSlots(confirmSlots, confirmationInput.value);
+      activeField = 'confirm';
+      renderAllSlots();
       updateSubmitState();
+    });
+    confirmationInput.addEventListener('focus', () => {
+      activeField = 'confirm';
+      confirmationInput.setSelectionRange(confirmationInput.value.length, confirmationInput.value.length);
+      renderAllSlots();
     });
     form.addEventListener('submit', (event) => {
       syncInput(passwordInput);
       syncInput(confirmationInput);
-      renderSlots(primarySlots, passwordInput.value);
-      renderSlots(confirmSlots, confirmationInput.value);
+      renderAllSlots();
 
       if (passwordInput.value.length !== 6 || confirmationInput.value.length !== 6) {
         event.preventDefault();
