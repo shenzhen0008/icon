@@ -7,6 +7,7 @@ use App\Modules\Balance\Models\BalanceLedger;
 use App\Modules\Position\Models\Position;
 use App\Modules\Product\Models\Product;
 use App\Modules\Product\Models\ProductDailyReturn;
+use App\Modules\Referral\Services\GrantReferralCommissionForSettlementService;
 use App\Modules\Settlement\Models\DailySettlement;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
@@ -14,6 +15,11 @@ use Illuminate\Validation\ValidationException;
 
 class DailySettlementService
 {
+    public function __construct(
+        private readonly GrantReferralCommissionForSettlementService $grantReferralCommissionForSettlementService,
+    ) {
+    }
+
     public function settleByProductAndDate(int $productId, string $date): void
     {
         $product = Product::query()
@@ -120,7 +126,7 @@ class DailySettlementService
 
             $profit = round((float) $position->principal * $rate, 2);
 
-            DailySettlement::query()->create([
+            $settlement = DailySettlement::query()->create([
                 'user_id' => $position->user_id,
                 'product_id' => $position->product_id,
                 'position_id' => $position->id,
@@ -146,6 +152,14 @@ class DailySettlementService
                 'biz_ref_id' => $position->id . ':' . $date,
                 'occurred_at' => now(),
             ]);
+
+            DB::afterCommit(function () use ($settlement): void {
+                try {
+                    $this->grantReferralCommissionForSettlementService->handle($settlement);
+                } catch (\Throwable $exception) {
+                    report($exception);
+                }
+            });
         });
     }
 }

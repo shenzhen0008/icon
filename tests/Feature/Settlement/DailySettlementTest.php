@@ -245,4 +245,77 @@ class DailySettlementTest extends TestCase
         $this->assertDatabaseCount('daily_settlements', 2);
         $this->assertDatabaseCount('balance_ledgers', 2);
     }
+
+    public function test_settlement_triggers_referral_commission_after_commit(): void
+    {
+        $referrer = User::factory()->create([
+            'balance' => 0,
+            'invite_code' => 'REF001',
+        ]);
+
+        $user = User::factory()->create([
+            'balance' => 0,
+            'invite_code' => 'USER01',
+            'referrer_id' => $referrer->id,
+        ]);
+
+        \DB::table('referral_commission_settings')->updateOrInsert([
+            'id' => 1,
+        ], [
+            'level_1_rate' => '0.0500',
+            'level_2_rate' => '0.0200',
+            'is_active' => true,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        $product = Product::query()->create([
+            'name' => 'Referral Trigger Product',
+            'code' => 'RTP',
+            'unit_price' => 1000,
+            'is_active' => true,
+        ]);
+
+        $position = Position::query()->create([
+            'user_id' => $user->id,
+            'product_id' => $product->id,
+            'principal' => 1000,
+            'status' => 'open',
+            'opened_at' => now(),
+        ]);
+
+        ProductDailyReturn::query()->create([
+            'product_id' => $product->id,
+            'return_date' => '2026-04-16',
+            'rate' => 0.1,
+        ]);
+
+        app(DailySettlementService::class)->settleByProductAndDate($product->id, '2026-04-16');
+
+        $referrer->refresh();
+        $this->assertSame('5.00', number_format((float) $referrer->balance, 2, '.', ''));
+
+        $settlementId = \DB::table('daily_settlements')
+            ->where('position_id', $position->id)
+            ->value('id');
+
+        $this->assertNotNull($settlementId);
+
+        $this->assertDatabaseHas('referral_commission_records', [
+            'settlement_id' => $settlementId,
+            'level' => 1,
+            'referrer_id' => $referrer->id,
+            'referred_user_id' => $user->id,
+            'commission_amount' => 5,
+            'status' => 'success',
+        ]);
+
+        $this->assertDatabaseHas('balance_ledgers', [
+            'user_id' => $referrer->id,
+            'type' => 'referral_commission_credit',
+            'amount' => 5,
+            'biz_ref_type' => 'referral_commission',
+            'biz_ref_id' => 'settlement:'.$settlementId.':level:1',
+        ]);
+    }
 }

@@ -84,6 +84,17 @@ class HomeHeroPanelFeedTest extends TestCase
             'occurred_at' => '2026-04-16 11:30:00',
         ]);
 
+        BalanceLedger::query()->create([
+            'user_id' => $user->id,
+            'type' => 'referral_commission_credit',
+            'amount' => '15.10',
+            'before_balance' => '1200.50',
+            'after_balance' => '1215.60',
+            'biz_ref_type' => 'referral_commission',
+            'biz_ref_id' => 'settlement:23:level:1',
+            'occurred_at' => '2026-04-16 11:50:00',
+        ]);
+
         $settlementWithin24h = DailySettlement::query()->create([
             'user_id' => $user->id,
             'product_id' => $product->id,
@@ -125,7 +136,8 @@ class HomeHeroPanelFeedTest extends TestCase
             ->assertJsonPath('trade_records.0.event_type', 'withdrawal_refund')
             ->assertJsonPath('trade_records.1.event_type', 'withdrawal_debit')
             ->assertJsonPath('trade_records.2.title', 'Mobile AMM')
-            ->assertJsonPath('income_records.0.profit', '30.00');
+            ->assertJsonPath('income_records.0.product_name', '推荐提成')
+            ->assertJsonPath('income_records.0.profit', '15.10');
 
         Carbon::setTestNow();
     }

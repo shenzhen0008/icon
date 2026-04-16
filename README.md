@@ -22,6 +22,19 @@ bash scripts/deploy.sh
 
 脚本会自动执行：`composer install --no-dev`、`key:generate`、数据库迁移、Livewire 资产发布、`storage/bootstrap` 权限修复，以及 Laravel 缓存重建（`optimize:clear` / `optimize`）。
 
+另外，部署脚本会自动幂等写入 Laravel Scheduler 的 crontab（每分钟执行一次 `php artisan schedule:run`），默认开启，可通过环境变量关闭：
+
+```bash
+INSTALL_SCHEDULER_CRON=0 bash scripts/deploy.sh
+```
+
+建议部署后检查：
+
+```bash
+crontab -l
+php artisan schedule:list
+```
+
 数据库说明：
 
 1. `migrate --force` 只负责表结构迁移（创建/更新表），不会同步开发环境里的业务数据。
@@ -111,14 +124,26 @@ PR 自检（字体相关）：
 REFERRAL_ENABLED=true
 REFERRAL_GO_LIVE_DATE=2026-04-15
 REFERRAL_BUSINESS_TIMEZONE=Asia/Shanghai
+SETTLEMENT_ENABLED=true
+SETTLEMENT_RUN_AT=00:05
+SETTLEMENT_TIMEZONE=Asia/Shanghai
 ```
 
-批量发放命令：
+触发口径：
+- 主链路：产品收益结算完成后，系统即时触发推荐提成发放。
+- 兜底链路：可手动执行批处理命令补跑历史遗漏提成。
+
+兜底补跑命令：
 ```bash
 php artisan referral:commission-process
 ```
 
-部署后如果启用该功能，需要先执行数据库迁移，再在后台确认提成比例配置。
+结算命令（手动补跑某日）：
+```bash
+php artisan settlement:daily --date=2026-04-16
+```
+
+部署后如果启用该功能，需要先执行数据库迁移，再在后台确认提成比例配置与结算调度配置。
 
 
 ## 推送到 GitHub

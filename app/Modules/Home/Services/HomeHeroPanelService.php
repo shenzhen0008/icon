@@ -8,8 +8,11 @@ use App\Modules\Position\Models\Position;
 use App\Modules\Settlement\Models\DailySettlement;
 use App\Modules\Withdrawal\Models\WithdrawalRequest;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
+use stdClass;
 
 class HomeHeroPanelService
 {
@@ -17,6 +20,10 @@ class HomeHeroPanelService
         'purchase_debit',
         'withdrawal_debit',
         'withdrawal_refund',
+    ];
+
+    private const INCOME_LEDGER_TYPES = [
+        'referral_commission_credit',
     ];
 
     /**
@@ -121,17 +128,16 @@ class HomeHeroPanelService
             ->get()
             ->pipe(fn (Collection $ledgers): array => $this->mapTradeRecords($ledgers));
 
-        $incomeRecords = DailySettlement::query()
-            ->with('product:id,name')
-            ->where('user_id', $user->id)
-            ->orderByDesc('created_at')
-            ->orderByDesc('id')
+        $incomeRecords = $this->incomeRecordQuery($user->id)
             ->limit(50)
             ->get()
-            ->map(fn (DailySettlement $settlement): array => [
-                'product_name' => (string) ($settlement->product?->name ?? '--'),
-                'profit' => $this->formatMoney((float) $settlement->profit),
-                'settlement_at' => $this->formatSettlementTime($settlement),
+            ->map(fn (stdClass $record): array => [
+                'product_name' => (string) ($record->product_name ?? '--'),
+                'profit' => $this->formatMoney((float) ($record->profit ?? 0)),
+                'rate_percent' => $record->rate === null
+                    ? '--'
+                    : number_format((float) $record->rate * 100, 2, '.', '').'%',
+                'settlement_at' => $this->formatIncomeOccurredAt($record->occurred_at ?? null),
             ])
             ->values()
             ->all();
@@ -145,6 +151,52 @@ class HomeHeroPanelService
             'trade_records' => $tradeRecords,
             'income_records' => $incomeRecords,
         ];
+    }
+
+    public function incomeRecordQuery(int $userId): QueryBuilder
+    {
+        $settlementQuery = DailySettlement::query()
+            ->leftJoin('products', 'products.id', '=', 'daily_settlements.product_id')
+            ->where('daily_settlements.user_id', $userId)
+            ->selectRaw(
+                "'settlement' as income_type, ".
+                "daily_settlements.id as sort_id, ".
+                "COALESCE(products.name, '--') as product_name, ".
+                "daily_settlements.profit as profit, ".
+                "daily_settlements.rate as rate, ".
+                "daily_settlements.created_at as occurred_at"
+            );
+
+        $commissionQuery = BalanceLedger::query()
+            ->where('balance_ledgers.user_id', $userId)
+            ->whereIn('balance_ledgers.type', self::INCOME_LEDGER_TYPES)
+            ->where('balance_ledgers.biz_ref_type', 'referral_commission')
+            ->selectRaw(
+                "'referral_commission' as income_type, ".
+                "balance_ledgers.id as sort_id, ".
+                "'推荐提成' as product_name, ".
+                "balance_ledgers.amount as profit, ".
+                "NULL as rate, ".
+                "balance_ledgers.occurred_at as occurred_at"
+            );
+
+        return DB::query()
+            ->fromSub($settlementQuery->unionAll($commissionQuery), 'income_records')
+            ->orderByDesc('occurred_at')
+            ->orderByDesc('sort_id');
+    }
+
+    private function formatIncomeOccurredAt(mixed $occurredAt): string
+    {
+        if ($occurredAt instanceof Carbon) {
+            return $occurredAt->format('Y-m-d H:i:s');
+        }
+
+        if (is_string($occurredAt) && trim($occurredAt) !== '') {
+            return $occurredAt;
+        }
+
+        return '--';
     }
 
     private function formatMoney(float $value): string
@@ -236,13 +288,4 @@ class HomeHeroPanelService
             ->all();
     }
 
-    private function formatSettlementTime(DailySettlement $settlement): string
-    {
-        $createdAt = $settlement->created_at;
-        if ($createdAt instanceof Carbon) {
-            return $createdAt->format('Y-m-d H:i:s');
-        }
-
-        return optional($settlement->settlement_date)->format('Y-m-d').' 00:00:00';
-    }
 }

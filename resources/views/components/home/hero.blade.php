@@ -4,6 +4,7 @@
     'isGuest' => false,
     'showTitle' => true,
     'showSubtitle' => true,
+    'showRecordButtons' => true,
 ])
 
 @php
@@ -22,14 +23,16 @@
         </div>
     </div>
 
-    <div class="mt-5 grid grid-cols-2 gap-2">
-        <a id="hero-trade-record-btn" href="/home/hero-panel/trade-records?mode=demo" class="inline-flex items-center justify-center rounded-lg border border-theme bg-theme-secondary px-3 py-2 text-scale-body font-medium text-theme transition hover:bg-theme-secondary/80">
-            交易记录
-        </a>
-        <a id="hero-income-record-btn" href="/home/hero-panel/income-records?mode=demo" class="inline-flex items-center justify-center rounded-lg border border-theme bg-theme-secondary px-3 py-2 text-scale-body font-medium text-theme transition hover:bg-theme-secondary/80">
-            收入记录
-        </a>
-    </div>
+    @if ($showRecordButtons)
+        <div class="mt-5 grid grid-cols-2 gap-2">
+            <a id="hero-trade-record-btn" href="/home/hero-panel/trade-records?mode=demo" class="inline-flex items-center justify-center rounded-lg border border-theme bg-theme-secondary px-3 py-2 text-scale-body font-medium text-theme transition hover:bg-theme-secondary/80">
+                交易记录
+            </a>
+            <a id="hero-income-record-btn" href="/home/hero-panel/income-records?mode=demo" class="inline-flex items-center justify-center rounded-lg border border-theme bg-theme-secondary px-3 py-2 text-scale-body font-medium text-theme transition hover:bg-theme-secondary/80">
+                收入记录
+            </a>
+        </div>
+    @endif
 
     <x-ui.metric-split-card
         wrapper-class="mt-3 rounded-xl border border-theme bg-theme-secondary/60 p-4"

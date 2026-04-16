@@ -13,7 +13,7 @@
   <x-nav.top />
 
   <main class="mx-auto w-full max-w-4xl px-4 pb-28 pt-8 md:pb-12">
-    <x-home.hero :summary="$summary" :payment-config="$paymentConfig" :payment-assets="$homePaymentAssets" :is-guest="$isGuest" />
+    <x-home.hero :summary="$summary" :payment-config="$paymentConfig" :payment-assets="$homePaymentAssets" :is-guest="$isGuest" :show-record-buttons="false" />
     <x-home.stats :summary="$summary" />
     <x-home.exchange-metrics :metrics="$metrics" :shared-profit="$sharedExchangeProfit" />
   </main>

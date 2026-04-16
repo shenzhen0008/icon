@@ -17,21 +17,15 @@ class ExchangeMetricsPageTest extends TestCase
             ->assertOk()
             ->assertSee('Welcome to AI Smart Contracts')
             ->assertSee('Artificial intelligence trading')
-            ->assertSee('交易记录')
-            ->assertSee('收入记录')
-            ->assertSee('id="hero-trade-record-btn"', false)
-            ->assertSee('id="hero-income-record-btn"', false)
-            ->assertSee('href="/home/hero-panel/trade-records?mode=demo"', false)
-            ->assertSee('href="/home/hero-panel/income-records?mode=demo"', false)
+            ->assertDontSee('交易记录')
+            ->assertDontSee('收入记录')
+            ->assertDontSee('id="hero-trade-record-btn"', false)
+            ->assertDontSee('id="hero-income-record-btn"', false)
+            ->assertDontSee('href="/home/hero-panel/trade-records?mode=demo"', false)
+            ->assertDontSee('href="/home/hero-panel/income-records?mode=demo"', false)
             ->assertSee('DEMO')
             ->assertSee('#demo')
             ->assertDontSee('#damo');
-
-        $content = $response->getContent();
-        $this->assertTrue(
-            strpos($content, 'id="hero-trade-record-btn"') < strpos($content, 'mt-3 rounded-xl border border-theme bg-theme-secondary/60 p-4'),
-            'Record buttons should render outside and before the summary card container.'
-        );
     }
 
     public function test_home_page_displays_exchange_metrics_section(): void

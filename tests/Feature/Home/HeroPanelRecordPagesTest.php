@@ -76,6 +76,17 @@ class HeroPanelRecordPagesTest extends TestCase
             'profit' => '10.00',
         ]);
 
+        BalanceLedger::query()->create([
+            'user_id' => $user->id,
+            'type' => 'referral_commission_credit',
+            'amount' => '15.10',
+            'before_balance' => '400.00',
+            'after_balance' => '415.10',
+            'biz_ref_type' => 'referral_commission',
+            'biz_ref_id' => 'settlement:99:level:1',
+            'occurred_at' => now()->subHour(),
+        ]);
+
         $this->actingAs($user)
             ->get('/home/hero-panel/trade-records')
             ->assertOk()
@@ -90,7 +101,9 @@ class HeroPanelRecordPagesTest extends TestCase
             ->assertOk()
             ->assertSee('收入记录')
             ->assertSee('Alpha Pool')
-            ->assertSee('10.00');
+            ->assertSee('10.00')
+            ->assertSee('推荐提成')
+            ->assertSee('15.10');
     }
 
     public function test_demo_mode_pages_render_fixed_records(): void

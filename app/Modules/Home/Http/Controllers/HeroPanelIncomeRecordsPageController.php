@@ -4,11 +4,11 @@ namespace App\Modules\Home\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Modules\Home\Services\HomeHeroPanelService;
-use App\Modules\Settlement\Models\DailySettlement;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Validation\Rule;
+use stdClass;
 
 class HeroPanelIncomeRecordsPageController extends Controller
 {
@@ -40,20 +40,21 @@ class HeroPanelIncomeRecordsPageController extends Controller
         }
 
         /** @var LengthAwarePaginator $pagination */
-        $pagination = DailySettlement::query()
-            ->with('product:id,name')
-            ->where('user_id', $user->id)
-            ->orderByDesc('created_at')
-            ->orderByDesc('id')
+        $pagination = $this->homeHeroPanelService
+            ->incomeRecordQuery($user->id)
             ->paginate($perPage)
             ->withQueryString();
 
         $records = collect($pagination->items())
-            ->map(fn (DailySettlement $settlement): array => [
-                'product_name' => (string) ($settlement->product?->name ?? '--'),
-                'profit' => number_format((float) $settlement->profit, 2, '.', ''),
-                'rate_percent' => number_format((float) $settlement->rate * 100, 2, '.', '').'%',
-                'settlement_at' => $settlement->created_at?->format('Y-m-d H:i:s') ?? '--',
+            ->map(fn (stdClass $record): array => [
+                'product_name' => (string) ($record->product_name ?? '--'),
+                'profit' => number_format((float) ($record->profit ?? 0), 2, '.', ''),
+                'rate_percent' => $record->rate === null
+                    ? '--'
+                    : number_format((float) $record->rate * 100, 2, '.', '').'%',
+                'settlement_at' => is_string($record->occurred_at)
+                    ? $record->occurred_at
+                    : '--',
             ])
             ->values()
             ->all();

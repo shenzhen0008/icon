@@ -12,6 +12,7 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withCommands([
         \App\Modules\Referral\Console\Commands\ProcessReferralCommissionCommand::class,
+        \App\Modules\Settlement\Console\Commands\ProcessDailySettlementCommand::class,
     ])
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->encryptCookies(except: [
