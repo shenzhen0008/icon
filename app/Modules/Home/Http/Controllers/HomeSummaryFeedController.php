@@ -14,6 +14,8 @@ class HomeSummaryFeedController extends Controller
 
     public function __invoke(): JsonResponse
     {
-        return response()->json($this->homeSummaryService->resolve());
+        return response()->json(
+            $this->homeSummaryService->resolve(auth('web')->id())
+        );
     }
 }

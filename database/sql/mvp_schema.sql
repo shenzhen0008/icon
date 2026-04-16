@@ -558,6 +558,79 @@ CREATE TABLE `home_display_settings` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `popup_campaigns`
+--
+
+DROP TABLE IF EXISTS `popup_campaigns`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `popup_campaigns` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `content` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `level` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'info',
+  `requires_ack` tinyint(1) NOT NULL DEFAULT '0',
+  `starts_at` datetime DEFAULT NULL,
+  `ends_at` datetime DEFAULT NULL,
+  `status` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'draft',
+  `created_by` bigint(20) unsigned NOT NULL,
+  `sent_at` datetime DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_popup_campaigns_status_time` (`status`,`starts_at`,`ends_at`),
+  KEY `idx_popup_campaigns_created_by` (`created_by`),
+  CONSTRAINT `popup_campaigns_created_by_foreign` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`) ON DELETE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `popup_campaign_user`
+--
+
+DROP TABLE IF EXISTS `popup_campaign_user`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `popup_campaign_user` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `campaign_id` bigint(20) unsigned NOT NULL,
+  `user_id` bigint(20) unsigned NOT NULL,
+  `delivery_status` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'pending',
+  `pushed_at` datetime DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_campaign_user` (`campaign_id`,`user_id`),
+  KEY `idx_popup_target_user_status` (`user_id`,`delivery_status`),
+  CONSTRAINT `popup_campaign_user_campaign_id_foreign` FOREIGN KEY (`campaign_id`) REFERENCES `popup_campaigns` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `popup_campaign_user_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `popup_receipts`
+--
+
+DROP TABLE IF EXISTS `popup_receipts`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `popup_receipts` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `campaign_id` bigint(20) unsigned NOT NULL,
+  `user_id` bigint(20) unsigned NOT NULL,
+  `shown_at` datetime DEFAULT NULL,
+  `dismissed_at` datetime DEFAULT NULL,
+  `confirmed_at` datetime DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_popup_receipt` (`campaign_id`,`user_id`),
+  KEY `idx_popup_receipt_user` (`user_id`),
+  CONSTRAINT `popup_receipts_campaign_id_foreign` FOREIGN KEY (`campaign_id`) REFERENCES `popup_campaigns` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `popup_receipts_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Dumping events for database 'icon_market'
 --
 

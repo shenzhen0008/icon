@@ -3,14 +3,18 @@
 namespace App\Modules\Home\Services;
 
 use App\Modules\Home\Models\HomeDisplaySetting;
+use App\Modules\PopupPush\Services\PopupFeedService;
 
 class HomeSummaryService
 {
-    public function __construct(private readonly DynamicDisplayValueService $dynamicDisplayValueService)
+    public function __construct(
+        private readonly DynamicDisplayValueService $dynamicDisplayValueService,
+        private readonly PopupFeedService $popupFeedService,
+    )
     {
     }
 
-    public function resolve(): array
+    public function resolve(?int $userId = null): array
     {
         $setting = HomeDisplaySetting::query()->firstOrCreate([
             'id' => 1,
@@ -30,6 +34,7 @@ class HomeSummaryService
         return [
             'participant_count' => $this->formatInteger($setting->summary_people_count),
             'total_profit' => $this->formatMoney($setting->summary_total_profit),
+            'popup' => $this->popupFeedService->resolveForUser($userId),
         ];
     }
 
