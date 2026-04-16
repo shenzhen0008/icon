@@ -1,5 +1,4 @@
 import { BrowserProvider, Contract, Interface, parseUnits } from 'ethers';
-import EthereumProvider from '@walletconnect/ethereum-provider';
 
 const homeOnchainEntry = document.getElementById('home-onchain-entry');
 const homeQuickPayPanel = document.getElementById('home-quick-pay-panel');
@@ -25,6 +24,18 @@ const onchainRechargeForm = document.querySelector('[data-onchain-recharge-form]
 let connectedWallet = null;
 let walletConnectProvider = null;
 let homeSelectedAsset = null;
+let walletConnectProviderClass = null;
+
+const getWalletConnectProviderClass = async () => {
+  if (walletConnectProviderClass) {
+    return walletConnectProviderClass;
+  }
+
+  const module = await import('@walletconnect/ethereum-provider');
+  walletConnectProviderClass = module.default;
+
+  return walletConnectProviderClass;
+};
 
 const requireGuestActivationBeforeHomePay = () => {
   const isGuest = homeIsGuestInput?.value === '1';
@@ -173,7 +184,8 @@ const connectWalletConnect = async (targetChainId = null) => {
   }
 
   const chainId = Number(targetChainId ?? chainIdInput?.value ?? onchainRechargeForm?.dataset.chainId ?? '56');
-  walletConnectProvider = await EthereumProvider.init({
+  const WalletConnectProvider = await getWalletConnectProviderClass();
+  walletConnectProvider = await WalletConnectProvider.init({
     projectId,
     chains: [chainId],
     optionalChains: [chainId],
