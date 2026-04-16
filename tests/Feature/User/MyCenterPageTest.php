@@ -22,7 +22,9 @@ class MyCenterPageTest extends TestCase
         $response->assertSee('临时账号');
         $response->assertSee('设置密码并注册');
         $response->assertSee('theme-pin-modal');
-        $response->assertSee('请输入 6 位数字密码');
+        $response->assertSee('请输入并确认 6 位数字密码');
+        $response->assertSee('输入 6 位 PIN');
+        $response->assertSee('确认 6 位 PIN');
         $response->assertDontSee('退出登录');
 
         $this->assertTrue(session()->has('temp_username'));
