@@ -10,44 +10,44 @@
   <x-layout.background-glow />
   <x-nav.top />
 
-  <main class="flex min-h-[calc(var(--app-vh,100dvh)-var(--top-nav-height,4rem)-var(--mobile-nav-height,4rem))] w-full flex-col pt-0 md:mx-auto md:max-w-4xl md:min-h-0 md:px-4 md:pb-12 md:pt-4">
-    <section class="relative overflow-hidden border border-[rgb(var(--theme-primary))]/20 bg-gradient-to-br from-[rgb(var(--theme-primary))]/85 via-[rgb(var(--theme-accent))]/75 to-[rgb(var(--theme-primary))]/70 px-5 pb-32 pt-6 text-white shadow-[0_20px_45px_rgb(var(--theme-primary))/0.24] md:rounded-[8px]">
+  <main class="flex min-h-[calc(var(--app-vh,100dvh)-var(--top-nav-height,4rem)-var(--mobile-nav-height,4rem))] w-full flex-col pt-0 md:mx-auto md:max-w-4xl md:min-h-0 md:px-4 md:pb-10 md:pt-3">
+    <section class="relative overflow-hidden border border-[rgb(var(--theme-primary))]/20 bg-gradient-to-br from-[rgb(var(--theme-primary))]/85 via-[rgb(var(--theme-accent))]/75 to-[rgb(var(--theme-primary))]/70 px-4 pb-24 pt-4 text-white shadow-[0_16px_34px_rgb(var(--theme-primary))/0.2] md:rounded-[8px]">
       <div class="relative z-10 max-w-[18rem] md:max-w-[20rem]">
         <p class="text-scale-micro font-semibold uppercase tracking-[0.12em] text-white/80">{{ __('pages/referral.hero_tagline') }}</p>
-        <h1 class="mt-2 whitespace-nowrap text-[clamp(1.95rem,8vw,2.65rem)] font-semibold leading-[1.02]">{{ __('pages/referral.hero_title') }}</h1>
-        <p class="mt-3 text-scale-body leading-6 text-white/85">
+        <h1 class="mt-1.5 whitespace-nowrap text-[clamp(1.72rem,7vw,2.3rem)] font-semibold leading-[1.04]">{{ __('pages/referral.hero_title') }}</h1>
+        <p class="mt-2 text-scale-body leading-5 text-white/85">
           {{ __('pages/referral.hero_subtitle') }}
         </p>
       </div>
 
-      <div class="pointer-events-none absolute inset-x-0 bottom-0 top-[5.75rem]">
-        <div class="absolute left-[-1.75rem] top-5 h-44 w-44 rounded-full bg-white/14"></div>
-        <div class="absolute right-[-2.25rem] top-12 h-52 w-52 rounded-full bg-white/12"></div>
-        <div class="absolute left-1/2 top-10 h-32 w-32 -translate-x-1/2 rounded-full bg-[#8eb1ff]/35 blur-xl"></div>
+      <div class="pointer-events-none absolute inset-x-0 bottom-0 top-[5.1rem]">
+        <div class="absolute left-[-1.75rem] top-4 h-36 w-36 rounded-full bg-white/14"></div>
+        <div class="absolute right-[-2.15rem] top-8 h-44 w-44 rounded-full bg-white/12"></div>
+        <div class="absolute left-1/2 top-8 h-28 w-28 -translate-x-1/2 rounded-full bg-[#8eb1ff]/35 blur-xl"></div>
 
         <img
           src="{{ asset('images/card.png') }}"
           alt=""
           aria-hidden="true"
-          class="absolute bottom-4 left-4 h-28 w-auto opacity-90 sm:h-32"
+          class="absolute bottom-3 left-3 h-24 w-auto opacity-90 sm:h-28"
         >
         <img
           src="{{ asset('images/coin.png') }}"
           alt=""
           aria-hidden="true"
-          class="absolute right-7 top-2 h-14 w-14 rotate-[12deg] drop-shadow-[0_10px_18px_rgba(255,177,0,0.35)]"
+          class="absolute right-6 top-2 h-12 w-12 rotate-[12deg] drop-shadow-[0_10px_18px_rgba(255,177,0,0.35)]"
         >
         <img
           src="{{ asset('images/coin.png') }}"
           alt=""
           aria-hidden="true"
-          class="absolute right-20 top-20 h-12 w-12 -rotate-[10deg] opacity-95 drop-shadow-[0_10px_18px_rgba(255,177,0,0.35)]"
+          class="absolute right-16 top-16 h-10 w-10 -rotate-[10deg] opacity-95 drop-shadow-[0_10px_18px_rgba(255,177,0,0.35)]"
         >
       </div>
     </section>
 
-    <section class="relative -mt-[5.5rem] mx-4 flex-1 rounded-[8px] border border-theme bg-theme-card p-5 shadow-[0_20px_45px_rgb(var(--theme-primary))/0.12] md:mx-0 md:flex-none">
-      <div class="rounded-[8px] border border-theme bg-theme-secondary/25 p-4">
+    <section class="relative -mt-[4.6rem] mx-4 flex-1 rounded-[8px] border border-theme bg-theme-card p-4 shadow-[0_14px_30px_rgb(var(--theme-primary))/0.1] md:mx-0 md:flex-none">
+      <div class="rounded-[8px] border border-theme bg-theme-secondary/25 p-3">
         <div class="relative flex items-center justify-between gap-3">
           <p class="text-scale-body font-semibold text-theme">{{ __('pages/referral.reward_info') }}</p>
           <button
@@ -65,7 +65,7 @@
             class="pointer-events-none absolute right-0 top-full z-10 mt-2 w-[min(22rem,calc(100vw-2rem))] translate-y-1 rounded-[8px] border border-theme bg-theme-card px-4 py-3 text-scale-body leading-6 text-theme-secondary opacity-0 shadow-[0_16px_35px_rgb(var(--theme-primary))/0.16] transition-all duration-200 ease-out"
           >
             <div class="absolute -top-2 right-3 h-4 w-4 rotate-45 border-l border-t border-theme bg-theme-card"></div>
-            <div class="relative max-h-[22rem] overflow-y-auto pr-1">
+            <div class="relative max-h-[18rem] overflow-y-auto pr-1">
               <p class="font-semibold text-theme">{{ __('pages/referral.help_title') }}</p>
               <p class="mt-2">{{ __('pages/referral.help_p1') }}</p>
               <p class="mt-2">{{ __('pages/referral.help_p2') }}</p>
@@ -76,41 +76,41 @@
           </div>
         </div>
 
-        <div class="grid grid-cols-2 gap-3">
-          <div class="mt-3 rounded-[8px] border border-theme bg-theme-card p-4 text-center shadow-[0_8px_20px_rgb(var(--theme-primary))/0.08]">
+        <div class="grid grid-cols-2 gap-2">
+          <div class="mt-2 rounded-[8px] border border-theme bg-theme-card p-3 text-center shadow-[0_8px_20px_rgb(var(--theme-primary))/0.08]">
             <p class="text-scale-micro font-medium text-theme-secondary">{{ __('pages/referral.level_1_title') }}</p>
-            <p class="mt-2 text-[clamp(1.55rem,6.5vw,2rem)] font-semibold text-[rgb(var(--theme-primary))]">{{ $dashboard['level_1_rate'] }}</p>
+            <p class="mt-1.5 text-[clamp(1.4rem,6vw,1.8rem)] font-semibold text-[rgb(var(--theme-primary))]">{{ $dashboard['level_1_rate'] }}</p>
             <p class="mt-1 text-scale-micro text-theme-secondary">{{ __('pages/referral.level_1_count_label') }}</p>
-            <p class="mt-1 text-scale-title font-semibold text-theme">{{ $dashboard['level_one_count'] }}</p>
+            <p class="text-scale-title font-semibold text-theme">{{ $dashboard['level_one_count'] }}</p>
           </div>
-          <div class="mt-3 rounded-[8px] border border-theme bg-theme-card p-4 text-center shadow-[0_8px_20px_rgb(var(--theme-primary))/0.08]">
+          <div class="mt-2 rounded-[8px] border border-theme bg-theme-card p-3 text-center shadow-[0_8px_20px_rgb(var(--theme-primary))/0.08]">
             <p class="text-scale-micro font-medium text-theme-secondary">{{ __('pages/referral.level_2_title') }}</p>
-            <p class="mt-2 text-[clamp(1.55rem,6.5vw,2rem)] font-semibold text-[rgb(var(--theme-accent))]">{{ $dashboard['level_2_rate'] }}</p>
+            <p class="mt-1.5 text-[clamp(1.4rem,6vw,1.8rem)] font-semibold text-[rgb(var(--theme-accent))]">{{ $dashboard['level_2_rate'] }}</p>
             <p class="mt-1 text-scale-micro text-theme-secondary">{{ __('pages/referral.level_2_count_label') }}</p>
-            <p class="mt-1 text-scale-title font-semibold text-theme">{{ $dashboard['level_two_count'] }}</p>
+            <p class="text-scale-title font-semibold text-theme">{{ $dashboard['level_two_count'] }}</p>
           </div>
         </div>
       </div>
 
-      <div class="mt-4 border-t border-theme pt-4">
+      <div class="mt-3 border-t border-theme pt-3">
         <p class="text-scale-micro font-semibold uppercase tracking-[0.12em] text-[rgb(var(--theme-primary))]">{{ __('pages/referral.invite_code') }}</p>
-        <div class="mt-2 rounded-[8px] border border-theme bg-theme-secondary/20 px-4 py-3">
-          <p class="break-all text-[clamp(1.2rem,5vw,1.55rem)] font-semibold tracking-[0.18em] text-theme">{{ $dashboard['invite_code'] }}</p>
+        <div class="mt-1.5 rounded-[8px] border border-theme bg-theme-secondary/20 px-3 py-2.5">
+          <p class="break-all text-[clamp(1.05rem,4.3vw,1.35rem)] font-semibold tracking-[0.14em] text-theme">{{ $dashboard['invite_code'] }}</p>
         </div>
       </div>
 
-      <div class="mt-4">
+      <div class="mt-3">
         <p class="text-scale-micro font-semibold uppercase tracking-[0.12em] text-[rgb(var(--theme-primary))]">{{ __('pages/referral.invite_link') }}</p>
-        <div class="mt-2 rounded-[8px] border border-theme bg-theme-secondary/20 px-4 py-3">
-          <p id="referral-invite-url" class="break-all text-scale-body leading-6 text-theme-secondary">{{ $dashboard['invite_url'] }}</p>
+        <div class="mt-1.5 rounded-[8px] border border-theme bg-theme-secondary/20 px-3 py-2.5">
+          <p id="referral-invite-url" class="break-all text-scale-body leading-5 text-theme-secondary">{{ $dashboard['invite_url'] }}</p>
         </div>
       </div>
 
-      <div class="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
-        <button type="button" id="copy-referral-link" data-referral-url="{{ $dashboard['invite_url'] }}" class="text-scale-ui inline-flex min-h-[3.25rem] items-center justify-center rounded-[8px] border border-theme bg-theme-secondary px-4 font-semibold text-theme transition hover:border-[rgb(var(--theme-primary))]/40 hover:text-[rgb(var(--theme-primary))]">
+      <div class="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-2">
+        <button type="button" id="copy-referral-link" data-referral-url="{{ $dashboard['invite_url'] }}" class="text-scale-ui inline-flex min-h-[2.85rem] items-center justify-center rounded-[8px] border border-theme bg-theme-secondary px-4 font-semibold text-theme transition hover:border-[rgb(var(--theme-primary))]/40 hover:text-[rgb(var(--theme-primary))]">
           {{ __('pages/referral.copy_link') }}
         </button>
-        <button type="button" id="share-referral-link" data-referral-url="{{ $dashboard['invite_url'] }}" class="text-scale-ui inline-flex min-h-[3.25rem] items-center justify-center rounded-[8px] bg-[rgb(var(--theme-primary))] px-4 font-semibold text-theme-on-primary shadow-[0_12px_25px_rgb(var(--theme-primary))/0.28] transition hover:bg-[rgb(var(--theme-primary))]/90">
+        <button type="button" id="share-referral-link" data-referral-url="{{ $dashboard['invite_url'] }}" class="text-scale-ui inline-flex min-h-[2.85rem] items-center justify-center rounded-[8px] bg-[rgb(var(--theme-primary))] px-4 font-semibold text-theme-on-primary shadow-[0_12px_25px_rgb(var(--theme-primary))/0.28] transition hover:bg-[rgb(var(--theme-primary))]/90">
           {{ __('pages/referral.share_now') }}
         </button>
       </div>
