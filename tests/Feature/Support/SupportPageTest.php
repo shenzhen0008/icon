@@ -34,4 +34,17 @@ class SupportPageTest extends TestCase
             ->assertSee('bg-theme text-theme')
             ->assertSee('客服系统暂未配置完成');
     }
+
+    public function test_support_page_renders_english_ui_copy_when_locale_is_en(): void
+    {
+        config()->set('support.tawk.enabled', false);
+        config()->set('support.tawk.property_id', null);
+        config()->set('support.tawk.widget_id', null);
+
+        $this->get('/support?locale=en')
+            ->assertOk()
+            ->assertSee('Support Center')
+            ->assertSee('Contact online support directly inside the website.')
+            ->assertSee('Support system is not configured yet. Please try again later.');
+    }
 }

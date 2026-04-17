@@ -21,11 +21,11 @@ class RechargePaymentRequestTest extends TestCase
         $this->createReceiver('ETH', 'Ethereum', '0x-eth');
         $this->createReceiver('DOGE', 'Dogecoin', 'D-doge');
 
-        $this->get('/recharge')
+        $this->get('/recharge?locale=zh-CN')
             ->assertOk()
-            ->assertSee('RECEIVE充值')
-            ->assertSee('SEND提款')
-            ->assertSee('CONVERT兑换')
+            ->assertSee('充值')
+            ->assertSee('提款')
+            ->assertSee('兑换')
             ->assertSee('data-fund-mode-button="receive"', false)
             ->assertSee('data-fund-mode-button="send"', false)
             ->assertSee('data-fund-mode-button="convert"', false)
@@ -53,6 +53,25 @@ class RechargePaymentRequestTest extends TestCase
             ->assertSee('id="hero-live-btn"', false)
             ->assertDontSee('Welcome to AI Smart Contracts')
             ->assertDontSee('Artificial intelligence trading');
+    }
+
+    public function test_recharge_page_localizes_fixed_ui_copy_for_english(): void
+    {
+        $this->createReceiver('USDT', 'TRC20', 'T-usdt');
+
+        $this->get('/recharge?locale=en')
+            ->assertOk()
+            ->assertSee('Recharge | Icon Market')
+            ->assertSee('RECEIVE')
+            ->assertSee('SEND')
+            ->assertSee('CONVERT')
+            ->assertSee('Currency Type')
+            ->assertSee('Network:')
+            ->assertSee('Copy Address')
+            ->assertSee('Quick Registration')
+            ->assertSee('Set Password and Register')
+            ->assertSee('Already have an account? Log in')
+            ->assertSee('Instructions');
     }
 
     public function test_authenticated_user_can_submit_recharge_payment_request(): void

@@ -20,11 +20,15 @@ class MyCenterPageTest extends TestCase
         $response->assertSee('存取款方式');
         $response->assertDontSee('持仓产品');
         $response->assertSee('临时账号');
-        $response->assertSee('设置密码并注册');
+        $response->assertDontSee('设置密码并注册');
         $response->assertSee('theme-pin-modal');
         $response->assertSee('请输入并确认 6 位数字交易 PIN');
         $response->assertSee('输入 6 位 PIN');
         $response->assertSee('确认 6 位 PIN');
+        $response->assertSee('const shouldAutoOpen = true;', false);
+        $response->assertSee('const closeRedirectUrl =', false);
+        $response->assertSee('locale=zh-CN', false);
+        $response->assertDontSee('const lockOpen = true;', false);
         $response->assertDontSee('退出登录');
 
         $this->assertTrue(session()->has('temp_username'));
@@ -99,5 +103,28 @@ class MyCenterPageTest extends TestCase
             ->assertSee("const modeStorageKey = 'home_hero_panel_mode';", false)
             ->assertSee("localStorage.getItem(modeStorageKey)", false)
             ->assertSee("setMode(savedMode === 'live' ? 'live' : 'damo');", false);
+    }
+
+    public function test_my_center_renders_english_ui_copy_when_locale_is_en(): void
+    {
+        $this->get('/me?locale=en')
+            ->assertOk()
+            ->assertSee('My Center | Icon Market')
+            ->assertSee('Deposit & Withdrawal')
+            ->assertSee('Please choose a deposit and withdrawal method.')
+            ->assertSee('Crypto Deposit')
+            ->assertSee('Bank Card')
+            ->assertSee('Next')
+            ->assertSee('Account Info')
+            ->assertSee('Temporary Account')
+            ->assertSee('Guest Not Registered')
+            ->assertSee('Account Status')
+            ->assertSee('Created At')
+            ->assertSee('Copy Account')
+            ->assertSee('Set Trading PIN')
+            ->assertSee('Please enter and confirm a 6-digit trading PIN.')
+            ->assertSee('Enter 6-digit PIN')
+            ->assertSee('Confirm 6-digit PIN')
+            ->assertSee('Confirm Registration');
     }
 }

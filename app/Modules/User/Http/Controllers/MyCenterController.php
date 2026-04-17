@@ -38,9 +38,9 @@ class MyCenterController extends Controller
             return view('me.index', [
                 'isGuest' => false,
                 'profile' => [
-                    'label' => '正式账号',
+                    'label' => __('pages/me.account.formal_label'),
                     'id' => $user->username,
-                    'status' => '已登录',
+                    'status' => __('pages/me.account.formal_status'),
                     'created_at' => $user->created_at?->format('Y-m-d H:i') ?? '--',
                 ],
                 'summary' => [
@@ -58,9 +58,9 @@ class MyCenterController extends Controller
         return view('me.index', [
             'isGuest' => true,
             'profile' => [
-                'label' => '临时账号',
+                'label' => __('pages/me.account.temp_label'),
                 'id' => $temporaryUsername,
-                'status' => '访客未注册',
+                'status' => __('pages/me.account.temp_status'),
                 'created_at' => '--',
             ],
             'summary' => [

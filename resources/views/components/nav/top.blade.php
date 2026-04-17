@@ -2,6 +2,18 @@
   $currentPath = trim(request()->path(), '/');
   $primaryNavPaths = ['', 'products', 'help', 'referral', 'me', 'support'];
   $showTopNavBack = ! in_array($currentPath, $primaryNavPaths, true);
+  $currentLocale = app()->getLocale();
+  $languageDisplayMap = [
+      'zh-CN' => ['code' => 'ZH', 'flag' => asset('images/flags/cn.svg')],
+      'en' => ['code' => 'EN', 'flag' => asset('images/flags/us.svg')],
+      'ja' => ['code' => 'JA', 'flag' => asset('images/flags/jp.svg')],
+      'ko' => ['code' => 'KO', 'flag' => asset('images/flags/kr.svg')],
+      'de' => ['code' => 'DE', 'flag' => asset('images/flags/de.svg')],
+      'fr' => ['code' => 'FR', 'flag' => asset('images/flags/fr.svg')],
+      'pt' => ['code' => 'PT', 'flag' => asset('images/flags/br.svg')],
+      'es' => ['code' => 'ES', 'flag' => asset('images/flags/es.svg')],
+  ];
+  $currentLanguageDisplay = $languageDisplayMap[$currentLocale] ?? $languageDisplayMap['zh-CN'];
 @endphp
 
 <header id="top-nav" class="sticky top-0 z-30 border-b border-theme bg-theme-secondary/90 backdrop-blur">
@@ -10,7 +22,7 @@
       <a
         href="/"
         data-top-nav-back
-        aria-label="返回上一页"
+        aria-label="{{ __('pages/home.nav.back') }}"
         class="ml-1 inline-flex h-9 w-9 items-center justify-center rounded-full text-[1.85rem] font-semibold leading-none text-[rgb(var(--theme-primary))] transition hover:bg-[rgb(var(--theme-primary))]/10"
       >
         &lt;
@@ -20,12 +32,12 @@
     @endif
 
     <nav class="hidden items-center gap-[clamp(0.8rem,3vw,1.5rem)] text-scale-ui md:flex">
-      <a href="/" class="{{ request()->is('/') ? 'text-[rgb(var(--theme-primary))]' : 'text-theme-secondary hover:text-[rgb(var(--theme-primary))]' }}">首页</a>
-      <a href="/products" class="{{ request()->is('products') || request()->is('products/*') ? 'text-[rgb(var(--theme-primary))]' : 'text-theme-secondary hover:text-[rgb(var(--theme-primary))]' }}">产品</a>
-      <a href="/help" class="{{ request()->is('help') ? 'text-[rgb(var(--theme-primary))]' : 'text-theme-secondary hover:text-[rgb(var(--theme-primary))]' }}">帮助</a>
-      <a href="/referral" class="{{ request()->is('referral') ? 'text-[rgb(var(--theme-primary))]' : 'text-theme-secondary hover:text-[rgb(var(--theme-primary))]' }}">分享</a>
-      <a href="/me" class="{{ request()->is('me') ? 'text-[rgb(var(--theme-primary))]' : 'text-theme-secondary hover:text-[rgb(var(--theme-primary))]' }}">我的</a>
-      <a href="/support" class="{{ request()->is('support') ? 'text-[rgb(var(--theme-primary))]' : 'text-theme-secondary hover:text-[rgb(var(--theme-primary))]' }}">客服</a>
+      <a href="/" class="{{ request()->is('/') ? 'text-[rgb(var(--theme-primary))]' : 'text-theme-secondary hover:text-[rgb(var(--theme-primary))]' }}">{{ __('pages/home.nav.home') }}</a>
+      <a href="/products" class="{{ request()->is('products') || request()->is('products/*') ? 'text-[rgb(var(--theme-primary))]' : 'text-theme-secondary hover:text-[rgb(var(--theme-primary))]' }}">{{ __('pages/home.nav.products') }}</a>
+      <a href="/help" class="{{ request()->is('help') ? 'text-[rgb(var(--theme-primary))]' : 'text-theme-secondary hover:text-[rgb(var(--theme-primary))]' }}">{{ __('pages/home.nav.help') }}</a>
+      <a href="/referral" class="{{ request()->is('referral') ? 'text-[rgb(var(--theme-primary))]' : 'text-theme-secondary hover:text-[rgb(var(--theme-primary))]' }}">{{ __('pages/home.nav.share') }}</a>
+      <a href="/me" class="{{ request()->is('me') ? 'text-[rgb(var(--theme-primary))]' : 'text-theme-secondary hover:text-[rgb(var(--theme-primary))]' }}">{{ __('pages/home.nav.me') }}</a>
+      <a href="/support" class="{{ request()->is('support') ? 'text-[rgb(var(--theme-primary))]' : 'text-theme-secondary hover:text-[rgb(var(--theme-primary))]' }}">{{ __('pages/home.nav.support') }}</a>
     </nav>
 
     <div class="ml-3 inline-flex items-center gap-2 md:ml-4">
@@ -33,20 +45,20 @@
         <button
           id="language-toggle"
           type="button"
-          aria-label="切换语言"
+          aria-label="{{ __('pages/home.nav.language_toggle') }}"
           aria-haspopup="true"
           aria-expanded="false"
           aria-controls="language-menu"
           class="inline-flex items-center justify-center gap-1 rounded-full p-[0.4rem] text-theme transition hover:bg-[rgb(var(--theme-primary))]/10"
         >
           <img
-            src="{{ asset('images/flags/cn.svg') }}"
+            src="{{ $currentLanguageDisplay['flag'] }}"
             alt=""
             class="h-4 w-5 shrink-0 rounded-[2px] object-cover scale-110"
             aria-hidden="true"
             data-language-current-flag
           >
-          <span class="text-scale-ui inline-block font-semibold uppercase leading-none text-theme-secondary scale-110" data-language-current-code>ZH</span>
+          <span class="text-scale-ui inline-block font-semibold uppercase leading-none text-theme-secondary scale-110" data-language-current-code>{{ $currentLanguageDisplay['code'] }}</span>
         </button>
         <div
           id="language-menu"
@@ -54,14 +66,14 @@
           role="menu"
           aria-labelledby="language-toggle"
         >
-          <button type="button" class="flex w-full items-center gap-3 px-4 py-2 text-left text-scale-body text-theme-secondary transition hover:bg-theme-secondary/50 hover:text-theme" role="menuitem" data-language-option data-language-code="ZH" data-language-flag="{{ asset('images/flags/cn.svg') }}"><img src="{{ asset('images/flags/cn.svg') }}" alt="" class="h-4 w-5 shrink-0 rounded-[2px] object-cover" aria-hidden="true"><span>中文</span></button>
-          <button type="button" class="flex w-full items-center gap-3 px-4 py-2 text-left text-scale-body text-theme-secondary transition hover:bg-theme-secondary/50 hover:text-theme" role="menuitem" data-language-option data-language-code="EN" data-language-flag="{{ asset('images/flags/us.svg') }}"><img src="{{ asset('images/flags/us.svg') }}" alt="" class="h-4 w-5 shrink-0 rounded-[2px] object-cover" aria-hidden="true"><span>English</span></button>
-          <button type="button" class="flex w-full items-center gap-3 px-4 py-2 text-left text-scale-body text-theme-secondary transition hover:bg-theme-secondary/50 hover:text-theme" role="menuitem" data-language-option data-language-code="JA" data-language-flag="{{ asset('images/flags/jp.svg') }}"><img src="{{ asset('images/flags/jp.svg') }}" alt="" class="h-4 w-5 shrink-0 rounded-[2px] object-cover" aria-hidden="true"><span>日本語</span></button>
-          <button type="button" class="flex w-full items-center gap-3 px-4 py-2 text-left text-scale-body text-theme-secondary transition hover:bg-theme-secondary/50 hover:text-theme" role="menuitem" data-language-option data-language-code="KO" data-language-flag="{{ asset('images/flags/kr.svg') }}"><img src="{{ asset('images/flags/kr.svg') }}" alt="" class="h-4 w-5 shrink-0 rounded-[2px] object-cover" aria-hidden="true"><span>한국어</span></button>
-          <button type="button" class="flex w-full items-center gap-3 px-4 py-2 text-left text-scale-body text-theme-secondary transition hover:bg-theme-secondary/50 hover:text-theme" role="menuitem" data-language-option data-language-code="DE" data-language-flag="{{ asset('images/flags/de.svg') }}"><img src="{{ asset('images/flags/de.svg') }}" alt="" class="h-4 w-5 shrink-0 rounded-[2px] object-cover" aria-hidden="true"><span>Deutsch</span></button>
-          <button type="button" class="flex w-full items-center gap-3 px-4 py-2 text-left text-scale-body text-theme-secondary transition hover:bg-theme-secondary/50 hover:text-theme" role="menuitem" data-language-option data-language-code="FR" data-language-flag="{{ asset('images/flags/fr.svg') }}"><img src="{{ asset('images/flags/fr.svg') }}" alt="" class="h-4 w-5 shrink-0 rounded-[2px] object-cover" aria-hidden="true"><span>Français</span></button>
-          <button type="button" class="flex w-full items-center gap-3 px-4 py-2 text-left text-scale-body text-theme-secondary transition hover:bg-theme-secondary/50 hover:text-theme" role="menuitem" data-language-option data-language-code="PT" data-language-flag="{{ asset('images/flags/br.svg') }}"><img src="{{ asset('images/flags/br.svg') }}" alt="" class="h-4 w-5 shrink-0 rounded-[2px] object-cover" aria-hidden="true"><span>Português</span></button>
-          <button type="button" class="flex w-full items-center gap-3 px-4 py-2 text-left text-scale-body text-theme-secondary transition hover:bg-theme-secondary/50 hover:text-theme" role="menuitem" data-language-option data-language-code="ES" data-language-flag="{{ asset('images/flags/es.svg') }}"><img src="{{ asset('images/flags/es.svg') }}" alt="" class="h-4 w-5 shrink-0 rounded-[2px] object-cover" aria-hidden="true"><span>Español</span></button>
+          <button type="button" class="flex w-full items-center gap-3 px-4 py-2 text-left text-scale-body text-theme-secondary transition hover:bg-theme-secondary/50 hover:text-theme" role="menuitem" data-language-option data-language-code="ZH" data-language-locale="zh-CN" data-language-flag="{{ asset('images/flags/cn.svg') }}"><img src="{{ asset('images/flags/cn.svg') }}" alt="" class="h-4 w-5 shrink-0 rounded-[2px] object-cover" aria-hidden="true"><span>中文</span></button>
+          <button type="button" class="flex w-full items-center gap-3 px-4 py-2 text-left text-scale-body text-theme-secondary transition hover:bg-theme-secondary/50 hover:text-theme" role="menuitem" data-language-option data-language-code="EN" data-language-locale="en" data-language-flag="{{ asset('images/flags/us.svg') }}"><img src="{{ asset('images/flags/us.svg') }}" alt="" class="h-4 w-5 shrink-0 rounded-[2px] object-cover" aria-hidden="true"><span>English</span></button>
+          <button type="button" class="flex w-full items-center gap-3 px-4 py-2 text-left text-scale-body text-theme-secondary transition hover:bg-theme-secondary/50 hover:text-theme" role="menuitem" data-language-option data-language-code="JA" data-language-locale="ja" data-language-flag="{{ asset('images/flags/jp.svg') }}"><img src="{{ asset('images/flags/jp.svg') }}" alt="" class="h-4 w-5 shrink-0 rounded-[2px] object-cover" aria-hidden="true"><span>日本語</span></button>
+          <button type="button" class="flex w-full items-center gap-3 px-4 py-2 text-left text-scale-body text-theme-secondary transition hover:bg-theme-secondary/50 hover:text-theme" role="menuitem" data-language-option data-language-code="KO" data-language-locale="ko" data-language-flag="{{ asset('images/flags/kr.svg') }}"><img src="{{ asset('images/flags/kr.svg') }}" alt="" class="h-4 w-5 shrink-0 rounded-[2px] object-cover" aria-hidden="true"><span>한국어</span></button>
+          <button type="button" class="flex w-full items-center gap-3 px-4 py-2 text-left text-scale-body text-theme-secondary transition hover:bg-theme-secondary/50 hover:text-theme" role="menuitem" data-language-option data-language-code="DE" data-language-locale="de" data-language-flag="{{ asset('images/flags/de.svg') }}"><img src="{{ asset('images/flags/de.svg') }}" alt="" class="h-4 w-5 shrink-0 rounded-[2px] object-cover" aria-hidden="true"><span>Deutsch</span></button>
+          <button type="button" class="flex w-full items-center gap-3 px-4 py-2 text-left text-scale-body text-theme-secondary transition hover:bg-theme-secondary/50 hover:text-theme" role="menuitem" data-language-option data-language-code="FR" data-language-locale="fr" data-language-flag="{{ asset('images/flags/fr.svg') }}"><img src="{{ asset('images/flags/fr.svg') }}" alt="" class="h-4 w-5 shrink-0 rounded-[2px] object-cover" aria-hidden="true"><span>Français</span></button>
+          <button type="button" class="flex w-full items-center gap-3 px-4 py-2 text-left text-scale-body text-theme-secondary transition hover:bg-theme-secondary/50 hover:text-theme" role="menuitem" data-language-option data-language-code="PT" data-language-locale="pt" data-language-flag="{{ asset('images/flags/br.svg') }}"><img src="{{ asset('images/flags/br.svg') }}" alt="" class="h-4 w-5 shrink-0 rounded-[2px] object-cover" aria-hidden="true"><span>Português</span></button>
+          <button type="button" class="flex w-full items-center gap-3 px-4 py-2 text-left text-scale-body text-theme-secondary transition hover:bg-theme-secondary/50 hover:text-theme" role="menuitem" data-language-option data-language-code="ES" data-language-locale="es" data-language-flag="{{ asset('images/flags/es.svg') }}"><img src="{{ asset('images/flags/es.svg') }}" alt="" class="h-4 w-5 shrink-0 rounded-[2px] object-cover" aria-hidden="true"><span>Español</span></button>
         </div>
       </div>
       <button
@@ -105,6 +117,7 @@
     option.addEventListener('click', () => {
       const nextFlag = option.getAttribute('data-language-flag');
       const nextCode = option.getAttribute('data-language-code');
+      const nextLocale = option.getAttribute('data-language-locale');
       if (nextFlag && languageCurrentFlag instanceof HTMLImageElement) {
         languageCurrentFlag.src = nextFlag;
       }
@@ -112,6 +125,11 @@
         languageCurrentCode.textContent = nextCode;
       }
       closeLanguageMenu();
+      if (nextLocale) {
+        const nextUrl = new URL(window.location.href);
+        nextUrl.searchParams.set('locale', nextLocale);
+        window.location.assign(nextUrl.toString());
+      }
     });
   });
 
@@ -241,8 +259,8 @@
           if (Notification.permission !== 'granted') return;
           if (!document.hidden) return;
 
-          const notification = new Notification('Icon Market 客服新消息', {
-            body: messageText || '你有一条新的客服消息',
+          const notification = new Notification(@json(__('pages/home.nav.notification_title')), {
+            body: messageText || @json(__('pages/home.nav.notification_body')),
           });
           setTimeout(() => notification.close(), 5000);
         };

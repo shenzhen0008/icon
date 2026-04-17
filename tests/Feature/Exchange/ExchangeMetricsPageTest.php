@@ -15,16 +15,17 @@ class ExchangeMetricsPageTest extends TestCase
     {
         $response = $this->get('/')
             ->assertOk()
-            ->assertSee('Welcome to AI Smart Contracts')
-            ->assertSee('Artificial intelligence trading')
+            ->assertSee('欢迎来到 AI 智能合约')
+            ->assertSee('人工智能量化交易')
             ->assertDontSee('交易记录')
             ->assertDontSee('收入记录')
             ->assertDontSee('id="hero-trade-record-btn"', false)
             ->assertDontSee('id="hero-income-record-btn"', false)
             ->assertDontSee('href="/home/hero-panel/trade-records?mode=demo"', false)
             ->assertDontSee('href="/home/hero-panel/income-records?mode=demo"', false)
-            ->assertSee('DEMO')
-            ->assertSee('#demo')
+            ->assertSee('演示')
+            ->assertSee('实盘')
+            ->assertSee('#演示')
             ->assertDontSee('#damo');
     }
 
@@ -50,9 +51,9 @@ class ExchangeMetricsPageTest extends TestCase
 
         $this->get('/')
             ->assertOk()
-            ->assertSee('Open transaction!')
-            ->assertSee('2000+ base factor library with AI support to more catch derivative factors, one step ahead!')
-            ->assertSee('Number of people')
+            ->assertSee('开启交易！')
+            ->assertSee('2000+ 基础因子库，AI 持续捕捉更多衍生因子，助你快人一步。')
+            ->assertSee('参与人数')
             ->assertSee('总盘获利值')
             ->assertSee('实时操盘平台')
             ->assertSee('Binance')

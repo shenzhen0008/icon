@@ -153,4 +153,43 @@ class PositionOrdersPageTest extends TestCase
             ->assertDontSee('已转购买')
             ->assertSee('暂无预订订单');
     }
+
+    public function test_orders_page_localizes_fixed_ui_copy_for_english(): void
+    {
+        $user = User::factory()->create();
+        $product = Product::query()->create([
+            'name' => 'Reserve Product',
+            'code' => 'RSP',
+            'unit_price' => 1000,
+            'is_active' => true,
+            'trade_mode' => 'reserve',
+        ]);
+
+        Position::query()->create([
+            'user_id' => $user->id,
+            'product_id' => $product->id,
+            'principal' => 1200,
+            'status' => 'open',
+            'opened_at' => now(),
+        ]);
+
+        DB::table('product_reservations')->insert([
+            'user_id' => $user->id,
+            'product_id' => $product->id,
+            'amount_usdt' => 1500,
+            'status' => 'approved',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        $this->actingAs($user)
+            ->get('/me/orders?locale=en')
+            ->assertOk()
+            ->assertSee('Orders')
+            ->assertSee('Positions')
+            ->assertSee('View Order')
+            ->assertSee('Reservation Orders')
+            ->assertSee('Approved')
+            ->assertSee('Reserve Product');
+    }
 }

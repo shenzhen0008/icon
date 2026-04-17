@@ -195,4 +195,14 @@ class AuthenticationFlowTest extends TestCase
             ->assertSee('访客未注册')
             ->assertDontSee($user->username);
     }
+
+    public function test_login_page_localizes_fixed_ui_copy_for_english(): void
+    {
+        $this->get('/login?locale=en')
+            ->assertOk()
+            ->assertSee('Login')
+            ->assertSee('Username (21 chars)')
+            ->assertSee('Password')
+            ->assertSee('Remember me');
+    }
 }

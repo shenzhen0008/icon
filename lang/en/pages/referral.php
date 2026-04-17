@@ -1,0 +1,28 @@
+<?php
+
+return [
+    'html_lang' => 'en',
+    'meta_title' => 'Referral | Icon Market',
+    'hero_tagline' => 'Invite & Earn',
+    'hero_title' => 'Referral Program',
+    'hero_subtitle' => 'Invite friends to join and earn 5% direct rewards plus 2% indirect rewards. Key info is all on one page.',
+    'reward_info' => 'Reward Details',
+    'reward_help_aria' => 'View reward details',
+    'help_title' => 'Is there a reward for inviting friends?',
+    'help_p1' => 'Yes, you can invite your friends to join AI Smart Contracts through your personal link and successfully invite your friends to join AI Smart Contracts. You will get an invitation bonus provided by AI Smart Contracts platform. The specific invitation rewards are as follows:',
+    'help_p2' => '① User A invites User B (User A can get 5% of the revenue from User B\'s participation in AI Smart Contracts).',
+    'help_p3' => '② User B invites User C (User B can get 5% of the revenue from User C\'s participation in AI Smart Contracts, while User A can get 3% of the revenue from User C\'s participation in AI Smart Contracts).',
+    'help_p4' => '③ User C invites User D (User C can get 5% of the revenue from User D\'s participation in AI smart contracts, User B can get 3% of the revenue from User D\'s participation in AI smart contracts, and User A can get 1% of the revenue from User D\'s .)',
+    'help_p5' => 'Example: User D participates in an AI smart contract to earn 100 USDT. User A will receive an invitation bonus of 1 USDT from the AI Smart Contracts platform. User B will receive an invitation bonus of 3 USDT from the AI Smart Contracts platform. User C will receive an invitation bonus of 5 USDT from the AI Smart Contracts Platform. All rewards are provided by the AI Smart Contracts Platform and do not affect the earnings of any user.',
+    'level_1_title' => 'Level 1 Reward (Direct)',
+    'level_1_count_label' => 'Level 1 Invites',
+    'level_2_title' => 'Level 2 Reward (Indirect)',
+    'level_2_count_label' => 'Level 2 Invites',
+    'invite_code' => 'Invite Code',
+    'invite_link' => 'Invite Link',
+    'copy_link' => 'Copy Link',
+    'share_now' => 'Share Now',
+    'copied' => 'Copied',
+    'share_text' => 'Icon Market referral invite',
+    'link_copied_alert' => 'Link copied',
+];

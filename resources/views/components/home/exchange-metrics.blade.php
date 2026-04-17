@@ -11,7 +11,7 @@
     data-shared-profit-max-delta="{{ $sharedProfit['max_delta'] ?? '0.00' }}"
 >
     <div class="mb-4 flex items-center justify-between gap-3">
-        <h2 class="text-scale-title font-semibold text-theme">实时操盘平台</h2>
+        <h2 class="text-scale-title font-semibold text-theme">{{ __('pages/home.exchange.title') }}</h2>
     </div>
 
     <div id="exchange-metrics-list" class="-mx-5 space-y-3">
@@ -42,9 +42,9 @@
 
                 <div class="hidden border-t border-theme px-4 py-3 text-scale-body" data-detail-row="{{ $metric['exchange_code'] }}">
                     <div class="grid grid-cols-3 border-b border-theme pb-2 text-scale-micro text-theme-secondary">
-                        <span>Currency</span>
-                        <span class="text-center">24h Volume</span>
-                        <span class="text-right">Liquidity</span>
+                        <span>{{ __('pages/home.exchange.currency') }}</span>
+                        <span class="text-center">{{ __('pages/home.exchange.volume_24h') }}</span>
+                        <span class="text-right">{{ __('pages/home.exchange.liquidity') }}</span>
                     </div>
 
                     <div class="mt-2 grid grid-cols-3 items-center gap-2">
@@ -81,7 +81,7 @@
                         <span class="text-center text-theme" data-field="eth_value">{{ $metric['eth_value'] }}</span>
                         <span class="text-right text-theme" data-field="eth_liquidity">{{ $metric['eth_liquidity'] }}</span>
                     </div>
-                    <p class="mt-2 text-scale-micro text-theme-secondary" data-field="updated_at">更新: --</p>
+                    <p class="mt-2 text-scale-micro text-theme-secondary" data-field="updated_at">{{ __('pages/home.exchange.updated_prefix') }}: --</p>
                 </div>
             </article>
         @endforeach
@@ -100,7 +100,7 @@
             const now = new Date();
             const timestamp = now.toLocaleString('sv-SE', { hour12: false }).replace('T', ' ');
             updatedFields.forEach((field) => {
-                field.textContent = `更新: ${timestamp}`;
+                field.textContent = `${@json(__('pages/home.exchange.updated_prefix'))}: ${timestamp}`;
             });
         };
 

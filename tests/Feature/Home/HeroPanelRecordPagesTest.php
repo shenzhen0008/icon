@@ -143,4 +143,65 @@ class HeroPanelRecordPagesTest extends TestCase
             ->assertUnprocessable()
             ->assertJsonValidationErrors(['per_page']);
     }
+
+    public function test_trade_records_page_localizes_fixed_ui_copy_for_english(): void
+    {
+        $user = User::factory()->create();
+
+        $this->actingAs($user)
+            ->get('/home/hero-panel/trade-records?locale=en')
+            ->assertOk()
+            ->assertSee('Trade Records')
+            ->assertSee('Type')
+            ->assertSee('No trade records yet')
+            ->assertSee('Back to Home');
+    }
+
+    public function test_income_records_page_localizes_fixed_ui_copy_for_english(): void
+    {
+        $user = User::factory()->create();
+        $product = Product::query()->create([
+            'name' => 'Alpha Pool',
+            'code' => 'ALPHA',
+            'unit_price' => '1000.00',
+            'is_active' => true,
+            'sort' => 1,
+        ]);
+
+        $position = Position::query()->create([
+            'user_id' => $user->id,
+            'product_id' => $product->id,
+            'principal' => '500.00',
+            'status' => 'open',
+            'opened_at' => now()->subDay(),
+        ]);
+
+        DailySettlement::query()->create([
+            'user_id' => $user->id,
+            'product_id' => $product->id,
+            'position_id' => $position->id,
+            'settlement_date' => now()->toDateString(),
+            'rate' => '0.0200',
+            'profit' => '10.00',
+        ]);
+
+        BalanceLedger::query()->create([
+            'user_id' => $user->id,
+            'type' => 'referral_commission_credit',
+            'amount' => '15.10',
+            'before_balance' => '400.00',
+            'after_balance' => '415.10',
+            'biz_ref_type' => 'referral_commission',
+            'biz_ref_id' => 'settlement:99:level:1',
+            'occurred_at' => now()->subHour(),
+        ]);
+
+        $this->actingAs($user)
+            ->get('/home/hero-panel/income-records?locale=en')
+            ->assertOk()
+            ->assertSee('Income Records')
+            ->assertSee('Product')
+            ->assertSee('Back to Home')
+            ->assertSee('Referral Commission');
+    }
 }

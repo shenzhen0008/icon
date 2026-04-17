@@ -20,4 +20,15 @@ class HelpPageTest extends TestCase
             ->assertSee('<details', false)
             ->assertSee('<summary', false);
     }
+
+    public function test_help_page_localizes_fixed_ui_copy_for_english_without_changing_faq_data_source(): void
+    {
+        $this->get('/help?locale=en')
+            ->assertOk()
+            ->assertSee('Help Center')
+            ->assertSee('Frequently Asked Questions')
+            ->assertSee('Online Support')
+            ->assertSee('你们是谁？')
+            ->assertSee('如何充值？');
+    }
 }

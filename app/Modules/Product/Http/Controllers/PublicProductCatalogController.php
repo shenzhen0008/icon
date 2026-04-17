@@ -6,11 +6,16 @@ use App\Http\Controllers\Controller;
 use App\Modules\Position\Models\Position;
 use App\Modules\Product\Models\Product;
 use App\Modules\Settlement\Models\DailySettlement;
+use App\Modules\User\Services\TemporaryAccountService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 
 class PublicProductCatalogController extends Controller
 {
+    public function __construct(private readonly TemporaryAccountService $temporaryAccountService)
+    {
+    }
+
     public function __invoke(): View
     {
         $summary = [
@@ -40,6 +45,8 @@ class PublicProductCatalogController extends Controller
                 'total_profit' => '$'.number_format($totalProfit, 2, '.', ''),
                 'orders_count' => (string) $ordersCount,
             ];
+        } else {
+            $this->temporaryAccountService->ensureGuestTempUsername(request());
         }
 
         $products = Product::query()
@@ -56,7 +63,7 @@ class PublicProductCatalogController extends Controller
                 'purchase_limit_label' => $this->formatPurchaseLimitLabel($product->purchase_limit_count),
                 'limit_range' => $this->formatRange($product->limit_min_usdt, $product->limit_max_usdt),
                 'rate_range' => $this->formatPercentRange($product->rate_min_percent, $product->rate_max_percent),
-                'cycle_label' => $product->cycle_days === null ? '--' : $product->cycle_days.'天',
+                'cycle_label' => $this->formatCycleLabel($product->cycle_days),
                 'product_icon_path' => $product->product_icon_path,
                 'symbol_icon_paths' => $this->resolveSymbolIconPaths($product->symbol_icon_paths),
             ])
@@ -65,6 +72,7 @@ class PublicProductCatalogController extends Controller
         return view('products.index', [
             'products' => $products,
             'summary' => $summary,
+            'isGuest' => $user === null,
         ]);
     }
 
@@ -89,10 +97,23 @@ class PublicProductCatalogController extends Controller
     private function formatPurchaseLimitLabel(null|int $purchaseLimitCount): string
     {
         if ($purchaseLimitCount === null) {
-            return '不限次';
+            return (string) __('pages/product-list.purchase_limit_unlimited');
         }
 
-        return (string) max(0, $purchaseLimitCount).'次';
+        return (string) __('pages/product-list.purchase_limit_count', [
+            'count' => (string) max(0, $purchaseLimitCount),
+        ]);
+    }
+
+    private function formatCycleLabel(null|int $cycleDays): string
+    {
+        if ($cycleDays === null) {
+            return '--';
+        }
+
+        return (string) __('pages/product-list.cycle_days_format', [
+            'days' => (string) max(0, $cycleDays),
+        ]);
     }
 
     /**

@@ -1,0 +1,48 @@
+<?php
+
+return [
+    'html_lang' => 'zh-CN',
+    'meta_title' => 'Icon Market | 数字资产管理平台',
+    'hero' => [
+        'title' => '欢迎来到 AI 智能合约',
+        'subtitle' => '人工智能量化交易',
+        'trade_records' => '交易记录',
+        'income_records' => '收入记录',
+        'available_balance' => '可用余额 (USDT)',
+        'total_earnings' => '累计收益 (USDT)',
+        'earnings_24h' => '24小时收益 (USDT)',
+        'mode_demo' => '演示',
+        'mode_live' => '实盘',
+        'mode_demo_badge' => '#演示',
+        'mode_live_badge' => '#实盘',
+        'live_load_failed' => 'LIVE 模式数据加载失败，请稍后重试。',
+    ],
+    'stats' => [
+        'title' => '开启交易！',
+        'subtitle' => '2000+ 基础因子库，AI 持续捕捉更多衍生因子，助你快人一步。',
+        'participant_count' => '参与人数',
+        'total_profit' => '总盘获利值',
+        'total_profit_suffix' => 'USDT',
+        'popup_confirm' => '我已知晓',
+        'popup_salutation_default' => '用户',
+    ],
+    'exchange' => [
+        'title' => '实时操盘平台',
+        'currency' => 'Currency',
+        'volume_24h' => '24h Volume',
+        'liquidity' => 'Liquidity',
+        'updated_prefix' => '更新',
+    ],
+    'nav' => [
+        'back' => '返回上一页',
+        'language_toggle' => '切换语言',
+        'home' => '首页',
+        'products' => '产品',
+        'help' => '帮助',
+        'share' => '分享',
+        'me' => '我的',
+        'support' => '客服',
+        'notification_title' => 'Icon Market 客服新消息',
+        'notification_body' => '你有一条新的客服消息',
+    ],
+];

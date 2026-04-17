@@ -1,0 +1,26 @@
+<?php
+
+return [
+    'html_lang' => 'zh-CN',
+    'meta_title' => '在线客服 | Icon Market',
+    'status_connecting' => '正在连接客服...',
+    'label_image' => '图片',
+    'input_placeholder' => '请输入消息...',
+    'button_send' => '发送',
+    'sound_prompt' => '开启消息提醒音？收到新消息时会播放提示音。',
+    'sound_later' => '稍后',
+    'sound_enable' => '开启',
+    'not_configured' => 'Stream Chat 尚未配置完成，请先设置 API Key 和 Secret。',
+    'name_self' => '我',
+    'name_support_default' => '客服',
+    'name_support_fallback' => '客服008',
+    'image_alt_uploaded' => 'uploaded image',
+    'label_self_prefix' => '我:',
+    'hint_image_uploading' => '图片上传中...',
+    'status_sound_enabled' => '提醒音已开启。',
+    'status_sound_enable_failed' => '提醒音开启失败，请再次点击。',
+    'error_token_failed' => '无法获取客服会话令牌，请稍后再试。',
+    'hint_image_send_failed' => '图片发送失败，请重试。',
+    'status_connected' => '客服已连接，可直接发送消息。',
+    'status_connect_failed' => '客服连接失败，请稍后重试。',
+];

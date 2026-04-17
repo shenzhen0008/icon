@@ -32,6 +32,20 @@ class StreamChatTest extends TestCase
             ], false);
     }
 
+    public function test_stream_chat_page_renders_english_ui_copy_when_locale_is_en(): void
+    {
+        config()->set('stream_chat.api_key', 'test-key');
+        config()->set('stream_chat.api_secret', 'test-secret');
+
+        $this->get('/stream-chat?locale=en')
+            ->assertOk()
+            ->assertSee('Online Support | Icon Market')
+            ->assertSee('Connecting to support...')
+            ->assertSee('Type your message...')
+            ->assertSee('Enable message alert sound? A tone will play when new messages arrive.')
+            ->assertSee('Enable');
+    }
+
     public function test_guest_can_get_stream_chat_token_payload(): void
     {
         config()->set('stream_chat.api_key', 'test-key');

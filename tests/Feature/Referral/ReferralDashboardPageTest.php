@@ -44,10 +44,6 @@ class ReferralDashboardPageTest extends TestCase
             ->assertSee('transition-all duration-200 ease-out', false)
             ->assertSee('opacity-0', false)
             ->assertSee('translate-y-1', false)
-            ->assertSee('Is there a reward for inviting friends?')
-            ->assertSee('You will get an invitation bonus provided by AI Smart Contracts platform.')
-            ->assertSee('User A can get 3% of the revenue from User C')
-            ->assertSee('All rewards are provided by the AI Smart Contracts Platform')
             ->assertSee('邀请好友有奖励吗？')
             ->assertSee('您可以通过个人专属链接邀请好友加入 AI 智能合约')
             ->assertSee('用户 A 可获得用户 C 参与 AI 智能合约收益的 3%')
@@ -68,6 +64,28 @@ class ReferralDashboardPageTest extends TestCase
             ->assertDontSee('二级邀请用户');
 
         $this->assertNotNull($user->invite_code);
+    }
+
+    public function test_referral_dashboard_renders_english_ui_copy_when_locale_is_en(): void
+    {
+        $user = User::factory()->create([
+            'invite_code' => 'ENCASE01',
+        ]);
+
+        $this->actingAs($user)
+            ->get('/referral?locale=en')
+            ->assertOk()
+            ->assertSee('Referral | Icon Market')
+            ->assertSee('Referral Program')
+            ->assertSee('Reward Details')
+            ->assertSee('aria-label="View reward details"', false)
+            ->assertSee('Is there a reward for inviting friends?')
+            ->assertSee('Level 1 Reward (Direct)')
+            ->assertSee('Level 2 Reward (Indirect)')
+            ->assertSee('Invite Code')
+            ->assertSee('Invite Link')
+            ->assertSee('Copy Link')
+            ->assertSee('Share Now');
     }
 
     public function test_referral_dashboard_shows_level_counts_only(): void

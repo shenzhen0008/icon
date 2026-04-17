@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="zh-CN" data-theme="{{ config('themes.active') }}">
+<html lang="{{ __('pages/help-center.html_lang') }}" data-theme="{{ config('themes.active') }}">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>帮助中心 | Icon Market</title>
+  <title>{{ __('pages/help-center.meta_title') }}</title>
   @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="min-h-screen bg-theme text-theme">
@@ -14,10 +14,10 @@
     <section class="rounded-3xl border border-theme bg-theme-card p-6 shadow-xl shadow-[rgb(var(--theme-primary))]/10">
       <div class="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
         <div>
-          <p class="text-scale-body font-semibold text-[rgb(var(--theme-primary))]">帮助中心</p>
-          <h1 class="mt-2 text-scale-display font-semibold text-theme">常见问题</h1>
+          <p class="text-scale-body font-semibold text-[rgb(var(--theme-primary))]">{{ __('pages/help-center.title') }}</p>
+          <h1 class="mt-2 text-scale-display font-semibold text-theme">{{ __('pages/help-center.faq_title') }}</h1>
           <p class="mt-3 max-w-2xl text-scale-body leading-6 text-theme-secondary">
-            先把常用问题放在这里。点击问题展开答案，再点一次就会收起。
+            {{ __('pages/help-center.intro') }}
           </p>
         </div>
 
@@ -25,7 +25,7 @@
           href="/stream-chat"
           class="inline-flex min-h-11 items-center justify-center rounded-lg bg-[rgb(var(--theme-primary))] px-5 py-3 text-scale-body font-semibold text-[rgb(var(--theme-on-primary))] transition hover:opacity-90"
         >
-          在线客服
+          {{ __('pages/help-center.online_support') }}
         </a>
       </div>
     </section>

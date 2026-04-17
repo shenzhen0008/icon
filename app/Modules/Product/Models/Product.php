@@ -53,4 +53,9 @@ class Product extends Model
     {
         return $this->hasMany(Position::class);
     }
+
+    public function translations(): HasMany
+    {
+        return $this->hasMany(ProductTranslation::class);
+    }
 }

@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="zh-CN" data-theme="{{ config('themes.active') }}">
+<html lang="{{ __('pages/product-detail.html_lang') }}" data-theme="{{ config('themes.active') }}">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>{{ $product['name'] }} | 产品详情</title>
+  <title>{{ $product['name'] }} | {{ __('pages/product-detail.meta_title_suffix') }}</title>
   @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="min-h-screen bg-theme text-theme">
@@ -29,15 +29,15 @@
 
       <div class="mt-4 flex items-start gap-2">
         <div class="min-w-0 flex-1 text-left">
-          <p class="text-scale-micro text-theme-secondary">限额(USDT)</p>
+          <p class="text-scale-micro text-theme-secondary">{{ __('pages/product-detail.amount_usdt') }}</p>
           <p class="text-scale-ui mt-1 whitespace-nowrap font-medium text-theme">{{ $product['limit_range'] }}</p>
         </div>
         <div class="min-w-0 flex-1 text-center">
-          <p class="text-scale-micro text-theme-secondary">收益率</p>
+          <p class="text-scale-micro text-theme-secondary">{{ __('pages/product-detail.yield_rate') }}</p>
           <p class="text-scale-ui mt-1 whitespace-nowrap font-medium text-theme">{{ $product['rate_range'] }}</p>
         </div>
         <div class="min-w-0 flex-1 text-right">
-          <p class="text-scale-micro text-theme-secondary">周期</p>
+          <p class="text-scale-micro text-theme-secondary">{{ __('pages/product-detail.cycle') }}</p>
           <p class="text-scale-ui mt-1 whitespace-nowrap font-medium text-theme">{{ $product['cycle_label'] }}</p>
         </div>
       </div>
@@ -52,44 +52,34 @@
         </div>
       </div>
 
-      @if (!empty($product['description']))
-        <div class="mt-4 rounded-2xl border border-theme bg-theme-card p-4">
-          <h2 class="text-scale-body font-semibold text-theme">产品介绍</h2>
-          <p class="mt-2 whitespace-pre-line text-scale-body leading-6 text-theme-secondary">{{ $product['description'] }}</p>
-        </div>
-      @endif
     </section>
 
-    <section class="mt-6 rounded-2xl border border-theme bg-theme-card p-6">
-      <h2 class="text-scale-body font-semibold text-theme">{{ $product['trade_mode'] === 'reserve' ? '预订' : '购买' }}</h2>
-
-      @if ($isGuest)
-        <p class="mt-3 text-scale-body text-theme-secondary">请先激活临时账号后{{ $product['trade_mode'] === 'reserve' ? '预订' : '购买' }}。</p>
-        <button id="open-activate-modal" class="text-scale-ui mt-4 mx-auto flex h-[clamp(1.9rem,7vw,2.2rem)] w-[clamp(7rem,42vw,9rem)] items-center justify-center rounded-lg bg-[rgb(var(--theme-primary))] px-[clamp(0.6rem,2.5vw,0.9rem)] font-semibold text-theme-on-primary">设置密码并注册</button>
-      @else
+    @unless($isGuest)
+      <section class="mt-6 rounded-2xl border border-theme bg-theme-card p-6">
+        <h2 class="text-scale-body font-semibold text-theme">{{ $product['trade_mode'] === 'reserve' ? __('pages/product-detail.reserve_heading') : __('pages/product-detail.buy_heading') }}</h2>
         @if ($product['trade_mode'] === 'reserve')
           <form method="POST" action="/products/{{ $product['id'] }}/reservations" class="mt-4 flex flex-col gap-3 sm:flex-row sm:items-end">
             @csrf
             <div class="sm:w-48">
-              <label class="mb-1 block text-scale-micro text-theme-secondary">预订金额(USDT)</label>
+              <label class="mb-1 block text-scale-micro text-theme-secondary">{{ __('pages/product-detail.reserve_amount_usdt') }}</label>
               <input type="number" min="0.01" step="0.01" name="amount" class="w-full rounded-lg border border-theme bg-theme-secondary px-3 py-2 text-scale-body text-theme" required>
             </div>
             <button class="text-scale-ui h-[clamp(1.9rem,7vw,2.2rem)] w-[clamp(7rem,42vw,9rem)] self-center rounded-lg bg-[rgb(var(--theme-primary))] px-[clamp(0.6rem,2.5vw,0.9rem)] font-semibold text-theme-on-primary mx-auto sm:w-[clamp(7.5rem,20vw,10rem)] sm:self-auto sm:mx-0">
-              立即预订
+              {{ __('pages/product-detail.preorder_now') }}
             </button>
           </form>
         @else
-          <p class="mt-3 text-scale-body text-theme-secondary">当前余额：{{ $balance }}</p>
+          <p class="mt-3 text-scale-body text-theme-secondary">{{ __('pages/product-detail.current_balance', ['balance' => $balance]) }}</p>
 
           <form method="POST" action="/positions/purchase" class="mt-4 flex flex-col gap-3 sm:flex-row sm:items-end">
             @csrf
             <input type="hidden" name="product_id" value="{{ $product['id'] }}">
             <div class="sm:w-48">
-              <label class="mb-1 block text-scale-micro text-theme-secondary">托管金额(USDT)</label>
+              <label class="mb-1 block text-scale-micro text-theme-secondary">{{ __('pages/product-detail.purchase_amount_usdt') }}</label>
               <input type="number" min="0.01" step="0.01" name="amount" class="w-full rounded-lg border border-theme bg-theme-secondary px-3 py-2 text-scale-body text-theme" required>
             </div>
             <button class="text-scale-ui h-[clamp(1.9rem,7vw,2.2rem)] w-[clamp(7rem,42vw,9rem)] self-center rounded-lg bg-[rgb(var(--theme-primary))] px-[clamp(0.6rem,2.5vw,0.9rem)] font-semibold text-theme-on-primary mx-auto sm:w-[clamp(7.5rem,20vw,10rem)] sm:self-auto sm:mx-0">
-              立即购买
+              {{ __('pages/product-detail.buy_now') }}
             </button>
           </form>
         @endif
@@ -99,18 +89,23 @@
         @error('product')
           <p class="mt-3 text-scale-body text-[rgb(var(--theme-rose))]">{{ $message }}</p>
         @enderror
-      @endif
-    </section>
-  </main>
 
-  @if ($isGuest)
-    <x-auth.activate-pin-modal
-      modal-id="activate-modal"
-      open-button-id="open-activate-modal"
-      redirect-to="/products/{{ $product['id'] }}"
-      :invite-code="app(\App\Modules\Referral\Support\InviteCodeResolver::class)->currentForForm(request())"
-    />
-  @endif
+        @if (!empty($product['description']))
+          <div class="mt-6">
+            <h2 class="text-scale-body font-semibold text-theme">{{ __('pages/product-detail.intro_title') }}</h2>
+            <p class="mt-2 whitespace-pre-line text-scale-body leading-6 text-theme-secondary">{{ $product['description'] }}</p>
+          </div>
+        @endif
+      </section>
+    @endunless
+
+    @if ($isGuest && !empty($product['description']))
+      <section class="mt-6">
+        <h2 class="text-scale-body font-semibold text-theme">{{ __('pages/product-detail.intro_title') }}</h2>
+        <p class="mt-2 whitespace-pre-line text-scale-body leading-6 text-theme-secondary">{{ $product['description'] }}</p>
+      </section>
+    @endif
+  </main>
 
   <x-nav.mobile />
 </body>

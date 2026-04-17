@@ -15,10 +15,10 @@
     <div class="flex items-start gap-4">
         <div>
             @if ($showTitle)
-                <h1 class="text-scale-display font-semibold text-theme">Welcome to AI Smart Contracts</h1>
+                <h1 class="text-scale-display font-semibold text-theme">{{ __('pages/home.hero.title') }}</h1>
             @endif
             @if ($showSubtitle)
-                <p class="mt-2 text-scale-body text-theme-secondary">Artificial intelligence trading</p>
+                <p class="mt-2 text-scale-body text-theme-secondary">{{ __('pages/home.hero.subtitle') }}</p>
             @endif
         </div>
     </div>
@@ -26,10 +26,10 @@
     @if ($showRecordButtons)
         <div class="mt-5 grid grid-cols-2 gap-2">
             <a id="hero-trade-record-btn" href="/home/hero-panel/trade-records?mode=demo" class="inline-flex items-center justify-center rounded-lg border border-theme bg-theme-secondary px-3 py-2 text-scale-body font-medium text-theme transition hover:bg-theme-secondary/80">
-                交易记录
+                {{ __('pages/home.hero.trade_records') }}
             </a>
             <a id="hero-income-record-btn" href="/home/hero-panel/income-records?mode=demo" class="inline-flex items-center justify-center rounded-lg border border-theme bg-theme-secondary px-3 py-2 text-scale-body font-medium text-theme transition hover:bg-theme-secondary/80">
-                收入记录
+                {{ __('pages/home.hero.income_records') }}
             </a>
         </div>
     @endif
@@ -39,19 +39,19 @@
     >
         <x-slot:top>
             <div class="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-3">
-                <p class="min-w-0 text-scale-body text-theme-secondary whitespace-nowrap">可用余额 (USDT)</p>
+                <p class="min-w-0 text-scale-body text-theme-secondary whitespace-nowrap">{{ __('pages/home.hero.available_balance') }}</p>
                 <p id="hero-available-balance" class="justify-self-center font-mono text-scale-title font-semibold leading-none tabular-nums text-theme">
                     ${{ $availableBalance }}
                 </p>
-                <span id="hero-mode-badge" class="justify-self-end inline-flex w-20 justify-center rounded-full border border-theme bg-theme-secondary/30 px-3 py-1 text-scale-body text-theme">demo</span>
+                <span id="hero-mode-badge" class="justify-self-end inline-flex w-20 justify-center rounded-full border border-theme bg-theme-secondary/30 px-3 py-1 text-scale-body text-theme">{{ __('pages/home.hero.mode_demo_badge') }}</span>
             </div>
         </x-slot:top>
         <x-slot:left>
-                <p class="text-scale-body text-theme-secondary whitespace-nowrap">Total earnings (USDT)</p>
+                <p class="text-scale-body text-theme-secondary whitespace-nowrap">{{ __('pages/home.hero.total_earnings') }}</p>
                 <p id="hero-total-earnings" class="mt-2 h-8 overflow-hidden text-ellipsis whitespace-nowrap font-mono text-scale-title font-semibold leading-none tabular-nums text-theme sm:h-9 text-scale-display">$0.00</p>
         </x-slot:left>
         <x-slot:right>
-                <p class="text-scale-body text-theme-secondary whitespace-nowrap">Earnings 24h (USDT)</p>
+                <p class="text-scale-body text-theme-secondary whitespace-nowrap">{{ __('pages/home.hero.earnings_24h') }}</p>
                 <p id="hero-earnings-24h" class="mt-2 h-8 overflow-hidden text-ellipsis whitespace-nowrap font-mono text-scale-title font-semibold leading-none tabular-nums text-theme sm:h-9 text-scale-display">$0.00</p>
         </x-slot:right>
     </x-ui.metric-split-card>
@@ -102,10 +102,10 @@
 
     <div class="mt-5 grid grid-cols-2 gap-3">
         <button id="hero-damo-btn" type="button" class="inline-flex items-center justify-center rounded-xl bg-theme-secondary px-4 py-3 text-scale-body font-semibold text-theme transition hover:bg-theme-secondary/80">
-            DEMO
+            {{ __('pages/home.hero.mode_demo') }}
         </button>
         <button id="hero-live-btn" type="button" class="inline-flex items-center justify-center rounded-xl bg-theme-secondary px-4 py-3 text-scale-body font-semibold text-theme transition hover:bg-theme-secondary/80">
-            LIVE
+            {{ __('pages/home.hero.mode_live') }}
         </button>
     </div>
 </section>
@@ -125,6 +125,10 @@
         const modeMap = {
             damo: 'demo',
             live: 'live',
+        };
+        const modeBadgeText = {
+            demo: @json(__('pages/home.hero.mode_demo_badge')),
+            live: @json(__('pages/home.hero.mode_live_badge')),
         };
 
         const tradeRecordBtn = document.getElementById('hero-trade-record-btn');
@@ -174,7 +178,7 @@
         const renderPanel = (payload) => {
             if (!payload) return;
 
-            if (modeBadge) modeBadge.textContent = payload.badge ?? '#demo';
+            if (modeBadge) modeBadge.textContent = modeBadgeText[payload.mode] ?? modeBadgeText.demo;
             if (availableBalance) availableBalance.textContent = formatMoneyWithPrefix(payload.available_balance);
             if (totalEarnings) totalEarnings.textContent = formatMoneyWithPrefix(payload.total_earnings);
             if (earnings24h) earnings24h.textContent = formatMoneyWithPrefix(payload.earnings_24h);
@@ -216,7 +220,7 @@
                 renderPanel(payload);
             } catch (error) {
                 if (mode === 'live') {
-                    alert('LIVE 模式数据加载失败，请稍后重试。');
+                    alert(@json(__('pages/home.hero.live_load_failed')));
                     setMode('damo');
                 }
             }

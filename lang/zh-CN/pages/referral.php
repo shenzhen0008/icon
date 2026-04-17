@@ -1,0 +1,28 @@
+<?php
+
+return [
+    'html_lang' => 'zh-CN',
+    'meta_title' => '邀请分享 | Icon Market',
+    'hero_tagline' => 'Invite & Earn',
+    'hero_title' => '邀请分享',
+    'hero_subtitle' => '邀请好友加入，一级返佣 5%，二级返佣 2%，核心信息一页看完，分享更直接。',
+    'reward_info' => '奖励说明',
+    'reward_help_aria' => '查看奖励说明',
+    'help_title' => '邀请好友有奖励吗？',
+    'help_p1' => '有的。您可以通过个人专属链接邀请好友加入 AI 智能合约，成功邀请后，您将获得 AI 智能合约平台提供的邀请奖励。具体邀请奖励规则如下：',
+    'help_p2' => '① 用户 A 邀请用户 B（用户 A 可获得用户 B 参与 AI 智能合约收益的 5%）',
+    'help_p3' => '② 用户 B 邀请用户 C（用户 B 可获得用户 C 参与 AI 智能合约收益的 5%，同时用户 A 可获得用户 C 参与 AI 智能合约收益的 3%）',
+    'help_p4' => '③ 用户 C 邀请用户 D（用户 C 可获得用户 D 参与 AI 智能合约收益的 5%，用户 B 可获得用户 D 参与 AI 智能合约收益的 3%，用户 A 可获得用户 D 参与 AI 智能合约收益的 1%）',
+    'help_p5' => '举例说明：用户 D 参与 AI 智能合约赚取 100 USDT，用户 A 将从 AI 智能合约平台获得 1 USDT 的邀请奖励，用户 B 将从 AI 智能合约平台获得 3 USDT 的邀请奖励，用户 C 将从 AI 智能合约平台获得 5 USDT 的邀请奖励。所有奖励均由 AI 智能合约平台提供，不会影响任何用户自身的收益。',
+    'level_1_title' => '一级奖励 Direct',
+    'level_1_count_label' => '一级邀请',
+    'level_2_title' => '二级奖励 Indirect',
+    'level_2_count_label' => '二级邀请',
+    'invite_code' => '邀请码',
+    'invite_link' => '邀请链接',
+    'copy_link' => '复制链接',
+    'share_now' => '立即分享',
+    'copied' => '已复制',
+    'share_text' => 'Icon Market 邀请分享',
+    'link_copied_alert' => '链接已复制',
+];

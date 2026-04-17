@@ -3,6 +3,18 @@
   'openButtonId' => null,
   'redirectTo' => null,
   'inviteCode' => '',
+  'autoOpen' => false,
+  'closeRedirectTo' => null,
+  'title' => null,
+  'closeLabel' => null,
+  'description' => null,
+  'pinLabel' => null,
+  'pinConfirmLabel' => null,
+  'pinAriaLabel' => null,
+  'pinConfirmAriaLabel' => null,
+  'submitLabel' => null,
+  'mismatchError' => null,
+  'incompleteError' => null,
 ])
 
 @php
@@ -14,13 +26,23 @@
   $passwordHiddenInputId = $modalId.'-password';
   $passwordConfirmationHiddenInputId = $modalId.'-password-confirmation';
   $submitButtonId = $modalId.'-submit';
+  $title = is_string($title) && $title !== '' ? $title : __('pages/me.activate_modal.title');
+  $closeLabel = is_string($closeLabel) && $closeLabel !== '' ? $closeLabel : __('pages/me.activate_modal.close');
+  $description = is_string($description) && $description !== '' ? $description : __('pages/me.activate_modal.description');
+  $pinLabel = is_string($pinLabel) && $pinLabel !== '' ? $pinLabel : __('pages/me.activate_modal.pin_label');
+  $pinConfirmLabel = is_string($pinConfirmLabel) && $pinConfirmLabel !== '' ? $pinConfirmLabel : __('pages/me.activate_modal.pin_confirm_label');
+  $pinAriaLabel = is_string($pinAriaLabel) && $pinAriaLabel !== '' ? $pinAriaLabel : __('pages/me.activate_modal.pin_aria');
+  $pinConfirmAriaLabel = is_string($pinConfirmAriaLabel) && $pinConfirmAriaLabel !== '' ? $pinConfirmAriaLabel : __('pages/me.activate_modal.pin_confirm_aria');
+  $submitLabel = is_string($submitLabel) && $submitLabel !== '' ? $submitLabel : __('pages/me.activate_modal.submit');
+  $mismatchError = is_string($mismatchError) && $mismatchError !== '' ? $mismatchError : __('pages/me.activate_modal.mismatch_error');
+  $incompleteError = is_string($incompleteError) && $incompleteError !== '' ? $incompleteError : __('pages/me.activate_modal.incomplete_error');
 @endphp
 
 <dialog id="{{ $modalId }}" class="theme-modal theme-pin-modal">
   <div class="p-5 md:p-6">
     <div class="mb-5 flex items-center justify-between">
-      <h2 class="text-scale-title font-semibold">设置交易 PIN</h2>
-      <button id="{{ $closeButtonId }}" class="rounded-lg px-2.5 py-1.5 text-theme-secondary hover:bg-theme-secondary/60">关闭</button>
+      <h2 class="text-scale-title font-semibold">{{ $title }}</h2>
+      <button id="{{ $closeButtonId }}" class="rounded-lg px-2.5 py-1.5 text-theme-secondary hover:bg-theme-secondary/60">{{ $closeLabel }}</button>
     </div>
 
     <form id="{{ $pinFormId }}" method="POST" action="/register" autocomplete="off" class="space-y-4">
@@ -32,10 +54,10 @@
       <input id="{{ $passwordHiddenInputId }}" type="hidden" name="password" value="">
       <input id="{{ $passwordConfirmationHiddenInputId }}" type="hidden" name="password_confirmation" value="">
 
-      <p class="text-scale-body text-theme-secondary">请输入并确认 6 位数字交易 PIN</p>
+      <p class="text-scale-body text-theme-secondary">{{ $description }}</p>
 
       <div>
-        <label for="{{ $passwordInputId }}" class="mb-1.5 block text-scale-body">输入 6 位 PIN</label>
+        <label for="{{ $passwordInputId }}" class="mb-1.5 block text-scale-body">{{ $pinLabel }}</label>
         <div class="relative">
           <input
             id="{{ $passwordInputId }}"
@@ -51,7 +73,7 @@
             data-1p-ignore="true"
             data-lpignore="true"
             class="absolute inset-0 z-10 h-full w-full cursor-text opacity-0"
-            aria-label="输入6位PIN"
+            aria-label="{{ $pinAriaLabel }}"
           >
           <div class="grid grid-cols-6 gap-2 rounded-xl border border-theme bg-theme-secondary px-2.5 py-3">
             @for ($index = 0; $index < 6; $index++)
@@ -66,7 +88,7 @@
       </div>
 
       <div>
-        <label for="{{ $passwordConfirmationInputId }}" class="mb-1.5 block text-scale-body">确认 6 位 PIN</label>
+        <label for="{{ $passwordConfirmationInputId }}" class="mb-1.5 block text-scale-body">{{ $pinConfirmLabel }}</label>
         <div class="relative">
           <input
             id="{{ $passwordConfirmationInputId }}"
@@ -82,7 +104,7 @@
             data-1p-ignore="true"
             data-lpignore="true"
             class="absolute inset-0 z-10 h-full w-full cursor-text opacity-0"
-            aria-label="确认6位PIN"
+            aria-label="{{ $pinConfirmAriaLabel }}"
           >
           <div class="grid grid-cols-6 gap-2 rounded-xl border border-theme bg-theme-secondary px-2.5 py-3">
             @for ($index = 0; $index < 6; $index++)
@@ -105,7 +127,7 @@
         type="submit"
         class="w-full rounded-lg bg-[rgb(var(--theme-primary))] px-4 py-2.5 font-semibold text-theme-on-primary"
       >
-        确认注册
+        {{ $submitLabel }}
       </button>
     </form>
   </div>
@@ -115,6 +137,8 @@
   (() => {
     const modal = document.getElementById(@json($modalId));
     const openButtonId = @json($openButtonId);
+    const shouldAutoOpen = @json((bool) $autoOpen);
+    const closeRedirectUrl = @json(is_string($closeRedirectTo) && $closeRedirectTo !== '' ? $closeRedirectTo : null);
     const openBtn = openButtonId ? document.getElementById(openButtonId) : null;
     const closeBtn = document.getElementById(@json($closeButtonId));
     const errorNode = document.getElementById(@json($errorId));
@@ -210,6 +234,10 @@
     };
 
     const closeModal = () => {
+      if (closeRedirectUrl) {
+        window.location.assign(closeRedirectUrl);
+        return;
+      }
       modal.close();
     };
 
@@ -237,7 +265,7 @@
 
     const showMismatchError = () => {
       if (errorNode) {
-        errorNode.textContent = '两次 PIN 不一致，请重新确认';
+        errorNode.textContent = @json($mismatchError);
       }
       confirmationInput.value = '';
       updateSubmitState();
@@ -306,7 +334,7 @@
       if (passwordInput.value.length !== 6 || confirmationInput.value.length !== 6) {
         event.preventDefault();
         if (errorNode) {
-          errorNode.textContent = '请输入完整的 6 位 PIN';
+          errorNode.textContent = @json($incompleteError);
         }
         updateSubmitState();
         return;
@@ -364,5 +392,11 @@
       updateSubmitState();
       focusPinInput();
     @endif
+
+    if (shouldAutoOpen && !modal.open) {
+      modal.showModal();
+      updateSubmitState();
+      focusPinInput();
+    }
   })();
 </script>

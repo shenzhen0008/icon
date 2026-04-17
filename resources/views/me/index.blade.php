@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="zh-CN" data-theme="{{ config('themes.active') }}">
+<html lang="{{ __('pages/me.html_lang') }}" data-theme="{{ config('themes.active') }}">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>我的 | Icon Market</title>
+  <title>{{ __('pages/me.meta_title') }}</title>
   @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="min-h-screen bg-theme text-theme">
@@ -16,10 +16,6 @@
     <div class="space-y-5">
       <x-me.payment-method-panel />
       <x-me.account-panel :profile="$profile" :is-guest="$isGuest" />
-
-      @if ($isGuest)
-        <x-me.guest-auth-panel />
-      @endif
     </div>
 
   </main>
@@ -30,7 +26,19 @@
     <x-auth.activate-pin-modal
       modal-id="activate-modal"
       open-button-id="open-activate-modal"
+      :auto-open="true"
+      :close-redirect-to="'/?locale='.app()->getLocale()"
       :invite-code="app(\App\Modules\Referral\Support\InviteCodeResolver::class)->currentForForm(request())"
+      :title="__('pages/me.activate_modal.title')"
+      :close-label="__('pages/me.activate_modal.close')"
+      :description="__('pages/me.activate_modal.description')"
+      :pin-label="__('pages/me.activate_modal.pin_label')"
+      :pin-confirm-label="__('pages/me.activate_modal.pin_confirm_label')"
+      :pin-aria-label="__('pages/me.activate_modal.pin_aria')"
+      :pin-confirm-aria-label="__('pages/me.activate_modal.pin_confirm_aria')"
+      :submit-label="__('pages/me.activate_modal.submit')"
+      :mismatch-error="__('pages/me.activate_modal.mismatch_error')"
+      :incomplete-error="__('pages/me.activate_modal.incomplete_error')"
     />
   @endif
 </body>

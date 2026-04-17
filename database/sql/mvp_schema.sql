@@ -223,6 +223,67 @@ CREATE TABLE `products` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `product_translations`
+--
+
+DROP TABLE IF EXISTS `product_translations`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `product_translations` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `product_id` bigint(20) unsigned NOT NULL,
+  `locale` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `product_translations_product_id_locale_unique` (`product_id`,`locale`),
+  KEY `product_translations_locale_index` (`locale`),
+  CONSTRAINT `product_translations_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `help_items`
+--
+
+DROP TABLE IF EXISTS `help_items`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `help_items` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `sort` int(10) unsigned NOT NULL DEFAULT '0',
+  `is_active` tinyint(1) NOT NULL DEFAULT '1',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `help_items_is_active_sort_index` (`is_active`,`sort`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `help_item_translations`
+--
+
+DROP TABLE IF EXISTS `help_item_translations`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `help_item_translations` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `help_item_id` bigint(20) unsigned NOT NULL,
+  `locale` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `question` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `answer` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `help_item_translations_help_item_id_locale_unique` (`help_item_id`,`locale`),
+  KEY `help_item_translations_locale_index` (`locale`),
+  CONSTRAINT `help_item_translations_help_item_id_foreign` FOREIGN KEY (`help_item_id`) REFERENCES `help_items` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `product_daily_returns`
 --
 

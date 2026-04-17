@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="zh-CN" data-theme="{{ config('themes.active') }}">
+<html lang="{{ __('pages/support.html_lang') }}" data-theme="{{ config('themes.active') }}">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>客服支持 | Icon Market</title>
+  <title>{{ __('pages/support.meta_title') }}</title>
   @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="min-h-screen bg-theme text-theme">
@@ -12,18 +12,18 @@
 
   <main class="mx-auto w-full max-w-4xl px-4 pb-[calc(var(--mobile-nav-height,4.25rem)+1.5rem+env(safe-area-inset-bottom))] pt-8 md:px-6 md:pb-10">
     <div class="mb-5">
-      <p class="text-scale-micro uppercase tracking-[0.24em] text-[rgb(var(--theme-primary))]">Support</p>
-      <h1 class="mt-2 text-scale-display font-semibold">客服中心</h1>
-      <p class="mt-1 text-scale-body text-theme-secondary">在站内页面直接联系在线客服。</p>
+      <p class="text-scale-micro uppercase tracking-[0.24em] text-[rgb(var(--theme-primary))]">{{ __('pages/support.section_label') }}</p>
+      <h1 class="mt-2 text-scale-display font-semibold">{{ __('pages/support.title') }}</h1>
+      <p class="mt-1 text-scale-body text-theme-secondary">{{ __('pages/support.intro') }}</p>
     </div>
 
     @if ($tawkEnabled && filled($embedUrl))
       <section class="rounded-2xl border border-[rgb(var(--theme-primary))]/20 bg-theme-card p-6 text-scale-body text-theme-secondary shadow-xl shadow-[rgb(var(--theme-primary))]/10">
-        客服已接入。点击页面右下角聊天入口即可开始会话。
+        {{ __('pages/support.ready_notice') }}
       </section>
     @else
       <section class="rounded-2xl border border-dashed border-theme bg-theme-card p-8 text-scale-body text-theme-secondary">
-        客服系统暂未配置完成，请稍后再试。
+        {{ __('pages/support.unavailable_notice') }}
       </section>
     @endif
   </main>

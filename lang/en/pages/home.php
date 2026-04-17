@@ -1,0 +1,48 @@
+<?php
+
+return [
+    'html_lang' => 'en',
+    'meta_title' => 'Icon Market | Digital Asset Management Platform',
+    'hero' => [
+        'title' => 'Welcome to AI Smart Contracts',
+        'subtitle' => 'Artificial intelligence trading',
+        'trade_records' => 'Trade Records',
+        'income_records' => 'Income Records',
+        'available_balance' => 'Available Balance (USDT)',
+        'total_earnings' => 'Total earnings (USDT)',
+        'earnings_24h' => 'Earnings 24h (USDT)',
+        'mode_demo' => 'DEMO',
+        'mode_live' => 'LIVE',
+        'mode_demo_badge' => '#demo',
+        'mode_live_badge' => '#live',
+        'live_load_failed' => 'Failed to load LIVE mode data. Please try again later.',
+    ],
+    'stats' => [
+        'title' => 'Open transaction!',
+        'subtitle' => 'A 2000+ factor library with AI support to capture more derivative signals and stay one step ahead.',
+        'participant_count' => 'Number of people',
+        'total_profit' => 'Total Profit',
+        'total_profit_suffix' => 'USDT',
+        'popup_confirm' => 'Understood',
+        'popup_salutation_default' => 'User',
+    ],
+    'exchange' => [
+        'title' => 'Live Trading Platforms',
+        'currency' => 'Currency',
+        'volume_24h' => '24h Volume',
+        'liquidity' => 'Liquidity',
+        'updated_prefix' => 'Updated',
+    ],
+    'nav' => [
+        'back' => 'Back',
+        'language_toggle' => 'Switch language',
+        'home' => 'Home',
+        'products' => 'Products',
+        'help' => 'Help',
+        'share' => 'Share',
+        'me' => 'Me',
+        'support' => 'Support',
+        'notification_title' => 'Icon Market Support Message',
+        'notification_body' => 'You have a new support message',
+    ],
+];

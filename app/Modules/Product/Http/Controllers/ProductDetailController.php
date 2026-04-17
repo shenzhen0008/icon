@@ -35,7 +35,7 @@ class ProductDetailController extends Controller
                 'description' => $product->description,
                 'limit_range' => $this->formatRange($product->limit_min_usdt, $product->limit_max_usdt),
                 'rate_range' => $this->formatPercentRange($product->rate_min_percent, $product->rate_max_percent),
-                'cycle_label' => $product->cycle_days === null ? '--' : $product->cycle_days.'天',
+                'cycle_label' => $this->formatCycleLabel($product->cycle_days),
                 'product_icon_path' => $product->product_icon_path,
                 'symbol_icon_paths' => $this->resolveSymbolIconPaths($product->symbol_icon_paths),
             ],
@@ -60,6 +60,17 @@ class ProductDetailController extends Controller
         }
 
         return number_format((float) $min, 2, '.', '').'-'.number_format((float) $max, 2, '.', '').'%';
+    }
+
+    private function formatCycleLabel(null|int $cycleDays): string
+    {
+        if ($cycleDays === null) {
+            return '--';
+        }
+
+        return (string) __('pages/product-detail.cycle_days_format', [
+            'days' => (string) max(0, $cycleDays),
+        ]);
     }
 
     /**

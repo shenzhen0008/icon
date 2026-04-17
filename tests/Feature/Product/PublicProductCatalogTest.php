@@ -82,6 +82,9 @@ class PublicProductCatalogTest extends TestCase
         $response->assertSee('1.83-2.01%');
         $response->assertSee('2天');
         $response->assertSee('立即购买');
+        $response->assertSee('data-open-activate-modal', false);
+        $response->assertSee('id="activate-modal"', false);
+        $response->assertSee('theme-pin-modal');
         $response->assertSee('text-theme-on-primary');
         $response->assertDontSee('rounded-2xl bg-[rgb(var(--theme-primary))] px-4 py-2 text-xl font-medium text-theme-secondary');
         $response->assertSee('/images/products/symbols/symbol-04.png');
@@ -91,7 +94,7 @@ class PublicProductCatalogTest extends TestCase
         $response->assertSee('overflow-x-auto overflow-y-hidden whitespace-nowrap pb-[0.05rem]', false);
     }
 
-    public function test_guest_can_view_product_detail_and_is_prompted_to_activate_for_purchase(): void
+    public function test_guest_can_view_product_detail_without_activate_prompt_section(): void
     {
         $product = Product::query()->create([
             'name' => 'Mobile AMM',
@@ -124,14 +127,10 @@ class PublicProductCatalogTest extends TestCase
         $response->assertSee('产品介绍');
         $response->assertSee('这是产品介绍内容');
         $response->assertSee('/images/products/symbols/symbol-01.png');
-        $response->assertSee('设置密码并注册');
-        $response->assertSee('id="activate-modal"', false);
-        $response->assertSee('theme-pin-modal');
-        $response->assertSee('请输入并确认 6 位数字交易 PIN');
-        $response->assertSee('输入 6 位 PIN');
-        $response->assertSee('确认 6 位 PIN');
-        $response->assertSee('text-theme-on-primary');
-        $response->assertDontSee('text-theme-secondary">设置密码并注册');
+        $response->assertDontSee('请先激活临时账号后购买。');
+        $response->assertDontSee('设置密码并注册');
+        $response->assertDontSee('id="activate-modal"', false);
+        $response->assertDontSee('theme-pin-modal');
     }
 
     public function test_guest_activation_from_product_detail_redirects_back_to_current_product_page(): void
@@ -280,5 +279,70 @@ class PublicProductCatalogTest extends TestCase
             ->assertSee('预订')
             ->assertSee('立即预订')
             ->assertDontSee('立即购买');
+    }
+
+    public function test_catalog_page_localizes_fixed_copy_but_keeps_product_name_from_backend_data(): void
+    {
+        Product::query()->create([
+            'name' => '量化策略A',
+            'code' => 'QSA',
+            'unit_price' => 1000,
+            'is_active' => true,
+            'sort' => 0,
+            'purchase_limit_count' => 2,
+            'limit_min_usdt' => 1000,
+            'limit_max_usdt' => 10000,
+            'rate_min_percent' => 1.25,
+            'rate_max_percent' => 1.55,
+            'cycle_days' => 3,
+        ]);
+
+        $response = $this->get('/products?locale=en');
+
+        $response->assertOk();
+        $response->assertSee('Product Market');
+        $response->assertSee('Rules');
+        $response->assertSee('Orders');
+        $response->assertSee('Auto Staking');
+        $response->assertSee('Buy Now');
+        $response->assertSee('limit (USDT)');
+        $response->assertSee('Rate of return');
+        $response->assertSee('Cycle');
+        $response->assertSee('Purchase Limit: 2');
+        $response->assertSee('量化策略A');
+    }
+
+    public function test_product_detail_localizes_fixed_copy_but_keeps_product_name_from_backend_data(): void
+    {
+        $user = User::factory()->create();
+
+        $product = Product::query()->create([
+            'name' => '中文产品名A',
+            'code' => 'CNPA',
+            'unit_price' => 1000,
+            'is_active' => true,
+            'limit_min_usdt' => 1000,
+            'limit_max_usdt' => 10000,
+            'rate_min_percent' => 1.10,
+            'rate_max_percent' => 2.20,
+            'cycle_days' => 2,
+            'description' => '这里是中文产品介绍',
+        ]);
+
+        $response = $this->actingAs($user)->get('/products/'.$product->id.'?locale=en');
+
+        $response->assertOk();
+        $response->assertSee('Product Detail');
+        $response->assertSee('limit (USDT)');
+        $response->assertSee('Rate of return');
+        $response->assertSee('Cycle');
+        $response->assertSee('2d');
+        $response->assertSee('Product Introduction');
+        $response->assertSee('Buy');
+        $response->assertSee('Buy Now');
+        $response->assertSee('Current Balance');
+        $response->assertSee('Escrow Amount (USDT)');
+        $response->assertSee('中文产品名A');
+        $response->assertSee('这里是中文产品介绍');
     }
 }

@@ -52,6 +52,6 @@ class SubmitRechargePaymentRequestController extends Controller
             'submitted_at' => now(),
         ]);
 
-        return redirect('/recharge')->with('success', '充值申请已提交，管理员核实后会手动入账。');
+        return redirect('/recharge')->with('success', __('pages/recharge.receive.success_submitted'));
     }
 }

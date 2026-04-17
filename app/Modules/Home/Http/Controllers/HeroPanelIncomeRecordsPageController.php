@@ -47,6 +47,7 @@ class HeroPanelIncomeRecordsPageController extends Controller
 
         $records = collect($pagination->items())
             ->map(fn (stdClass $record): array => [
+                'income_type' => (string) ($record->income_type ?? ''),
                 'product_name' => (string) ($record->product_name ?? '--'),
                 'profit' => number_format((float) ($record->profit ?? 0), 2, '.', ''),
                 'rate_percent' => $record->rate === null
