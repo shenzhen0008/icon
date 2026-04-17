@@ -37,6 +37,9 @@ class RechargePaymentRequestsTable
                 TextColumn::make('network')
                     ->label('网络')
                     ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('channel')
+                    ->label('渠道')
+                    ->badge(),
                 ImageColumn::make('receipt_image_path')
                     ->label('付款截图')
                     ->disk('public')

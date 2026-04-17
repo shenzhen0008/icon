@@ -5,6 +5,7 @@ namespace Tests\Feature\Product;
 use App\Models\User;
 use App\Modules\Position\Models\Position;
 use App\Modules\Product\Models\Product;
+use App\Modules\Product\Models\ProductTranslation;
 use App\Modules\Settlement\Models\DailySettlement;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -106,12 +107,17 @@ class PublicProductCatalogTest extends TestCase
             'rate_min_percent' => 1.15,
             'rate_max_percent' => 2.22,
             'cycle_days' => 2,
-            'description' => '这是产品介绍内容',
             'product_icon_path' => '/images/products/symbols/symbol-01.png',
             'symbol_icon_paths' => [
                 '/images/products/symbols/symbol-01.png',
                 '/images/products/symbols/symbol-02.png',
             ],
+        ]);
+
+        ProductTranslation::query()->create([
+            'product_id' => $product->id,
+            'locale' => 'zh-CN',
+            'description' => '这是产品介绍内容',
         ]);
 
         $response = $this->get('/products/'.$product->id);
@@ -326,6 +332,11 @@ class PublicProductCatalogTest extends TestCase
             'rate_min_percent' => 1.10,
             'rate_max_percent' => 2.20,
             'cycle_days' => 2,
+        ]);
+
+        ProductTranslation::query()->create([
+            'product_id' => $product->id,
+            'locale' => 'zh-CN',
             'description' => '这里是中文产品介绍',
         ]);
 
@@ -344,5 +355,45 @@ class PublicProductCatalogTest extends TestCase
         $response->assertSee('Escrow Amount (USDT)');
         $response->assertSee('中文产品名A');
         $response->assertSee('这里是中文产品介绍');
+    }
+
+    public function test_product_detail_uses_translation_from_product_translations_for_current_locale(): void
+    {
+        $product = Product::query()->create([
+            'name' => 'Translate Product',
+            'code' => 'TRP',
+            'unit_price' => 1000,
+            'is_active' => true,
+        ]);
+
+        ProductTranslation::query()->create([
+            'product_id' => $product->id,
+            'locale' => 'en',
+            'description' => 'English Translation Description',
+        ]);
+
+        $this->get('/products/'.$product->id.'?locale=en')
+            ->assertOk()
+            ->assertSee('English Translation Description');
+    }
+
+    public function test_product_detail_falls_back_to_default_locale_translation_when_current_locale_missing(): void
+    {
+        $product = Product::query()->create([
+            'name' => 'Fallback Product',
+            'code' => 'FBP',
+            'unit_price' => 1000,
+            'is_active' => true,
+        ]);
+
+        ProductTranslation::query()->create([
+            'product_id' => $product->id,
+            'locale' => 'zh-CN',
+            'description' => '默认语言翻译介绍',
+        ]);
+
+        $this->get('/products/'.$product->id.'?locale=en')
+            ->assertOk()
+            ->assertSee('默认语言翻译介绍');
     }
 }

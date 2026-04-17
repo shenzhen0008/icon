@@ -38,6 +38,7 @@ class SubmitWithdrawalRequestService
                 'asset_code' => (string) $payload['asset_code'],
                 'network' => (string) $payload['network'],
                 'destination_address' => (string) $payload['destination_address'],
+                'meta_json' => $payload['meta_json'] ?? null,
                 'amount' => $amount,
                 'status' => 'pending',
                 'submitted_at' => $submittedAt,

@@ -28,8 +28,25 @@ class WithdrawalRequestsTable
                 TextColumn::make('network')
                     ->label('网络'),
                 TextColumn::make('destination_address')
-                    ->label('收款地址')
+                    ->label('收款地址/卡号')
                     ->searchable(),
+                TextColumn::make('bank_snapshot')
+                    ->label('银行卡快照')
+                    ->getStateUsing(function (WithdrawalRequest $record): string {
+                        if ($record->network !== 'BANK_CARD') {
+                            return '--';
+                        }
+
+                        $meta = is_array($record->meta_json) ? $record->meta_json : [];
+                        $bankName = (string) ($meta['bank_name'] ?? '');
+                        $accountName = (string) ($meta['account_name'] ?? '');
+                        $cardNumber = (string) ($meta['card_number'] ?? '');
+                        $parts = array_values(array_filter([$bankName, $accountName, $cardNumber], fn (string $value): bool => $value !== ''));
+
+                        return $parts === [] ? '--' : implode(' / ', $parts);
+                    })
+                    ->wrap()
+                    ->toggleable(),
                 TextColumn::make('amount')
                     ->label('提款金额')
                     ->numeric(decimalPlaces: 2)

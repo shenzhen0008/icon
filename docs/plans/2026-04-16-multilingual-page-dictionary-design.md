@@ -237,3 +237,31 @@ FAQ 数量多、更新频率高，采用数据库管理。
 5. 不引入 SEO 多语言字段；
 6. 本阶段数据库新增 3 张表：`product_translations`、`help_items`、`help_item_translations`；
 7. 语言规模维持 8 种，按统一机制逐步补齐翻译内容。
+
+## 12. 推进顺序（实施路线）
+
+### 12.1 先打通前台读取链路
+
+1. 帮助页改为优先数据库翻译读取（`help_items + help_item_translations`）；
+2. 商品详情改为走 `product_translations + fallback`；
+3. 保持 Blade 只展示最终字符串，不在视图层写 locale 分支。
+
+### 12.2 再补后台录入链路
+
+1. 产品管理改为按语言维护翻译（至少覆盖 `description`）；
+2. 新增 HelpItem 的 Filament 资源，并包含 translations 录入能力；
+3. 后台录入遵循默认语言必填、非默认语言可缺失但需可识别。
+
+### 12.3 最后做数据迁移与退场
+
+1. 写一次性迁移脚本：`products.description -> product_translations(zh-CN)`；
+2. 写一次性迁移脚本：`config/help.php -> help_items/help_item_translations`；
+3. 稳定期内保留旧数据源兜底，验证完成后逐步移除 `config/help.php` 依赖。
+
+### 12.4 测试一次补齐
+
+1. 至少覆盖：成功路径、无权限路径、非法输入路径；
+2. 增加 locale/fallback 的 Feature Test；
+3. 发布前执行并通过：
+   - `php artisan test`
+   - `npm run build`

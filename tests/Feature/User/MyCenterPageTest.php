@@ -80,7 +80,7 @@ class MyCenterPageTest extends TestCase
             ->assertSee('正式账号')
             ->assertSee('加密货币存款')
             ->assertSee('id="payment-method-form"', false)
-            ->assertSee('action="/recharge"', false)
+            ->assertSee('action="/recharge/entry"', false)
             ->assertSee('AbC123xYz987QwErT654X')
             ->assertSee('退出登录')
             ->assertDontSee('这是管理员备注')

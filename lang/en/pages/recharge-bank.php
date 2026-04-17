@@ -1,0 +1,46 @@
+<?php
+
+return [
+    'html_lang' => 'en',
+    'meta_title' => 'Bank Funding | Icon Market',
+    'tabs' => [
+        'receive' => 'RECEIVE',
+        'send' => 'SEND',
+    ],
+    'setup' => [
+        'title' => 'Bind Bank Card',
+        'subtitle' => 'Please provide real bank-card details for recharge verification and withdrawal review.',
+        'submit' => 'Save and Continue',
+    ],
+    'receive' => [
+        'title' => 'Bank Recharge',
+        'steps' => '1. Copy receiver card info -> 2. Transfer in your banking app -> 3. Upload screenshot',
+        'receiver_unavailable' => 'Receiving account is unavailable. Please try again later.',
+        'receiver_bank_name' => 'Receiving Bank',
+        'receiver_account_name' => 'Account Name',
+        'receiver_card_number' => 'Card Number',
+        'receiver_branch_name' => 'Branch',
+        'copy' => 'Copy',
+        'copied' => 'Copied',
+        'contact_account' => 'Contact Account',
+        'payment_amount' => 'Payment Amount',
+        'receipt_image' => 'Transfer Screenshot',
+        'choose_file' => 'Choose File',
+        'no_file_selected' => 'No file selected',
+        'user_note' => 'Note (Optional)',
+        'submit' => 'Submit Recharge Request',
+    ],
+    'send' => [
+        'title' => 'Bank Withdrawal',
+        'available_balance' => 'Available Balance',
+        'bank_name' => 'Bank Name',
+        'account_name' => 'Account Name',
+        'card_number' => 'Card Number',
+        'branch_name' => 'Branch (Optional)',
+        'reserved_phone' => 'Reserved Phone (Optional)',
+        'withdrawal_amount' => 'Withdrawal Amount',
+        'note' => 'Note (Optional)',
+        'submit' => 'Submit Withdrawal Request',
+        'freeze_notice' => 'The requested amount is frozen immediately after submission and refunded automatically if rejected.',
+    ],
+];

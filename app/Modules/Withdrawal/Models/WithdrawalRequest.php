@@ -16,6 +16,7 @@ class WithdrawalRequest extends Model
         'asset_code',
         'network',
         'destination_address',
+        'meta_json',
         'amount',
         'status',
         'submitted_at',
@@ -28,6 +29,7 @@ class WithdrawalRequest extends Model
     {
         return [
             'amount' => 'decimal:2',
+            'meta_json' => 'array',
             'submitted_at' => 'datetime',
             'reviewed_at' => 'datetime',
         ];

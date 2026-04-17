@@ -27,9 +27,15 @@ class ProductManagementPageTest extends TestCase
             ->assertSee('手动触发当日结算');
         $this->get('/admin/products/create')
             ->assertOk()
-            ->assertDontSee('按钮文案');
+            ->assertDontSee('按钮文案')
+            ->assertDontSee('产品介绍')
+            ->assertSee('多语言介绍')
+            ->assertSee('语言')
+            ->assertSee('介绍文案');
         $this->get('/admin/products/'.$product->id.'/edit')
             ->assertOk()
-            ->assertDontSee('按钮文案');
+            ->assertDontSee('按钮文案')
+            ->assertDontSee('产品介绍')
+            ->assertSee('多语言介绍');
     }
 }

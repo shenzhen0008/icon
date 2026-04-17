@@ -1,0 +1,133 @@
+What is an artificial intelligence (AI) smart contract trading system?
+An AI smart contract trading system is a blockchain technology-based trading system that uses smart contracts as an execution and management tool for trading. A smart contract is a computational code that programmatically defines and automatically executes the terms of a contract. These contract codes are stored on the blockchain to ensure transparency, security and reliability of transactions. At the same time the smart contract trading system allows participants to trade without the need for a third party intermediary. The system works on the principle that the contract code will automatically execute a transaction when predefined conditions are met. This means that transactions can be executed without human intervention, thus reducing the possibility of fraud and errors and increasing the efficiency of transactions. The system can execute various types of transactions, such as digital currency transactions, asset swaps, decentralized finance (DeFi) transactions, etc. It can also provide other functions such as decentralized exchange (DEX) operations, automated trading strategy execution and management, and crowdfunding platform operations. These systems provide a more open and transparent trading environment through blockchain technology, enabling participants to trade securely and without the need to trust third parties.
+人工智能（AI）智能合约交易系统是什么？
+人工智能（AI）智能合约交易系统是一种基于区块链技术的交易系统，它以智能合约作为交易的执行与管理工具。智能合约是一种计算代码，以程序方式定义并自动执行合约条款。这些合约代码存储在区块链上，以确保交易的透明性、安全性与可靠性。
+同时，该智能合约交易系统允许交易参与方在无需第三方中介的情况下进行交易。系统的运行原理是：当预设条件满足时，合约代码将自动执行一笔交易。这意味着交易可在无需人工干预的情况下完成，从而降低欺诈与出错的可能性，并提升交易效率。
+该系统可执行多种类型的交易，例如数字货币交易、资产互换、去中心化金融（DeFi）交易等。它还可提供其他功能，如去中心化交易所（DEX）运营、自动化交易策略的执行与管理，以及众筹平台运营等。
+此类系统通过区块链技术提供更开放、透明的交易环境，使参与方能够安全地进行交易，且无需依赖第三方信用背书。
+
+How does the Artificial Intelligence (AI) Smart Contracts Trading System work?
+1. Data collection and analysis: The system uses AI technology to collect, analyze and process a variety of data related to trading, including market data, trading history, technical indicators, etc. This data is used to help the system make decisions and predict market movements. 2. Trading strategy generation: Based on the analysis results of the data, the system uses AI algorithms to generate trading strategies. These strategies may be based on technical indicators, market trends, historical data, etc. AI is able to learn and identify patterns from large amounts of data and help determine the best timing and execution of trades. 3. Smart Contract Execution: The system uses smart contracts as a tool for trade execution. The smart contract contains the code logic and execution rules for the trading strategy. When a predetermined trading condition is triggered, the smart contract will automatically execute the corresponding trading operation, such as placing an order, buying and selling. 4. Automated trade execution: AI smart contract trading systems can automatically execute trading strategies without human intervention. The system can automatically monitor market changes, make buying and selling decisions according to set rules and strategies, and execute trading operations when conditions are met. 5. Risk management and optimization: The system can also include risk management and optimization features to ensure the safety and efficiency of trading. ai can perform risk assessment based on market conditions and trading history, and adjust trading strategies to minimize risk and increase returns.
+人工智能（AI）智能合约交易系统如何运作？
+数据收集与分析：系统运用人工智能技术，对各类与交易相关的数据进行收集、分析与处理，包括市场数据、交易历史、技术指标等。这些数据用于辅助系统决策并预测市场走势。
+交易策略生成：基于数据分析结果，系统通过人工智能算法生成交易策略。这些策略可依托技术指标、市场趋势、历史数据等制定。人工智能能够从海量数据中学习并识别规律，协助确定最佳交易时机与执行方案。
+智能合约执行：系统以智能合约作为交易执行工具。智能合约中包含交易策略的代码逻辑与执行规则。当预设交易条件被触发时，智能合约将自动执行相应交易操作，如下单、买入与卖出。
+自动化交易执行：人工智能智能合约交易系统可在无需人工干预的情况下自动执行交易策略。系统能够实时监测市场变化，依据设定规则与策略做出买卖决策，并在条件满足时执行交易操作。
+风险管理与优化：系统还可集成风险管理与优化功能，保障交易的安全性与效率。人工智能可根据市场行情与交易历史进行风险评估，并调整交易策略，以实现风险最小化、收益最大化。
+
+How does an AI smart contract system generate revenue?
+An AI smart contract system is usually an automatically executing software program that manages and executes contracts based on predetermined rules and conditions. Such a system is usually not a stand-alone entity, but is built on top of a blockchain or smart contract platform to ensure automated execution and transparency of contracts. AI smart contract systems typically generate revenue in the following ways: Transaction fees: When a user executes a transaction on a smart contract system, the system may charge a transaction fee. These fees are usually paid in cryptocurrency and are used to maintain and run the smart contract platform. License Fees: An AI smart contract system may require users to pay a license fee to access the system in order to gain access to a particular contract or feature. Providing Liquidity: AI Smart Contract Systems allow users to provide liquidity, such as depositing cryptocurrency into a decentralized application and earning interest or rewards accordingly. Token Rewards: In some cases, users may be rewarded for holding tokens of the platform or participating in the platform's activity system. Contract Execution Rewards: AI smart contract systems may offer rewards to miners or validators for executing smart contracts. These rewards are usually paid in the form of cryptocurrency as an incentive for them to maintain the security and integrity of the network. It is important to note that different AI smart contract systems may use different business models and revenue mechanisms, so the specifics may vary.
+AI 智能合约系统如何产生收益？
+AI 智能合约系统通常是一段可自动执行的软件程序，它根据预设规则与条件对合约进行管理和执行。这类系统一般并非独立实体，而是搭建在区块链或智能合约平台之上，以保障合约的自动执行与透明性。
+AI 智能合约系统通常通过以下方式产生收益：
+1,交易手续费：用户在智能合约系统上执行交易时，系统会收取交易手续费。这类费用一般以加密货币形式支付，用于智能合约平台的维护与运营。
+2,许可费用：部分 AI 智能合约系统会要求用户支付许可费用，以获取特定合约或功能的使用权限。
+3,提供流动性：AI 智能合约系统允许用户提供流动性，例如将加密货币存入去中心化应用中，从而获取利息或相应奖励。
+4,代币奖励：在某些场景下，用户持有平台代币或参与平台活动体系，可获得代币奖励。
+5,合约执行奖励：AI 智能合约系统会向执行智能合约的矿工或验证者发放奖励。这类奖励通常以加密货币形式支付，用于激励其维护网络安全与完整性。
+需要注意的是，不同的 AI 智能合约系统可能采用不同的商业模式与收益机制，因此具体方式会有所差异。
+How do I open a demo account and cancel it?
+In order to provide a better experience for new users, AI System provides a demo account feature for each new user. You can switch to a demo account by clicking "Demo" on the platform homepage. After switching to the demo account, you can choose the amount of the demo account ($10,000, $100,000, $1,000,000) according to your needs. After entering the demo account, the user can participate in smart contracts with the funds from the demo account. Funds generated by smart contracts on the demo account are not allowed to be withdrawn. At the end of the user experience. You want to start investing in real AI smart contracts. Simply click "Live" again to switch to a real user. The demo account will automatically cancel the demo account status and switch to a real investment account.
+如何开设并注销模拟账户？
+为给新用户提供更优质的体验，人工智能系统为每位新用户提供模拟账户功能。您可在平台首页点击 “Demo（模拟）” 切换至模拟账户。切换至模拟账户后，可根据自身需求选择模拟账户金额（10,000 美元、100,000 美元、1,000,000 美元）。进入模拟账户后，用户可使用模拟账户资金参与智能合约交易。模拟账户中通过智能合约产生的资金不可提现。用户体验结束后，若想开始投资真实的人工智能智能合约，只需再次点击 “Live（实盘）” 即可切换为真实账户。届时模拟账户状态将自动注销，并切换为真实投资账户。
+
+How to participate in AI Smart Contracts?
+Deposit USDT and ETH in your wallet, enter the AI smart contract system and click on the "+" symbol on the home page, pay with ETH to activate the AI smart contract agreement and get the node credentials to participate, after success, the system will automatically generate the smart contract.
+如何参与 AI 智能合约？
+在您的钱包中存入 USDT（泰达币）和 ETH（以太坊），进入 AI 智能合约系统并点击首页的「+」图标，使用 ETH 支付以激活 AI 智能合约协议、获取参与节点凭证；操作成功后，系统将自动生成智能合约。
+Why is Tether (USDT) used as a token for AI smart contracts?
+1. Stability: USDT is a stable coin whose value is pegged to the US dollar at a 1:1 exchange ratio. This means that the value of each USDT is always equal to $1 and does not fluctuate as drastically as other cryptocurrencies. For smart contracts, using a stablecoin can avoid large fluctuations in value during the execution of the contract, ensuring the reliability and stability of the contract. 2. Liquidity: USDT is one of the widely accepted stablecoins worldwide, and it has wide circulation and liquidity on all major exchanges and digital asset platforms. This makes it easier to use USDT as a payment and transaction currency in smart contracts, which can be easily exchanged and traded with other cryptocurrencies. 3. Programmability: USDT is a token based on blockchain platforms such as Ether (Ethereum), which allows it to be seamlessly integrated with smart contracts. Ether smart contracts offer powerful programming capabilities that enable developers to create complex smart contract logic, and using USDT as a unit of payment and transaction for smart contracts makes it easier to integrate with these features. 4. Linking traditional finance: USDT, as a stablecoin with its value pegged to the US dollar, offers the possibility to bridge the gap between digital assets and traditional finance. By using USDT, smart contracts can enable connections to the traditional financial system, enabling quick and easy conversion between digital assets and fiat currencies. It is important to note that using USDT is not the only option for smart contracts. Depending on the specific needs and application scenarios, smart contracts can use other stable coins or cryptocurrencies as payment and transaction units. USDT was chosen mainly because of its stability, liquidity and the advantages of combining it with the programmability of Ether smart contracts.
+为什么将泰达币（USDT）用作 AI 智能合约的代币？
+稳定性：USDT 是一种稳定币，其价值与美元按 1:1 比例挂钩。这意味着每枚 USDT 的价值始终等于 1 美元，不会像其他加密货币那样出现剧烈波动。对于智能合约而言，使用稳定币可以避免合约执行过程中资产价值大幅波动，确保合约的可靠性与稳定性。
+流动性：USDT 是全球范围内被广泛认可的稳定币之一，在各大交易所与数字资产平台上拥有广泛的流通性和流动性。这使得在智能合约中将 USDT 作为支付与交易货币更加便捷，可轻松与其他加密货币进行兑换和交易。
+可编程性：USDT 是基于以太坊等区块链平台发行的代币，能够与智能合约实现无缝集成。以太坊智能合约具备强大的编程能力，开发者可借此构建复杂的智能合约逻辑；将 USDT 作为智能合约的支付与交易单位，能更便捷地对接这些功能。
+衔接传统金融：USDT 作为价值与美元挂钩的稳定币，为搭建数字资产与传统金融之间的桥梁提供了可能。通过使用 USDT，智能合约可实现与传统金融体系的连接，让数字资产与法定货币之间实现快速、简便的兑换。
+需要注意的是，使用 USDT 并非智能合约的唯一选择。根据具体需求与应用场景，智能合约也可采用其他稳定币或加密货币作为支付和交易单位。选择 USDT，主要是因其具备稳定性、流动性，以及与以太坊智能合约可编程性相结合的优势。
+What are the AI smart contract returns criteria?
+The returns from AI smart contracts are not fixed and may be influenced by blockchain liquidity. Based on the invested amount, there are two types of AI smart contracts: non-custodial AI smart contracts and custodial AI smart contracts. The daily returns generated by different smart contracts are as follows: 1.Non-custodial AI Smart Contracts: Storing funds in the AI account according to the smart contract requirements generates a daily return of 0.5% of the account amount for the user(Account amount not less than 100USDT). U Plan: Users unable to invest more funds in the platform's financial products can apply for the U Plan through customer service. The U Plan is generated by the system based on user applications, specifying contract amounts and profit standards. 2.Custodial AI Smart Contracts: Custodial AI smart contracts include reservation amounts (processed through manual online customer service) and automatic allocation of amounts based on the user-submitted order base (the system automatically allocates additional rewards based on the allocated amount). ①The amount of the smart contract is: 1,000-10,000USDT. Earnings range: 1.83% - 2.01%. ②The amount of the smart contract is: 10,000-50,000USDT. Earnings range: 2.18% - 2.35%. ③The amount of the smart contract is: 50,000-200,000 USDT. Earnings range: 2.46%-2.73%. ④The amount of the smart contract is: 200,000-500,000USDT. Earnings range: 2.79%-2.98%. ⑤The amount of the smart contract is: 500,000-1,000,000USDT. Earnings range: 3.05%-3.29%. ⑥The amount of the smart contract is: 1,000,000-5,000,000USDT. Earnings range: 3.33%-3.50%. ⑦The amount of the smart contract is: 5,000,000USDT or more. Earnings range: 3.50%-4.0%.
+AI 智能合约收益标准是什么？
+AI 智能合约的收益并非固定，可能会受到区块链流动性的影响。根据投入金额，AI 智能合约分为两种类型：非托管型 AI 智能合约与托管型 AI 智能合约。不同智能合约产生的每日收益如下：
+1,非托管型 AI 智能合约根据智能合约要求将资金存入 AI 账户，可为用户产生账户金额0.5% 的每日收益（账户金额不低于 100USDT）。U 计划：无法在平台理财产品中投入更多资金的用户，可通过客服申请 U 计划。U 计划由系统根据用户申请生成，明确合约金额与收益标准。
+2,z托管型 AI 智能合约托管型 AI 智能合约包含预约金额（通过在线人工客服办理），以及根据用户提交订单基数自动分配金额（系统根据分配金额自动发放额外奖励）。
+① 智能合约金额：1,000–10,000 USDT收益区间：1.83%–2.01%
+② 智能合约金额：10,000–50,000 USDT收益区间：2.18%–2.35%
+③ 智能合约金额：50,000–200,000 USDT收益区间：2.46%–2.73%
+④ 智能合约金额：200,000–500,000 USDT收益区间：2.79%–2.98%
+⑤ 智能合约金额：500,000–1,000,000 USDT收益区间：3.05%–3.29%
+⑥ 智能合约金额：1,000,000–5,000,000 USDT收益区间：3.33%–3.50%
+⑦ 智能合约金额：5,000,000 USDT 及以上收益区间：3.50%–4.0%
+Is there a reward for inviting friends?
+Yes, you can invite your friends to join AI Smart Contracts through your personal link and successfully invite your friends to join AI Smart Contracts. You will get an invitation bonus provided by AI Smart Contracts platform. The specific invitation rewards are as follows: ① User A invites User B (User A can get 5% of the revenue from User B's participation in AI Smart Contracts). ② User B invites User C (User B can get 5% of the revenue from User C's participation in AI Smart Contracts, while User A can get 3% of the revenue from User C's participation in AI Smart Contracts) ③ User C invites User D (User C can get 5% of the revenue from User D's participation in AI smart contracts, User B can get 3% of the revenue from User D's participation in AI smart contracts, and User A can get 1% of the revenue from User D's .) Example: User D participates in an AI smart contract to earn 100 USDT. User A will receive an invitation bonus of 1 USDT from the AI Smart Contracts platform. User B will receive an invitation bonus of 3 USDT from the AI Smart Contracts platform. User C will receive an invitation bonus of 5 USDT from the AI Smart Contracts Platform. All rewards are provided by the AI Smart Contracts Platform and do not affect the earnings of any user.
+邀请好友有奖励吗？
+有的。您可以通过个人专属链接邀请好友加入 AI 智能合约，成功邀请后，您将获得 AI 智能合约平台提供的邀请奖励。具体邀请奖励规则如下：① 用户 A 邀请用户 B（用户 A 可获得用户 B 参与 AI 智能合约收益的 5%）② 用户 B 邀请用户 C（用户 B 可获得用户 C 参与 AI 智能合约收益的 5%，同时用户 A 可获得用户 C 参与 AI 智能合约收益的 3%）③ 用户 C 邀请用户 D（用户 C 可获得用户 D 参与 AI 智能合约收益的 5%，用户 B 可获得用户 D 参与 AI 智能合约收益的 3%，用户 A 可获得用户 D 参与 AI 智能合约收益的 1%）
+举例说明：用户 D 参与 AI 智能合约赚取 100 USDT，用户 A 将从 AI 智能合约平台获得 1 USDT 的邀请奖励，用户 B 将从 AI 智能合约平台获得 3 USDT 的邀请奖励，用户 C 将从 AI 智能合约平台获得 5 USDT 的邀请奖励。所有奖励均由 AI 智能合约平台提供，不会影响任何用户自身的收益。
+
+How do I make a deposit?
+Users can purchase the cryptocurrencies Tether (USDT), USD Coin (USDC), Eehereum (ETH) through the major cryptocurrency exchanges around the world (Coinbase, Crypto.com, Kraken, Coinsmart, Okcoin, Gemini and Paxful, etc.) or Bitcoin (BTC). After successful purchase, obtain a transfer address through your AI personal account and transfer to the designated AI account to participate. Alternatively, you can make a deposit by obtaining your bank wire account details through the online customer service agent. The online customer service will provide you with dedicated wire transfer account details based on the amount you need to deposit. The user has to go to the bank or complete the wire transfer through online banking as per the online customer service request. After the funds arrive, the system will automatically add them to the AI account for the user. (Note: The platform provides users with the function of bank wire deposit. Wire transfer deposits need to meet the minimum recharge amount to allow access. (Minimum wire transfer deposit standard: $5,000 or more.)
+如何进行入金（存款）？
+用户可通过全球各大加密货币交易所（Coinbase、Crypto.com、Kraken、Coinsmart、Okcoin、Gemini 及 Paxful 等）购买加密货币泰达币（USDT）、美元硬币（USDC）、以太坊（ETH）或比特币（BTC）。购买成功后，通过您的 AI 个人账号获取转账地址，并转入指定 AI 账户即可参与。
+或者，您也可以通过在线客服获取银行电汇账户信息进行入金。在线客服会根据您需要入金的金额，为您提供专属电汇账户信息。用户需按照在线客服要求，前往银行或通过网上银行完成电汇。资金到账后，系统将自动为用户将其添加至 AI 账户中。
+（注意：本平台为用户提供银行电汇入金功能。电汇入金需满足最低充值金额方可入账。电汇入金最低标准：5000 美元及以上。）
+How do I withdraw my earnings and AI account funds?
+UNI tokens generated by project nodes through smart contracts will be converted to Tether (USDT) and added to your AI account. You can withdraw your daily earnings at any time. The withdrawn funds will be automatically sent by the system to your designated address account or your designated bank card account according to the user's individual needs. Only one withdrawal per day is supported. Direct withdrawal of funds from your account is not allowed if you have not made any transactions for a long period of time. The minimum withdrawal amount is 30 Tether (USD). A fee of 3 Tether (USDT) will be charged for each withdrawal. (Note: Users withdrawing funds to a bank card. Deposits must be made by wire transfer in order to be allowed to withdraw funds from your account using your bank card. Each withdrawal must not be less than 500 USD.)
+如何提取收益及 AI 账户资金？
+项目节点通过智能合约产生的 UNI 代币将转换为泰达币（USDT）并计入您的 AI 账户。您可随时提取每日收益，系统将根据用户个人需求，自动把提取的资金发放至您指定的地址账户或银行卡账户。系统仅支持每日一次提现。若长期未进行任何交易，则不允许从账户直接提取资金。最低提现金额为 30 USDT，每次提现将收取3 USDT 手续费。
+（注意：选择提现至银行卡的用户，必须先通过电汇方式完成入金，方可使用银行卡提现。每次提现金额不得低于 500 美元。）
+Is the information secure?
+DataRobot is a leader in automated machine learning, developed and built with the user in mind. We implement risk-based and standards-based security protocols to protect our services and customer data. Our comprehensive security program ensures compliance with industry standards and best practices for information security, enterprise controls, and software development. Network and Endpoint Security We have systems in place to protect your data from malware, vulnerabilities, and other cyber security threats such as network-based attacks and unauthorized access. We regularly perform penetration testing using trusted third parties. Governance DataRobot's Enterprise Security Steering Committee is a cross-functional leadership team that develops our security program and drives execution coordination. This committee works with our Security Advisory Board to ensure that security is a key consideration in all company initiatives. All of our employees receive security and privacy training and testing, and participate in monthly competitions to reward information security awareness. We have comprehensive policies and procedures designed to manage the integrity of our environment and ensure that security is embedded at the technical, physical and operational levels. Local Platform For customers who wish to keep their data in-house and use our self-hosted solutions, we can provide controls to help you meet your unique security and privacy requirements. Use your own certificate authority, use encryption in transit, use configuration at rest Compatible with DNSSEC certifications We have obtained or plan to obtain the following certifications. ISO 27001: We are certified to ISO 27001, a globally recognized standard for organizational information security management systems. SOC2 Type II: We conduct annual FedRamp: We are currently certified to FedRamp, which is a set of security requirements for cloud service providers set by the U.S. government.
+信息是否安全？
+DataRobot 是自动化机器学习领域的领军企业，其开发与构建始终以用户为核心。我们实施基于风险与行业标准的安全协议，以保护我们的服务及客户数据。我们全面的安全方案确保符合信息安全、企业管控与软件开发领域的行业标准及最佳实践。
+网络与终端安全
+我们配备相应系统，保护您的数据免受恶意软件、安全漏洞以及其他网络安全威胁（如网络攻击、未授权访问等）的侵害。我们定期委托可信第三方开展渗透测试。
+治理机制
+DataRobot 企业安全指导委员会是一个跨职能领导团队，负责制定安全方案并推动执行协调工作。该委员会与安全咨询委员会协作，确保安全成为公司所有项目中的核心考量因素。我们所有员工均需接受安全与隐私相关培训及考核，并参与月度竞赛以奖励信息安全意识突出的人员。我们制定了完善的政策与流程，旨在管控环境完整性，确保安全理念深度融入技术、物理及运营各层面。
+本地部署平台
+对于希望将数据留存于内部并使用我们自托管解决方案的客户，我们可提供相应管控措施，助力您满足独特的安全与隐私需求。
+使用您自有证书颁发机构
+传输过程加密
+静态数据配置加密
+兼容 DNSSEC 安全扩展
+认证资质
+我们已获得或计划获得以下认证：
+ISO 27001：我们已通过 ISO 27001 认证，该标准是全球公认的组织信息安全管理体系标准。
+SOC2 Type II：我们每年进行相关审核认证。
+FedRamp：我们目前已获得 FedRamp 认证，该认证是美国政府针对云服务提供商制定的一系列安全要求标准。
+
+How to participate in quantitative trading with Ammuni?
+Firstly use the decentralized wallet to get the quantitative trading node credentials, which need to be claimed only once! Secondly transfer Tether (USDT) to the decentralized wallet, and finally the program distributes the reward to your AI account based on the amount of Tether (USDT) you have participated in.
+如何使用 Ammuni 参与量化交易？
+首先，使用去中心化钱包领取量化交易节点凭证，该凭证只需领取一次。其次，将泰达币（USDT）转入该去中心化钱包。最后，系统会根据您参与的泰达币（USDT）数量，将奖励发放至您的 AI 账户。
+How are the earnings calculated?
+When you successfully receive the AI smart contract node credentials. The smart contract will automatically start calculating the earnings, through the liquidity provided by the node, i.e. the funds in your address, while the earnings generated by different financial products depending on the smart contract. the earnings of UNI tokens will be added to your AI account through direct conversion of the market price of the smart contract to Tether (USDT).
+收益如何计算？
+当您成功领取 AI 智能合约节点凭证后，智能合约将自动开始计算收益。收益通过节点提供的流动性（即您地址中的资金）产生，而不同理财产品的收益则取决于对应的智能合约。UNI 代币产生的收益，将通过智能合约按市场价格直接转换为泰达币（USDT），发放至您的 AI 账户中。
+
+How do I obtain a loan amount from the platform?
+1.Provide the required documents and supporting materials according to the platform's requirements. This includes your ID card/driver's license, pay slip, proof of property, credit score, proof of property and guarantor information. 2. The platform will conduct a credit assessment of your application to determine your credit risk and loan eligibility. This may involve checking your credit report, assessing your debt load and ability to repay. 3. Based on your credit assessment and financial situation, the platform will determine the amount of your loan. They will consider your income, debt load, credit history and other factors. 4. If you meet the platform's requirements and are approved for a loan, the system will automatically generate a loan contract. A credit line of credit is issued based on your personal credit. The obtained loan payment will be automatically dispatched to the platform account.
+如何在平台获得贷款额度？
+按照平台要求提供所需文件及证明材料，包括身份证 / 驾驶证、工资单、资产证明、信用评分、房产证明及担保人信息。
+平台将对您的申请进行信用评估，以确定您的信用风险与贷款资格，这可能包括查询您的信用报告、评估负债情况与还款能力。
+平台将根据您的信用评估结果与财务状况确定贷款额度，会综合考虑您的收入、负债、信用记录及其他相关因素。
+若您符合平台要求且贷款申请获批，系统将自动生成贷款合同，并根据个人信用授予授信额度，获批的贷款资金将自动发放至平台账户。
+How to receive new user participation bonus?
+In order to better improve the investment experience of new users of AI Smart Contracts. The platform provides one new user participation bonus for new users. Depending on the size of the funds transferred to the AI account for the first time by the new user, the user can receive different rewards. New users can apply for one new user participation bonus through AI online customer service after successfully receiving the platform node voucher and transferring funds to AI account. The specific amount of the award can be consulted and understood through the online customer service staff (each user can only participate once).
+如何领取新用户参与奖励？
+为更好地提升 AI 智能合约新用户的投资体验，平台为新用户提供一份新用户参与奖励。根据新用户首次转入 AI 账户的资金规模，用户可领取不同额度的奖励。新用户在成功领取平台节点凭证并向 AI 账户转入资金后，可通过 AI 在线客服申请新用户参与奖励，每位用户仅限参与一次。具体奖励金额可咨询在线客服人员了解。
+
+About Ammuni
+Ammuni is a joint initiative of Uniswap and Tether. It is our eternal goal to create a highly decentralized and trustworthy value platform that encourages more people to own USDT. This is a Defi project that automatically distributes rewards for liquidity providers through smart contracts.
+关于 Ammuni
+Ammuni 是由去中心化交易所 Uniswap 与稳定币泰达币（USDT）联合发起的项目。打造一个高度去中心化、值得信赖的价值平台，并鼓励更多人持有 USDT，是我们始终不变的目标。这是一个去中心化金融（DeFi）项目，通过智能合约为流动性提供者自动分发奖励。
+Project Side and Participant Benefits ProfileThe
+project party (Tether & Uniswap) obtains the amount of Tether (USDT) on the Etherchain (ERC-20) in the decentralized wallet address used by the participant through a smart contract and uses it to trade with USDT on major exchanges via AI for high frequency trading (automatic market maker agreement mechanism), buying low and selling high. The project side changes the traditional profit-making behavior of moving bricks. AI automatic quantitative trading, the freedom to combine AI ultra-high yield universal quantitative model, but also custom trading strategies, compared to manual moving bricks, maximize returns. The project side allocates fixed income to all participants, and the rest of the income is used by the project operating expenses.
+项目方与参与者收益概况
+项目方（泰达币公司 & 去中心化交易所 Uniswap）通过智能合约，获取参与者在去中心化钱包地址中、以太坊链（ERC-20 协议）上的泰达币（USDT）数额，并利用 AI 在各大交易所针对 USDT 进行高频交易（自动做市协议机制），低买高卖。
+项目方改变了传统的搬砖盈利模式，采用 AI 自动量化交易，既可自由组合 AI 超高收益通用量化模型，也可自定义交易策略，相较于人工搬砖，实现收益最大化。
+项目方为所有参与者分配固定收益，剩余收益则用于项目运营开支。
+
+
+
+
+
+
+

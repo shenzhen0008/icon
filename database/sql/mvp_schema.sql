@@ -199,7 +199,6 @@ DROP TABLE IF EXISTS `products`;
 CREATE TABLE `products` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description` text COLLATE utf8mb4_unicode_ci,
   `code` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `unit_price` decimal(16,2) NOT NULL DEFAULT '1000.00',
   `purchase_limit_count` int(10) unsigned DEFAULT NULL,
@@ -577,6 +576,7 @@ CREATE TABLE `withdrawal_requests` (
   `asset_code` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'USDT',
   `network` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'TRC20',
   `destination_address` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `meta_json` json DEFAULT NULL,
   `amount` decimal(16,2) NOT NULL,
   `status` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'pending',
   `submitted_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,

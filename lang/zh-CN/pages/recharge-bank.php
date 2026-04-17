@@ -1,0 +1,46 @@
+<?php
+
+return [
+    'html_lang' => 'zh-CN',
+    'meta_title' => '银行卡资金 | Icon Market',
+    'tabs' => [
+        'receive' => '充值',
+        'send' => '提款',
+    ],
+    'setup' => [
+        'title' => '绑定银行卡',
+        'subtitle' => '请填写真实银行卡信息，用于后续充值核账与提现打款审核。',
+        'submit' => '保存并进入资金页',
+    ],
+    'receive' => [
+        'title' => '银行卡充值',
+        'steps' => '1.复制平台收款卡信息 -> 2.去银行App转账 -> 3.上传截图提交',
+        'receiver_unavailable' => '收款账户暂不可用，请稍后重试。',
+        'receiver_bank_name' => '收款银行',
+        'receiver_account_name' => '收款户名',
+        'receiver_card_number' => '收款卡号',
+        'receiver_branch_name' => '收款支行',
+        'copy' => '复制',
+        'copied' => '已复制',
+        'contact_account' => '联系账号',
+        'payment_amount' => '付款金额',
+        'receipt_image' => '转账截图',
+        'choose_file' => '选择文件',
+        'no_file_selected' => '未选择文件',
+        'user_note' => '备注（可选）',
+        'submit' => '提交充值申请',
+    ],
+    'send' => [
+        'title' => '银行卡提款',
+        'available_balance' => '可提余额',
+        'bank_name' => '开户银行',
+        'account_name' => '持卡人姓名',
+        'card_number' => '银行卡号',
+        'branch_name' => '开户支行（可选）',
+        'reserved_phone' => '预留手机号（可选）',
+        'withdrawal_amount' => '提款金额',
+        'note' => '备注（可选）',
+        'submit' => '提交提款申请',
+        'freeze_notice' => '提交后系统会立即冻结对应余额，管理员审核驳回后将自动退回账户余额。',
+    ],
+];

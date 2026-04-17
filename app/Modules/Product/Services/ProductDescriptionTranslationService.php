@@ -19,10 +19,6 @@ class ProductDescriptionTranslationService
             $currentLocale,
         );
 
-        if (is_string($description) && trim($description) !== '') {
-            return $description;
-        }
-
-        return (string) ($product->description ?? '');
+        return is_string($description) ? $description : '';
     }
 }

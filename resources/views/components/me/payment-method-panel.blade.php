@@ -2,7 +2,7 @@
   <h2 class="text-scale-body font-semibold text-theme">{{ __('pages/me.payment.title') }}</h2>
   <p class="mt-1 text-scale-micro text-theme-secondary">{{ __('pages/me.payment.subtitle') }}</p>
 
-  <form id="payment-method-form" method="GET" action="/recharge" class="mt-4">
+  <form id="payment-method-form" method="GET" action="/recharge/entry" class="mt-4">
     <div class="space-y-3">
       <label class="flex cursor-pointer items-center justify-between gap-3 rounded-xl border border-theme bg-theme-secondary/20 p-4 transition hover:border-[rgb(var(--theme-primary))]/45">
         <span class="flex items-center gap-2 text-scale-body text-theme">

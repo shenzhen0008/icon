@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Products\Schemas;
 
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\TagsInput;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
@@ -14,6 +15,17 @@ class ProductForm
 {
     public static function configure(Schema $schema): Schema
     {
+        $localeOptions = [];
+        $localeLabels = (array) config('i18n.locale_labels_zh', []);
+        foreach ((array) config('i18n.supported_locales', []) as $locale) {
+            if (is_string($locale) && $locale !== '') {
+                $label = $localeLabels[$locale] ?? null;
+                $localeOptions[$locale] = is_string($label) && $label !== ''
+                    ? sprintf('%s %s', $locale, $label)
+                    : $locale;
+            }
+        }
+
         return $schema
             ->components([
                 Section::make('基础信息')
@@ -23,10 +35,6 @@ class ProductForm
                             ->label('产品名称')
                             ->required()
                             ->maxLength(255),
-                        Textarea::make('description')
-                            ->label('产品介绍')
-                            ->rows(4)
-                            ->columnSpanFull(),
                         TextInput::make('code')
                             ->label('产品代码')
                             ->required()
@@ -92,6 +100,25 @@ class ProductForm
                         TagsInput::make('symbol_icon_paths')
                             ->label('币种图标列表')
                             ->placeholder('/images/products/symbols/symbol-01.png'),
+                    ]),
+                Section::make('多语言介绍')
+                    ->schema([
+                        Repeater::make('translations')
+                            ->relationship('translations')
+                            ->label('按语言维护介绍文案')
+                            ->defaultItems(0)
+                            ->columns(2)
+                            ->schema([
+                                Select::make('locale')
+                                    ->label('语言')
+                                    ->required()
+                                    ->options($localeOptions),
+                                Textarea::make('description')
+                                    ->label('介绍文案')
+                                    ->rows(4)
+                                    ->required()
+                                    ->columnSpanFull(),
+                            ]),
                     ]),
             ]);
     }
