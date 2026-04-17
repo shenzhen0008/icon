@@ -38,9 +38,9 @@
         wrapper-class="mt-3 rounded-xl border border-theme bg-theme-secondary/60 p-4"
     >
         <x-slot:top>
-            <div class="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-3">
+            <div class="grid grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-2">
                 <p class="min-w-0 text-scale-body text-theme-secondary whitespace-nowrap">{{ __('pages/home.hero.available_balance') }}</p>
-                <p id="hero-available-balance" class="justify-self-center font-mono text-scale-title font-semibold leading-none tabular-nums text-theme">
+                <p id="hero-available-balance" class="justify-self-end font-mono text-scale-title font-semibold leading-none tabular-nums text-theme">
                     ${{ $availableBalance }}
                 </p>
                 <span id="hero-mode-badge" class="justify-self-end inline-flex w-20 justify-center rounded-full border border-theme bg-theme-secondary/30 px-3 py-1 text-scale-body text-theme">{{ __('pages/home.hero.mode_demo_badge') }}</span>

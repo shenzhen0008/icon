@@ -3,8 +3,8 @@
 
   <div class="mt-4 rounded-xl border border-theme bg-theme-secondary/20 p-4">
     <p class="text-scale-micro text-theme-secondary">{{ $profile['label'] }}</p>
-    <div class="mt-1 flex items-start justify-between gap-3">
-      <p class="min-w-0 break-all text-scale-title font-semibold tracking-wider text-theme">{{ $profile['id'] }}</p>
+    <div class="mt-1 flex flex-nowrap items-center justify-between gap-3">
+      <p class="min-w-0 flex-1 truncate whitespace-nowrap text-scale-title font-semibold tracking-wider text-theme" title="{{ $profile['id'] }}">{{ $profile['id'] }}</p>
       <button type="button" id="copy-account-button" data-copy-text="{{ $profile['id'] }}" class="shrink-0 rounded-2xl border border-theme bg-theme-secondary px-3 py-1.5 text-scale-body font-semibold text-theme transition hover:border-[rgb(var(--theme-primary))] hover:text-[rgb(var(--theme-primary))]">{{ __('pages/me.account.copy_account') }}</button>
     </div>
   </div>
