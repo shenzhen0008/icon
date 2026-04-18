@@ -3,12 +3,18 @@
 namespace App\Modules\Support\Services;
 
 use App\Models\User;
+use App\Modules\User\Services\TemporaryAccountService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use RuntimeException;
 
 class StreamChatTokenService
 {
+    public function __construct(
+        private readonly TemporaryAccountService $temporaryAccountService,
+    ) {
+    }
+
     public function issueGuestTokenPayload(Request $request): array
     {
         $apiKey = (string) config('stream_chat.api_key');
@@ -24,11 +30,8 @@ class StreamChatTokenService
             $request->session()->put('stream_chat.guest_id', $guestId);
         }
 
-        $guestName = (string) $request->session()->get('stream_chat.guest_name');
-        if ($guestName === '') {
-            $guestName = 'Guest-'.Str::upper(Str::random(4));
-            $request->session()->put('stream_chat.guest_name', $guestName);
-        }
+        $guestName = $this->resolveDisplayName($request);
+        $request->session()->put('stream_chat.guest_name', $guestName);
 
         $channelType = (string) config('stream_chat.channel_type', 'messaging');
         $channelPrefix = (string) config('stream_chat.channel_prefix', 'support');
@@ -45,7 +48,7 @@ class StreamChatTokenService
             'channel' => [
                 'type' => $channelType,
                 'id' => $channelId,
-                'name' => 'Support '.$guestName,
+                'name' => $guestName,
                 'members' => [$guestId, $agentUserId],
             ],
         ];
@@ -65,10 +68,8 @@ class StreamChatTokenService
             throw new RuntimeException('Stream Chat guest session is not initialized.');
         }
 
-        $guestName = (string) $request->session()->get('stream_chat.guest_name');
-        if ($guestName === '') {
-            $guestName = 'Guest';
-        }
+        $guestName = $this->resolveDisplayName($request);
+        $request->session()->put('stream_chat.guest_name', $guestName);
 
         $channelType = (string) config('stream_chat.channel_type', 'messaging');
         $channelPrefix = (string) config('stream_chat.channel_prefix', 'support');
@@ -85,7 +86,7 @@ class StreamChatTokenService
             'channel' => [
                 'type' => $channelType,
                 'id' => $channelId,
-                'name' => 'Support '.$guestName,
+                'name' => $guestName,
                 'members' => [$guestId, $agentUserId],
             ],
         ];
@@ -140,5 +141,28 @@ class StreamChatTokenService
     private function base64UrlEncode(string $value): string
     {
         return rtrim(strtr(base64_encode($value), '+/', '-_'), '=');
+    }
+
+    private function resolveDisplayName(Request $request): string
+    {
+        $user = $request->user();
+        if ($user instanceof User) {
+            $username = trim((string) $user->username);
+            if ($username !== '') {
+                return $username;
+            }
+        }
+
+        $temporaryUsername = $this->temporaryAccountService->ensureGuestTempUsername($request);
+        if (is_string($temporaryUsername) && $temporaryUsername !== '') {
+            return $temporaryUsername;
+        }
+
+        $legacyName = trim((string) $request->session()->get('stream_chat.guest_name', ''));
+        if ($legacyName !== '' && !str_starts_with($legacyName, 'Guest-')) {
+            return $legacyName;
+        }
+
+        return 'guest';
     }
 }

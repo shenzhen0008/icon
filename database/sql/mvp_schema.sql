@@ -177,6 +177,7 @@ CREATE TABLE `users` (
   `balance` decimal(16,2) NOT NULL DEFAULT '0.00',
   `invite_code` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `referrer_id` bigint(20) unsigned DEFAULT NULL,
+  `is_admin` tinyint(1) NOT NULL DEFAULT '0',
   `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -184,6 +185,7 @@ CREATE TABLE `users` (
   UNIQUE KEY `users_username_unique` (`username`),
   UNIQUE KEY `users_email_unique` (`email`),
   UNIQUE KEY `users_invite_code_unique` (`invite_code`),
+  KEY `idx_users_is_admin` (`is_admin`),
   KEY `users_referrer_id_foreign` (`referrer_id`),
   CONSTRAINT `users_referrer_id_foreign` FOREIGN KEY (`referrer_id`) REFERENCES `users` (`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -232,6 +234,7 @@ CREATE TABLE `product_translations` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `product_id` bigint(20) unsigned NOT NULL,
   `locale` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `description` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,

@@ -5,6 +5,8 @@ namespace App\Modules\Home\Services;
 use App\Models\User;
 use App\Modules\Balance\Models\BalanceLedger;
 use App\Modules\Position\Models\Position;
+use App\Modules\Product\Models\Product;
+use App\Modules\Product\Services\ProductTranslationService;
 use App\Modules\Settlement\Models\DailySettlement;
 use App\Modules\Withdrawal\Models\WithdrawalRequest;
 use Illuminate\Database\Eloquent\Builder;
@@ -16,6 +18,10 @@ use stdClass;
 
 class HomeHeroPanelService
 {
+    public function __construct(private readonly ProductTranslationService $productTranslationService)
+    {
+    }
+
     private const TRADE_LEDGER_TYPES = [
         'purchase_debit',
         'withdrawal_debit',
@@ -128,19 +134,11 @@ class HomeHeroPanelService
             ->get()
             ->pipe(fn (Collection $ledgers): array => $this->mapTradeRecords($ledgers));
 
-        $incomeRecords = $this->incomeRecordQuery($user->id)
+        $incomeRows = $this->incomeRecordQuery($user->id)
             ->limit(50)
-            ->get()
-            ->map(fn (stdClass $record): array => [
-                'product_name' => (string) ($record->product_name ?? '--'),
-                'profit' => $this->formatMoney((float) ($record->profit ?? 0)),
-                'rate_percent' => $record->rate === null
-                    ? '--'
-                    : number_format((float) $record->rate * 100, 2, '.', '').'%',
-                'settlement_at' => $this->formatIncomeOccurredAt($record->occurred_at ?? null),
-            ])
-            ->values()
-            ->all();
+            ->get();
+
+        $incomeRecords = $this->mapIncomeRecords($incomeRows);
 
         return [
             'mode' => 'live',
@@ -161,6 +159,7 @@ class HomeHeroPanelService
             ->selectRaw(
                 "'settlement' as income_type, ".
                 "daily_settlements.id as sort_id, ".
+                "daily_settlements.product_id as product_id, ".
                 "COALESCE(products.name, '--') as product_name, ".
                 "daily_settlements.profit as profit, ".
                 "daily_settlements.rate as rate, ".
@@ -174,6 +173,7 @@ class HomeHeroPanelService
             ->selectRaw(
                 "'referral_commission' as income_type, ".
                 "balance_ledgers.id as sort_id, ".
+                "NULL as product_id, ".
                 "'推荐提成' as product_name, ".
                 "balance_ledgers.amount as profit, ".
                 "NULL as rate, ".
@@ -204,6 +204,76 @@ class HomeHeroPanelService
         return number_format($value, 2, '.', '');
     }
 
+    /**
+     * @param iterable<int, stdClass> $incomeRows
+     * @return array<int, array{income_type:string, product_name:string, profit:string, rate_percent:string, settlement_at:string}>
+     */
+    public function mapIncomeRecords(iterable $incomeRows): array
+    {
+        $incomeRowCollection = collect($incomeRows);
+        $incomeProductNamesByRecordId = $this->resolveIncomeProductNames($incomeRowCollection);
+
+        return $incomeRowCollection
+            ->map(fn (stdClass $record): array => [
+                'income_type' => (string) ($record->income_type ?? ''),
+                'product_name' => $incomeProductNamesByRecordId[(int) ($record->sort_id ?? 0)] ?? (string) ($record->product_name ?? '--'),
+                'profit' => $this->formatMoney((float) ($record->profit ?? 0)),
+                'rate_percent' => $record->rate === null
+                    ? '--'
+                    : number_format((float) $record->rate * 100, 2, '.', '').'%',
+                'settlement_at' => $this->formatIncomeOccurredAt($record->occurred_at ?? null),
+            ])
+            ->values()
+            ->all();
+    }
+
+    /**
+     * @param Collection<int, stdClass> $incomeRows
+     * @return array<int, string>
+     */
+    private function resolveIncomeProductNames(Collection $incomeRows): array
+    {
+        $productIds = $incomeRows
+            ->where('income_type', 'settlement')
+            ->pluck('product_id')
+            ->filter(static fn (mixed $id): bool => is_numeric($id) && (int) $id > 0)
+            ->map(static fn (mixed $id): int => (int) $id)
+            ->unique()
+            ->values();
+
+        if ($productIds->isEmpty()) {
+            return [];
+        }
+
+        $products = Product::query()
+            ->with('translations')
+            ->whereIn('id', $productIds)
+            ->get()
+            ->keyBy(fn (Product $product): int => (int) $product->id);
+
+        $resolvedNames = [];
+
+        foreach ($incomeRows as $row) {
+            if (($row->income_type ?? '') !== 'settlement') {
+                continue;
+            }
+
+            $productId = is_numeric($row->product_id ?? null) ? (int) $row->product_id : 0;
+            if ($productId <= 0) {
+                continue;
+            }
+
+            $product = $products->get($productId);
+            if (! $product instanceof Product) {
+                continue;
+            }
+
+            $resolvedNames[(int) ($row->sort_id ?? 0)] = $this->productTranslationService->resolveName($product, emptyFallback: '--');
+        }
+
+        return $resolvedNames;
+    }
+
     public function tradeRecordQuery(int $userId): Builder
     {
         return BalanceLedger::query()
@@ -231,7 +301,7 @@ class HomeHeroPanelService
             ->values();
 
         $positions = Position::query()
-            ->with('product:id,name')
+            ->with(['product:id,name', 'product.translations'])
             ->whereIn('id', $positionIds)
             ->get()
             ->keyBy(fn (Position $position): string => (string) $position->id);
@@ -256,7 +326,7 @@ class HomeHeroPanelService
                 return match ($ledger->type) {
                     'purchase_debit' => [
                         'event_type' => 'purchase_debit',
-                        'title' => (string) ($positions->get((string) $ledger->biz_ref_id)?->product?->name ?? '--'),
+                        'title' => $this->productTranslationService->resolveName($positions->get((string) $ledger->biz_ref_id)?->product, emptyFallback: '--'),
                         'amount' => $this->formatMoney(abs((float) $ledger->amount)),
                         'status' => 'completed',
                         'occurred_at' => $occurredAt,

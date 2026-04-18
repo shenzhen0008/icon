@@ -6,7 +6,7 @@ use App\Modules\Exchange\Models\ExchangeMetric;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class ExchangeMetricManagementPageTest extends TestCase
+class ExchangeMetricManagementPageTest extends AdminPanelTestCase
 {
     use RefreshDatabase;
 

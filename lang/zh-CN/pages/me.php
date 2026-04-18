@@ -31,6 +31,7 @@ return [
         'pin_aria' => '输入6位PIN',
         'pin_confirm_aria' => '确认6位PIN',
         'submit' => '确认注册',
+        'login' => '已有账号，去登录',
         'mismatch_error' => '两次 PIN 不一致，请重新确认',
         'incomplete_error' => '请输入完整的 6 位 PIN',
     ],

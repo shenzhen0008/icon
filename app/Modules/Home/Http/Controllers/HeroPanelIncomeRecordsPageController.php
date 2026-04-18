@@ -8,7 +8,6 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Validation\Rule;
-use stdClass;
 
 class HeroPanelIncomeRecordsPageController extends Controller
 {
@@ -45,20 +44,7 @@ class HeroPanelIncomeRecordsPageController extends Controller
             ->paginate($perPage)
             ->withQueryString();
 
-        $records = collect($pagination->items())
-            ->map(fn (stdClass $record): array => [
-                'income_type' => (string) ($record->income_type ?? ''),
-                'product_name' => (string) ($record->product_name ?? '--'),
-                'profit' => number_format((float) ($record->profit ?? 0), 2, '.', ''),
-                'rate_percent' => $record->rate === null
-                    ? '--'
-                    : number_format((float) $record->rate * 100, 2, '.', '').'%',
-                'settlement_at' => is_string($record->occurred_at)
-                    ? $record->occurred_at
-                    : '--',
-            ])
-            ->values()
-            ->all();
+        $records = $this->homeHeroPanelService->mapIncomeRecords($pagination->items());
 
         return view('home.hero-panel-income-records', [
             'records' => $records,

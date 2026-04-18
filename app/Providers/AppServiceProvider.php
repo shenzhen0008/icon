@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\User;
 use App\Modules\Position\Models\Position;
 use App\Policies\PositionPolicy;
 use Illuminate\Cache\RateLimiting\Limit;
@@ -26,6 +27,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Gate::policy(Position::class, PositionPolicy::class);
+        Gate::define('access-admin', fn (User $user): bool => (bool) $user->is_admin);
 
         RateLimiter::for('register-pin', function (Request $request): Limit {
             $scope = (string) ($request->session()->get('temp_username') ?? 'guest');

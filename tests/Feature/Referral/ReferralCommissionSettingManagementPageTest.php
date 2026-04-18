@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Referral;
 
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
 use Tests\TestCase;
@@ -9,6 +10,15 @@ use Tests\TestCase;
 class ReferralCommissionSettingManagementPageTest extends TestCase
 {
     use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->actingAs(User::factory()->create([
+            'is_admin' => true,
+        ]));
+    }
 
     public function test_admin_can_open_referral_commission_setting_page(): void
     {

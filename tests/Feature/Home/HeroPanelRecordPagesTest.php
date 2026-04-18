@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Modules\Balance\Models\BalanceLedger;
 use App\Modules\Position\Models\Position;
 use App\Modules\Product\Models\Product;
+use App\Modules\Product\Models\ProductTranslation;
 use App\Modules\Settlement\Models\DailySettlement;
 use App\Modules\Withdrawal\Models\WithdrawalRequest;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -203,5 +204,47 @@ class HeroPanelRecordPagesTest extends TestCase
             ->assertSee('Product')
             ->assertSee('Back to Home')
             ->assertSee('Referral Commission');
+    }
+
+    public function test_income_records_page_uses_translated_product_title_for_current_locale(): void
+    {
+        $user = User::factory()->create();
+        $product = Product::query()->create([
+            'name' => '中文收益产品',
+            'code' => 'ALPHA',
+            'unit_price' => '1000.00',
+            'is_active' => true,
+            'sort' => 1,
+        ]);
+
+        ProductTranslation::query()->create([
+            'product_id' => $product->id,
+            'locale' => 'en',
+            'title' => 'English Income Product',
+            'description' => 'desc',
+        ]);
+
+        $position = Position::query()->create([
+            'user_id' => $user->id,
+            'product_id' => $product->id,
+            'principal' => '500.00',
+            'status' => 'open',
+            'opened_at' => now()->subDay(),
+        ]);
+
+        DailySettlement::query()->create([
+            'user_id' => $user->id,
+            'product_id' => $product->id,
+            'position_id' => $position->id,
+            'settlement_date' => now()->toDateString(),
+            'rate' => '0.0200',
+            'profit' => '10.00',
+        ]);
+
+        $this->actingAs($user)
+            ->get('/home/hero-panel/income-records?locale=en')
+            ->assertOk()
+            ->assertSee('English Income Product')
+            ->assertDontSee('中文收益产品');
     }
 }

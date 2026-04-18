@@ -63,6 +63,15 @@
           <button id="agent-chat-sound-enable" type="button" class="rounded-lg bg-[rgb(var(--theme-primary))] px-2.5 py-1 text-scale-micro font-semibold text-theme-on-primary hover:bg-[rgb(var(--theme-primary))]/80">开启</button>
         </div>
       </aside>
+
+      <div id="agent-user-context-menu" class="fixed z-50 hidden min-w-[12rem] rounded-xl border border-theme bg-theme-card p-1 shadow-2xl shadow-black/25">
+        <button id="agent-copy-username-button" type="button" class="block w-full rounded-lg px-3 py-2 text-left text-scale-micro text-theme transition hover:bg-theme-secondary">
+          复制用户名
+        </button>
+        <button id="agent-open-admin-user-button" type="button" class="block w-full rounded-lg px-3 py-2 text-left text-scale-micro text-theme transition hover:bg-theme-secondary">
+          打开用户管理
+        </button>
+      </div>
     @else
       <section class="rounded-2xl border border-dashed border-theme bg-theme-card p-8 text-scale-body text-theme-secondary">
         Stream Chat 尚未配置完成，请先设置 API Key 和 Secret。
@@ -94,6 +103,9 @@
       const soundPromptEl = document.getElementById('agent-chat-sound-prompt');
       const soundEnableEl = document.getElementById('agent-chat-sound-enable');
       const soundDismissEl = document.getElementById('agent-chat-sound-dismiss');
+      const contextMenuEl = document.getElementById('agent-user-context-menu');
+      const copyUsernameButtonEl = document.getElementById('agent-copy-username-button');
+      const openAdminUserButtonEl = document.getElementById('agent-open-admin-user-button');
       const pendingUploads = new Map();
       let currentUserId = '';
       let soundEnabled = localStorage.getItem('stream_chat_agent_sound_enabled') === '1';
@@ -106,6 +118,7 @@
       let recoveredSubscription = null;
       let activeSubscription = null;
       let refreshPromise = null;
+      let contextMenuUsername = '';
       const unreadByChannel = new Map();
       let hideChannel = async () => {};
       const isMobile = () => window.matchMedia('(max-width: 767px)').matches;
@@ -135,6 +148,26 @@
         drawerEl?.classList.add('hidden');
       };
 
+      const hideContextMenu = () => {
+        contextMenuEl?.classList.add('hidden');
+        contextMenuUsername = '';
+      };
+
+      const showContextMenu = (event, username) => {
+        if (!contextMenuEl || !username) return;
+        const menuWidth = contextMenuEl.offsetWidth || 200;
+        const menuHeight = contextMenuEl.offsetHeight || 44;
+        const maxLeft = Math.max(8, window.innerWidth - menuWidth - 8);
+        const maxTop = Math.max(8, window.innerHeight - menuHeight - 8);
+        const left = Math.min(Math.max(8, event.clientX), maxLeft);
+        const top = Math.min(Math.max(8, event.clientY), maxTop);
+
+        contextMenuUsername = username;
+        contextMenuEl.style.left = `${left}px`;
+        contextMenuEl.style.top = `${top}px`;
+        contextMenuEl.classList.remove('hidden');
+      };
+
       const resetMessages = () => {
         if (messagesEl) messagesEl.innerHTML = '';
       };
@@ -157,9 +190,47 @@
         return parts[parts.length - 1] || '';
       };
 
+      const isLegacyGuestLabel = (value) => typeof value === 'string' && /^Guest-[A-Za-z0-9]{2,}$/i.test(value.trim());
+
+      const resolveChannelDisplayName = (channel) => {
+        if (!channel) return '';
+
+        const memberUsers = Object.values(channel.state?.members ?? {})
+          .map((member) => member?.user)
+          .filter((user) => user && user.id && !user.id.startsWith('support_agent_') && !user.id.startsWith('agent_'));
+
+        const memberName = memberUsers
+          .map((user) => (user?.name || '').trim())
+          .find((name) => name !== '' && !isLegacyGuestLabel(name));
+        if (memberName) return memberName;
+
+        const channelName = (channel.data?.name || '').trim();
+        if (channelName !== '' && !isLegacyGuestLabel(channelName)) {
+          return channelName;
+        }
+
+        const senderId = memberUsers[0]?.id || '';
+        return senderId || channel.id;
+      };
+
+      const resolveCustomerDisplayName = (message) => {
+        const senderId = message?.user?.id || '';
+        const memberName = (activeChannel?.state?.members?.[senderId]?.user?.name || '').trim();
+        if (memberName !== '' && !isLegacyGuestLabel(memberName)) {
+          return memberName;
+        }
+
+        const messageName = (message?.user?.name || '').trim();
+        if (messageName !== '' && !isLegacyGuestLabel(messageName)) {
+          return messageName;
+        }
+
+        return senderId || '访客';
+      };
+
       const buildMessageNode = (message) => {
         const isAgent = message.user?.id?.startsWith('support_agent_') || message.user?.id?.startsWith('agent_');
-        const displayName = isAgent ? '我' : (message.user?.name || '访客');
+        const displayName = isAgent ? '我' : resolveCustomerDisplayName(message);
         const wrapper = document.createElement('div');
         wrapper.className = `mb-3 flex ${isAgent ? 'justify-end' : 'justify-start'}`;
 
@@ -215,15 +286,24 @@
         if (audioCtx.state === 'suspended') {
           await audioCtx.resume();
         }
-        const oscillator = audioCtx.createOscillator();
-        const gainNode = audioCtx.createGain();
-        oscillator.type = 'sine';
-        oscillator.frequency.value = 880;
-        gainNode.gain.value = 0.02;
-        oscillator.connect(gainNode);
-        gainNode.connect(audioCtx.destination);
-        oscillator.start();
-        oscillator.stop(audioCtx.currentTime + 0.12);
+
+        const now = audioCtx.currentTime;
+        const tone = (freq, delay, duration, peakGain) => {
+          const oscillator = audioCtx.createOscillator();
+          const gainNode = audioCtx.createGain();
+          oscillator.type = 'triangle';
+          oscillator.frequency.setValueAtTime(freq, now + delay);
+          gainNode.gain.setValueAtTime(0.0001, now + delay);
+          gainNode.gain.exponentialRampToValueAtTime(peakGain, now + delay + 0.02);
+          gainNode.gain.exponentialRampToValueAtTime(0.0001, now + delay + duration);
+          oscillator.connect(gainNode);
+          gainNode.connect(audioCtx.destination);
+          oscillator.start(now + delay);
+          oscillator.stop(now + delay + duration + 0.02);
+        };
+
+        tone(1046, 0, 0.16, 0.09);
+        tone(1318, 0.11, 0.2, 0.085);
       };
 
       const showSoundPrompt = () => {
@@ -251,6 +331,32 @@
       soundDismissEl?.addEventListener('click', () => {
         hideSoundPrompt();
       });
+
+      copyUsernameButtonEl?.addEventListener('click', async () => {
+        if (!contextMenuUsername) return;
+        try {
+          await navigator.clipboard.writeText(contextMenuUsername);
+          setStatus(`已复制用户名：${contextMenuUsername}`);
+        } catch (_) {
+          setStatus('复制失败，请手动复制。');
+        }
+        hideContextMenu();
+      });
+
+      openAdminUserButtonEl?.addEventListener('click', () => {
+        if (!contextMenuUsername) return;
+        const targetUrl = `/admin/users?search=${encodeURIComponent(contextMenuUsername)}`;
+        window.open(targetUrl, '_blank', 'noopener');
+        hideContextMenu();
+      });
+
+      document.addEventListener('click', (event) => {
+        if (!contextMenuEl || contextMenuEl.classList.contains('hidden')) return;
+        if (event.target instanceof Node && contextMenuEl.contains(event.target)) return;
+        hideContextMenu();
+      });
+      window.addEventListener('scroll', hideContextMenu, true);
+      window.addEventListener('resize', hideContextMenu);
 
       showSoundPrompt();
 
@@ -308,7 +414,7 @@
         channel.markRead?.().catch(() => {});
         updateActiveChannelHighlight();
 
-        setStatus(`当前会话：${channel.data?.name || channel.id}`);
+        setStatus(`当前会话：${resolveChannelDisplayName(channel) || channel.id}`);
         showChatView();
         closeChannelDrawer();
 
@@ -359,7 +465,7 @@
 
           const name = document.createElement('span');
           name.className = 'truncate';
-          name.textContent = channel.data?.name || channel.id;
+          name.textContent = resolveChannelDisplayName(channel) || channel.id;
           row.appendChild(name);
 
           const unreadDot = document.createElement('span');
@@ -376,7 +482,7 @@
             event.preventDefault();
             event.stopPropagation();
 
-            const confirmed = window.confirm(`确定从客服列表移除「${channel.data?.name || channel.id}」吗？后续该访客再次发消息会自动出现。`);
+            const confirmed = window.confirm(`确定从客服列表移除「${resolveChannelDisplayName(channel) || channel.id}」吗？后续该访客再次发消息会自动出现。`);
             if (!confirmed) return;
 
             await hideChannel(channel);
@@ -384,7 +490,14 @@
           row.appendChild(hideButton);
 
           btn.appendChild(row);
+          btn.addEventListener('contextmenu', (event) => {
+            const username = resolveChannelDisplayName(channel);
+            if (!username) return;
+            event.preventDefault();
+            showContextMenu(event, username);
+          });
           btn.addEventListener('click', () => {
+            hideContextMenu();
             activateChannel(channel);
           });
           container.appendChild(btn);
@@ -392,14 +505,37 @@
       };
 
       const renderChannelList = async (channels) => {
-        const channelIds = new Set(channels.map((channel) => channel.id));
+        const toMillis = (value) => {
+          if (!value) return 0;
+          const time = Date.parse(String(value));
+          return Number.isFinite(time) ? time : 0;
+        };
+
+        const getChannelLastActivityAt = (channel) => {
+          const messages = Array.isArray(channel?.state?.messages) ? channel.state.messages : [];
+          const lastMessage = messages.length > 0 ? messages[messages.length - 1] : null;
+          return Math.max(
+            toMillis(lastMessage?.created_at),
+            toMillis(channel?.state?.last_message_at),
+            toMillis(channel?.data?.last_message_at),
+            toMillis(channel?.data?.updated_at)
+          );
+        };
+
+        const sortedChannels = [...channels].sort((a, b) => {
+          const unreadDiff = Number(unreadByChannel.get(b.id) ?? 0) - Number(unreadByChannel.get(a.id) ?? 0);
+          if (unreadDiff !== 0) return unreadDiff;
+          return getChannelLastActivityAt(b) - getChannelLastActivityAt(a);
+        });
+
+        const channelIds = new Set(sortedChannels.map((channel) => channel.id));
         Array.from(unreadByChannel.keys()).forEach((channelId) => {
           if (!channelIds.has(channelId)) {
             unreadByChannel.delete(channelId);
           }
         });
 
-        channels.forEach((channel) => {
+        sortedChannels.forEach((channel) => {
           const unreadCount = channel.countUnread?.();
           if (Number.isFinite(unreadCount)) {
             unreadByChannel.set(channel.id, Math.max(0, Number(unreadCount)));
@@ -408,11 +544,11 @@
           }
         });
 
-        renderChannelButtons(listEl, channels);
-        renderChannelButtons(drawerListEl, channels);
+        renderChannelButtons(listEl, sortedChannels);
+        renderChannelButtons(drawerListEl, sortedChannels);
         updateActiveChannelHighlight();
 
-        if (channels.length === 0) {
+        if (sortedChannels.length === 0) {
           resetMessages();
           setStatus('等待新的访客消息...');
           showListView();
@@ -421,7 +557,7 @@
         }
 
         const activeChannelId = activeChannel?.id;
-        const matched = channels.find((channel) => channel.id === activeChannelId);
+        const matched = sortedChannels.find((channel) => channel.id === activeChannelId);
         if (matched) {
           await activateChannel(matched);
           return;
@@ -436,10 +572,10 @@
         }
 
         if (!activeChannel) {
-          await activateChannel(channels[0]);
+          await activateChannel(sortedChannels[0]);
         } else {
-          activeChannel = channels[0];
-          await activateChannel(channels[0]);
+          activeChannel = sortedChannels[0];
+          await activateChannel(sortedChannels[0]);
         }
       };
 
@@ -551,6 +687,7 @@
           const current = Number(unreadByChannel.get(channelId) ?? 0);
           unreadByChannel.set(channelId, current + 1);
           updateActiveChannelHighlight();
+          refreshChannels().catch(() => {});
         });
 
         formEl?.addEventListener('submit', async (event) => {

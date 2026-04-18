@@ -17,7 +17,7 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'username' => ['required', 'string', 'size:21', 'regex:/^[A-Za-z0-9]{21}$/'],
+            'username' => ['required', 'string', 'between:3,21', 'regex:/^[A-Za-z0-9]+$/'],
             'password' => ['required', 'string'],
             'remember' => ['nullable', 'boolean'],
         ];

@@ -127,6 +127,8 @@
       modal-id="activate-modal"
       open-button-id="open-activate-modal"
       redirect-to="/products"
+      :login-url="'/login?redirect_to=%2Fproducts'"
+      :login-label="__('pages/me.activate_modal.login')"
       :invite-code="app(\App\Modules\Referral\Support\InviteCodeResolver::class)->currentForForm(request())"
     />
     <script>

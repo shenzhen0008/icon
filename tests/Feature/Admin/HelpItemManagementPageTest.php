@@ -7,7 +7,7 @@ use App\Modules\Help\Models\HelpItemTranslation;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class HelpItemManagementPageTest extends TestCase
+class HelpItemManagementPageTest extends AdminPanelTestCase
 {
     use RefreshDatabase;
 

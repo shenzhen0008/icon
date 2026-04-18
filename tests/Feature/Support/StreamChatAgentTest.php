@@ -10,12 +10,14 @@ class StreamChatAgentTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_authenticated_user_can_access_stream_chat_agent_page(): void
+    public function test_admin_can_access_stream_chat_agent_page(): void
     {
         config()->set('stream_chat.api_key', 'test-key');
         config()->set('stream_chat.api_secret', 'test-secret');
 
-        $user = User::factory()->create();
+        $user = User::factory()->create([
+            'is_admin' => true,
+        ]);
 
         $this->actingAs($user)
             ->get('/stream-chat-agent')
@@ -37,7 +39,10 @@ class StreamChatAgentTest extends TestCase
             ->assertSee('agent-mobile-chat-view')
             ->assertSee('agent-mobile-back')
             ->assertSee('agent-open-channel-drawer')
-            ->assertSee('agent-channel-drawer');
+            ->assertSee('agent-channel-drawer')
+            ->assertSee('agent-user-context-menu')
+            ->assertSee('agent-copy-username-button')
+            ->assertSee('/admin/users?search=', false);
     }
 
     public function test_guest_cannot_access_stream_chat_agent_routes(): void
@@ -46,13 +51,14 @@ class StreamChatAgentTest extends TestCase
         $this->post('/stream-chat-agent/token')->assertRedirect('/login');
     }
 
-    public function test_stream_chat_agent_token_endpoint_returns_payload_for_authenticated_user(): void
+    public function test_stream_chat_agent_token_endpoint_returns_payload_for_admin_user(): void
     {
         config()->set('stream_chat.api_key', 'test-key');
         config()->set('stream_chat.api_secret', 'test-secret');
 
         $user = User::factory()->create([
             'name' => 'Support One',
+            'is_admin' => true,
         ]);
 
         $this->actingAs($user)
@@ -75,7 +81,9 @@ class StreamChatAgentTest extends TestCase
         config()->set('stream_chat.api_key', null);
         config()->set('stream_chat.api_secret', null);
 
-        $user = User::factory()->create();
+        $user = User::factory()->create([
+            'is_admin' => true,
+        ]);
 
         $this->actingAs($user)
             ->postJson('/stream-chat-agent/token')
@@ -83,5 +91,18 @@ class StreamChatAgentTest extends TestCase
             ->assertJson([
                 'message' => 'Stream Chat is not configured.',
             ]);
+    }
+
+    public function test_non_admin_user_cannot_access_stream_chat_agent_routes(): void
+    {
+        $user = User::factory()->create();
+
+        $this->actingAs($user)
+            ->get('/stream-chat-agent')
+            ->assertForbidden();
+
+        $this->actingAs($user)
+            ->postJson('/stream-chat-agent/token')
+            ->assertForbidden();
     }
 }

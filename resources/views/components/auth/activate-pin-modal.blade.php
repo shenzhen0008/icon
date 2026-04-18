@@ -13,6 +13,8 @@
   'pinAriaLabel' => null,
   'pinConfirmAriaLabel' => null,
   'submitLabel' => null,
+  'loginUrl' => null,
+  'loginLabel' => null,
   'mismatchError' => null,
   'incompleteError' => null,
 ])
@@ -34,6 +36,8 @@
   $pinAriaLabel = is_string($pinAriaLabel) && $pinAriaLabel !== '' ? $pinAriaLabel : __('pages/me.activate_modal.pin_aria');
   $pinConfirmAriaLabel = is_string($pinConfirmAriaLabel) && $pinConfirmAriaLabel !== '' ? $pinConfirmAriaLabel : __('pages/me.activate_modal.pin_confirm_aria');
   $submitLabel = is_string($submitLabel) && $submitLabel !== '' ? $submitLabel : __('pages/me.activate_modal.submit');
+  $loginUrl = is_string($loginUrl) && $loginUrl !== '' ? $loginUrl : null;
+  $loginLabel = is_string($loginLabel) && $loginLabel !== '' ? $loginLabel : __('pages/me.activate_modal.login');
   $mismatchError = is_string($mismatchError) && $mismatchError !== '' ? $mismatchError : __('pages/me.activate_modal.mismatch_error');
   $incompleteError = is_string($incompleteError) && $incompleteError !== '' ? $incompleteError : __('pages/me.activate_modal.incomplete_error');
 @endphp
@@ -129,6 +133,15 @@
       >
         {{ $submitLabel }}
       </button>
+
+      @if ($loginUrl !== null)
+        <a
+          href="{{ $loginUrl }}"
+          class="block text-center text-scale-body text-theme-secondary underline decoration-theme underline-offset-2 hover:text-theme"
+        >
+          {{ $loginLabel }}
+        </a>
+      @endif
     </form>
   </div>
 </dialog>

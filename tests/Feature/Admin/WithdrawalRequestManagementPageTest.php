@@ -7,7 +7,7 @@ use App\Modules\Withdrawal\Models\WithdrawalRequest;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class WithdrawalRequestManagementPageTest extends TestCase
+class WithdrawalRequestManagementPageTest extends AdminPanelTestCase
 {
     use RefreshDatabase;
 

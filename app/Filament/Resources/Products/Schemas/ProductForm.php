@@ -105,7 +105,7 @@ class ProductForm
                     ->schema([
                         Repeater::make('translations')
                             ->relationship('translations')
-                            ->label('按语言维护介绍文案')
+                            ->label('按语言维护标题与介绍文案')
                             ->defaultItems(0)
                             ->columns(2)
                             ->schema([
@@ -113,6 +113,10 @@ class ProductForm
                                     ->label('语言')
                                     ->required()
                                     ->options($localeOptions),
+                                TextInput::make('title')
+                                    ->label('产品标题')
+                                    ->maxLength(255)
+                                    ->required(),
                                 Textarea::make('description')
                                     ->label('介绍文案')
                                     ->rows(4)

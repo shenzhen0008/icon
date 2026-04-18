@@ -7,7 +7,7 @@ use App\Modules\Balance\Models\RechargePaymentRequest;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class OnchainRechargeRequestManagementPageTest extends TestCase
+class OnchainRechargeRequestManagementPageTest extends AdminPanelTestCase
 {
     use RefreshDatabase;
 

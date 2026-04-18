@@ -8,7 +8,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
-class ProductReservationManagementPageTest extends TestCase
+class ProductReservationManagementPageTest extends AdminPanelTestCase
 {
     use RefreshDatabase;
 

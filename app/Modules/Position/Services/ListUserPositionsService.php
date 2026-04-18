@@ -4,10 +4,15 @@ namespace App\Modules\Position\Services;
 
 use App\Models\User;
 use App\Modules\Position\Models\Position;
+use App\Modules\Product\Services\ProductTranslationService;
 use App\Modules\Settlement\Models\DailySettlement;
 
 class ListUserPositionsService
 {
+    public function __construct(private readonly ProductTranslationService $productTranslationService)
+    {
+    }
+
     /**
      * @return array<int, array{
      *     id:int,
@@ -20,7 +25,7 @@ class ListUserPositionsService
     public function handle(User $user): array
     {
         $positions = Position::query()
-            ->with('product:id,name')
+            ->with(['product:id,name', 'product.translations'])
             ->where('user_id', $user->id)
             ->whereIn('status', ['open', 'redeeming'])
             ->latest('id')
@@ -44,7 +49,7 @@ class ListUserPositionsService
 
         return $positions->map(fn (Position $position): array => [
             'id' => $position->id,
-            'name' => $position->product?->name ?? '--',
+            'name' => $this->productTranslationService->resolveName($position->product, emptyFallback: '--'),
             'principal' => number_format((float) $position->principal, 2, '.', ''),
             'status' => $position->status,
             'recent_profits' => $recentProfitRowsByPosition[$position->id] ?? [],

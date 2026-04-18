@@ -64,6 +64,22 @@ class StreamChatTest extends TestCase
         $this->assertSame('test-key', $response->json('apiKey'));
     }
 
+    public function test_guest_token_prefers_temp_username_for_display_name(): void
+    {
+        config()->set('stream_chat.api_key', 'test-key');
+        config()->set('stream_chat.api_secret', 'test-secret');
+        $tempUsernameKey = (string) config('user.temp_username_session_key');
+
+        $this->withSession([
+            $tempUsernameKey => 'aaa123',
+        ])->postJson('/stream-chat/guest-token')
+            ->assertOk()
+            ->assertJson([
+                'user' => ['name' => 'aaa123'],
+                'channel' => ['name' => 'aaa123'],
+            ]);
+    }
+
     public function test_guest_token_endpoint_returns_503_when_stream_chat_is_not_configured(): void
     {
         config()->set('stream_chat.api_key', null);
@@ -80,10 +96,11 @@ class StreamChatTest extends TestCase
     {
         config()->set('stream_chat.api_key', 'test-key');
         config()->set('stream_chat.api_secret', 'test-secret');
+        $tempUsernameKey = (string) config('user.temp_username_session_key');
 
         $this->withSession([
             'stream_chat.guest_id' => 'guest_test1234',
-            'stream_chat.guest_name' => 'Guest-ABCD',
+            $tempUsernameKey => 'aaa123',
         ])->get('/stream-chat/notify-token')
             ->assertOk()
             ->assertJsonStructure([
@@ -91,6 +108,10 @@ class StreamChatTest extends TestCase
                 'token',
                 'user' => ['id', 'name'],
                 'channel' => ['type', 'id', 'name', 'members'],
+            ])
+            ->assertJson([
+                'user' => ['name' => 'aaa123'],
+                'channel' => ['name' => 'aaa123'],
             ]);
     }
 

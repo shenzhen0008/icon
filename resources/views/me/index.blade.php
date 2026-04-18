@@ -37,6 +37,8 @@
       :pin-aria-label="__('pages/me.activate_modal.pin_aria')"
       :pin-confirm-aria-label="__('pages/me.activate_modal.pin_confirm_aria')"
       :submit-label="__('pages/me.activate_modal.submit')"
+      :login-url="'/login?redirect_to=%2Fme'"
+      :login-label="__('pages/me.activate_modal.login')"
       :mismatch-error="__('pages/me.activate_modal.mismatch_error')"
       :incomplete-error="__('pages/me.activate_modal.incomplete_error')"
     />

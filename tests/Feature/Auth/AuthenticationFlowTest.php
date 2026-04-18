@@ -141,6 +141,21 @@ class AuthenticationFlowTest extends TestCase
         $this->assertGuest();
     }
 
+    public function test_user_can_login_with_short_username(): void
+    {
+        $user = User::factory()->create([
+            'username' => 'aaa123',
+            'password' => bcrypt('aaa123456'),
+        ]);
+
+        $this->post('/login', [
+            'username' => 'aaa123',
+            'password' => 'aaa123456',
+        ])->assertRedirect('/me');
+
+        $this->assertAuthenticatedAs($user);
+    }
+
     public function test_password_confirmation_is_required_for_sensitive_page(): void
     {
         $user = User::factory()->create([
@@ -201,7 +216,7 @@ class AuthenticationFlowTest extends TestCase
         $this->get('/login?locale=en')
             ->assertOk()
             ->assertSee('Login')
-            ->assertSee('Username (21 chars)')
+            ->assertSee('Username')
             ->assertSee('Password')
             ->assertSee('Remember me');
     }

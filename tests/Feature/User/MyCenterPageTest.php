@@ -25,6 +25,7 @@ class MyCenterPageTest extends TestCase
         $response->assertSee('请输入并确认 6 位数字交易 PIN');
         $response->assertSee('输入 6 位 PIN');
         $response->assertSee('确认 6 位 PIN');
+        $response->assertSee('/login?redirect_to=%2Fme', false);
         $response->assertSee('const shouldAutoOpen = true;', false);
         $response->assertSee('const closeRedirectUrl =', false);
         $response->assertSee('locale=zh-CN', false);

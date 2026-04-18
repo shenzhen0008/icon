@@ -6,7 +6,7 @@ use App\Modules\Product\Models\Product;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class ProductManagementPageTest extends TestCase
+class ProductManagementPageTest extends AdminPanelTestCase
 {
     use RefreshDatabase;
 

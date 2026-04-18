@@ -4,6 +4,7 @@ namespace App\Modules\Position\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Modules\Position\Models\Position;
+use App\Modules\Product\Services\ProductTranslationService;
 use App\Modules\Redemption\Models\PositionRedemptionRequest;
 use App\Modules\Settlement\Models\DailySettlement;
 use Illuminate\Contracts\View\View;
@@ -11,11 +12,15 @@ use Illuminate\Support\Facades\Gate;
 
 class PositionOrderPageController extends Controller
 {
+    public function __construct(private readonly ProductTranslationService $productTranslationService)
+    {
+    }
+
     public function __invoke(Position $position): View
     {
         Gate::authorize('view', $position);
 
-        $position->loadMissing('product:id,name');
+        $position->loadMissing(['product:id,name', 'product.translations']);
 
         $latestRedemptionRequest = PositionRedemptionRequest::query()
             ->where('position_id', $position->id)
@@ -37,7 +42,7 @@ class PositionOrderPageController extends Controller
         return view('positions.show', [
             'position' => [
                 'id' => $position->id,
-                'product_name' => $position->product?->name ?? '--',
+                'product_name' => $this->productTranslationService->resolveName($position->product, emptyFallback: '--'),
                 'principal' => number_format((float) $position->principal, 2, '.', ''),
                 'status' => $position->status,
                 'opened_at' => $position->opened_at?->format('Y-m-d H:i') ?? '--',

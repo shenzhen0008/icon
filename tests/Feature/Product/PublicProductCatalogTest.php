@@ -85,6 +85,7 @@ class PublicProductCatalogTest extends TestCase
         $response->assertSee('立即购买');
         $response->assertSee('data-open-activate-modal', false);
         $response->assertSee('id="activate-modal"', false);
+        $response->assertSee('/login?redirect_to=%2Fproducts', false);
         $response->assertSee('theme-pin-modal');
         $response->assertSee('text-theme-on-primary');
         $response->assertDontSee('rounded-2xl bg-[rgb(var(--theme-primary))] px-4 py-2 text-xl font-medium text-theme-secondary');
@@ -395,5 +396,70 @@ class PublicProductCatalogTest extends TestCase
         $this->get('/products/'.$product->id.'?locale=en')
             ->assertOk()
             ->assertSee('默认语言翻译介绍');
+    }
+
+    public function test_catalog_uses_product_title_translation_for_current_locale(): void
+    {
+        $product = Product::query()->create([
+            'name' => '中文产品名B',
+            'code' => 'CNPB',
+            'unit_price' => 1000,
+            'is_active' => true,
+            'sort' => 0,
+        ]);
+
+        ProductTranslation::query()->create([
+            'product_id' => $product->id,
+            'locale' => 'en',
+            'title' => 'English Product Name B',
+            'description' => 'English description',
+        ]);
+
+        $this->get('/products?locale=en')
+            ->assertOk()
+            ->assertSee('English Product Name B')
+            ->assertDontSee('中文产品名B');
+    }
+
+    public function test_product_detail_uses_product_title_translation_for_current_locale(): void
+    {
+        $product = Product::query()->create([
+            'name' => '中文产品名C',
+            'code' => 'CNPC',
+            'unit_price' => 1000,
+            'is_active' => true,
+        ]);
+
+        ProductTranslation::query()->create([
+            'product_id' => $product->id,
+            'locale' => 'en',
+            'title' => 'English Product Name C',
+            'description' => 'English description C',
+        ]);
+
+        $this->get('/products/'.$product->id.'?locale=en')
+            ->assertOk()
+            ->assertSee('English Product Name C')
+            ->assertDontSee('中文产品名C');
+    }
+
+    public function test_product_detail_falls_back_to_base_product_name_when_translated_title_missing(): void
+    {
+        $product = Product::query()->create([
+            'name' => '基础产品名D',
+            'code' => 'BASE-D',
+            'unit_price' => 1000,
+            'is_active' => true,
+        ]);
+
+        ProductTranslation::query()->create([
+            'product_id' => $product->id,
+            'locale' => 'en',
+            'description' => 'English description D',
+        ]);
+
+        $this->get('/products/'.$product->id.'?locale=en')
+            ->assertOk()
+            ->assertSee('基础产品名D');
     }
 }

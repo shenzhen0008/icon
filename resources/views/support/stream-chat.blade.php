@@ -185,15 +185,24 @@
         if (audioCtx.state === 'suspended') {
           await audioCtx.resume();
         }
-        const oscillator = audioCtx.createOscillator();
-        const gainNode = audioCtx.createGain();
-        oscillator.type = 'sine';
-        oscillator.frequency.value = 880;
-        gainNode.gain.value = 0.02;
-        oscillator.connect(gainNode);
-        gainNode.connect(audioCtx.destination);
-        oscillator.start();
-        oscillator.stop(audioCtx.currentTime + 0.12);
+
+        const now = audioCtx.currentTime;
+        const tone = (freq, delay, duration, peakGain) => {
+          const oscillator = audioCtx.createOscillator();
+          const gainNode = audioCtx.createGain();
+          oscillator.type = 'triangle';
+          oscillator.frequency.setValueAtTime(freq, now + delay);
+          gainNode.gain.setValueAtTime(0.0001, now + delay);
+          gainNode.gain.exponentialRampToValueAtTime(peakGain, now + delay + 0.02);
+          gainNode.gain.exponentialRampToValueAtTime(0.0001, now + delay + duration);
+          oscillator.connect(gainNode);
+          gainNode.connect(audioCtx.destination);
+          oscillator.start(now + delay);
+          oscillator.stop(now + delay + duration + 0.02);
+        };
+
+        tone(1046, 0, 0.16, 0.09);
+        tone(1318, 0.11, 0.2, 0.085);
       };
 
       const showSoundPrompt = () => {
@@ -254,6 +263,11 @@
         });
 
         await channel.watch();
+        if ((channel.data?.name || '') !== payload.channel.name) {
+          channel.updatePartial({
+            set: { name: payload.channel.name },
+          }).catch(() => {});
+        }
         localStorage.setItem(streamNotifyBootstrapKey, '1');
         renderHistory(channel.state.messages);
 

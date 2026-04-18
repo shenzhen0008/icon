@@ -4,7 +4,7 @@ namespace App\Modules\Product\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Modules\Product\Models\Product;
-use App\Modules\Product\Services\ProductDescriptionTranslationService;
+use App\Modules\Product\Services\ProductTranslationService;
 use App\Modules\User\Services\TemporaryAccountService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
@@ -13,7 +13,7 @@ class ProductDetailController extends Controller
 {
     public function __construct(
         private readonly TemporaryAccountService $temporaryAccountService,
-        private readonly ProductDescriptionTranslationService $productDescriptionTranslationService,
+        private readonly ProductTranslationService $productTranslationService,
     ) {}
 
     public function __invoke(Request $request, Product $product): View
@@ -32,11 +32,11 @@ class ProductDetailController extends Controller
         return view('products.show', [
             'product' => [
                 'id' => $product->id,
-                'name' => $product->name,
+                'name' => $this->productTranslationService->resolveName($product, emptyFallback: '--'),
                 'code' => $product->code,
                 'trade_mode' => $product->trade_mode,
                 'unit_price' => number_format((float) $product->unit_price, 2, '.', ''),
-                'description' => $this->productDescriptionTranslationService->resolveDescription($product),
+                'description' => $this->productTranslationService->resolveDescription($product),
                 'limit_range' => $this->formatRange($product->limit_min_usdt, $product->limit_max_usdt),
                 'rate_range' => $this->formatPercentRange($product->rate_min_percent, $product->rate_max_percent),
                 'cycle_label' => $this->formatCycleLabel($product->cycle_days),

@@ -5,7 +5,7 @@
 本方案用于当前 Laravel 13 项目的多语言落地，目标是：
 
 1. 固定 UI 文案可按页面独立维护；
-2. 商品介绍支持后台按语言录入；
+2. 商品标题与介绍支持后台按语言录入；
 3. 帮助页 FAQ 支持后台按语言录入；
 4. 不引入 SEO 多语言字段（本项目当前不做 SEO）。
 
@@ -44,21 +44,22 @@ lang/
 3. key 稳定不随文案变更而变更；
 4. key 命名统一小写下划线。
 
-### 2.2 商品介绍：数据库翻译表
+### 2.2 商品标题与介绍：数据库翻译表
 
 商品为业务实体，采用主表 + 翻译表模式：
 
 1. `products`：语言无关字段（当前项目已存在，无需新建）；
 2. `product_translations`：语言相关字段（本次新增）。
 
-当前最小落地口径：商品只翻译简介字段。
+当前最小落地口径：商品翻译标题与简介字段。
 
 `product_translations` 字段：
 
 1. `id`
 2. `product_id`
 3. `locale`
-4. `description`
+4. `title`
+5. `description`
 5. `created_at`
 6. `updated_at`
 
@@ -86,14 +87,15 @@ FAQ 数量多、更新频率高，采用数据库管理。
 
 ### 3.1 `product_translations`
 
-用途：商品多语言简介（仅 `description`）。
+用途：商品多语言标题与简介（`title + description`）。
 
 字段：
 
 1. `id`（主键）
 2. `product_id`（关联 `products.id`）
 3. `locale`（如 `zh-CN`、`en`）
-4. `description`（TEXT）
+4. `title`（VARCHAR）
+5. `description`（TEXT）
 5. `created_at`
 6. `updated_at`
 
@@ -159,7 +161,8 @@ FAQ 数量多、更新频率高，采用数据库管理。
 
 后台商品创建/编辑页面按语言 Tab 填写：
 
-1. `description`
+1. `title`
+2. `description`
 
 发布前校验：
 
@@ -201,7 +204,7 @@ FAQ 数量多、更新频率高，采用数据库管理。
 1. 新建 `product_translations`；
 2. 将 `products` 现有中文内容迁移为 `zh-CN`；
 3. 读取逻辑切换到翻译表 + 回退；
-4. 本阶段只迁移/维护 `description` 的多语言。
+4. 本阶段迁移/维护 `title + description` 的多语言。
 
 ### 8.2 FAQ
 
@@ -222,16 +225,16 @@ FAQ 数量多、更新频率高，采用数据库管理。
 
 1. locale 切换有效，且全站统一按同一策略生效。
 2. 页面 UI 字典可随 locale 正常切换。
-3. 商品 `description` 可按 locale 读取，并在缺失时回退默认语言。
+3. 商品 `title/description` 可按 locale 读取，并在缺失时回退默认语言。
 4. FAQ `question/answer` 可按 locale 读取，并在缺失时回退默认语言。
-5. 后台可按语言录入商品简介与 FAQ 问答。
+5. 后台可按语言录入商品标题/简介与 FAQ 问答。
 
 ## 11. 本次结论
 
 最终采用：
 
 1. UI：页面级语言包（每页一个字典文件）；
-2. 商品：复用现有 `products`，新增 `product_translations`（当前仅 `description`）；
+2. 商品：复用现有 `products`，新增 `product_translations`（`title + description`）；
 3. FAQ：无分类，采用 `help_items + help_item_translations`；
 4. 全站统一 locale 与 fallback 机制；
 5. 不引入 SEO 多语言字段；
@@ -248,13 +251,13 @@ FAQ 数量多、更新频率高，采用数据库管理。
 
 ### 12.2 再补后台录入链路
 
-1. 产品管理改为按语言维护翻译（至少覆盖 `description`）；
+1. 产品管理改为按语言维护翻译（覆盖 `title + description`）；
 2. 新增 HelpItem 的 Filament 资源，并包含 translations 录入能力；
 3. 后台录入遵循默认语言必填、非默认语言可缺失但需可识别。
 
 ### 12.3 最后做数据迁移与退场
 
-1. 写一次性迁移脚本：`products.description -> product_translations(zh-CN)`；
+1. 写一次性迁移脚本：`products.name/description -> product_translations(zh-CN)`；
 2. 写一次性迁移脚本：`config/help.php -> help_items/help_item_translations`；
 3. 稳定期内保留旧数据源兜底，验证完成后逐步移除 `config/help.php` 依赖。
 

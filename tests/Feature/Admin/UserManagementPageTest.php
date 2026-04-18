@@ -9,7 +9,7 @@ use App\Modules\Product\Models\Product;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class UserManagementPageTest extends TestCase
+class UserManagementPageTest extends AdminPanelTestCase
 {
     use RefreshDatabase;
 
@@ -20,7 +20,9 @@ class UserManagementPageTest extends TestCase
         $this->get('/admin')
             ->assertOk()
             ->assertSee('产品管理')
-            ->assertSee('用户管理');
+            ->assertSee('用户管理')
+            ->assertSee('客服工作台')
+            ->assertSee('/stream-chat-agent', false);
         $this->get('/admin/users')->assertOk();
         $this->get('/admin/users/create')
             ->assertOk()

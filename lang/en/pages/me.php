@@ -31,6 +31,7 @@ return [
         'pin_aria' => 'Enter 6-digit PIN',
         'pin_confirm_aria' => 'Confirm 6-digit PIN',
         'submit' => 'Confirm Registration',
+        'login' => 'Already have an account? Log in',
         'mismatch_error' => 'The two PIN entries do not match. Please try again.',
         'incomplete_error' => 'Please enter a complete 6-digit PIN.',
     ],

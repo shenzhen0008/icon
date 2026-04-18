@@ -6,7 +6,7 @@ use App\Modules\Balance\Models\RechargeReceiver;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class RechargeReceiverManagementPageTest extends TestCase
+class RechargeReceiverManagementPageTest extends AdminPanelTestCase
 {
     use RefreshDatabase;
 

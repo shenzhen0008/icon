@@ -33,7 +33,7 @@
                 {{ __('pages/login.remember_me') }}
             </label>
 
-            <button class="w-full rounded bg-[rgb(var(--theme-primary))] px-4 py-2 font-medium text-theme-secondary">{{ __('pages/login.submit') }}</button>
+            <button class="text-scale-ui flex h-[clamp(1.9rem,7vw,2.2rem)] w-full items-center justify-center rounded-2xl bg-[rgb(var(--theme-primary))] px-[clamp(0.6rem,2.5vw,0.9rem)] font-semibold text-theme-on-primary shadow-lg shadow-[rgb(var(--theme-primary))]/20 transition hover:bg-[rgb(var(--theme-primary))]/90">{{ __('pages/login.submit') }}</button>
         </form>
     </main>
 

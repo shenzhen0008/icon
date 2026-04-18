@@ -6,7 +6,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
 use Tests\TestCase;
 
-class HomeDisplaySettingManagementPageTest extends TestCase
+class HomeDisplaySettingManagementPageTest extends AdminPanelTestCase
 {
     use RefreshDatabase;
 

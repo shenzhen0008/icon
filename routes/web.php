@@ -86,8 +86,10 @@ Route::middleware('auth')->group(function (): void {
     Route::get('/me/orders', PositionOrdersPageController::class);
     Route::get('/me/positions/{position}', PositionOrderPageController::class);
     Route::post('/me/positions/{position}/redemption-requests', SubmitPositionRedemptionRequestController::class);
-    Route::get('/stream-chat-agent', StreamChatAgentPageController::class);
-    Route::post('/stream-chat-agent/token', StreamChatAgentTokenController::class);
+    Route::middleware('can:access-admin')->group(function (): void {
+        Route::get('/stream-chat-agent', StreamChatAgentPageController::class);
+        Route::post('/stream-chat-agent/token', StreamChatAgentTokenController::class);
+    });
     Route::post('/popup/{campaign}/shown', MarkPopupShownController::class);
     Route::post('/popup/{campaign}/dismiss', MarkPopupDismissedController::class);
     Route::post('/popup/{campaign}/confirm', MarkPopupConfirmedController::class);

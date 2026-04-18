@@ -5,6 +5,7 @@ namespace App\Modules\Product\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Modules\Position\Models\Position;
 use App\Modules\Product\Models\Product;
+use App\Modules\Product\Services\ProductTranslationService;
 use App\Modules\Settlement\Models\DailySettlement;
 use App\Modules\User\Services\TemporaryAccountService;
 use Illuminate\Contracts\View\View;
@@ -12,9 +13,10 @@ use Illuminate\Support\Facades\Auth;
 
 class PublicProductCatalogController extends Controller
 {
-    public function __construct(private readonly TemporaryAccountService $temporaryAccountService)
-    {
-    }
+    public function __construct(
+        private readonly TemporaryAccountService $temporaryAccountService,
+        private readonly ProductTranslationService $productTranslationService,
+    ) {}
 
     public function __invoke(): View
     {
@@ -50,13 +52,14 @@ class PublicProductCatalogController extends Controller
         }
 
         $products = Product::query()
+            ->with('translations')
             ->where('is_active', true)
             ->orderBy('sort')
             ->orderBy('id')
             ->get()
             ->map(fn (Product $product): array => [
                 'id' => $product->id,
-                'name' => $product->name,
+                'name' => $this->productTranslationService->resolveName($product, emptyFallback: '--'),
                 'code' => $product->code,
                 'trade_mode' => $product->trade_mode,
                 'unit_price' => number_format((float) $product->unit_price, 2, '.', ''),
