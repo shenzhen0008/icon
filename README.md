@@ -167,10 +167,19 @@ cd /www/wwwroot/bitcon.yunqueapp.com
 # 拉取修复代码
 git pull origin main
 
-# 清理缓存
-/www/server/php/83/bin/php artisan optimize:clear
-# 迁移新数据表
+# 推荐：走统一部署脚本（默认执行 composer + migrate + optimize）
+bash scripts/deploy.sh
+
+# 首次初始化数据库并校验编码时（可选）
+# DB_ROOT_PASSWORD 请替换为服务器 root 密码
+DB_INIT_ENABLED=1 DB_ROOT_PASSWORD='你的数据库root密码' bash scripts/deploy.sh
+
+# 需要初始化基础数据时（可选）
+RUN_SEEDER=1 bash scripts/deploy.sh
+
+# 仅手动执行关键步骤（备用）
 /www/server/php/83/bin/php artisan migrate --force
+/www/server/php/83/bin/php artisan optimize:clear
 
 # 管理后台
 https://xxxxxx.com/admin

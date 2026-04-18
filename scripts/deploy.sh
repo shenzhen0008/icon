@@ -5,6 +5,11 @@ PHP_BIN="/www/server/php/83/bin/php"
 APP_DIR="/www/wwwroot/bitcon.yunqueapp.com"
 ENV_TEMPLATE=".env.production.example"
 INSTALL_SCHEDULER_CRON="${INSTALL_SCHEDULER_CRON:-1}"
+MYSQL_BIN="${MYSQL_BIN:-mysql}"
+DB_INIT_ENABLED="${DB_INIT_ENABLED:-0}"
+DB_INIT_CHARSET="${DB_INIT_CHARSET:-utf8mb4}"
+DB_INIT_COLLATION="${DB_INIT_COLLATION:-utf8mb4_unicode_ci}"
+RUN_SEEDER="${RUN_SEEDER:-0}"
 
 if [ ! -x "$PHP_BIN" ]; then
   echo "[ERROR] PHP 8.3 binary not found at: $PHP_BIN"
@@ -23,6 +28,21 @@ if [ ! -f .env ]; then
   fi
 fi
 
+get_env_value() {
+  local key="$1"
+  local file="$2"
+  local line
+
+  line="$(grep -E "^${key}=" "$file" | tail -n 1 || true)"
+  line="${line#*=}"
+  line="${line%\"}"
+  line="${line#\"}"
+  line="${line%\'}"
+  line="${line#\'}"
+
+  printf '%s' "$line"
+}
+
 if [ ! -f public/build/manifest.json ]; then
   echo "[ERROR] public/build/manifest.json missing. Please upload local build artifacts."
   exit 1
@@ -38,9 +58,54 @@ if ! ls public/build/assets/app-*.js >/dev/null 2>&1; then
   exit 1
 fi
 
+DB_HOST="$(get_env_value "DB_HOST" ".env")"
+DB_PORT="$(get_env_value "DB_PORT" ".env")"
+DB_DATABASE="$(get_env_value "DB_DATABASE" ".env")"
+
+if [ "$DB_INIT_ENABLED" = "1" ]; then
+  if ! command -v "$MYSQL_BIN" >/dev/null 2>&1; then
+    echo "[ERROR] mysql client not found: $MYSQL_BIN"
+    exit 1
+  fi
+
+  DB_ROOT_USER="${DB_ROOT_USER:-root}"
+  DB_ROOT_PASSWORD="${DB_ROOT_PASSWORD:-}"
+
+  if [ -z "$DB_DATABASE" ]; then
+    echo "[ERROR] DB_DATABASE is empty in .env, cannot initialize database."
+    exit 1
+  fi
+
+  if [ -z "$DB_ROOT_PASSWORD" ]; then
+    echo "[ERROR] DB_INIT_ENABLED=1 requires DB_ROOT_PASSWORD."
+    exit 1
+  fi
+
+  DB_HOST="${DB_HOST:-127.0.0.1}"
+  DB_PORT="${DB_PORT:-3306}"
+
+  "$MYSQL_BIN" -h"$DB_HOST" -P"$DB_PORT" -u"$DB_ROOT_USER" -p"$DB_ROOT_PASSWORD" -e \
+    "CREATE DATABASE IF NOT EXISTS \`$DB_DATABASE\` CHARACTER SET $DB_INIT_CHARSET COLLATE $DB_INIT_COLLATION;"
+
+  DB_META="$("$MYSQL_BIN" -N -B -h"$DB_HOST" -P"$DB_PORT" -u"$DB_ROOT_USER" -p"$DB_ROOT_PASSWORD" -e \
+    "SELECT DEFAULT_CHARACTER_SET_NAME, DEFAULT_COLLATION_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME='$DB_DATABASE';")"
+  DB_META_CHARSET="$(printf '%s' "$DB_META" | awk '{print $1}')"
+  DB_META_COLLATION="$(printf '%s' "$DB_META" | awk '{print $2}')"
+
+  if [ "$DB_META_CHARSET" != "$DB_INIT_CHARSET" ] || [ "$DB_META_COLLATION" != "$DB_INIT_COLLATION" ]; then
+    echo "[ERROR] Database $DB_DATABASE charset/collation mismatch: expected $DB_INIT_CHARSET/$DB_INIT_COLLATION, got $DB_META_CHARSET/$DB_META_COLLATION."
+    exit 1
+  fi
+
+  echo "[INFO] Database $DB_DATABASE ready with $DB_INIT_CHARSET/$DB_INIT_COLLATION."
+fi
+
 $PHP_BIN /usr/bin/composer install --no-dev --optimize-autoloader
 $PHP_BIN artisan key:generate --force
 $PHP_BIN artisan migrate --force
+if [ "$RUN_SEEDER" = "1" ]; then
+  $PHP_BIN artisan db:seed --force
+fi
 $PHP_BIN artisan livewire:publish --assets
 
 mkdir -p storage/app/public/recharge-receipts

@@ -1,0 +1,106 @@
+[
+  {
+    "code": "PROD_A",
+    "name": "基础模型-V",
+    "unit_price": 1000.0,
+    "purchase_limit_count": 2,
+    "limit_min_usdt": 1000.0,
+    "limit_max_usdt": 10000.0,
+    "rate_min_percent": 1.15,
+    "rate_max_percent": 2.22,
+    "cycle_days": 2,
+    "product_icon_path": null,
+    "symbol_icon_paths": [],
+    "trade_mode": "direct",
+    "is_active": true,
+    "sort": 10,
+    "translations": {
+      "en": {
+        "title": "1212121212",
+        "description": "sdgsdrgwsedrgf\\nwerwertwerttrwertwer\\nwertwertwertwert"
+      },
+      "zh-CN": {
+        "title": "111111111111111",
+        "description": "是广东省的风格受到感染\\n是的官方说的话说的话\\n是的后端收费较好的风格\\n说的话说的废话"
+      }
+    }
+  },
+  {
+    "code": "PROD_B",
+    "name": "ai智能合约模型-VI",
+    "unit_price": 5000.0,
+    "purchase_limit_count": 2,
+    "limit_min_usdt": 5000.0,
+    "limit_max_usdt": 30000.0,
+    "rate_min_percent": 2.25,
+    "rate_max_percent": 3.32,
+    "cycle_days": 10,
+    "product_icon_path": null,
+    "symbol_icon_paths": [],
+    "trade_mode": "direct",
+    "is_active": true,
+    "sort": 20,
+    "translations": {
+      "en": {
+        "title": null,
+        "description": "sdjfhlisdhfl\\nsdfgsdfjgh\\nsdgfsdfgwsdfg"
+      },
+      "zh-CN": {
+        "title": "ai智能合约模型-VI",
+        "description": "看金额更符合开始的\\n啊时代客家话\\n撒娇的风格好\\n啊思考绝代风华"
+      }
+    }
+  },
+  {
+    "code": "PROD_C",
+    "name": "增长C",
+    "unit_price": 10000.0,
+    "purchase_limit_count": null,
+    "limit_min_usdt": 60000.0,
+    "limit_max_usdt": 120000.0,
+    "rate_min_percent": 3.0,
+    "rate_max_percent": 3.5,
+    "cycle_days": 15,
+    "product_icon_path": null,
+    "symbol_icon_paths": [],
+    "trade_mode": "reserve",
+    "is_active": true,
+    "sort": 30,
+    "translations": {
+      "en": {
+        "title": null,
+        "description": "sdfgsdfg\\nsdfgsdfgsdfg\\nshdfsdfhsdfhg\\nsdfgsdfhsdh"
+      },
+      "zh-CN": {
+        "title": "增长C",
+        "description": "山东科技风格黑龙江省蛋糕\\n圣诞节匡扶汉室地方\\n上岛咖啡价格合理稳定\\n是氮磷钾肥婚礼上岛咖啡加"
+      }
+    }
+  },
+  {
+    "code": "PROD_D",
+    "name": "旗舰D",
+    "unit_price": 30000.0,
+    "purchase_limit_count": null,
+    "limit_min_usdt": 8000.0,
+    "limit_max_usdt": 100000.0,
+    "rate_min_percent": 3.5,
+    "rate_max_percent": 4.5,
+    "cycle_days": 10,
+    "product_icon_path": null,
+    "symbol_icon_paths": [],
+    "trade_mode": "reserve",
+    "is_active": true,
+    "sort": 40,
+    "translations": {
+      "en": {
+        "title": null,
+        "description": "sdjlfhglajshd\\nsdfgsdfhsdfh\\nsdhsdfhsdfh\\nsdhfsdfhsdf"
+      },
+      "zh-CN": {
+        "title": "旗舰D",
+        "description": "山东公司的风格受到广泛\\n是的废话好多饭\\n是的废话都是风格好\\n风格和山东分公司"
+      }
+    }
+  }
+]
