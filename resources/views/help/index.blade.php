@@ -34,7 +34,16 @@
       @foreach ($faqs as $faq)
         <details class="group overflow-hidden rounded-2xl border border-theme bg-theme-card">
           <summary class="flex cursor-pointer list-none items-center justify-between gap-4 px-5 py-4 text-left">
-            <span class="text-scale-body font-semibold text-theme">{{ $faq['question'] }}</span>
+            <span class="relative block pl-8">
+              <img
+                src="/images/icon_question.svg"
+                alt=""
+                aria-hidden="true"
+                class="pointer-events-none absolute left-0 top-1/2 h-7 w-7 -translate-y-1/2"
+                loading="lazy"
+              >
+              <span class="text-scale-body font-semibold text-theme">{{ $faq['question'] }}</span>
+            </span>
             <span class="shrink-0 text-theme-secondary transition group-open:rotate-45">+</span>
           </summary>
           <div class="border-t border-theme bg-theme-secondary/20 px-5 py-4">
@@ -42,6 +51,51 @@
           </div>
         </details>
       @endforeach
+    </section>
+
+    <section class="mt-8">
+      @php
+        $licenses = [
+            [
+                'title_lines' => ['NMLS Regulated', 'MTL License'],
+                'image' => '/images/NMLSRegulatedMTLLicense.jpeg',
+            ],
+            [
+                'title_lines' => ['SEC Regulated', 'Common Financial Service License'],
+                'image' => '/images/SECRegulatedCommonFinancialServiceLicense.jpeg',
+            ],
+            [
+                'title_lines' => ['NYSDFS Regulated', 'Digital Currency License'],
+                'image' => '/images/NYSDFSRegulatedDigitalCurrencyLicense.jpeg',
+            ],
+        ];
+      @endphp
+
+      <div class="grid gap-4 md:grid-cols-3">
+        @foreach ($licenses as $license)
+          <article class="overflow-hidden rounded-2xl border border-theme bg-theme-card">
+            <div class="border-b border-theme px-4 py-3">
+              <div class="relative pl-8">
+                <img
+                  src="/images/icon_question.svg"
+                  alt=""
+                  aria-hidden="true"
+                  class="pointer-events-none absolute left-0 top-1/2 h-7 w-7 -translate-y-1/2"
+                  loading="lazy"
+                >
+                <p class="text-scale-ui font-semibold leading-tight text-theme break-words">{{ $license['title_lines'][0] }}</p>
+                <p class="mt-1 text-scale-ui font-semibold leading-tight text-theme break-words">{{ $license['title_lines'][1] }}</p>
+              </div>
+            </div>
+            <img
+              src="{{ $license['image'] }}"
+              alt="{{ implode(' ', $license['title_lines']) }}"
+              class="h-86 w-full bg-theme-secondary/20 object-contain object-center"
+              loading="lazy"
+            >
+          </article>
+        @endforeach
+      </div>
     </section>
   </main>
 
