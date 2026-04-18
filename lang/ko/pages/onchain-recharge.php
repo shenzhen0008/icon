@@ -1,0 +1,25 @@
+<?php
+
+return [
+    'html_lang' => 'ko',
+    'meta_title' => '온체인 충전 | Icon Market',
+    'title' => '온체인 충전',
+    'intro' => '직접 결제 후 거래 해시를 제출하세요. 고객센터 확인 후 입금됩니다.',
+    'back_to_recharge' => '일반 충전으로 돌아가기',
+    'no_channel' => '현재 사용 가능한 수신 채널이 없습니다. 관리자에게 문의하세요.',
+    'dev_prefill_params' => '개발 사전 입력 파라미터',
+    'chain_id' => '체인 ID',
+    'token_address_usdt' => '토큰 주소 (USDT)',
+    'default_receiver_address' => '기본 수신 주소',
+    'select_asset' => '자산 선택',
+    'asset' => '자산',
+    'payment_amount' => '결제 금액',
+    'receiving_address' => '수신 주소',
+    'tx_hash' => '트랜잭션 해시 (Tx Hash)',
+    'payer_wallet' => '결제 지갑 주소',
+    'payer_wallet_placeholder' => '충전 확인 시 지갑에 자동 연결되어 주소가 자동 입력됩니다',
+    'pay_button' => '충전 확인 후 지갑 결제 실행',
+    'note' => '메모 (선택)',
+    'note_placeholder' => '예: 결제 용도, 정산 보충 정보',
+    'submit' => '온체인 충전 신청 제출',
+];

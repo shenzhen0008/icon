@@ -1,0 +1,46 @@
+<?php
+
+return [
+    'html_lang' => 'ko',
+    'meta_title' => '은행 충전 | Icon Market',
+    'tabs' => [
+        'receive' => '입금',
+        'send' => '출금',
+    ],
+    'setup' => [
+        'title' => '은행 카드 연동',
+        'subtitle' => '충전 확인 및 출금 심사를 위해 실제 은행 카드 정보를 입력해 주세요.',
+        'submit' => '저장 후 계속',
+    ],
+    'receive' => [
+        'title' => '은행 입금',
+        'steps' => '1. 수취 계좌 정보 복사 -> 2. 은행 앱에서 이체 -> 3. 스크린샷 업로드',
+        'receiver_unavailable' => '수취 계좌를 사용할 수 없습니다. 잠시 후 다시 시도해 주세요.',
+        'receiver_bank_name' => '수취 은행',
+        'receiver_account_name' => '예금주',
+        'receiver_card_number' => '카드 번호',
+        'receiver_branch_name' => '지점',
+        'copy' => '복사',
+        'copied' => '복사됨',
+        'contact_account' => '연락 계정',
+        'payment_amount' => '결제 금액',
+        'receipt_image' => '이체 스크린샷',
+        'choose_file' => '파일 선택',
+        'no_file_selected' => '선택된 파일 없음',
+        'user_note' => '메모 (선택)',
+        'submit' => '충전 요청 제출',
+    ],
+    'send' => [
+        'title' => '은행 출금',
+        'available_balance' => '사용 가능 잔액',
+        'bank_name' => '은행명',
+        'account_name' => '예금주',
+        'card_number' => '카드 번호',
+        'branch_name' => '지점명 (선택)',
+        'reserved_phone' => '등록 휴대폰 번호 (선택)',
+        'withdrawal_amount' => '출금 금액',
+        'note' => '메모 (선택)',
+        'submit' => '출금 요청 제출',
+        'freeze_notice' => '요청 제출 후 해당 금액은 즉시 동결되며, 거절 시 자동 환불됩니다.',
+    ],
+];

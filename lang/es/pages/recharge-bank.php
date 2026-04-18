@@ -1,0 +1,46 @@
+<?php
+
+return [
+    'html_lang' => 'es',
+    'meta_title' => 'Financiación bancaria | Icon Market',
+    'tabs' => [
+        'receive' => 'RECIBIR',
+        'send' => 'ENVIAR',
+    ],
+    'setup' => [
+        'title' => 'Vincular tarjeta bancaria',
+        'subtitle' => 'Proporciona datos reales de tu tarjeta bancaria para la verificación de recarga y la revisión de retiros.',
+        'submit' => 'Guardar y continuar',
+    ],
+    'receive' => [
+        'title' => 'Recarga bancaria',
+        'steps' => '1. Copia la información de la tarjeta receptora -> 2. Transfiere en tu app bancaria -> 3. Sube la captura de pantalla',
+        'receiver_unavailable' => 'La cuenta receptora no está disponible. Inténtalo de nuevo más tarde.',
+        'receiver_bank_name' => 'Banco receptor',
+        'receiver_account_name' => 'Nombre de la cuenta',
+        'receiver_card_number' => 'Número de tarjeta',
+        'receiver_branch_name' => 'Sucursal',
+        'copy' => 'Copiar',
+        'copied' => 'Copiado',
+        'contact_account' => 'Cuenta de contacto',
+        'payment_amount' => 'Monto del pago',
+        'receipt_image' => 'Captura de transferencia',
+        'choose_file' => 'Elegir archivo',
+        'no_file_selected' => 'Ningún archivo seleccionado',
+        'user_note' => 'Nota (opcional)',
+        'submit' => 'Enviar solicitud de recarga',
+    ],
+    'send' => [
+        'title' => 'Retiro bancario',
+        'available_balance' => 'Saldo disponible',
+        'bank_name' => 'Nombre del banco',
+        'account_name' => 'Nombre de la cuenta',
+        'card_number' => 'Número de tarjeta',
+        'branch_name' => 'Sucursal (opcional)',
+        'reserved_phone' => 'Teléfono registrado (opcional)',
+        'withdrawal_amount' => 'Monto del retiro',
+        'note' => 'Nota (opcional)',
+        'submit' => 'Enviar solicitud de retiro',
+        'freeze_notice' => 'El monto solicitado se congela inmediatamente después del envío y se reembolsa automáticamente si es rechazado.',
+    ],
+];

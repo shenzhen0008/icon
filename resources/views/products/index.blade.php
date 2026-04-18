@@ -105,12 +105,12 @@
                 <button
                   type="button"
                   data-open-activate-modal
-                  class="text-scale-ui mt-2.5 flex h-[clamp(1.9rem,7vw,2.2rem)] w-[clamp(7rem,42vw,9rem)] items-center justify-center rounded-2xl bg-[rgb(var(--theme-primary))] px-[clamp(0.6rem,2.5vw,0.9rem)] font-semibold text-theme-on-primary shadow-lg shadow-[rgb(var(--theme-primary))]/20 transition hover:bg-[rgb(var(--theme-primary))]/90 mx-auto"
+                  class="text-scale-ui mt-2.5 flex h-[clamp(1.9rem,7vw,2.2rem)] min-w-[clamp(7rem,42vw,9rem)] w-auto items-center justify-center whitespace-nowrap rounded-2xl bg-[rgb(var(--theme-primary))] px-[clamp(0.6rem,2.5vw,0.9rem)] font-semibold text-theme-on-primary shadow-lg shadow-[rgb(var(--theme-primary))]/20 transition hover:bg-[rgb(var(--theme-primary))]/90 mx-auto"
                 >
                   {{ $product['trade_mode'] === 'reserve' ? __('pages/product-list.preorder_now') : __('pages/product-list.buy_now') }}
                 </button>
               @else
-                <a href="/products/{{ $product['id'] }}" class="text-scale-ui mt-2.5 flex h-[clamp(1.9rem,7vw,2.2rem)] w-[clamp(7rem,42vw,9rem)] items-center justify-center rounded-2xl bg-[rgb(var(--theme-primary))] px-[clamp(0.6rem,2.5vw,0.9rem)] font-semibold text-theme-on-primary shadow-lg shadow-[rgb(var(--theme-primary))]/20 transition hover:bg-[rgb(var(--theme-primary))]/90 mx-auto">
+                <a href="/products/{{ $product['id'] }}" class="text-scale-ui mt-2.5 flex h-[clamp(1.9rem,7vw,2.2rem)] min-w-[clamp(7rem,42vw,9rem)] w-auto items-center justify-center whitespace-nowrap rounded-2xl bg-[rgb(var(--theme-primary))] px-[clamp(0.6rem,2.5vw,0.9rem)] font-semibold text-theme-on-primary shadow-lg shadow-[rgb(var(--theme-primary))]/20 transition hover:bg-[rgb(var(--theme-primary))]/90 mx-auto">
                   {{ $product['trade_mode'] === 'reserve' ? __('pages/product-list.preorder_now') : __('pages/product-list.buy_now') }}
                 </a>
               @endif

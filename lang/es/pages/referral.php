@@ -1,0 +1,28 @@
+<?php
+
+return [
+    'html_lang' => 'es',
+    'meta_title' => 'Referidos | Icon Market',
+    'hero_tagline' => 'Invita y gana',
+    'hero_title' => 'Programa de referidos',
+    'hero_subtitle' => 'Invita a tus amigos y gana 5% de recompensas directas más 2% de recompensas indirectas. La información clave está toda en una sola página.',
+    'reward_info' => 'Detalles de recompensa',
+    'reward_help_aria' => 'Ver detalles de recompensa',
+    'help_title' => '¿Hay recompensa por invitar amigos?',
+    'help_p1' => 'Sí, puedes invitar a tus amigos a unirse a AI Smart Contracts mediante tu enlace personal e invitarlos con éxito a unirse a AI Smart Contracts. Recibirás un bono de invitación proporcionado por la plataforma AI Smart Contracts. Las recompensas específicas por invitación son las siguientes:',
+    'help_p2' => '① El usuario A invita al usuario B (el usuario A puede obtener el 5% de los ingresos de la participación del usuario B en AI Smart Contracts).',
+    'help_p3' => '② El usuario B invita al usuario C (el usuario B puede obtener el 5% de los ingresos de la participación del usuario C en AI Smart Contracts, mientras que el usuario A puede obtener el 3% de los ingresos de la participación del usuario C en AI Smart Contracts).',
+    'help_p4' => '③ El usuario C invita al usuario D (el usuario C puede obtener el 5% de los ingresos de la participación del usuario D en AI Smart Contracts, el usuario B puede obtener el 3% de los ingresos de la participación del usuario D en AI Smart Contracts y el usuario A puede obtener el 1% de los ingresos del usuario D).',
+    'help_p5' => 'Ejemplo: el usuario D participa en un contrato inteligente de IA para ganar 100 USDT. El usuario A recibirá un bono de invitación de 1 USDT de la plataforma AI Smart Contracts. El usuario B recibirá un bono de invitación de 3 USDT de la plataforma AI Smart Contracts. El usuario C recibirá un bono de invitación de 5 USDT de la plataforma AI Smart Contracts. Todas las recompensas son proporcionadas por la plataforma AI Smart Contracts y no afectan las ganancias de ningún usuario.',
+    'level_1_title' => 'Recompensa de nivel 1 (directa)',
+    'level_1_count_label' => 'Invitados de nivel 1',
+    'level_2_title' => 'Recompensa de nivel 2 (indirecta)',
+    'level_2_count_label' => 'Invitados de nivel 2',
+    'invite_code' => 'Código de invitación',
+    'invite_link' => 'Enlace de invitación',
+    'copy_link' => 'Copiar enlace',
+    'share_now' => 'Compartir ahora',
+    'copied' => 'Copiado',
+    'share_text' => 'Invitación de referido de Icon Market',
+    'link_copied_alert' => 'Enlace copiado',
+];

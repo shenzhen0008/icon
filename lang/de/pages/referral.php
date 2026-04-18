@@ -1,0 +1,28 @@
+<?php
+
+return [
+    'html_lang' => 'de',
+    'meta_title' => 'Empfehlung | Icon Market',
+    'hero_tagline' => 'Einladen und verdienen',
+    'hero_title' => 'Empfehlungsprogramm',
+    'hero_subtitle' => 'Laden Sie Freunde ein und erhalten Sie 5 % direkte Belohnung plus 2 % indirekte Belohnung. Alle wichtigen Informationen auf einer Seite.',
+    'reward_info' => 'Belohnungsdetails',
+    'reward_help_aria' => 'Belohnungsdetails anzeigen',
+    'help_title' => 'Gibt es eine Belohnung für das Einladen von Freunden?',
+    'help_p1' => 'Ja, Sie können Ihre Freunde über Ihren persönlichen Link zu AI Smart Contracts einladen. Wenn Ihre Freunde erfolgreich beitreten, erhalten Sie einen Empfehlungsbonus von der AI Smart Contracts-Plattform. Die genauen Belohnungen sind wie folgt:',
+    'help_p2' => '① Benutzer A lädt Benutzer B ein (Benutzer A erhält 5 % der Einnahmen aus der Teilnahme von Benutzer B an AI Smart Contracts).',
+    'help_p3' => '② Benutzer B lädt Benutzer C ein (Benutzer B erhält 5 % der Einnahmen von Benutzer C, während Benutzer A 3 % der Einnahmen von Benutzer C erhält).',
+    'help_p4' => '③ Benutzer C lädt Benutzer D ein (Benutzer C erhält 5 % der Einnahmen von Benutzer D, Benutzer B erhält 3 % und Benutzer A erhält 1 %).',
+    'help_p5' => 'Beispiel: Benutzer D nimmt an einem AI Smart Contract teil und verdient 100 USDT. Benutzer A erhält 1 USDT, Benutzer B 3 USDT und Benutzer C 5 USDT Empfehlungsbonus. Alle Belohnungen werden von der AI Smart Contracts-Plattform bereitgestellt und beeinflussen die Einnahmen anderer Benutzer nicht.',
+    'level_1_title' => 'Level-1-Belohnung (direkt)',
+    'level_1_count_label' => 'Level-1-Einladungen',
+    'level_2_title' => 'Level-2-Belohnung (indirekt)',
+    'level_2_count_label' => 'Level-2-Einladungen',
+    'invite_code' => 'Einladungscode',
+    'invite_link' => 'Einladungslink',
+    'copy_link' => 'Link kopieren',
+    'share_now' => 'Jetzt teilen',
+    'copied' => 'Kopiert',
+    'share_text' => 'Icon Market Empfehlungs-Einladung',
+    'link_copied_alert' => 'Link kopiert',
+];

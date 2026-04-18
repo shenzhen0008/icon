@@ -1,0 +1,28 @@
+<?php
+
+return [
+    'html_lang' => 'pt',
+    'meta_title' => 'Indicação | Icon Market',
+    'hero_tagline' => 'Indique e ganhe',
+    'hero_title' => 'Programa de indicação',
+    'hero_subtitle' => 'Convide amigos para participar e ganhe 5% de recompensas diretas mais 2% de recompensas indiretas. As principais informações estão em uma única página.',
+    'reward_info' => 'Detalhes da recompensa',
+    'reward_help_aria' => 'Ver detalhes da recompensa',
+    'help_title' => 'Existe recompensa por convidar amigos?',
+    'help_p1' => 'Sim, você pode convidar seus amigos para participar do AI Smart Contracts através do seu link pessoal e convidá-los com sucesso para participar do AI Smart Contracts. Você receberá um bônus de convite fornecido pela plataforma AI Smart Contracts. As recompensas específicas de convite são as seguintes:',
+    'help_p2' => '① O usuário A convida o usuário B (o usuário A pode obter 5% da receita da participação do usuário B no AI Smart Contracts).',
+    'help_p3' => '② O usuário B convida o usuário C (o usuário B pode obter 5% da receita da participação do usuário C no AI Smart Contracts, enquanto o usuário A pode obter 3% da receita da participação do usuário C no AI Smart Contracts).',
+    'help_p4' => '③ O usuário C convida o usuário D (o usuário C pode obter 5% da receita da participação do usuário D no AI smart contracts, o usuário B pode obter 3% da receita da participação do usuário D no AI smart contracts e o usuário A pode obter 1% da receita do usuário D).',
+    'help_p5' => 'Exemplo: o usuário D participa de um contrato inteligente de IA para ganhar 100 USDT. O usuário A receberá um bônus de convite de 1 USDT da plataforma AI Smart Contracts. O usuário B receberá um bônus de convite de 3 USDT da plataforma AI Smart Contracts. O usuário C receberá um bônus de convite de 5 USDT da plataforma AI Smart Contracts. Todas as recompensas são fornecidas pela plataforma AI Smart Contracts e não afetam os ganhos de nenhum usuário.',
+    'level_1_title' => 'Recompensa de nível 1 (direta)',
+    'level_1_count_label' => 'Convites de nível 1',
+    'level_2_title' => 'Recompensa de nível 2 (indireta)',
+    'level_2_count_label' => 'Convites de nível 2',
+    'invite_code' => 'Código de convite',
+    'invite_link' => 'Link de convite',
+    'copy_link' => 'Copiar link',
+    'share_now' => 'Compartilhar agora',
+    'copied' => 'Copiado',
+    'share_text' => 'Convite de indicação do Icon Market',
+    'link_copied_alert' => 'Link copiado',
+];

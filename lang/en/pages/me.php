@@ -35,4 +35,27 @@ return [
         'mismatch_error' => 'The two PIN entries do not match. Please try again.',
         'incomplete_error' => 'Please enter a complete 6-digit PIN.',
     ],
+    'guest_panel' => [
+        'title' => 'Quick Registration',
+        'description' => 'You are currently in guest mode. Set a password to upgrade your temporary account to a registered account.',
+        'activate_button' => 'Set Password and Register',
+        'login_link' => 'Already have an account? Log in',
+    ],
+    'products_panel' => [
+        'title' => 'Available Products',
+        'empty' => 'No products are currently available.',
+        'limit_prefix' => 'Limit: ',
+        'purchase_hint' => 'Purchase by amount. A warning will appear when balance is insufficient.',
+        'guest_hint' => 'Log in to enter the detail page and purchase.',
+        'view_buy' => 'Go to Detail to Buy',
+        'view_detail' => 'Go to Detail',
+    ],
+    'profit_panel' => [
+        'title' => 'Profit Status',
+        'today_settled' => 'Today Settled Profit',
+        'total_settled' => 'Total Settled Profit',
+        'current_principal' => 'Current Principal',
+        'account_balance' => 'Account Balance',
+        'recharge' => 'Recharge',
+    ],
 ];

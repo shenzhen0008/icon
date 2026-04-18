@@ -46,8 +46,8 @@
             </div>
           @else
             <div class="mt-4">
-              <p class="text-scale-body text-theme-secondary">收款银行</p>
-              <div id="bank-receiver-selector" class="mt-2 flex flex-wrap gap-2" role="tablist" aria-label="Bank receiver selector">
+              <p class="text-scale-body text-theme-secondary">{{ __('pages/recharge-bank.receive.receiver_bank_name') }}</p>
+              <div id="bank-receiver-selector" class="mt-2 flex flex-wrap gap-2" role="tablist" aria-label="{{ __('pages/recharge-bank.receive.receiver_bank_name') }}">
                 @foreach ($receivers as $receiver)
                   @php
                     $receiverKey = (string) ($receiver['key'] ?? '');

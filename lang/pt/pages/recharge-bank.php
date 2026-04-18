@@ -1,0 +1,46 @@
+<?php
+
+return [
+    'html_lang' => 'pt',
+    'meta_title' => 'Financiamento bancário | Icon Market',
+    'tabs' => [
+        'receive' => 'RECEBER',
+        'send' => 'ENVIAR',
+    ],
+    'setup' => [
+        'title' => 'Vincular cartão bancário',
+        'subtitle' => 'Forneça dados reais do cartão bancário para verificação de recarga e revisão de saque.',
+        'submit' => 'Salvar e continuar',
+    ],
+    'receive' => [
+        'title' => 'Recarga bancária',
+        'steps' => '1. Copie os dados do cartão de recebimento -> 2. Transfira no seu app bancário -> 3. Envie a captura de tela',
+        'receiver_unavailable' => 'A conta de recebimento está indisponível. Tente novamente mais tarde.',
+        'receiver_bank_name' => 'Banco de recebimento',
+        'receiver_account_name' => 'Nome da conta',
+        'receiver_card_number' => 'Número do cartão',
+        'receiver_branch_name' => 'Agência',
+        'copy' => 'Copiar',
+        'copied' => 'Copiado',
+        'contact_account' => 'Conta de contato',
+        'payment_amount' => 'Valor do pagamento',
+        'receipt_image' => 'Comprovante de transferência',
+        'choose_file' => 'Escolher arquivo',
+        'no_file_selected' => 'Nenhum arquivo selecionado',
+        'user_note' => 'Observação (opcional)',
+        'submit' => 'Enviar solicitação de recarga',
+    ],
+    'send' => [
+        'title' => 'Saque bancário',
+        'available_balance' => 'Saldo disponível',
+        'bank_name' => 'Nome do banco',
+        'account_name' => 'Nome da conta',
+        'card_number' => 'Número do cartão',
+        'branch_name' => 'Agência (opcional)',
+        'reserved_phone' => 'Telefone cadastrado (opcional)',
+        'withdrawal_amount' => 'Valor do saque',
+        'note' => 'Observação (opcional)',
+        'submit' => 'Enviar solicitação de saque',
+        'freeze_notice' => 'O valor solicitado é congelado imediatamente após o envio e reembolsado automaticamente se for rejeitado.',
+    ],
+];

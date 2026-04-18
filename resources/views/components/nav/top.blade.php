@@ -153,7 +153,7 @@
     window.location.assign(fallbackUrl);
   });
 
-  // 主题切换功能
+  // Theme toggle.
   document.getElementById('theme-toggle').addEventListener('click', () => {
     const html = document.documentElement;
     const currentTheme = html.getAttribute('data-theme');
@@ -162,11 +162,11 @@
     localStorage.setItem('theme', newTheme);
   });
 
-  // 页面加载时恢复主题
+  // Restore theme when page loads.
   const savedTheme = localStorage.getItem('theme') || 'business';
   document.documentElement.setAttribute('data-theme', savedTheme);
 
-  // 同步顶部/底部导航与可视区域数据，避免移动端键盘弹起后布局溢出。
+  // Sync top/bottom nav and viewport insets to avoid mobile keyboard overflow.
   const syncLayoutInsets = () => {
     const topNav = document.getElementById('top-nav');
     const mobileNav = document.getElementById('mobile-nav');

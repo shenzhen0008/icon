@@ -57,15 +57,24 @@
       @php
         $licenses = [
             [
-                'title_lines' => ['NMLS Regulated', 'MTL License'],
+                'title_lines' => [
+                    __('pages/help-center.license_titles.nmls.line1'),
+                    __('pages/help-center.license_titles.nmls.line2'),
+                ],
                 'image' => '/images/NMLSRegulatedMTLLicense.jpeg',
             ],
             [
-                'title_lines' => ['SEC Regulated', 'Common Financial Service License'],
+                'title_lines' => [
+                    __('pages/help-center.license_titles.sec.line1'),
+                    __('pages/help-center.license_titles.sec.line2'),
+                ],
                 'image' => '/images/SECRegulatedCommonFinancialServiceLicense.jpeg',
             ],
             [
-                'title_lines' => ['NYSDFS Regulated', 'Digital Currency License'],
+                'title_lines' => [
+                    __('pages/help-center.license_titles.nysdfs.line1'),
+                    __('pages/help-center.license_titles.nysdfs.line2'),
+                ],
                 'image' => '/images/NYSDFSRegulatedDigitalCurrencyLicense.jpeg',
             ],
         ];

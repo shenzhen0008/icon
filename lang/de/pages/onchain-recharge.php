@@ -1,0 +1,25 @@
+<?php
+
+return [
+    'html_lang' => 'de',
+    'meta_title' => 'On-Chain-Aufladung | Icon Market',
+    'title' => 'On-Chain-Aufladung',
+    'intro' => 'Senden Sie nach der Direktzahlung den Transaktions-Hash. Gutschrift erfolgt nach Support-Prüfung.',
+    'back_to_recharge' => 'Zurück zur Standard-Aufladung',
+    'no_channel' => 'Derzeit ist kein Empfangskanal verfügbar. Bitte kontaktieren Sie den Administrator.',
+    'dev_prefill_params' => 'Vorbelegte Entwicklungsparameter',
+    'chain_id' => 'Chain-ID',
+    'token_address_usdt' => 'Token-Adresse (USDT)',
+    'default_receiver_address' => 'Standard-Empfangsadresse',
+    'select_asset' => 'Asset auswählen',
+    'asset' => 'Asset',
+    'payment_amount' => 'Zahlungsbetrag',
+    'receiving_address' => 'Empfangsadresse',
+    'tx_hash' => 'Transaktions-Hash (Tx Hash)',
+    'payer_wallet' => 'Wallet-Adresse des Zahlers',
+    'payer_wallet_placeholder' => 'Beim Bestätigen wird die Wallet automatisch verbunden und die Adresse eingetragen',
+    'pay_button' => 'Aufladung bestätigen und Wallet-Zahlung starten',
+    'note' => 'Notiz (optional)',
+    'note_placeholder' => 'Zum Beispiel: Zahlungszweck, zusätzliche Prüfhinweise',
+    'submit' => 'On-Chain-Aufladungsantrag senden',
+];

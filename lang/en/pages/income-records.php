@@ -19,6 +19,7 @@ return [
     ],
     'income_type' => [
         'referral_commission' => 'Referral Commission',
+        'referral_commission_legacy_name' => '推荐提成',
     ],
     'empty' => 'No income records yet',
 ];

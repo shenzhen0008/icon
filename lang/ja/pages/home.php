@@ -1,0 +1,48 @@
+<?php
+
+return [
+    'html_lang' => 'ja',
+    'meta_title' => 'Icon Market | デジタル資産管理プラットフォーム',
+    'hero' => [
+        'title' => 'AIスマートコントラクトへようこそ',
+        'subtitle' => 'AIによる定量取引',
+        'trade_records' => '取引履歴',
+        'income_records' => '収益履歴',
+        'available_balance' => '残高 (USDT)',
+        'total_earnings' => '累計収益 (USDT)',
+        'earnings_24h' => '24時間収益 (USDT)',
+        'mode_demo' => 'デモ',
+        'mode_live' => 'ライブ',
+        'mode_demo_badge' => '#demo',
+        'mode_live_badge' => '#live',
+        'live_load_failed' => 'LIVEモードのデータ読み込みに失敗しました。しばらくしてから再試行してください。',
+    ],
+    'stats' => [
+        'title' => '取引を開始！',
+        'subtitle' => 'AIを活用した2000以上の因子ライブラリで、より多くの派生シグナルを捉え、一歩先を行きます。',
+        'participant_count' => '参加人数',
+        'total_profit' => '総利益',
+        'total_profit_suffix' => 'USDT',
+        'popup_confirm' => '了解',
+        'popup_salutation_default' => 'ユーザー',
+    ],
+    'exchange' => [
+        'title' => 'ライブ取引プラットフォーム',
+        'currency' => '通貨',
+        'volume_24h' => '24時間出来高',
+        'liquidity' => '流動性',
+        'updated_prefix' => '更新',
+    ],
+    'nav' => [
+        'back' => '戻る',
+        'language_toggle' => '言語を切り替える',
+        'home' => 'ホーム',
+        'products' => '商品',
+        'help' => 'ヘルプ',
+        'share' => '共有',
+        'me' => 'マイページ',
+        'support' => 'サポート',
+        'notification_title' => 'Icon Market サポートメッセージ',
+        'notification_body' => '新しいサポートメッセージがあります',
+    ],
+];

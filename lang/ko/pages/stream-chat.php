@@ -1,0 +1,26 @@
+<?php
+
+return [
+    'html_lang' => 'ko',
+    'meta_title' => '온라인 지원 | Icon Market',
+    'status_connecting' => '고객지원에 연결 중...',
+    'label_image' => '이미지',
+    'input_placeholder' => '메시지를 입력하세요...',
+    'button_send' => '전송',
+    'sound_prompt' => '메시지 알림음을 활성화하시겠습니까? 새 메시지 도착 시 알림음이 재생됩니다.',
+    'sound_later' => '나중에',
+    'sound_enable' => '활성화',
+    'not_configured' => 'Stream Chat이 아직 설정되지 않았습니다. 먼저 API Key와 Secret을 설정해 주세요.',
+    'name_self' => '나',
+    'name_support_default' => '고객지원',
+    'name_support_fallback' => 'Support008',
+    'image_alt_uploaded' => '업로드된 이미지',
+    'label_self_prefix' => '나:',
+    'hint_image_uploading' => '이미지 업로드 중...',
+    'status_sound_enabled' => '알림음이 활성화되었습니다.',
+    'status_sound_enable_failed' => '알림음 활성화에 실패했습니다. 다시 시도해 주세요.',
+    'error_token_failed' => '고객지원 세션 토큰을 가져올 수 없습니다. 잠시 후 다시 시도해 주세요.',
+    'hint_image_send_failed' => '이미지 전송에 실패했습니다. 다시 시도해 주세요.',
+    'status_connected' => '고객지원 연결 완료. 이제 메시지를 보낼 수 있습니다.',
+    'status_connect_failed' => '고객지원 연결에 실패했습니다. 잠시 후 다시 시도해 주세요.',
+];

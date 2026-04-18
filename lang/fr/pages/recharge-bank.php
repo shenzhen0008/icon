@@ -1,0 +1,46 @@
+<?php
+
+return [
+    'html_lang' => 'fr',
+    'meta_title' => 'Rechargement bancaire | Icon Market',
+    'tabs' => [
+        'receive' => 'RECEVOIR',
+        'send' => 'ENVOYER',
+    ],
+    'setup' => [
+        'title' => 'Lier une carte bancaire',
+        'subtitle' => 'Veuillez fournir les informations réelles de votre carte bancaire pour la vérification du rechargement et l’examen des retraits.',
+        'submit' => 'Enregistrer et continuer',
+    ],
+    'receive' => [
+        'title' => 'Rechargement bancaire',
+        'steps' => '1. Copier les infos de la carte destinataire -> 2. Effectuer le virement dans votre app bancaire -> 3. Téléverser la capture d’écran',
+        'receiver_unavailable' => 'Le compte destinataire est indisponible. Veuillez réessayer plus tard.',
+        'receiver_bank_name' => 'Banque destinataire',
+        'receiver_account_name' => 'Nom du compte',
+        'receiver_card_number' => 'Numéro de carte',
+        'receiver_branch_name' => 'Agence',
+        'copy' => 'Copier',
+        'copied' => 'Copié',
+        'contact_account' => 'Compte de contact',
+        'payment_amount' => 'Montant du paiement',
+        'receipt_image' => 'Capture du virement',
+        'choose_file' => 'Choisir un fichier',
+        'no_file_selected' => 'Aucun fichier sélectionné',
+        'user_note' => 'Note (optionnelle)',
+        'submit' => 'Soumettre la demande de rechargement',
+    ],
+    'send' => [
+        'title' => 'Retrait bancaire',
+        'available_balance' => 'Solde disponible',
+        'bank_name' => 'Nom de la banque',
+        'account_name' => 'Nom du compte',
+        'card_number' => 'Numéro de carte',
+        'branch_name' => 'Agence (optionnel)',
+        'reserved_phone' => 'Téléphone enregistré (optionnel)',
+        'withdrawal_amount' => 'Montant du retrait',
+        'note' => 'Note (optionnelle)',
+        'submit' => 'Soumettre la demande de retrait',
+        'freeze_notice' => 'Le montant demandé est gelé immédiatement après la soumission et remboursé automatiquement en cas de rejet.',
+    ],
+];

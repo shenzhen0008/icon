@@ -1,0 +1,25 @@
+<?php
+
+return [
+    'html_lang' => 'fr',
+    'meta_title' => 'Recharge on-chain | Icon Market',
+    'title' => 'Recharge on-chain',
+    'intro' => 'Soumettez le hash de transaction après paiement direct. Les fonds sont crédités après vérification du support.',
+    'back_to_recharge' => 'Retour à la recharge standard',
+    'no_channel' => 'Aucun canal de réception n’est actuellement disponible. Veuillez contacter l’administrateur.',
+    'dev_prefill_params' => 'Paramètres de préremplissage (développement)',
+    'chain_id' => 'ID de chaîne',
+    'token_address_usdt' => 'Adresse du token (USDT)',
+    'default_receiver_address' => 'Adresse de réception par défaut',
+    'select_asset' => 'Sélectionner un actif',
+    'asset' => 'Actif',
+    'payment_amount' => 'Montant du paiement',
+    'receiving_address' => 'Adresse de réception',
+    'tx_hash' => 'Hash de transaction (Tx Hash)',
+    'payer_wallet' => 'Adresse du portefeuille payeur',
+    'payer_wallet_placeholder' => 'Lors de la confirmation, le portefeuille se connecte automatiquement et renseigne l’adresse',
+    'pay_button' => 'Confirmer la recharge et ouvrir le paiement wallet',
+    'note' => 'Note (optionnel)',
+    'note_placeholder' => 'Par exemple : objectif du paiement, informations complémentaires de vérification',
+    'submit' => 'Soumettre la demande de recharge on-chain',
+];

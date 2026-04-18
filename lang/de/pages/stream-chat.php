@@ -1,0 +1,26 @@
+<?php
+
+return [
+    'html_lang' => 'de',
+    'meta_title' => 'Online-Support | Icon Market',
+    'status_connecting' => 'Verbindung zum Support wird hergestellt...',
+    'label_image' => 'Bild',
+    'input_placeholder' => 'Geben Sie Ihre Nachricht ein...',
+    'button_send' => 'Senden',
+    'sound_prompt' => 'Benachrichtigungston für Nachrichten aktivieren? Bei neuen Nachrichten wird ein Ton abgespielt.',
+    'sound_later' => 'Später',
+    'sound_enable' => 'Aktivieren',
+    'not_configured' => 'Stream Chat ist noch nicht konfiguriert. Bitte legen Sie zuerst API Key und Secret fest.',
+    'name_self' => 'Ich',
+    'name_support_default' => 'Support',
+    'name_support_fallback' => 'Support008',
+    'image_alt_uploaded' => 'hochgeladenes Bild',
+    'label_self_prefix' => 'Ich:',
+    'hint_image_uploading' => 'Bild wird hochgeladen...',
+    'status_sound_enabled' => 'Benachrichtigungston aktiviert.',
+    'status_sound_enable_failed' => 'Aktivierung des Benachrichtigungstons fehlgeschlagen. Bitte erneut versuchen.',
+    'error_token_failed' => 'Support-Sitzungstoken konnte nicht abgerufen werden. Bitte versuchen Sie es später erneut.',
+    'hint_image_send_failed' => 'Bildversand fehlgeschlagen. Bitte erneut versuchen.',
+    'status_connected' => 'Support verbunden. Sie können jetzt Nachrichten senden.',
+    'status_connect_failed' => 'Support-Verbindung fehlgeschlagen. Bitte versuchen Sie es später erneut.',
+];

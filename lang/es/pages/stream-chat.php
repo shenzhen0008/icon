@@ -1,0 +1,26 @@
+<?php
+
+return [
+    'html_lang' => 'es',
+    'meta_title' => 'Soporte en línea | Icon Market',
+    'status_connecting' => 'Conectando con soporte...',
+    'label_image' => 'Imagen',
+    'input_placeholder' => 'Escribe tu mensaje...',
+    'button_send' => 'Enviar',
+    'sound_prompt' => '¿Habilitar sonido de alerta de mensajes? Se reproducirá un tono cuando lleguen nuevos mensajes.',
+    'sound_later' => 'Más tarde',
+    'sound_enable' => 'Habilitar',
+    'not_configured' => 'Stream Chat aún no está configurado. Configura primero la API Key y el Secret.',
+    'name_self' => 'Yo',
+    'name_support_default' => 'Soporte',
+    'name_support_fallback' => 'Soporte008',
+    'image_alt_uploaded' => 'imagen subida',
+    'label_self_prefix' => 'Yo:',
+    'hint_image_uploading' => 'Subiendo imagen...',
+    'status_sound_enabled' => 'Sonido de alerta habilitado.',
+    'status_sound_enable_failed' => 'No se pudo habilitar el sonido de alerta. Inténtalo de nuevo.',
+    'error_token_failed' => 'No se pudo obtener el token de sesión de soporte. Inténtalo de nuevo más tarde.',
+    'hint_image_send_failed' => 'Error al enviar imagen. Vuelve a intentarlo.',
+    'status_connected' => 'Soporte conectado. Ya puedes enviar mensajes.',
+    'status_connect_failed' => 'Falló la conexión con soporte. Inténtalo de nuevo más tarde.',
+];

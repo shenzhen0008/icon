@@ -1,0 +1,28 @@
+<?php
+
+return [
+    'html_lang' => 'fr',
+    'meta_title' => 'Parrainage | Icon Market',
+    'hero_tagline' => 'Invitez et gagnez',
+    'hero_title' => 'Programme de parrainage',
+    'hero_subtitle' => 'Invitez vos amis et obtenez 5 % de récompense directe plus 2 % de récompense indirecte. Les informations clés sont regroupées sur une seule page.',
+    'reward_info' => 'Détails des récompenses',
+    'reward_help_aria' => 'Voir les détails des récompenses',
+    'help_title' => 'Y a-t-il une récompense pour inviter des amis ?',
+    'help_p1' => 'Oui, vous pouvez inviter vos amis à rejoindre AI Smart Contracts via votre lien personnel. Une fois l’invitation réussie, vous recevrez un bonus d’invitation offert par la plateforme AI Smart Contracts. Les récompenses sont les suivantes :',
+    'help_p2' => '① L’utilisateur A invite l’utilisateur B (l’utilisateur A reçoit 5 % des revenus de la participation de l’utilisateur B).',
+    'help_p3' => '② L’utilisateur B invite l’utilisateur C (l’utilisateur B reçoit 5 % des revenus de l’utilisateur C, tandis que l’utilisateur A reçoit 3 % des revenus de l’utilisateur C).',
+    'help_p4' => '③ L’utilisateur C invite l’utilisateur D (l’utilisateur C reçoit 5 % des revenus de l’utilisateur D, l’utilisateur B reçoit 3 %, et l’utilisateur A reçoit 1 %).',
+    'help_p5' => 'Exemple : l’utilisateur D participe à un AI Smart Contract et gagne 100 USDT. L’utilisateur A reçoit 1 USDT, l’utilisateur B reçoit 3 USDT et l’utilisateur C reçoit 5 USDT de bonus d’invitation. Toutes les récompenses sont fournies par la plateforme AI Smart Contracts et n’affectent pas les revenus des utilisateurs.',
+    'level_1_title' => 'Récompense niveau 1 (directe)',
+    'level_1_count_label' => 'Invitations niveau 1',
+    'level_2_title' => 'Récompense niveau 2 (indirecte)',
+    'level_2_count_label' => 'Invitations niveau 2',
+    'invite_code' => 'Code d’invitation',
+    'invite_link' => 'Lien d’invitation',
+    'copy_link' => 'Copier le lien',
+    'share_now' => 'Partager maintenant',
+    'copied' => 'Copié',
+    'share_text' => 'Invitation de parrainage Icon Market',
+    'link_copied_alert' => 'Lien copié',
+];

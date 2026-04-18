@@ -1,0 +1,28 @@
+<?php
+
+return [
+    'html_lang' => 'ja',
+    'meta_title' => '紹介 | Icon Market',
+    'hero_tagline' => '招待して稼ぐ',
+    'hero_title' => '紹介プログラム',
+    'hero_subtitle' => '友達を招待すると、直接報酬5% + 間接報酬2%を獲得できます。主要情報はこの1ページに集約されています。',
+    'reward_info' => '報酬詳細',
+    'reward_help_aria' => '報酬詳細を表示',
+    'help_title' => '友達を招待すると報酬はありますか？',
+    'help_p1' => 'はい。あなた専用のリンクから友達を AI Smart Contracts に招待し、友達が正常に参加すると、AI Smart Contracts プラットフォームから招待ボーナスを受け取れます。具体的な報酬は以下の通りです。',
+    'help_p2' => '① ユーザーAがユーザーBを招待（ユーザーAはユーザーBの参加収益の5%を獲得）。',
+    'help_p3' => '② ユーザーBがユーザーCを招待（ユーザーBはユーザーCの参加収益の5%、同時にユーザーAはユーザーCの参加収益の3%を獲得）。',
+    'help_p4' => '③ ユーザーCがユーザーDを招待（ユーザーCはユーザーDの参加収益の5%、ユーザーBは3%、ユーザーAは1%を獲得）。',
+    'help_p5' => '例：ユーザーDがAIスマートコントラクトで100 USDTを獲得した場合、ユーザーAは1 USDT、ユーザーBは3 USDT、ユーザーCは5 USDTの招待ボーナスを受け取ります。すべての報酬はAI Smart Contractsプラットフォームが負担し、他ユーザーの収益には影響しません。',
+    'level_1_title' => 'レベル1報酬（直接）',
+    'level_1_count_label' => 'レベル1招待数',
+    'level_2_title' => 'レベル2報酬（間接）',
+    'level_2_count_label' => 'レベル2招待数',
+    'invite_code' => '招待コード',
+    'invite_link' => '招待リンク',
+    'copy_link' => 'リンクをコピー',
+    'share_now' => '今すぐ共有',
+    'copied' => 'コピーしました',
+    'share_text' => 'Icon Market 招待リンク',
+    'link_copied_alert' => 'リンクをコピーしました',
+];

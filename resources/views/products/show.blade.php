@@ -64,7 +64,7 @@
               <label class="mb-1 block text-scale-micro text-theme-secondary">{{ __('pages/product-detail.reserve_amount_usdt') }}</label>
               <input type="number" min="0.01" step="0.01" name="amount" class="w-full rounded-lg border border-theme bg-theme-secondary px-3 py-2 text-scale-body text-theme" required>
             </div>
-            <button class="text-scale-ui h-[clamp(1.9rem,7vw,2.2rem)] w-[clamp(7rem,42vw,9rem)] self-center rounded-lg bg-[rgb(var(--theme-primary))] px-[clamp(0.6rem,2.5vw,0.9rem)] font-semibold text-theme-on-primary mx-auto sm:w-[clamp(7.5rem,20vw,10rem)] sm:self-auto sm:mx-0">
+            <button class="text-scale-ui h-[clamp(1.9rem,7vw,2.2rem)] min-w-[clamp(7rem,42vw,9rem)] w-auto self-center whitespace-nowrap rounded-lg bg-[rgb(var(--theme-primary))] px-[clamp(0.6rem,2.5vw,0.9rem)] font-semibold text-theme-on-primary mx-auto sm:min-w-[clamp(7.5rem,20vw,10rem)] sm:self-auto sm:mx-0">
               {{ __('pages/product-detail.preorder_now') }}
             </button>
           </form>
@@ -78,7 +78,7 @@
               <label class="mb-1 block text-scale-micro text-theme-secondary">{{ __('pages/product-detail.purchase_amount_usdt') }}</label>
               <input type="number" min="0.01" step="0.01" name="amount" class="w-full rounded-lg border border-theme bg-theme-secondary px-3 py-2 text-scale-body text-theme" required>
             </div>
-            <button class="text-scale-ui h-[clamp(1.9rem,7vw,2.2rem)] w-[clamp(7rem,42vw,9rem)] self-center rounded-lg bg-[rgb(var(--theme-primary))] px-[clamp(0.6rem,2.5vw,0.9rem)] font-semibold text-theme-on-primary mx-auto sm:w-[clamp(7.5rem,20vw,10rem)] sm:self-auto sm:mx-0">
+            <button class="text-scale-ui h-[clamp(1.9rem,7vw,2.2rem)] min-w-[clamp(7rem,42vw,9rem)] w-auto self-center whitespace-nowrap rounded-lg bg-[rgb(var(--theme-primary))] px-[clamp(0.6rem,2.5vw,0.9rem)] font-semibold text-theme-on-primary mx-auto sm:min-w-[clamp(7.5rem,20vw,10rem)] sm:self-auto sm:mx-0">
               {{ __('pages/product-detail.buy_now') }}
             </button>
           </form>

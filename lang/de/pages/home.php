@@ -1,0 +1,48 @@
+<?php
+
+return [
+    'html_lang' => 'de',
+    'meta_title' => 'Icon Market | Plattform für digitales Vermögensmanagement',
+    'hero' => [
+        'title' => 'Willkommen bei AI Smart Contracts',
+        'subtitle' => 'Trading mit künstlicher Intelligenz',
+        'trade_records' => 'Handelsverlauf',
+        'income_records' => 'Einnahmeverlauf',
+        'available_balance' => 'Kontostand (USDT)',
+        'total_earnings' => 'Gesamtertrag (USDT)',
+        'earnings_24h' => 'Ertrag 24h (USDT)',
+        'mode_demo' => 'DEMO',
+        'mode_live' => 'LIVE',
+        'mode_demo_badge' => '#demo',
+        'mode_live_badge' => '#live',
+        'live_load_failed' => 'LIVE-Modus-Daten konnten nicht geladen werden. Bitte versuchen Sie es später erneut.',
+    ],
+    'stats' => [
+        'title' => 'Transaktion starten!',
+        'subtitle' => 'Eine Bibliothek mit über 2000 Faktoren mit KI-Unterstützung, um mehr Derivatsignale zu erfassen und einen Schritt voraus zu sein.',
+        'participant_count' => 'Anzahl der Teilnehmer',
+        'total_profit' => 'Gesamtgewinn',
+        'total_profit_suffix' => 'USDT',
+        'popup_confirm' => 'Verstanden',
+        'popup_salutation_default' => 'Benutzer',
+    ],
+    'exchange' => [
+        'title' => 'Live-Handelsplattformen',
+        'currency' => 'Währung',
+        'volume_24h' => '24h-Volumen',
+        'liquidity' => 'Liquidität',
+        'updated_prefix' => 'Aktualisiert',
+    ],
+    'nav' => [
+        'back' => 'Zurück',
+        'language_toggle' => 'Sprache wechseln',
+        'home' => 'Startseite',
+        'products' => 'Produkte',
+        'help' => 'Hilfe',
+        'share' => 'Teilen',
+        'me' => 'Mein Bereich',
+        'support' => 'Support',
+        'notification_title' => 'Icon Market Support-Nachricht',
+        'notification_body' => 'Sie haben eine neue Support-Nachricht',
+    ],
+];

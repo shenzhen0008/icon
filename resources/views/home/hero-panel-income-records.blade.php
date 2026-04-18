@@ -76,7 +76,7 @@
           @forelse ($records as $record)
             @php
               $productName = $incomeTypeLabels[$record['income_type'] ?? '']
-                ?? (($record['product_name'] ?? '') === '推荐提成'
+                ?? (($record['product_name'] ?? '') === __('pages/income-records.income_type.referral_commission_legacy_name')
                   ? __('pages/income-records.income_type.referral_commission')
                   : ($record['product_name'] ?? '--'));
             @endphp

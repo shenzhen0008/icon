@@ -1,0 +1,25 @@
+<?php
+
+return [
+    'html_lang' => 'es',
+    'meta_title' => 'Recarga on-chain | Icon Market',
+    'title' => 'Recarga on-chain',
+    'intro' => 'Envía el hash de la transacción tras el pago directo. Los fondos se acreditan tras la verificación del soporte.',
+    'back_to_recharge' => 'Volver a recarga estándar',
+    'no_channel' => 'Actualmente no hay un canal de recepción disponible. Contacta con el administrador.',
+    'dev_prefill_params' => 'Parámetros de precarga de desarrollo',
+    'chain_id' => 'ID de cadena',
+    'token_address_usdt' => 'Dirección del token (USDT)',
+    'default_receiver_address' => 'Dirección receptora predeterminada',
+    'select_asset' => 'Seleccionar activo',
+    'asset' => 'Activo',
+    'payment_amount' => 'Monto del pago',
+    'receiving_address' => 'Dirección de recepción',
+    'tx_hash' => 'Hash de transacción (Tx Hash)',
+    'payer_wallet' => 'Dirección de la cartera pagadora',
+    'payer_wallet_placeholder' => 'Al confirmar la recarga, la cartera se conectará automáticamente y completará la dirección',
+    'pay_button' => 'Confirmar recarga y abrir pago con cartera',
+    'note' => 'Nota (opcional)',
+    'note_placeholder' => 'Por ejemplo: propósito del pago o información adicional de verificación',
+    'submit' => 'Enviar solicitud de recarga on-chain',
+];

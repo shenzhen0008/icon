@@ -1,0 +1,48 @@
+<?php
+
+return [
+    'html_lang' => 'pt',
+    'meta_title' => 'Icon Market | Plataforma de gestão de ativos digitais',
+    'hero' => [
+        'title' => 'Bem-vindo ao AI Smart Contracts',
+        'subtitle' => 'Negociação com inteligência artificial',
+        'trade_records' => 'Registros de negociação',
+        'income_records' => 'Registros de renda',
+        'available_balance' => 'Saldo (SDT)',
+        'total_earnings' => 'Ganhos totais (USDT)',
+        'earnings_24h' => 'Ganhos 24h (USDT)',
+        'mode_demo' => 'DEMO',
+        'mode_live' => 'LIVE',
+        'mode_demo_badge' => '#demo',
+        'mode_live_badge' => '#live',
+        'live_load_failed' => 'Falha ao carregar os dados do modo LIVE. Tente novamente mais tarde.',
+    ],
+    'stats' => [
+        'title' => 'Transação aberta!',
+        'subtitle' => 'Uma biblioteca de mais de 2000 fatores com suporte de IA para capturar mais sinais de derivativos e ficar um passo à frente.',
+        'participant_count' => 'Número de pessoas',
+        'total_profit' => 'Lucro total',
+        'total_profit_suffix' => 'USDT',
+        'popup_confirm' => 'Entendido',
+        'popup_salutation_default' => 'Usuário',
+    ],
+    'exchange' => [
+        'title' => 'Plataformas de negociação ao vivo',
+        'currency' => 'Moeda',
+        'volume_24h' => 'Volume 24h',
+        'liquidity' => 'Liquidez',
+        'updated_prefix' => 'Atualizado',
+    ],
+    'nav' => [
+        'back' => 'Voltar',
+        'language_toggle' => 'Trocar idioma',
+        'home' => 'Início',
+        'products' => 'Produtos',
+        'help' => 'Ajuda',
+        'share' => 'Compartilhar',
+        'me' => 'Eu',
+        'support' => 'Suporte',
+        'notification_title' => 'Mensagem de suporte do Icon Market',
+        'notification_body' => 'Você tem uma nova mensagem de suporte',
+    ],
+];

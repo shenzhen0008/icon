@@ -1,0 +1,48 @@
+<?php
+
+return [
+    'html_lang' => 'ko',
+    'meta_title' => 'Icon Market | 디지털 자산 관리 플랫폼',
+    'hero' => [
+        'title' => 'AI 스마트 컨트랙트에 오신 것을 환영합니다',
+        'subtitle' => '인공지능 트레이딩',
+        'trade_records' => '거래 내역',
+        'income_records' => '수익 내역',
+        'available_balance' => '잔액 (USDT)',
+        'total_earnings' => '누적 수익 (USDT)',
+        'earnings_24h' => '24시간 수익 (USDT)',
+        'mode_demo' => '데모',
+        'mode_live' => '라이브',
+        'mode_demo_badge' => '#demo',
+        'mode_live_badge' => '#live',
+        'live_load_failed' => 'LIVE 모드 데이터 로드에 실패했습니다. 잠시 후 다시 시도해 주세요.',
+    ],
+    'stats' => [
+        'title' => '거래 시작!',
+        'subtitle' => 'AI를 활용한 2000개 이상의 팩터 라이브러리로 더 많은 파생 신호를 포착하고 한발 앞서 나가세요.',
+        'participant_count' => '참여 인원',
+        'total_profit' => '총 수익',
+        'total_profit_suffix' => 'USDT',
+        'popup_confirm' => '확인했습니다',
+        'popup_salutation_default' => '사용자',
+    ],
+    'exchange' => [
+        'title' => '실시간 거래 플랫폼',
+        'currency' => '통화',
+        'volume_24h' => '24시간 거래량',
+        'liquidity' => '유동성',
+        'updated_prefix' => '업데이트',
+    ],
+    'nav' => [
+        'back' => '뒤로',
+        'language_toggle' => '언어 전환',
+        'home' => '홈',
+        'products' => '상품',
+        'help' => '도움말',
+        'share' => '공유',
+        'me' => '내 정보',
+        'support' => '고객지원',
+        'notification_title' => 'Icon Market 고객지원 메시지',
+        'notification_body' => '새 고객지원 메시지가 있습니다',
+    ],
+];

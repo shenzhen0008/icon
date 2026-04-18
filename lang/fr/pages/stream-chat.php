@@ -1,0 +1,26 @@
+<?php
+
+return [
+    'html_lang' => 'fr',
+    'meta_title' => 'Support en ligne | Icon Market',
+    'status_connecting' => 'Connexion au support...',
+    'label_image' => 'Image',
+    'input_placeholder' => 'Saisissez votre message...',
+    'button_send' => 'Envoyer',
+    'sound_prompt' => 'Activer le son de notification des messages ? Une tonalité sera jouée à l’arrivée de nouveaux messages.',
+    'sound_later' => 'Plus tard',
+    'sound_enable' => 'Activer',
+    'not_configured' => 'Stream Chat n’est pas encore configuré. Veuillez d’abord définir la clé API et le secret.',
+    'name_self' => 'Moi',
+    'name_support_default' => 'Support',
+    'name_support_fallback' => 'Support008',
+    'image_alt_uploaded' => 'image téléversée',
+    'label_self_prefix' => 'Moi :',
+    'hint_image_uploading' => 'Téléversement de l’image...',
+    'status_sound_enabled' => 'Son de notification activé.',
+    'status_sound_enable_failed' => 'Échec de l’activation du son de notification. Veuillez réessayer.',
+    'error_token_failed' => 'Impossible d’obtenir le jeton de session support. Veuillez réessayer plus tard.',
+    'hint_image_send_failed' => 'Échec de l’envoi de l’image. Veuillez réessayer.',
+    'status_connected' => 'Support connecté. Vous pouvez maintenant envoyer des messages.',
+    'status_connect_failed' => 'Échec de la connexion au support. Veuillez réessayer plus tard.',
+];

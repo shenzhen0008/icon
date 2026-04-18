@@ -1,0 +1,26 @@
+<?php
+
+return [
+    'html_lang' => 'ja',
+    'meta_title' => 'オンラインサポート | Icon Market',
+    'status_connecting' => 'サポートに接続中...',
+    'label_image' => '画像',
+    'input_placeholder' => 'メッセージを入力...',
+    'button_send' => '送信',
+    'sound_prompt' => 'メッセージ通知音を有効にしますか？ 新着メッセージ時に通知音が再生されます。',
+    'sound_later' => '後で',
+    'sound_enable' => '有効化',
+    'not_configured' => 'Stream Chat はまだ設定されていません。先に API Key と Secret を設定してください。',
+    'name_self' => '私',
+    'name_support_default' => 'サポート',
+    'name_support_fallback' => 'Support008',
+    'image_alt_uploaded' => 'アップロード済み画像',
+    'label_self_prefix' => '私:',
+    'hint_image_uploading' => '画像をアップロード中...',
+    'status_sound_enabled' => '通知音を有効化しました。',
+    'status_sound_enable_failed' => '通知音の有効化に失敗しました。もう一度お試しください。',
+    'error_token_failed' => 'サポートセッショントークンを取得できません。しばらくしてから再試行してください。',
+    'hint_image_send_failed' => '画像送信に失敗しました。再試行してください。',
+    'status_connected' => 'サポートに接続しました。メッセージを送信できます。',
+    'status_connect_failed' => 'サポート接続に失敗しました。しばらくしてから再試行してください。',
+];

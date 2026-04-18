@@ -1,0 +1,25 @@
+<?php
+
+return [
+    'html_lang' => 'ja',
+    'meta_title' => 'オンチェーン入金 | Icon Market',
+    'title' => 'オンチェーン入金',
+    'intro' => '直接支払い後にトランザクションハッシュを提出してください。サポート確認後に入金されます。',
+    'back_to_recharge' => '通常入金へ戻る',
+    'no_channel' => '現在利用可能な受取チャネルがありません。管理者に連絡してください。',
+    'dev_prefill_params' => '開発用事前入力パラメータ',
+    'chain_id' => 'チェーン ID',
+    'token_address_usdt' => 'トークンアドレス (USDT)',
+    'default_receiver_address' => 'デフォルト受取アドレス',
+    'select_asset' => '通貨を選択',
+    'asset' => '通貨',
+    'payment_amount' => '支払金額',
+    'receiving_address' => '受取アドレス',
+    'tx_hash' => 'トランザクションハッシュ (Tx Hash)',
+    'payer_wallet' => '支払いウォレットアドレス',
+    'payer_wallet_placeholder' => '入金確認時にウォレットへ自動接続し、アドレスを自動入力します',
+    'pay_button' => '入金を確認してウォレット支払いを開始',
+    'note' => '備考（任意）',
+    'note_placeholder' => '例：支払用途、照合補足情報',
+    'submit' => 'オンチェーン入金申請を送信',
+];

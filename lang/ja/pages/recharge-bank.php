@@ -1,0 +1,46 @@
+<?php
+
+return [
+    'html_lang' => 'ja',
+    'meta_title' => '銀行入金 | Icon Market',
+    'tabs' => [
+        'receive' => '受取',
+        'send' => '送金',
+    ],
+    'setup' => [
+        'title' => '銀行カード連携',
+        'subtitle' => '入金確認と出金審査のため、実際の銀行カード情報を入力してください。',
+        'submit' => '保存して続行',
+    ],
+    'receive' => [
+        'title' => '銀行入金',
+        'steps' => '1. 受取口座情報をコピー -> 2. 銀行アプリで振込 -> 3. スクリーンショットをアップロード',
+        'receiver_unavailable' => '受取口座は現在利用できません。しばらくしてから再試行してください。',
+        'receiver_bank_name' => '受取銀行',
+        'receiver_account_name' => '口座名義',
+        'receiver_card_number' => 'カード番号',
+        'receiver_branch_name' => '支店',
+        'copy' => 'コピー',
+        'copied' => 'コピーしました',
+        'contact_account' => '連絡先アカウント',
+        'payment_amount' => '支払金額',
+        'receipt_image' => '振込スクリーンショット',
+        'choose_file' => 'ファイルを選択',
+        'no_file_selected' => 'ファイルが選択されていません',
+        'user_note' => 'メモ（任意）',
+        'submit' => '入金申請を提出',
+    ],
+    'send' => [
+        'title' => '銀行出金',
+        'available_balance' => '利用可能残高',
+        'bank_name' => '銀行名',
+        'account_name' => '口座名義',
+        'card_number' => 'カード番号',
+        'branch_name' => '支店名（任意）',
+        'reserved_phone' => '登録電話番号（任意）',
+        'withdrawal_amount' => '出金金額',
+        'note' => 'メモ（任意）',
+        'submit' => '出金申請を提出',
+        'freeze_notice' => '申請後、対象金額は即時凍結され、却下時は自動で返金されます。',
+    ],
+];

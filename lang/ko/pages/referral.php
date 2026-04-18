@@ -1,0 +1,28 @@
+<?php
+
+return [
+    'html_lang' => 'ko',
+    'meta_title' => '추천 | Icon Market',
+    'hero_tagline' => '초대하고 수익 받기',
+    'hero_title' => '추천 프로그램',
+    'hero_subtitle' => '친구를 초대하면 직접 보상 5% + 간접 보상 2%를 받을 수 있습니다. 핵심 정보가 한 페이지에 정리되어 있습니다.',
+    'reward_info' => '보상 상세',
+    'reward_help_aria' => '보상 상세 보기',
+    'help_title' => '친구를 초대하면 보상이 있나요?',
+    'help_p1' => '네. 개인 링크를 통해 친구를 AI Smart Contracts에 초대하고 친구가 성공적으로 참여하면 AI Smart Contracts 플랫폼에서 초대 보너스를 받을 수 있습니다. 구체적인 보상은 다음과 같습니다:',
+    'help_p2' => '① 사용자 A가 사용자 B를 초대하면(사용자 A는 사용자 B의 참여 수익의 5%를 획득).',
+    'help_p3' => '② 사용자 B가 사용자 C를 초대하면(사용자 B는 사용자 C의 참여 수익의 5%, 동시에 사용자 A는 사용자 C의 참여 수익의 3%를 획득).',
+    'help_p4' => '③ 사용자 C가 사용자 D를 초대하면(사용자 C는 사용자 D의 참여 수익의 5%, 사용자 B는 3%, 사용자 A는 1%를 획득).',
+    'help_p5' => '예: 사용자 D가 AI 스마트 컨트랙트에 참여해 100 USDT를 획득하면 사용자 A는 1 USDT, 사용자 B는 3 USDT, 사용자 C는 5 USDT의 초대 보너스를 받습니다. 모든 보상은 AI Smart Contracts 플랫폼에서 제공되며, 어떤 사용자의 수익에도 영향을 주지 않습니다.',
+    'level_1_title' => '레벨 1 보상 (직접)',
+    'level_1_count_label' => '레벨 1 초대 수',
+    'level_2_title' => '레벨 2 보상 (간접)',
+    'level_2_count_label' => '레벨 2 초대 수',
+    'invite_code' => '초대 코드',
+    'invite_link' => '초대 링크',
+    'copy_link' => '링크 복사',
+    'share_now' => '지금 공유',
+    'copied' => '복사됨',
+    'share_text' => 'Icon Market 추천 초대',
+    'link_copied_alert' => '링크가 복사되었습니다',
+];

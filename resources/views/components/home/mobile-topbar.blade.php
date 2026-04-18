@@ -10,7 +10,7 @@
             type="button"
             class="rounded-lg border border-cyan-400/30 bg-cyan-400/10 px-3 py-1.5 text-scale-micro font-medium text-cyan-200 hover:bg-cyan-400/20"
         >
-            登录
+            {{ __('pages/login.title') }}
         </button>
     </div>
 </header>

@@ -25,11 +25,59 @@ class HomePageLocalizationTest extends TestCase
         $response->assertSee('Support');
     }
 
-    public function test_home_page_falls_back_to_default_copy_for_untranslated_locale(): void
+    public function test_home_page_renders_japanese_copy_when_locale_is_ja(): void
     {
         $this->seedHomeDependencies();
 
         $response = $this->get('/?locale=ja');
+
+        $response->assertOk();
+        $response->assertSee('デジタル資産管理プラットフォーム');
+        $response->assertSee('残高 (USDT)');
+        $response->assertSee('ライブ取引プラットフォーム');
+    }
+
+    public function test_home_page_renders_korean_copy_when_locale_is_ko(): void
+    {
+        $this->seedHomeDependencies();
+
+        $response = $this->get('/?locale=ko');
+
+        $response->assertOk();
+        $response->assertSee('디지털 자산 관리 플랫폼');
+        $response->assertSee('잔액 (USDT)');
+        $response->assertSee('실시간 거래 플랫폼');
+    }
+
+    public function test_home_page_renders_french_copy_when_locale_is_fr(): void
+    {
+        $this->seedHomeDependencies();
+
+        $response = $this->get('/?locale=fr');
+
+        $response->assertOk();
+        $response->assertSee('Plateforme de gestion d’actifs numériques');
+        $response->assertSee('Solde (USDT)');
+        $response->assertSee('Plateformes de trading en direct');
+    }
+
+    public function test_home_page_renders_german_copy_when_locale_is_de(): void
+    {
+        $this->seedHomeDependencies();
+
+        $response = $this->get('/?locale=de');
+
+        $response->assertOk();
+        $response->assertSee('Plattform für digitales Vermögensmanagement');
+        $response->assertSee('Kontostand (USDT)');
+        $response->assertSee('Live-Handelsplattformen');
+    }
+
+    public function test_home_page_falls_back_to_default_copy_for_untranslated_locale(): void
+    {
+        $this->seedHomeDependencies();
+
+        $response = $this->get('/?locale=it');
 
         $response->assertOk();
         $response->assertSee('数字资产管理平台');

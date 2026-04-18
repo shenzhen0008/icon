@@ -1,0 +1,46 @@
+<?php
+
+return [
+    'html_lang' => 'de',
+    'meta_title' => 'Bankaufladung | Icon Market',
+    'tabs' => [
+        'receive' => 'EMPFANGEN',
+        'send' => 'SENDEN',
+    ],
+    'setup' => [
+        'title' => 'Bankkarte verknüpfen',
+        'subtitle' => 'Bitte geben Sie echte Bankkartendaten für die Aufladungsprüfung und Auszahlungsprüfung an.',
+        'submit' => 'Speichern und fortfahren',
+    ],
+    'receive' => [
+        'title' => 'Bankeinzahlung',
+        'steps' => '1. Empfängerkartendaten kopieren -> 2. In Ihrer Banking-App überweisen -> 3. Screenshot hochladen',
+        'receiver_unavailable' => 'Empfängerkonto ist nicht verfügbar. Bitte versuchen Sie es später erneut.',
+        'receiver_bank_name' => 'Empfangsbank',
+        'receiver_account_name' => 'Kontoinhaber',
+        'receiver_card_number' => 'Kartennummer',
+        'receiver_branch_name' => 'Filiale',
+        'copy' => 'Kopieren',
+        'copied' => 'Kopiert',
+        'contact_account' => 'Kontaktkonto',
+        'payment_amount' => 'Zahlungsbetrag',
+        'receipt_image' => 'Überweisungs-Screenshot',
+        'choose_file' => 'Datei auswählen',
+        'no_file_selected' => 'Keine Datei ausgewählt',
+        'user_note' => 'Hinweis (optional)',
+        'submit' => 'Einzahlungsantrag einreichen',
+    ],
+    'send' => [
+        'title' => 'Bankauszahlung',
+        'available_balance' => 'Verfügbarer Kontostand',
+        'bank_name' => 'Bankname',
+        'account_name' => 'Kontoinhaber',
+        'card_number' => 'Kartennummer',
+        'branch_name' => 'Filiale (optional)',
+        'reserved_phone' => 'Hinterlegte Telefonnummer (optional)',
+        'withdrawal_amount' => 'Auszahlungsbetrag',
+        'note' => 'Hinweis (optional)',
+        'submit' => 'Auszahlungsantrag einreichen',
+        'freeze_notice' => 'Der angeforderte Betrag wird sofort nach Einreichung eingefroren und bei Ablehnung automatisch zurückerstattet.',
+    ],
+];

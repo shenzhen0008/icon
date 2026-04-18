@@ -63,11 +63,11 @@
             type="button"
             data-walletconnect-project-id="{{ config('web3.payment.walletconnect_project_id', '') }}"
             class="inline-flex items-center justify-center rounded-xl bg-[rgb(var(--theme-primary))] px-4 py-3 text-scale-body font-semibold text-theme-on-primary transition hover:bg-[rgb(var(--theme-primary))]/90"
-        >直接付款（链上充值）</button>
+        >Direct Pay (On-chain Recharge)</button>
 
         <div id="home-quick-pay-panel" class="hidden rounded-xl border border-theme bg-theme-secondary/40 p-3">
             @if (count($paymentAssets) === 0)
-                <p class="text-scale-body text-theme-secondary">当前无可用 EVM 币种配置，请联系管理员配置代币合约与收款地址。</p>
+                <p class="text-scale-body text-theme-secondary">No EVM asset configuration is currently available. Please contact the administrator to configure token contracts and receiving addresses.</p>
             @else
                 <div class="space-y-3">
                     <div class="grid grid-cols-2 gap-2 md:grid-cols-4">
@@ -86,12 +86,12 @@
                             </button>
                         @endforeach
                     </div>
-                    <p id="home-selected-asset" class="text-scale-micro text-theme-secondary">当前已选：{{ $paymentAssets[0]['code'] ?? '--' }}</p>
+                    <p id="home-selected-asset" class="text-scale-micro text-theme-secondary">Selected: {{ $paymentAssets[0]['code'] ?? '--' }}</p>
                     <div class="grid grid-cols-1 gap-2 md:grid-cols-3">
                         <input id="home-payment-amount" type="number" step="0.01" min="0.01" value="{{ $paymentConfig['amount'] ?? '10' }}" class="rounded-lg border border-theme bg-theme-card px-3 py-2 text-theme md:col-span-2" />
-                        <div class="rounded-lg border border-theme bg-theme-card px-3 py-2 text-scale-micro text-theme-secondary">点击确认充值时自动连接钱包，失败将自动尝试 WalletConnect</div>
+                        <div class="rounded-lg border border-theme bg-theme-card px-3 py-2 text-scale-micro text-theme-secondary">When confirming recharge, wallet connection starts automatically and falls back to WalletConnect on failure.</div>
                     </div>
-                    <button id="home-pay-confirm-btn" type="button" class="w-full rounded-lg border border-[rgb(var(--theme-primary))]/40 px-3 py-2 text-scale-body font-semibold text-[rgb(var(--theme-primary))] hover:bg-[rgb(var(--theme-primary))]/10">确认充值并拉起钱包付款</button>
+                    <button id="home-pay-confirm-btn" type="button" class="w-full rounded-lg border border-[rgb(var(--theme-primary))]/40 px-3 py-2 text-scale-body font-semibold text-[rgb(var(--theme-primary))] hover:bg-[rgb(var(--theme-primary))]/10">Confirm recharge and open wallet payment</button>
                     <input type="hidden" id="home-is-guest" value="{{ $isGuest ? '1' : '0' }}">
                     <p id="home-pay-feedback" class="hidden text-scale-micro text-[rgb(var(--theme-primary))]"></p>
                 </div>

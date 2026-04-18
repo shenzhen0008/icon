@@ -35,4 +35,27 @@ return [
         'mismatch_error' => '两次 PIN 不一致，请重新确认',
         'incomplete_error' => '请输入完整的 6 位 PIN',
     ],
+    'guest_panel' => [
+        'title' => '快速注册',
+        'description' => '你当前是访客态，设置密码后即可将临时账号升级为正式账号。',
+        'activate_button' => '设置密码并注册',
+        'login_link' => '已有账号？去登录',
+    ],
+    'products_panel' => [
+        'title' => '可购买产品',
+        'empty' => '暂无可购买产品',
+        'limit_prefix' => '限额: ',
+        'purchase_hint' => '按金额购买，余额不足时会提示失败。',
+        'guest_hint' => '登录后可进入详情页购买。',
+        'view_buy' => '前往详情购买',
+        'view_detail' => '前往详情查看',
+    ],
+    'profit_panel' => [
+        'title' => '收益状态',
+        'today_settled' => '今日已结算收益',
+        'total_settled' => '累计已结算收益',
+        'current_principal' => '当前本金',
+        'account_balance' => '账户余额',
+        'recharge' => '充值',
+    ],
 ];

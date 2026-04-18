@@ -1,0 +1,25 @@
+<?php
+
+return [
+    'html_lang' => 'zh-CN',
+    'meta_title' => '链上充值 | Icon Market',
+    'title' => '链上充值',
+    'intro' => '直接付款后提交交易哈希，客服核账后入账。',
+    'back_to_recharge' => '返回普通充值',
+    'no_channel' => '当前暂无可用收款通道，请联系管理员。',
+    'dev_prefill_params' => '开发预填参数',
+    'chain_id' => '链 ID',
+    'token_address_usdt' => 'Token Address (USDT)',
+    'default_receiver_address' => '默认收款地址',
+    'select_asset' => '选择币种',
+    'asset' => '币种',
+    'payment_amount' => '付款金额',
+    'receiving_address' => '收款地址',
+    'tx_hash' => '交易哈希（Tx Hash）',
+    'payer_wallet' => '付款钱包地址',
+    'payer_wallet_placeholder' => '点击确认充值时自动连接钱包并回填地址',
+    'pay_button' => '确认充值并拉起钱包付款',
+    'note' => '备注（可选）',
+    'note_placeholder' => '例如：付款用途、核账补充信息',
+    'submit' => '提交链上充值申请',
+];
