@@ -177,6 +177,9 @@ DB_INIT_ENABLED=1 DB_ROOT_PASSWORD='你的数据库root密码' bash scripts/depl
 # 需要初始化基础数据时（可选）
 RUN_SEEDER=1 bash scripts/deploy.sh
 
+# 管理员账号会随 seeder 写入（来自 database/seeders/data/admin_user.json）
+# 如需临时覆盖管理员密码，可额外传 ADMIN_SEED_PASSWORD
+
 # 仅手动执行关键步骤（备用）
 /www/server/php/83/bin/php artisan migrate --force
 /www/server/php/83/bin/php artisan optimize:clear

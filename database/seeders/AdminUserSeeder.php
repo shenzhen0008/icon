@@ -11,50 +11,53 @@ class AdminUserSeeder extends Seeder
 {
     public function run(): void
     {
-        $defaults = $this->loadAdminDefaults();
+        foreach ($this->loadAdminDefaults() as $admin) {
+            if (! is_array($admin)) {
+                continue;
+            }
 
-        $adminEmail = (string) env('ADMIN_SEED_EMAIL', (string) ($defaults['email'] ?? 'admin@icon-market.local'));
-        $adminUsername = (string) env('ADMIN_SEED_USERNAME', (string) ($defaults['username'] ?? 'admin'));
-        $adminName = (string) env('ADMIN_SEED_NAME', (string) ($defaults['name'] ?? 'System Admin'));
-        $rawPassword = env('ADMIN_SEED_PASSWORD');
+            $adminEmail = (string) ($admin['email'] ?? '');
+            $adminUsername = (string) ($admin['username'] ?? '');
+            $adminName = (string) ($admin['name'] ?? $adminUsername);
+            $seedPassword = (string) ($admin['password'] ?? 'ChangeMe_123456');
+            $rawPassword = (string) env('ADMIN_SEED_PASSWORD', $seedPassword);
 
-        $user = User::query()
-            ->where('email', $adminEmail)
-            ->orWhere('username', $adminUsername)
-            ->first();
+            if ($adminEmail === '' || $adminUsername === '') {
+                continue;
+            }
 
-        if (! $user instanceof User) {
-            $passwordForCreate = is_string($rawPassword) && $rawPassword !== ''
-                ? $rawPassword
-                : 'ChangeMe_123456';
+            $user = User::query()
+                ->where('email', $adminEmail)
+                ->orWhere('username', $adminUsername)
+                ->first();
 
-            User::query()->create([
+            if (! $user instanceof User) {
+                User::query()->create([
+                    'username' => $adminUsername,
+                    'name' => $adminName,
+                    'email' => $adminEmail,
+                    'password' => Hash::make($rawPassword !== '' ? $rawPassword : 'ChangeMe_123456'),
+                    'is_admin' => true,
+                ]);
+
+                continue;
+            }
+
+            $user->forceFill([
                 'username' => $adminUsername,
                 'name' => $adminName,
                 'email' => $adminEmail,
-                'password' => Hash::make($passwordForCreate),
                 'is_admin' => true,
             ]);
 
-            return;
+            $user->password = Hash::make($rawPassword !== '' ? $rawPassword : 'ChangeMe_123456');
+
+            $user->save();
         }
-
-        $user->forceFill([
-            'username' => $adminUsername,
-            'name' => $adminName,
-            'email' => $adminEmail,
-            'is_admin' => true,
-        ]);
-
-        if (is_string($rawPassword) && $rawPassword !== '') {
-            $user->password = Hash::make($rawPassword);
-        }
-
-        $user->save();
     }
 
     /**
-     * @return array<string, mixed>
+     * @return array<int, array<string, mixed>>
      */
     private function loadAdminDefaults(): array
     {
@@ -70,6 +73,15 @@ class AdminUserSeeder extends Seeder
             return [];
         }
 
-        return is_array($decoded) ? $decoded : [];
+        if (! is_array($decoded)) {
+            return [];
+        }
+
+        if (array_is_list($decoded)) {
+            return $decoded;
+        }
+
+        /** @var array<string, mixed> $decoded */
+        return [$decoded];
     }
 }
