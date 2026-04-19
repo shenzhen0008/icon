@@ -1,19 +1,52 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-PHP_BIN="/www/server/php/83/bin/php"
-APP_DIR="/www/wwwroot/bitcon.yunqueapp.com"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DEFAULT_APP_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+PHP_BIN="${PHP_BIN:-/www/server/php/83/bin/php}"
+APP_DIR="${APP_DIR:-$DEFAULT_APP_DIR}"
+COMPOSER_BIN="${COMPOSER_BIN:-/usr/bin/composer}"
 ENV_TEMPLATE=".env.production.example"
 INSTALL_SCHEDULER_CRON="${INSTALL_SCHEDULER_CRON:-1}"
 MYSQL_BIN="${MYSQL_BIN:-mysql}"
 DB_INIT_ENABLED="${DB_INIT_ENABLED:-0}"
 DB_INIT_CHARSET="${DB_INIT_CHARSET:-utf8mb4}"
 DB_INIT_COLLATION="${DB_INIT_COLLATION:-utf8mb4_unicode_ci}"
-RUN_SEEDER="${RUN_SEEDER:-0}"
+RUN_SEEDER="${RUN_SEEDER:-1}"
+WEB_USER="${WEB_USER:-}"
+WEB_GROUP="${WEB_GROUP:-}"
 
 if [ ! -x "$PHP_BIN" ]; then
-  echo "[ERROR] PHP 8.3 binary not found at: $PHP_BIN"
+  echo "[ERROR] PHP binary not found at: $PHP_BIN"
   exit 1
+fi
+
+if [ ! -f "$COMPOSER_BIN" ]; then
+  if command -v composer >/dev/null 2>&1; then
+    COMPOSER_BIN="$(command -v composer)"
+  else
+    echo "[ERROR] composer not found. Set COMPOSER_BIN or install composer."
+    exit 1
+  fi
+fi
+
+if [ ! -d "$APP_DIR" ]; then
+  echo "[ERROR] APP_DIR not found: $APP_DIR"
+  exit 1
+fi
+
+if [ -z "$WEB_USER" ] || [ -z "$WEB_GROUP" ]; then
+  if id -u www >/dev/null 2>&1; then
+    WEB_USER="${WEB_USER:-www}"
+    WEB_GROUP="${WEB_GROUP:-www}"
+  elif id -u www-data >/dev/null 2>&1; then
+    WEB_USER="${WEB_USER:-www-data}"
+    WEB_GROUP="${WEB_GROUP:-www-data}"
+  else
+    WEB_USER="${WEB_USER:-$(id -un)}"
+    WEB_GROUP="${WEB_GROUP:-$(id -gn)}"
+    echo "[WARN] Neither user 'www' nor 'www-data' exists. Fallback to $WEB_USER:$WEB_GROUP"
+  fi
 fi
 
 cd "$APP_DIR"
@@ -100,7 +133,7 @@ if [ "$DB_INIT_ENABLED" = "1" ]; then
   echo "[INFO] Database $DB_DATABASE ready with $DB_INIT_CHARSET/$DB_INIT_COLLATION."
 fi
 
-$PHP_BIN /usr/bin/composer install --no-dev --optimize-autoloader
+$PHP_BIN "$COMPOSER_BIN" install --no-dev --optimize-autoloader
 $PHP_BIN artisan key:generate --force
 $PHP_BIN artisan migrate --force
 if [ "$RUN_SEEDER" = "1" ]; then
@@ -109,11 +142,11 @@ fi
 $PHP_BIN artisan livewire:publish --assets
 
 mkdir -p storage/app/public/recharge-receipts
-chown -R www:www storage bootstrap/cache
+chown -R "$WEB_USER:$WEB_GROUP" storage bootstrap/cache
 chmod -R 775 storage bootstrap/cache
 mkdir -p storage/logs
 touch storage/logs/laravel.log
-chown www:www storage/logs/laravel.log
+chown "$WEB_USER:$WEB_GROUP" storage/logs/laravel.log
 chmod 664 storage/logs/laravel.log
 
 if [ -e public/storage ] && [ ! -L public/storage ]; then
@@ -129,7 +162,7 @@ if [ "$INSTALL_SCHEDULER_CRON" = "1" ]; then
   if command -v crontab >/dev/null 2>&1; then
     SCHEDULER_LOG="$APP_DIR/storage/logs/scheduler.log"
     touch "$SCHEDULER_LOG"
-    chown www:www "$SCHEDULER_LOG" || true
+    chown "$WEB_USER:$WEB_GROUP" "$SCHEDULER_LOG" || true
     chmod 664 "$SCHEDULER_LOG" || true
 
     SCHEDULER_CRON="* * * * * cd $APP_DIR && $PHP_BIN artisan schedule:run >> $SCHEDULER_LOG 2>&1"

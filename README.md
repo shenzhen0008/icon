@@ -9,18 +9,33 @@ bash scripts/deploy.sh
 
 注意：该脚本不会在 `git pull` 后自动触发。每次部署更新后需要手动执行一次。
 
-### PHP 版本说明
-`bash scripts/deploy.sh` 已经内部固定使用 `/www/server/php/83/bin/php`，所以直接运行脚本即可使用 PHP 8.3，无需额外指定版本。
+### PHP / 目录可配置说明
+`bash scripts/deploy.sh` 默认使用：
+- `PHP_BIN=/www/server/php/83/bin/php`
+- `APP_DIR=仓库根目录（脚本自动推导）`
+- `WEB_USER/WEB_GROUP` 自动优先使用 `www`，若不存在则使用 `www-data`
+
+如果新服务器路径不同，可在执行时覆盖：
+
+```bash
+PHP_BIN=/usr/bin/php8.3 APP_DIR=/www/wwwroot/your-domain.com bash scripts/deploy.sh
+```
+
+如果需要显式指定权限用户组：
+
+```bash
+PHP_BIN=/usr/bin/php8.3 APP_DIR=/www/wwwroot/your-domain.com WEB_USER=www-data WEB_GROUP=www-data bash scripts/deploy.sh
+```
 
 首次执行前请确认：
 
 1. 复制 `.env.production.example` 为 `.env`（若 `.env` 不存在，脚本也会自动复制）。
 2. 在 `.env` 中填写真实生产数据库配置（不要使用占位密码）。
 3. Web 站点根目录指向 `public`，并启用 Laravel 伪静态规则。
-4. **项目要求 PHP >= 8.3.0**，服务器如有多个PHP版本，请确保使用 `/www/server/php/83/bin/php` 路径。
+4. **项目要求 PHP >= 8.3.0**，服务器如有多个 PHP 版本，请确保 `PHP_BIN` 指向 8.3 可执行文件。
 5. 由于 Filament / Livewire 运行时需要前端资产，请确保 `public/vendor/livewire` 目录可写，部署脚本会自动发布 Livewire 静态前端资源。
 
-脚本会自动执行：`composer install --no-dev`、`key:generate`、数据库迁移、Livewire 资产发布、`storage/bootstrap` 权限修复，以及 Laravel 缓存重建（`optimize:clear` / `optimize`）。
+脚本会自动执行：`composer install --no-dev`、`key:generate`、数据库迁移、默认执行 `db:seed --force`、Livewire 资产发布、`storage/bootstrap` 权限修复，以及 Laravel 缓存重建（`optimize:clear` / `optimize`）。
 
 另外，部署脚本会自动幂等写入 Laravel Scheduler 的 crontab（每分钟执行一次 `php artisan schedule:run`），默认开启，可通过环境变量关闭：
 
@@ -49,21 +64,21 @@ php artisan schedule:list
 git pull
 cp -n .env.production.example .env
 # 编辑 .env，填写真实 DB 配置
-bash scripts/deploy.sh
+PHP_BIN=/usr/bin/php8.3 APP_DIR=/www/wwwroot/your-domain.com bash scripts/deploy.sh
 ```
 
 **部署故障排除：**
-- 如遇到 "PHP Fatal error: Uncaught RuntimeException: Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.3.0""，请使用 `/www/server/php/83/bin/php` 替代 `php` 命令
+- 如遇到 "PHP Fatal error: Uncaught RuntimeException: Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.3.0""，请将 `PHP_BIN` 指向 PHP 8.3，例如：`PHP_BIN=/usr/bin/php8.3`
 - 如遇到 "Your local changes to the following files would be overwritten by merge"，请先备份或清理 `public/build/` 目录下的文件，然后重新执行 `git pull`
-- 如果后台打开后出现 `/livewire/livewire.min.js` 404，请检查 Nginx 是否把 `/livewire` 请求转发给 Laravel；也可以直接运行 `/www/server/php/83/bin/php artisan livewire:publish --assets` 以生成 `public/vendor/livewire` 静态前端资源。
+- 如果后台打开后出现 `/livewire/livewire.min.js` 404，请检查 Nginx 是否把 `/livewire` 请求转发给 Laravel；也可以直接运行 `PHP_BIN=/usr/bin/php8.3 php artisan livewire:publish --assets` 以生成 `public/vendor/livewire` 静态前端资源。
 
 ### 后台空白页修复
 - 如果后台打开后显示空白，并且浏览器控制台报 `/livewire/livewire.min.js` 404，说明 Livewire 前端资源未正确发布或 `/livewire` 路径没有被 Laravel 处理。
-- 解决步骤：
-  1. 进入服务器目录：`cd /www/wwwroot/bitcon.yunqueapp.com`
+ 解决步骤：
+  1. 进入服务器目录：`cd /www/wwwroot/your-domain.com`
   2. 拉取最新代码：`git pull origin main`
-  3. 运行部署脚本：`bash scripts/deploy.sh`
-  4. 如果需要手动修复，可以执行：`/www/server/php/83/bin/php artisan livewire:publish --assets` 和 `/www/server/php/83/bin/php artisan optimize:clear`
+  3. 运行部署脚本：`PHP_BIN=/usr/bin/php8.3 APP_DIR=/www/wwwroot/your-domain.com bash scripts/deploy.sh`
+  4. 如果需要手动修复，可以执行：`PHP_BIN=/usr/bin/php8.3 php artisan livewire:publish --assets` 和 `PHP_BIN=/usr/bin/php8.3 php artisan optimize:clear`
   5. 确认 Nginx 伪静态规则生效，`public` 目录为站点根，并且 `/livewire` 请求能被 Laravel 路由处理。
 - 这个问题通常不是代码业务逻辑出错，而是部署后 Livewire 资源未发布或服务端 rewrite 配置不正确。
 
@@ -162,29 +177,54 @@ git commit -m "update navigation and product card sizing"
 git push origin main
 
 ## 服务器端更新：
-cd /www/wwwroot/bitcon.yunqueapp.com
+cd /www/wwwroot/your-domain.com
 
 # 拉取修复代码
 git pull origin main
 
-# 推荐：走统一部署脚本（默认执行 composer + migrate + optimize）
-bash scripts/deploy.sh
+# 推荐：走统一部署脚本（默认执行 composer + migrate + seed + optimize）
+PHP_BIN=/usr/bin/php8.3 APP_DIR=/www/wwwroot/your-domain.com bash scripts/deploy.sh
 
 # 首次初始化数据库并校验编码时（可选）
 # DB_ROOT_PASSWORD 请替换为服务器 root 密码
-DB_INIT_ENABLED=1 DB_ROOT_PASSWORD='你的数据库root密码' bash scripts/deploy.sh
+DB_INIT_ENABLED=1 DB_ROOT_PASSWORD='你的数据库root密码' PHP_BIN=/usr/bin/php8.3 APP_DIR=/www/wwwroot/your-domain.com bash scripts/deploy.sh
 
-# 需要初始化基础数据时（可选）
-RUN_SEEDER=1 bash scripts/deploy.sh
+# 如需跳过种子导入（例如后续增量发布）
+RUN_SEEDER=0 PHP_BIN=/usr/bin/php8.3 APP_DIR=/www/wwwroot/your-domain.com bash scripts/deploy.sh
 
 # 管理员账号会随 seeder 写入（来自 database/seeders/data/admin_user.json）
 # 如需临时覆盖管理员密码，可额外传 ADMIN_SEED_PASSWORD
 
 # 仅手动执行关键步骤（备用）
-/www/server/php/83/bin/php artisan migrate --force
-/www/server/php/83/bin/php artisan optimize:clear
+PHP_BIN=/usr/bin/php8.3 php artisan migrate --force
+PHP_BIN=/usr/bin/php8.3 php artisan optimize:clear
 
 # 管理后台
 https://xxxxxx.com/admin
 # 客服后台
 https://xxxxxx.com/stream-chat-agent
+
+
+mkdir -p /www/wwwroot/zorai.sbs
+cd /www/wwwroot/zorai.sbs
+
+# 首次拉取
+git clone https://github.com/shenzhen0008/icon.git .
+
+# 配置生产环境文件
+cp .env.production.example .env
+# 编辑 .env（APP_URL / DB_* / STREAM_CHAT_* / WEB3_WALLETCONNECT_PROJECT_ID）
+
+# 首发部署
+PHP_BIN=/usr/bin/php APP_DIR=/www/wwwroot/zorai.sbs WEB_USER=www-data WEB_GROUP=www-data bash scripts/deploy.sh
+
+打开宝塔 软件商店 -> PHP 8.3 -> 设置 -> 禁用函数（disable_functions）
+把 putenv 从禁用列表删除。
+在宝塔 PHP 8.3 的 disable_functions 里移除 exec
+
+同时检查 proc_open、proc_close 不在禁用列表里
+宝塔 PHP 8.3 扩展里启用 fileinfo，然后重启 PHP
+安装/启用 mbstring（宝塔里给 PHP 8.3 安装扩展
+
+重启php8.3
+/etc/init.d/php-fpm-83 restart
