@@ -1,3 +1,7 @@
+@php
+  $localeQuery = 'locale='.urlencode(app()->getLocale());
+@endphp
+
 <x-ui.metric-split-card :use-split-layout="false" wrapper-class="home-data-panel">
   <h2 class="text-scale-body font-semibold text-theme">{{ __('pages/me.profit_panel.title') }}</h2>
 
@@ -19,7 +23,7 @@
         <p class="text-theme-secondary">{{ __('pages/me.profit_panel.account_balance') }}</p>
         <p class="mt-1 text-scale-body font-semibold text-theme">{{ $summary['balance'] }}</p>
       </div>
-      <a href="/recharge" class="text-scale-ui absolute bottom-3 right-3 inline-flex h-10 min-w-[5.25rem] items-center justify-center rounded-lg border border-[rgb(var(--theme-primary))]/35 bg-[rgb(var(--theme-primary))]/14 px-4 font-semibold text-[rgb(var(--theme-primary))] transition hover:border-[rgb(var(--theme-primary))] hover:bg-[rgb(var(--theme-primary))]/20">
+      <a href="/recharge?{{ $localeQuery }}" class="text-scale-ui absolute bottom-3 right-3 inline-flex h-10 min-w-[5.25rem] items-center justify-center rounded-lg border border-[rgb(var(--theme-primary))]/35 bg-[rgb(var(--theme-primary))]/14 px-4 font-semibold text-[rgb(var(--theme-primary))] transition hover:border-[rgb(var(--theme-primary))] hover:bg-[rgb(var(--theme-primary))]/20">
         {{ __('pages/me.profit_panel.recharge') }}
       </a>
     </div>

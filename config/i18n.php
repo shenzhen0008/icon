@@ -1,8 +1,8 @@
 <?php
 
 return [
-    'default_locale' => env('I18N_DEFAULT_LOCALE', 'zh-CN'),
-    'fallback_locale' => env('I18N_FALLBACK_LOCALE', 'zh-CN'),
+    'default_locale' => env('I18N_DEFAULT_LOCALE', 'en'),
+    'fallback_locale' => env('I18N_FALLBACK_LOCALE', 'en'),
     'session_key' => 'locale',
     'query_key' => 'locale',
     'supported_locales' => [

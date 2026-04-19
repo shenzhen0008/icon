@@ -15,6 +15,7 @@
     $selectedAssetCode = old('asset_code', $defaultAssetCode);
     $selectedAsset = $assets[$selectedAssetCode] ?? (count($assets) > 0 ? reset($assets) : null);
     $selectedAssetCode = $selectedAsset['code'] ?? $selectedAssetCode;
+    $localeQuery = 'locale='.urlencode(app()->getLocale());
   @endphp
 
   <main class="mx-auto w-full max-w-4xl px-4 pb-28 pt-8 md:pb-10">
@@ -24,7 +25,7 @@
           <h1 class="text-scale-display font-semibold text-theme">{{ __('pages/onchain-recharge.title') }}</h1>
           <p class="mt-2 text-scale-body text-theme-secondary">{{ __('pages/onchain-recharge.intro') }}</p>
         </div>
-        <a href="/recharge" class="rounded-lg border border-theme px-3 py-2 text-scale-body text-theme-secondary hover:text-theme">{{ __('pages/onchain-recharge.back_to_recharge') }}</a>
+        <a href="/recharge?{{ $localeQuery }}" class="rounded-lg border border-theme px-3 py-2 text-scale-body text-theme-secondary hover:text-theme">{{ __('pages/onchain-recharge.back_to_recharge') }}</a>
       </div>
 
       @if (session('success'))

@@ -12,6 +12,7 @@
     $selectedAssetCode = old('asset_code', $defaultAssetCode);
     $selectedAsset = $assets[$selectedAssetCode] ?? (count($assets) > 0 ? reset($assets) : null);
     $selectedAssetCode = $selectedAsset['code'] ?? $selectedAssetCode;
+    $localeQuery = 'locale='.urlencode(app()->getLocale());
   @endphp
 
   <x-nav.top />
@@ -88,7 +89,7 @@
 
             <div class="mt-4 flex flex-wrap items-center gap-3">
               <button id="open-activate-modal" class="rounded-lg bg-[rgb(var(--theme-primary))] px-4 py-2 text-scale-body font-semibold text-theme-secondary">{{ __('pages/recharge.receive.activate_account') }}</button>
-              <a href="/login" class="text-scale-body text-[rgb(var(--theme-primary))] underline underline-offset-4">{{ __('pages/recharge.receive.go_login') }}</a>
+              <a href="/login?{{ $localeQuery }}" class="text-scale-body text-[rgb(var(--theme-primary))] underline underline-offset-4">{{ __('pages/recharge.receive.go_login') }}</a>
             </div>
           </div>
         @elseif (count($assets) > 0)

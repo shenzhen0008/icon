@@ -9,6 +9,7 @@
 
 @php
     $availableBalance = number_format((float) (auth()->user()?->balance ?? 0), 2, '.', ',');
+    $localeQuery = 'locale='.urlencode(app()->getLocale());
 @endphp
 
 <section id="home-data-panel" class="mb-8 overflow-hidden rounded-2xl border border-theme bg-theme-card p-5 shadow-xl shadow-theme">
@@ -25,10 +26,10 @@
 
     @if ($showRecordButtons)
         <div class="mt-5 grid grid-cols-2 gap-2">
-            <a id="hero-trade-record-btn" href="/home/hero-panel/trade-records?mode=demo" class="inline-flex items-center justify-center rounded-lg border border-theme bg-theme-secondary px-3 py-2 text-scale-body font-medium text-theme transition hover:bg-theme-secondary/80">
+            <a id="hero-trade-record-btn" href="/home/hero-panel/trade-records?mode=demo&{{ $localeQuery }}" class="inline-flex items-center justify-center rounded-lg border border-theme bg-theme-secondary px-3 py-2 text-scale-body font-medium text-theme transition hover:bg-theme-secondary/80">
                 {{ __('pages/home.hero.trade_records') }}
             </a>
-            <a id="hero-income-record-btn" href="/home/hero-panel/income-records?mode=demo" class="inline-flex items-center justify-center rounded-lg border border-theme bg-theme-secondary px-3 py-2 text-scale-body font-medium text-theme transition hover:bg-theme-secondary/80">
+            <a id="hero-income-record-btn" href="/home/hero-panel/income-records?mode=demo&{{ $localeQuery }}" class="inline-flex items-center justify-center rounded-lg border border-theme bg-theme-secondary px-3 py-2 text-scale-body font-medium text-theme transition hover:bg-theme-secondary/80">
                 {{ __('pages/home.hero.income_records') }}
             </a>
         </div>
@@ -185,7 +186,8 @@
         };
 
         const syncRecordLinks = (mode) => {
-            const suffix = `?mode=${encodeURIComponent(mode)}`;
+            const locale = @json(app()->getLocale());
+            const suffix = `?mode=${encodeURIComponent(mode)}&locale=${encodeURIComponent(locale)}`;
             if (tradeRecordBtn) tradeRecordBtn.setAttribute('href', `/home/hero-panel/trade-records${suffix}`);
             if (incomeRecordBtn) incomeRecordBtn.setAttribute('href', `/home/hero-panel/income-records${suffix}`);
         };

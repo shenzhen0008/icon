@@ -40,7 +40,7 @@ return [
         'products' => 'Produkte',
         'help' => 'Hilfe',
         'share' => 'Teilen',
-        'me' => 'Mein Bereich',
+        'me' => 'Konto',
         'support' => 'Support',
         'notification_title' => 'Icon Market Support-Nachricht',
         'notification_body' => 'Sie haben eine neue Support-Nachricht',

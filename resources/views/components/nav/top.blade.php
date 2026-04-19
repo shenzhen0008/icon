@@ -21,6 +21,7 @@
     @if ($showTopNavBack)
       <a
         href="/"
+        data-keep-locale
         data-top-nav-back
         aria-label="{{ __('pages/home.nav.back') }}"
         class="ml-1 inline-flex h-9 w-9 items-center justify-center rounded-full text-[1.85rem] font-semibold leading-none text-[rgb(var(--theme-primary))] transition hover:bg-[rgb(var(--theme-primary))]/10"
@@ -28,16 +29,16 @@
         &lt;
       </a>
     @else
-      <a href="/" class="text-[1.04rem] font-semibold tracking-[0.22em] leading-none text-[rgb(var(--theme-primary))] md:text-[1.1rem]">ICON MARKET</a>
+      <a href="/" data-keep-locale class="text-[1.04rem] font-semibold tracking-[0.22em] leading-none text-[rgb(var(--theme-primary))] md:text-[1.1rem]">ICON MARKET</a>
     @endif
 
     <nav class="hidden items-center gap-[clamp(0.8rem,3vw,1.5rem)] text-scale-ui md:flex">
-      <a href="/" class="{{ request()->is('/') ? 'text-[rgb(var(--theme-primary))]' : 'text-theme-secondary hover:text-[rgb(var(--theme-primary))]' }}">{{ __('pages/home.nav.home') }}</a>
-      <a href="/products" class="{{ request()->is('products') || request()->is('products/*') ? 'text-[rgb(var(--theme-primary))]' : 'text-theme-secondary hover:text-[rgb(var(--theme-primary))]' }}">{{ __('pages/home.nav.products') }}</a>
-      <a href="/help" class="{{ request()->is('help') ? 'text-[rgb(var(--theme-primary))]' : 'text-theme-secondary hover:text-[rgb(var(--theme-primary))]' }}">{{ __('pages/home.nav.help') }}</a>
-      <a href="/referral" class="{{ request()->is('referral') ? 'text-[rgb(var(--theme-primary))]' : 'text-theme-secondary hover:text-[rgb(var(--theme-primary))]' }}">{{ __('pages/home.nav.share') }}</a>
-      <a href="/me" class="{{ request()->is('me') ? 'text-[rgb(var(--theme-primary))]' : 'text-theme-secondary hover:text-[rgb(var(--theme-primary))]' }}">{{ __('pages/home.nav.me') }}</a>
-      <a href="/support" class="{{ request()->is('support') ? 'text-[rgb(var(--theme-primary))]' : 'text-theme-secondary hover:text-[rgb(var(--theme-primary))]' }}">{{ __('pages/home.nav.support') }}</a>
+      <a href="/" data-keep-locale class="{{ request()->is('/') ? 'text-[rgb(var(--theme-primary))]' : 'text-theme-secondary hover:text-[rgb(var(--theme-primary))]' }}">{{ __('pages/home.nav.home') }}</a>
+      <a href="/products" data-keep-locale class="{{ request()->is('products') || request()->is('products/*') ? 'text-[rgb(var(--theme-primary))]' : 'text-theme-secondary hover:text-[rgb(var(--theme-primary))]' }}">{{ __('pages/home.nav.products') }}</a>
+      <a href="/help" data-keep-locale class="{{ request()->is('help') ? 'text-[rgb(var(--theme-primary))]' : 'text-theme-secondary hover:text-[rgb(var(--theme-primary))]' }}">{{ __('pages/home.nav.help') }}</a>
+      <a href="/referral" data-keep-locale class="{{ request()->is('referral') ? 'text-[rgb(var(--theme-primary))]' : 'text-theme-secondary hover:text-[rgb(var(--theme-primary))]' }}">{{ __('pages/home.nav.share') }}</a>
+      <a href="/me" data-keep-locale class="{{ request()->is('me') ? 'text-[rgb(var(--theme-primary))]' : 'text-theme-secondary hover:text-[rgb(var(--theme-primary))]' }}">{{ __('pages/home.nav.me') }}</a>
+      <a href="/support" data-keep-locale class="{{ request()->is('support') ? 'text-[rgb(var(--theme-primary))]' : 'text-theme-secondary hover:text-[rgb(var(--theme-primary))]' }}">{{ __('pages/home.nav.support') }}</a>
     </nav>
 
     <div class="ml-3 inline-flex items-center gap-2 md:ml-4">
@@ -151,6 +152,28 @@
       return;
     }
     window.location.assign(fallbackUrl);
+  });
+
+  const appendLocaleToHref = (href, locale) => {
+    if (!href || !href.startsWith('/')) {
+      return href;
+    }
+
+    const nextUrl = new URL(href, window.location.origin);
+    if (!nextUrl.searchParams.has('locale')) {
+      nextUrl.searchParams.set('locale', locale);
+    }
+
+    return `${nextUrl.pathname}${nextUrl.search}${nextUrl.hash}`;
+  };
+
+  const currentLocale = @json(app()->getLocale());
+  document.querySelectorAll('a[data-keep-locale]').forEach((anchorEl) => {
+    const href = anchorEl.getAttribute('href');
+    const nextHref = appendLocaleToHref(href, currentLocale);
+    if (nextHref && nextHref !== href) {
+      anchorEl.setAttribute('href', nextHref);
+    }
   });
 
   // Theme toggle.

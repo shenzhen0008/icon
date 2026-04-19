@@ -1,5 +1,6 @@
 <section class="rounded-2xl border border-theme bg-theme-card p-5">
   @php
+    $localeQuery = 'locale='.urlencode(app()->getLocale());
     $statusLabels = [
       'open' => __('pages/orders.positions.status.open'),
       'redeeming' => __('pages/orders.positions.status.redeeming'),
@@ -36,7 +37,7 @@
 
           <div class="mt-2 flex items-center justify-between gap-3">
             <p class="text-scale-body text-theme-secondary">{{ __('pages/orders.positions.principal_prefix') }}{{ $position['principal'] }}</p>
-            <a href="/me/positions/{{ $position['id'] }}" class="text-scale-body text-[rgb(var(--theme-primary))] underline underline-offset-4">{{ __('pages/orders.positions.view_order') }}</a>
+            <a href="/me/positions/{{ $position['id'] }}?{{ $localeQuery }}" class="text-scale-body text-[rgb(var(--theme-primary))] underline underline-offset-4">{{ __('pages/orders.positions.view_order') }}</a>
           </div>
 
           <div id="{{ $panelId }}" class="mt-3 hidden border-t border-theme pt-3">

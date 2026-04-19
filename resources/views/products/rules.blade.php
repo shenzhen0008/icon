@@ -7,6 +7,9 @@
   @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="min-h-screen bg-theme text-theme">
+  @php
+    $localeQuery = 'locale='.urlencode(app()->getLocale());
+  @endphp
   <x-layout.background-glow />
   <x-nav.top />
 
@@ -71,7 +74,7 @@
 
     <section class="mt-3">
       <a
-        href="/products"
+        href="/products?{{ $localeQuery }}"
         class="flex h-11 w-full items-center justify-center rounded-xl bg-[rgb(var(--theme-primary))] px-5 text-scale-body font-semibold text-theme-on-primary shadow-lg shadow-[rgb(var(--theme-primary))]/20 transition hover:bg-[rgb(var(--theme-primary))]/90"
       >
         {{ __('pages/product-rules.go_market') }}

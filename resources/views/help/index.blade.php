@@ -7,6 +7,9 @@
   @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="min-h-screen bg-theme text-theme">
+  @php
+    $localeQuery = 'locale='.urlencode(app()->getLocale());
+  @endphp
   <x-layout.background-glow />
   <x-nav.top />
 
@@ -22,7 +25,7 @@
         </div>
 
         <a
-          href="/stream-chat"
+          href="/stream-chat?{{ $localeQuery }}"
           class="inline-flex min-h-11 items-center justify-center rounded-lg bg-[rgb(var(--theme-primary))] px-5 py-3 text-scale-body font-semibold text-[rgb(var(--theme-on-primary))] transition hover:opacity-90"
         >
           {{ __('pages/help-center.online_support') }}

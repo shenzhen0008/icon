@@ -1,4 +1,8 @@
 <section class="rounded-2xl border border-theme bg-theme-card p-5">
+  @php
+    $localeQuery = 'locale='.urlencode(app()->getLocale());
+  @endphp
+
   <h2 class="text-scale-body font-semibold text-theme">{{ __('pages/me.products_panel.title') }}</h2>
 
   @if (count($products) === 0)
@@ -18,7 +22,7 @@
           @if ($isGuest)
             <p class="mt-3 text-scale-body text-theme-secondary">{{ __('pages/me.products_panel.guest_hint') }}</p>
           @else
-            <a href="/products/{{ $product['id'] }}" class="text-scale-ui mt-3 inline-flex h-[clamp(1.9rem,7vw,2.2rem)] w-[clamp(8rem,45vw,10rem)] items-center justify-center rounded-lg px-[clamp(0.6rem,2.5vw,0.9rem)] font-semibold {{ $product['is_eligible'] ? 'bg-[rgb(var(--theme-primary))] text-theme-on-primary' : 'bg-theme-secondary text-theme' }}">
+            <a href="/products/{{ $product['id'] }}?{{ $localeQuery }}" class="text-scale-ui mt-3 inline-flex h-[clamp(1.9rem,7vw,2.2rem)] w-[clamp(8rem,45vw,10rem)] items-center justify-center rounded-lg px-[clamp(0.6rem,2.5vw,0.9rem)] font-semibold {{ $product['is_eligible'] ? 'bg-[rgb(var(--theme-primary))] text-theme-on-primary' : 'bg-theme-secondary text-theme' }}">
               {{ $product['is_eligible'] ? __('pages/me.products_panel.view_buy') : __('pages/me.products_panel.view_detail') }}
             </a>
           @endif

@@ -7,6 +7,9 @@
   @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="min-h-screen bg-theme text-theme">
+  @php
+    $localeQuery = 'locale='.urlencode(app()->getLocale());
+  @endphp
   <x-layout.background-glow />
   <x-nav.top />
 
@@ -15,12 +18,14 @@
       <div class="mb-4 grid grid-cols-2 gap-3">
         <a
           href="/products/rules"
+          data-keep-locale
           class="flex h-12 items-center justify-center rounded-2xl border border-[rgb(var(--theme-primary))]/20 bg-theme-card px-4 text-scale-body font-semibold text-theme shadow-lg shadow-[rgb(var(--theme-primary))]/10 transition hover:border-[rgb(var(--theme-primary))]/40 hover:text-[rgb(var(--theme-primary))]"
         >
           {{ __('pages/product-list.rules') }}
         </a>
         <a
           href="/me/orders"
+          data-keep-locale
           class="flex h-12 items-center justify-center rounded-2xl border border-[rgb(var(--theme-primary))]/20 bg-theme-card px-4 text-scale-body font-semibold text-theme shadow-lg shadow-[rgb(var(--theme-primary))]/10 transition hover:border-[rgb(var(--theme-primary))]/40 hover:text-[rgb(var(--theme-primary))]"
         >
           {{ __('pages/product-list.orders') }}
@@ -110,7 +115,7 @@
                   {{ $product['trade_mode'] === 'reserve' ? __('pages/product-list.preorder_now') : __('pages/product-list.buy_now') }}
                 </button>
               @else
-                <a href="/products/{{ $product['id'] }}" class="text-scale-ui mt-2.5 flex h-[clamp(1.9rem,7vw,2.2rem)] min-w-[clamp(7rem,42vw,9rem)] w-auto items-center justify-center whitespace-nowrap rounded-2xl bg-[rgb(var(--theme-primary))] px-[clamp(0.6rem,2.5vw,0.9rem)] font-semibold text-theme-on-primary shadow-lg shadow-[rgb(var(--theme-primary))]/20 transition hover:bg-[rgb(var(--theme-primary))]/90 mx-auto">
+                <a href="/products/{{ $product['id'] }}?{{ $localeQuery }}" class="text-scale-ui mt-2.5 flex h-[clamp(1.9rem,7vw,2.2rem)] min-w-[clamp(7rem,42vw,9rem)] w-auto items-center justify-center whitespace-nowrap rounded-2xl bg-[rgb(var(--theme-primary))] px-[clamp(0.6rem,2.5vw,0.9rem)] font-semibold text-theme-on-primary shadow-lg shadow-[rgb(var(--theme-primary))]/20 transition hover:bg-[rgb(var(--theme-primary))]/90 mx-auto">
                   {{ $product['trade_mode'] === 'reserve' ? __('pages/product-list.preorder_now') : __('pages/product-list.buy_now') }}
                 </a>
               @endif
@@ -126,8 +131,8 @@
     <x-auth.activate-pin-modal
       modal-id="activate-modal"
       open-button-id="open-activate-modal"
-      redirect-to="/products"
-      :login-url="'/login?redirect_to=%2Fproducts'"
+      :redirect-to="'/products?'.$localeQuery"
+      :login-url="'/login?redirect_to=%2Fproducts&'.$localeQuery"
       :login-label="__('pages/me.activate_modal.login')"
       :invite-code="app(\App\Modules\Referral\Support\InviteCodeResolver::class)->currentForForm(request())"
     />
