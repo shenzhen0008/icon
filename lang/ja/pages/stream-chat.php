@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'ja',
-    'meta_title' => 'オンラインサポート | Icon Market',
+    'meta_title' => 'オンラインサポート | :app_name',
     'status_connecting' => 'サポートに接続中...',
     'label_image' => '画像',
     'input_placeholder' => 'メッセージを入力...',

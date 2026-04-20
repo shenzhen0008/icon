@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'ja',
-    'meta_title' => 'Icon Market | デジタル資産管理プラットフォーム',
+    'meta_title' => ':app_name | デジタル資産管理プラットフォーム',
     'hero' => [
         'title' => 'AIスマートコントラクトへようこそ',
         'subtitle' => 'AIによる定量取引',
@@ -42,7 +42,7 @@ return [
         'share' => '共有',
         'me' => 'マイページ',
         'support' => 'サポート',
-        'notification_title' => 'Icon Market サポートメッセージ',
+        'notification_title' => ':app_name サポートメッセージ',
         'notification_body' => '新しいサポートメッセージがあります',
     ],
 ];

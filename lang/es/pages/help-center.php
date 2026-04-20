@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'es',
-    'meta_title' => 'Centro de ayuda | Icon Market',
+    'meta_title' => 'Centro de ayuda | :app_name',
     'title' => 'Centro de ayuda',
     'faq_title' => 'Preguntas frecuentes',
     'intro' => 'Bienvenido al Centro de ayuda. Aquí encontrarás guías de usuario, preguntas frecuentes e información relevante para ayudarte a comprender y usar esta aplicación rápidamente.',

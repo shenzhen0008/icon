@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'es',
-    'meta_title' => 'Financiación bancaria | Icon Market',
+    'meta_title' => 'Financiación bancaria | :app_name',
     'tabs' => [
         'receive' => 'RECIBIR',
         'send' => 'ENVIAR',

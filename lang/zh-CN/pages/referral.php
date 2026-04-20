@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'zh-CN',
-    'meta_title' => '邀请分享 | Icon Market',
+    'meta_title' => '邀请分享 | :app_name',
     'hero_tagline' => 'Invite & Earn',
     'hero_title' => '邀请分享',
     'hero_subtitle' => '邀请好友加入，一级返佣 5%，二级返佣 2%，核心信息一页看完，分享更直接。',
@@ -23,6 +23,6 @@ return [
     'copy_link' => '复制链接',
     'share_now' => '立即分享',
     'copied' => '已复制',
-    'share_text' => 'Icon Market 邀请分享',
+    'share_text' => ':app_name 邀请分享',
     'link_copied_alert' => '链接已复制',
 ];

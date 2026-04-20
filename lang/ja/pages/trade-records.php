@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'ja',
-    'meta_title' => '取引履歴 | Icon Market',
+    'meta_title' => '取引履歴 | :app_name',
     'title' => '取引履歴',
     'intro' => 'ホームパネル（:mode）専用の取引履歴ページです。',
     'back_home' => 'ホームに戻る',

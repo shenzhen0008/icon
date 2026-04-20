@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'ko',
-    'meta_title' => '주문 | Icon Market',
+    'meta_title' => '주문 | :app_name',
     'title' => '주문',
     'intro' => '현재 포지션과 최근 수익 내역을 확인하세요.',
     'positions' => [

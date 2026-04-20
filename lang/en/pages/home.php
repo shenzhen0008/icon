@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'en',
-    'meta_title' => 'Icon Market | Digital Asset Management Platform',
+    'meta_title' => ':app_name | Digital Asset Management Platform',
     'hero' => [
         'title' => 'Welcome to AI Smart Contracts',
         'subtitle' => 'Artificial intelligence trading',
@@ -42,7 +42,7 @@ return [
         'share' => 'Share',
         'me' => 'Me',
         'support' => 'Support',
-        'notification_title' => 'Icon Market Support Message',
+        'notification_title' => ':app_name Support Message',
         'notification_body' => 'You have a new support message',
     ],
 ];

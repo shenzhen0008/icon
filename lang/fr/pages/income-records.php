@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'fr',
-    'meta_title' => 'Historique des revenus | Icon Market',
+    'meta_title' => 'Historique des revenus | :app_name',
     'title' => 'Historique des revenus',
     'intro' => 'Page dédiée à l’historique des revenus pour le panneau d’accueil (:mode).',
     'back_home' => 'Retour à l’accueil',

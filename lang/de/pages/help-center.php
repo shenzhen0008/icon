@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'de',
-    'meta_title' => 'Hilfezentrum | Icon Market',
+    'meta_title' => 'Hilfezentrum | :app_name',
     'title' => 'Hilfezentrum',
     'faq_title' => 'Häufig gestellte Fragen',
     'intro' => 'Willkommen im Hilfezentrum. Hier finden Sie Benutzerleitfäden, FAQs und relevante Informationen, damit Sie diese Anwendung schnell verstehen und nutzen können.',

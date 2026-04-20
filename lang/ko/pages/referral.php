@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'ko',
-    'meta_title' => '추천 | Icon Market',
+    'meta_title' => '추천 | :app_name',
     'hero_tagline' => '초대하고 수익 받기',
     'hero_title' => '추천 프로그램',
     'hero_subtitle' => '친구를 초대하면 직접 보상 5% + 간접 보상 2%를 받을 수 있습니다. 핵심 정보가 한 페이지에 정리되어 있습니다.',
@@ -23,6 +23,6 @@ return [
     'copy_link' => '링크 복사',
     'share_now' => '지금 공유',
     'copied' => '복사됨',
-    'share_text' => 'Icon Market 추천 초대',
+    'share_text' => ':app_name 추천 초대',
     'link_copied_alert' => '링크가 복사되었습니다',
 ];

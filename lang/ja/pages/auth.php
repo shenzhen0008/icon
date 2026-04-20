@@ -3,7 +3,7 @@
 return [
     'html_lang' => 'ja',
     'register' => [
-        'meta_title' => 'アカウント有効化 | Icon Market',
+        'meta_title' => 'アカウント有効化 | :app_name',
         'title' => '取引PINを設定してアカウントを有効化',
         'temp_username' => '仮ユーザー名: :username',
         'pin_hint' => '取引PINは6桁の数字のみ対応しています。',
@@ -12,7 +12,7 @@ return [
         'submit' => 'アカウントを有効化',
     ],
     'confirm_password' => [
-        'meta_title' => 'パスワード確認 | Icon Market',
+        'meta_title' => 'パスワード確認 | :app_name',
         'title' => 'パスワード確認',
         'password_label' => 'パスワード',
         'submit' => '確認',

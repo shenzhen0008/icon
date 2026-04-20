@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'ja',
-    'meta_title' => 'ヘルプセンター | Icon Market',
+    'meta_title' => 'ヘルプセンター | :app_name',
     'title' => 'ヘルプセンター',
     'faq_title' => 'よくある質問',
     'intro' => 'ヘルプセンターへようこそ。ここではユーザーガイド、FAQ、関連情報を確認でき、アプリを素早く理解して利用できます。',

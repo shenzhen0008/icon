@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'de',
-    'meta_title' => 'On-Chain-Aufladung | Icon Market',
+    'meta_title' => 'On-Chain-Aufladung | :app_name',
     'title' => 'On-Chain-Aufladung',
     'intro' => 'Senden Sie nach der Direktzahlung den Transaktions-Hash. Gutschrift erfolgt nach Support-Prüfung.',
     'back_to_recharge' => 'Zurück zur Standard-Aufladung',

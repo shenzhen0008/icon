@@ -61,7 +61,7 @@ class RechargePaymentRequestTest extends TestCase
 
         $this->get('/recharge?locale=en')
             ->assertOk()
-            ->assertSee('Recharge | Icon Market')
+            ->assertSee('Recharge | '.config('app.name'))
             ->assertSee('RECEIVE')
             ->assertSee('SEND')
             ->assertSee('CONVERT')

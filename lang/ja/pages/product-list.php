@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'ja',
-    'meta_title' => '商品マーケット | Icon Market',
+    'meta_title' => '商品マーケット | :app_name',
     'rules' => 'ルール',
     'orders' => '注文',
     'today_profit' => '本日の予想収益',

@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'zh-CN',
-    'meta_title' => '登录 | Icon Market',
+    'meta_title' => '登录 | :app_name',
     'title' => '登录',
     'username_label' => '用户名',
     'password_label' => '密码',

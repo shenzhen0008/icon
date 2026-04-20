@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'es',
-    'meta_title' => 'Reglas | Icon Market',
+    'meta_title' => 'Reglas | :app_name',
     'hero_title' => 'Trading con IA',
     'hero_intro' => 'El sistema utiliza modelos estratégicos de IA de nivel empresarial para ejecución cuantitativa, autoaprendizaje y optimización de parámetros. Dentro de reglas definidas, mejora la eficiencia de asignación y sincroniza los resultados de liquidación con los registros de órdenes.',
     'feature_settlement_title' => 'Liquidación segura',

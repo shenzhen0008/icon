@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'ko',
-    'meta_title' => '마이 센터 | Icon Market',
+    'meta_title' => '마이 센터 | :app_name',
     'payment' => [
         'title' => '입금 및 출금',
         'subtitle' => '입금 및 출금 방법을 선택해 주세요.',

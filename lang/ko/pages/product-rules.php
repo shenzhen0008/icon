@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'ko',
-    'meta_title' => '규칙 | Icon Market',
+    'meta_title' => '규칙 | :app_name',
     'hero_title' => 'AI 트레이딩',
     'hero_intro' => '시스템은 엔터프라이즈급 AI 전략 모델을 사용하여 정량 실행, 자동 학습, 파라미터 최적화를 수행합니다. 정의된 규칙 내에서 배분 효율을 높이고 정산 결과를 주문 기록에 동기화합니다.',
     'feature_settlement_title' => '안전한 정산',

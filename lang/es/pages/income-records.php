@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'es',
-    'meta_title' => 'Registros de ingresos | Icon Market',
+    'meta_title' => 'Registros de ingresos | :app_name',
     'title' => 'Registros de ingresos',
     'intro' => 'Página dedicada de registros de ingresos para el panel de inicio (:mode).',
     'back_home' => 'Volver al inicio',

@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'zh-CN',
-    'meta_title' => '产品市场 | Icon Market',
+    'meta_title' => '产品市场 | :app_name',
     'rules' => '规则',
     'orders' => '订单',
     'today_profit' => '今日预计收益',

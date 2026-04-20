@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'de',
-    'meta_title' => 'Bankaufladung | Icon Market',
+    'meta_title' => 'Bankaufladung | :app_name',
     'tabs' => [
         'receive' => 'EMPFANGEN',
         'send' => 'SENDEN',

@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'fr',
-    'meta_title' => 'Connexion | Icon Market',
+    'meta_title' => 'Connexion | :app_name',
     'title' => 'Connexion',
     'username_label' => 'Nom d’utilisateur',
     'password_label' => 'Mot de passe',

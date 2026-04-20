@@ -3,7 +3,7 @@
 return [
     'html_lang' => 'pt',
     'register' => [
-        'meta_title' => 'Ativar conta | Icon Market',
+        'meta_title' => 'Ativar conta | :app_name',
         'title' => 'Definir PIN de negociação para ativar a conta',
         'temp_username' => 'Nome de usuário temporário: :username',
         'pin_hint' => 'O PIN de negociação suporta apenas 6 dígitos.',
@@ -12,7 +12,7 @@ return [
         'submit' => 'Ativar conta',
     ],
     'confirm_password' => [
-        'meta_title' => 'Confirmar senha | Icon Market',
+        'meta_title' => 'Confirmar senha | :app_name',
         'title' => 'Confirmar senha',
         'password_label' => 'Senha',
         'submit' => 'Confirmar',

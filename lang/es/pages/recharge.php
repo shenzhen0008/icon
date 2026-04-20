@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'es',
-    'meta_title' => 'Recarga | Icon Market',
+    'meta_title' => 'Recarga | :app_name',
     'tabs' => [
         'receive' => 'RECIBIR',
         'send' => 'ENVIAR',

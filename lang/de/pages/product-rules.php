@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'de',
-    'meta_title' => 'Regeln | Icon Market',
+    'meta_title' => 'Regeln | :app_name',
     'hero_title' => 'AI Trading',
     'hero_intro' => 'Das System nutzt KI-Strategiemodelle auf Enterprise-Niveau für quantitative Ausführung, automatisches Lernen und Parameteroptimierung. Innerhalb definierter Regeln verbessert es die Allokationseffizienz und synchronisiert Abrechnungsergebnisse mit Auftragsaufzeichnungen.',
     'feature_settlement_title' => 'Sichere Abrechnung',

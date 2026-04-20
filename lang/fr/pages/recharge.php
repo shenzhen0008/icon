@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'fr',
-    'meta_title' => 'Rechargement | Icon Market',
+    'meta_title' => 'Rechargement | :app_name',
     'tabs' => [
         'receive' => 'RECEVOIR',
         'send' => 'ENVOYER',

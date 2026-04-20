@@ -110,7 +110,7 @@ class MyCenterPageTest extends TestCase
     {
         $this->get('/me?locale=en')
             ->assertOk()
-            ->assertSee('My Center | Icon Market')
+            ->assertSee('My Center | '.config('app.name'))
             ->assertSee('Deposit & Withdrawal')
             ->assertSee('Please choose a deposit and withdrawal method.')
             ->assertSee('Crypto Deposit')

@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'de',
-    'meta_title' => 'Einnahmeverlauf | Icon Market',
+    'meta_title' => 'Einnahmeverlauf | :app_name',
     'title' => 'Einnahmeverlauf',
     'intro' => 'Spezielle Einnahmeseite für das Startseiten-Panel (:mode).',
     'back_home' => 'Zurück zur Startseite',

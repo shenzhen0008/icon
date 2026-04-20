@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'ja',
-    'meta_title' => '銀行入金 | Icon Market',
+    'meta_title' => '銀行入金 | :app_name',
     'tabs' => [
         'receive' => '受取',
         'send' => '送金',

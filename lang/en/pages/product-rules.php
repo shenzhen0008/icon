@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'en',
-    'meta_title' => 'Rules | Icon Market',
+    'meta_title' => 'Rules | :app_name',
     'hero_title' => 'AI Trading',
     'hero_intro' => 'The system uses enterprise-grade AI strategy models for quantitative execution, auto-learning, and parameter optimization. Within defined rules, it improves allocation efficiency and syncs settlement results to order records.',
     'feature_settlement_title' => 'Secure Settlement',

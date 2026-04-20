@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'ja',
-    'meta_title' => 'オンチェーン入金 | Icon Market',
+    'meta_title' => 'オンチェーン入金 | :app_name',
     'title' => 'オンチェーン入金',
     'intro' => '直接支払い後にトランザクションハッシュを提出してください。サポート確認後に入金されます。',
     'back_to_recharge' => '通常入金へ戻る',

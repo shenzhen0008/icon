@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'en',
-    'meta_title' => 'Referral | Icon Market',
+    'meta_title' => 'Referral | :app_name',
     'hero_tagline' => 'Invite & Earn',
     'hero_title' => 'Referral Program',
     'hero_subtitle' => 'Invite friends to join and earn 5% direct rewards plus 2% indirect rewards. Key info is all on one page.',
@@ -23,6 +23,6 @@ return [
     'copy_link' => 'Copy Link',
     'share_now' => 'Share Now',
     'copied' => 'Copied',
-    'share_text' => 'Icon Market referral invite',
+    'share_text' => ':app_name referral invite',
     'link_copied_alert' => 'Link copied',
 ];

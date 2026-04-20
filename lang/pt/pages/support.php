@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'pt',
-    'meta_title' => 'Central de suporte | Icon Market',
+    'meta_title' => 'Central de suporte | :app_name',
     'section_label' => 'Suporte',
     'title' => 'Central de suporte',
     'intro' => 'Entre em contato com o suporte online diretamente no site.',

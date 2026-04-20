@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'ja',
-    'meta_title' => '注文 | Icon Market',
+    'meta_title' => '注文 | :app_name',
     'title' => '注文',
     'intro' => '現在のポジションと最近の収益履歴を確認できます。',
     'positions' => [

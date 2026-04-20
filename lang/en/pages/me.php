@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'en',
-    'meta_title' => 'My Center | Icon Market',
+    'meta_title' => 'My Center | :app_name',
     'payment' => [
         'title' => 'Deposit & Withdrawal',
         'subtitle' => 'Please choose a deposit and withdrawal method.',

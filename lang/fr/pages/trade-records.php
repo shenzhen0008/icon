@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'fr',
-    'meta_title' => 'Historique des transactions | Icon Market',
+    'meta_title' => 'Historique des transactions | :app_name',
     'title' => 'Historique des transactions',
     'intro' => 'Page dédiée à l’historique des transactions pour le panneau d’accueil (:mode).',
     'back_home' => 'Retour à l’accueil',

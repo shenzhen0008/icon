@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'fr',
-    'meta_title' => 'Ordres | Icon Market',
+    'meta_title' => 'Ordres | :app_name',
     'title' => 'Ordres',
     'intro' => 'Consultez vos positions en cours et vos derniers enregistrements de profits.',
     'positions' => [

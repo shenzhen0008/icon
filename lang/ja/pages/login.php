@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'ja',
-    'meta_title' => 'ログイン | Icon Market',
+    'meta_title' => 'ログイン | :app_name',
     'title' => 'ログイン',
     'username_label' => 'ユーザー名',
     'password_label' => 'パスワード',

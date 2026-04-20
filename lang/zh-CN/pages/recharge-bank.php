@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'zh-CN',
-    'meta_title' => '银行卡资金 | Icon Market',
+    'meta_title' => '银行卡资金 | :app_name',
     'tabs' => [
         'receive' => '充值',
         'send' => '提款',

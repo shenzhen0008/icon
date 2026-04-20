@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'en',
-    'meta_title' => 'Trade Records | Icon Market',
+    'meta_title' => 'Trade Records | :app_name',
     'title' => 'Trade Records',
     'intro' => 'Dedicated trade records page for the home panel (:mode).',
     'back_home' => 'Back to Home',

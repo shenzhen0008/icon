@@ -29,7 +29,7 @@
         &lt;
       </a>
     @else
-      <a href="/" data-keep-locale class="text-[1.04rem] font-semibold tracking-[0.22em] leading-none text-[rgb(var(--theme-primary))] md:text-[1.1rem]">ICON MARKET</a>
+      <a href="/" data-keep-locale class="text-[1.04rem] font-semibold tracking-[0.22em] leading-none text-[rgb(var(--theme-primary))] md:text-[1.1rem]">{{ config('app.name') }}</a>
     @endif
 
     <nav class="hidden items-center gap-[clamp(0.8rem,3vw,1.5rem)] text-scale-ui md:flex">
@@ -290,7 +290,7 @@
           if (Notification.permission !== 'granted') return;
           if (!document.hidden) return;
 
-          const notification = new Notification(@json(__('pages/home.nav.notification_title')), {
+          const notification = new Notification(@json(__('pages/home.nav.notification_title', ['app_name' => config('app.name')])), {
             body: messageText || @json(__('pages/home.nav.notification_body')),
           });
           setTimeout(() => notification.close(), 5000);

@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'ja',
-    'meta_title' => '紹介 | Icon Market',
+    'meta_title' => '紹介 | :app_name',
     'hero_tagline' => '招待して稼ぐ',
     'hero_title' => '紹介プログラム',
     'hero_subtitle' => '友達を招待すると、直接報酬5% + 間接報酬2%を獲得できます。主要情報はこの1ページに集約されています。',
@@ -23,6 +23,6 @@ return [
     'copy_link' => 'リンクをコピー',
     'share_now' => '今すぐ共有',
     'copied' => 'コピーしました',
-    'share_text' => 'Icon Market 招待リンク',
+    'share_text' => ':app_name 招待リンク',
     'link_copied_alert' => 'リンクをコピーしました',
 ];

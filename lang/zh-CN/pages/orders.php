@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'zh-CN',
-    'meta_title' => '订单 | Icon Market',
+    'meta_title' => '订单 | :app_name',
     'title' => '订单',
     'intro' => '查看当前持仓与最近收益记录。',
     'positions' => [

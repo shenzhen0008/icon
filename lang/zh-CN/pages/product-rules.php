@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'zh-CN',
-    'meta_title' => '规则说明 | Icon Market',
+    'meta_title' => '规则说明 | :app_name',
     'hero_title' => 'AI Trading',
     'hero_intro' => '系统基于企业级 AI 策略模型执行量化处理、自动学习与参数优化，在规则范围内提升委托效率，并将收益结算结果同步到订单记录中。',
     'feature_settlement_title' => '安全结算',

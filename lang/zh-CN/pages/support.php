@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'zh-CN',
-    'meta_title' => '客服支持 | Icon Market',
+    'meta_title' => '客服支持 | :app_name',
     'section_label' => '客服',
     'title' => '客服中心',
     'intro' => '在站内页面直接联系在线客服。',

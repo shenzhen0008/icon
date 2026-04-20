@@ -224,6 +224,16 @@ class GlobalNavigationTest extends TestCase
         }
     }
 
+    public function test_top_nav_brand_uses_configured_app_name(): void
+    {
+        config(['app.name' => 'Zorai Radar']);
+
+        $response = $this->get('/')->assertOk();
+        $topNavMarkup = $this->topNavMarkup($response->getContent());
+
+        $this->assertStringContainsString('Zorai Radar', $topNavMarkup);
+    }
+
     public function test_frontend_pages_use_unified_desktop_main_container_width(): void
     {
         $product = Product::query()->create([

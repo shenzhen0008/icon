@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'ja',
-    'meta_title' => 'ルール | Icon Market',
+    'meta_title' => 'ルール | :app_name',
     'hero_title' => 'AI取引',
     'hero_intro' => 'システムはエンタープライズ級AI戦略モデルを用いて、定量実行・自動学習・パラメータ最適化を行います。定義済みルール内で配分効率を高め、精算結果を注文記録へ同期します。',
     'feature_settlement_title' => '安全な精算',

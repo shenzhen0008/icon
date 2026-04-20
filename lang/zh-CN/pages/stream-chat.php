@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'zh-CN',
-    'meta_title' => '在线客服 | Icon Market',
+    'meta_title' => '在线客服 | :app_name',
     'status_connecting' => '正在连接客服...',
     'label_image' => '图片',
     'input_placeholder' => '请输入消息...',

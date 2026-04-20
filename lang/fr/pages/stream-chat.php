@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'fr',
-    'meta_title' => 'Support en ligne | Icon Market',
+    'meta_title' => 'Support en ligne | :app_name',
     'status_connecting' => 'Connexion au support...',
     'label_image' => 'Image',
     'input_placeholder' => 'Saisissez votre message...',

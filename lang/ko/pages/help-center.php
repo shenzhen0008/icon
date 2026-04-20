@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'ko',
-    'meta_title' => '도움말 센터 | Icon Market',
+    'meta_title' => '도움말 센터 | :app_name',
     'title' => '도움말 센터',
     'faq_title' => '자주 묻는 질문',
     'intro' => '도움말 센터에 오신 것을 환영합니다. 여기에서 사용자 가이드, FAQ 및 관련 정보를 확인하여 이 애플리케이션을 빠르게 이해하고 사용할 수 있습니다.',

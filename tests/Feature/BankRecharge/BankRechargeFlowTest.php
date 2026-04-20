@@ -34,7 +34,7 @@ class BankRechargeFlowTest extends TestCase
                 'code' => 'A',
                 'enabled' => true,
                 'bank_name' => 'ABC',
-                'account_name' => 'ICON MARKET',
+                'account_name' => 'TEST ACCOUNT',
                 'card_number' => '6225880011223344',
                 'branch_name' => 'Main',
                 'sort' => 10,

@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'pt',
-    'meta_title' => 'Minha central | Icon Market',
+    'meta_title' => 'Minha central | :app_name',
     'payment' => [
         'title' => 'Depósito e saque',
         'subtitle' => 'Por favor, escolha um método de depósito e saque.',

@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'ja',
-    'meta_title' => '収益履歴 | Icon Market',
+    'meta_title' => '収益履歴 | :app_name',
     'title' => '収益履歴',
     'intro' => 'ホームパネル（:mode）専用の収益履歴ページです。',
     'back_home' => 'ホームに戻る',

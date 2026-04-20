@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'ko',
-    'meta_title' => 'Icon Market | 디지털 자산 관리 플랫폼',
+    'meta_title' => ':app_name | 디지털 자산 관리 플랫폼',
     'hero' => [
         'title' => 'AI 스마트 컨트랙트에 오신 것을 환영합니다',
         'subtitle' => '인공지능 트레이딩',
@@ -42,7 +42,7 @@ return [
         'share' => '공유',
         'me' => '내 정보',
         'support' => '고객지원',
-        'notification_title' => 'Icon Market 고객지원 메시지',
+        'notification_title' => ':app_name 고객지원 메시지',
         'notification_body' => '새 고객지원 메시지가 있습니다',
     ],
 ];

@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'pt',
-    'meta_title' => 'Indicação | Icon Market',
+    'meta_title' => 'Indicação | :app_name',
     'hero_tagline' => 'Indique e ganhe',
     'hero_title' => 'Programa de indicação',
     'hero_subtitle' => 'Convide amigos para participar e ganhe 5% de recompensas diretas mais 2% de recompensas indiretas. As principais informações estão em uma única página.',
@@ -23,6 +23,6 @@ return [
     'copy_link' => 'Copiar link',
     'share_now' => 'Compartilhar agora',
     'copied' => 'Copiado',
-    'share_text' => 'Convite de indicação do Icon Market',
+    'share_text' => 'Convite de indicação do :app_name',
     'link_copied_alert' => 'Link copiado',
 ];

@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'de',
-    'meta_title' => 'Anmelden | Icon Market',
+    'meta_title' => 'Anmelden | :app_name',
     'title' => 'Anmelden',
     'username_label' => 'Benutzername',
     'password_label' => 'Passwort',

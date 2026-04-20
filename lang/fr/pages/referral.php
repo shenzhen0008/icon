@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'fr',
-    'meta_title' => 'Parrainage | Icon Market',
+    'meta_title' => 'Parrainage | :app_name',
     'hero_tagline' => 'Invitez et gagnez',
     'hero_title' => 'Programme de parrainage',
     'hero_subtitle' => 'Invitez vos amis et obtenez 5 % de récompense directe plus 2 % de récompense indirecte. Les informations clés sont regroupées sur une seule page.',
@@ -23,6 +23,6 @@ return [
     'copy_link' => 'Copier le lien',
     'share_now' => 'Partager maintenant',
     'copied' => 'Copié',
-    'share_text' => 'Invitation de parrainage Icon Market',
+    'share_text' => 'Invitation de parrainage :app_name',
     'link_copied_alert' => 'Lien copié',
 ];

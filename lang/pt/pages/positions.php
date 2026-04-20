@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'pt',
-    'meta_title' => 'Detalhe do pedido | Icon Market',
+    'meta_title' => 'Detalhe do pedido | :app_name',
     'title' => 'Detalhe do pedido',
     'status' => [
         'open' => 'Aberto',

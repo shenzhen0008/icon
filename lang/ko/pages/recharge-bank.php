@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'ko',
-    'meta_title' => '은행 충전 | Icon Market',
+    'meta_title' => '은행 충전 | :app_name',
     'tabs' => [
         'receive' => '입금',
         'send' => '출금',

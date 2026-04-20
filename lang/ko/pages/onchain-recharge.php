@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'ko',
-    'meta_title' => '온체인 충전 | Icon Market',
+    'meta_title' => '온체인 충전 | :app_name',
     'title' => '온체인 충전',
     'intro' => '직접 결제 후 거래 해시를 제출하세요. 고객센터 확인 후 입금됩니다.',
     'back_to_recharge' => '일반 충전으로 돌아가기',

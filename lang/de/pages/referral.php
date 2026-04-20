@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'de',
-    'meta_title' => 'Empfehlung | Icon Market',
+    'meta_title' => 'Empfehlung | :app_name',
     'hero_tagline' => 'Einladen und verdienen',
     'hero_title' => 'Empfehlungsprogramm',
     'hero_subtitle' => 'Laden Sie Freunde ein und erhalten Sie 5 % direkte Belohnung plus 2 % indirekte Belohnung. Alle wichtigen Informationen auf einer Seite.',
@@ -23,6 +23,6 @@ return [
     'copy_link' => 'Link kopieren',
     'share_now' => 'Jetzt teilen',
     'copied' => 'Kopiert',
-    'share_text' => 'Icon Market Empfehlungs-Einladung',
+    'share_text' => ':app_name Empfehlungs-Einladung',
     'link_copied_alert' => 'Link kopiert',
 ];

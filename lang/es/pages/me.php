@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'es',
-    'meta_title' => 'Mi centro | Icon Market',
+    'meta_title' => 'Mi centro | :app_name',
     'payment' => [
         'title' => 'Depósito y retiro',
         'subtitle' => 'Por favor, elige un método de depósito y retiro.',

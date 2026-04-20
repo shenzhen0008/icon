@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'fr',
-    'meta_title' => 'Mon espace | Icon Market',
+    'meta_title' => 'Mon espace | :app_name',
     'payment' => [
         'title' => 'Dépôt et retrait',
         'subtitle' => 'Veuillez choisir une méthode de dépôt et de retrait.',

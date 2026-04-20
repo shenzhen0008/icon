@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'es',
-    'meta_title' => 'Referidos | Icon Market',
+    'meta_title' => 'Referidos | :app_name',
     'hero_tagline' => 'Invita y gana',
     'hero_title' => 'Programa de referidos',
     'hero_subtitle' => 'Invita a tus amigos y gana 5% de recompensas directas más 2% de recompensas indirectas. La información clave está toda en una sola página.',
@@ -23,6 +23,6 @@ return [
     'copy_link' => 'Copiar enlace',
     'share_now' => 'Compartir ahora',
     'copied' => 'Copiado',
-    'share_text' => 'Invitación de referido de Icon Market',
+    'share_text' => 'Invitación de referido de :app_name',
     'link_copied_alert' => 'Enlace copiado',
 ];

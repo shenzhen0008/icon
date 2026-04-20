@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'ko',
-    'meta_title' => '수익 내역 | Icon Market',
+    'meta_title' => '수익 내역 | :app_name',
     'title' => '수익 내역',
     'intro' => '홈 패널(:mode) 전용 수익 내역 페이지입니다.',
     'back_home' => '홈으로 돌아가기',

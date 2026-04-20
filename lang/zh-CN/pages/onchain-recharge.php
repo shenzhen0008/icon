@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'zh-CN',
-    'meta_title' => '链上充值 | Icon Market',
+    'meta_title' => '链上充值 | :app_name',
     'title' => '链上充值',
     'intro' => '直接付款后提交交易哈希，客服核账后入账。',
     'back_to_recharge' => '返回普通充值',

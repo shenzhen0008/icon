@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'es',
-    'meta_title' => 'Registros de operaciones | Icon Market',
+    'meta_title' => 'Registros de operaciones | :app_name',
     'title' => 'Registros de operaciones',
     'intro' => 'Página dedicada de registros de operaciones para el panel de inicio (:mode).',
     'back_home' => 'Volver al inicio',

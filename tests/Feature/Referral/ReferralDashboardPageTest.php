@@ -75,7 +75,7 @@ class ReferralDashboardPageTest extends TestCase
         $this->actingAs($user)
             ->get('/referral?locale=en')
             ->assertOk()
-            ->assertSee('Referral | Icon Market')
+            ->assertSee('Referral | '.config('app.name'))
             ->assertSee('Referral Program')
             ->assertSee('Reward Details')
             ->assertSee('aria-label="View reward details"', false)

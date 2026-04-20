@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'pt',
-    'meta_title' => 'Entrar | Icon Market',
+    'meta_title' => 'Entrar | :app_name',
     'title' => 'Entrar',
     'username_label' => 'Nome de usuário',
     'password_label' => 'Senha',

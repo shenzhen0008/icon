@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'de',
-    'meta_title' => 'Mein Bereich | Icon Market',
+    'meta_title' => 'Mein Bereich | :app_name',
     'payment' => [
         'title' => 'Ein- und Auszahlung',
         'subtitle' => 'Bitte wählen Sie eine Ein- und Auszahlungsmethode.',

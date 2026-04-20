@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'zh-CN',
-    'meta_title' => '订单详情 | Icon Market',
+    'meta_title' => '订单详情 | :app_name',
     'title' => '订单详情',
     'status' => [
         'open' => '持有中',

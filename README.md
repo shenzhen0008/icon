@@ -30,10 +30,43 @@ PHP_BIN=/usr/bin/php8.3 APP_DIR=/www/wwwroot/your-domain.com WEB_USER=www-data W
 首次执行前请确认：
 
 1. 复制 `.env.production.example` 为 `.env`（若 `.env` 不存在，脚本也会自动复制）。
-2. 在 `.env` 中填写真实生产数据库配置（不要使用占位密码）。
-3. Web 站点根目录指向 `public`，并启用 Laravel 伪静态规则。
-4. **项目要求 PHP >= 8.3.0**，服务器如有多个 PHP 版本，请确保 `PHP_BIN` 指向 8.3 可执行文件。
-5. 由于 Filament / Livewire 运行时需要前端资产，请确保 `public/vendor/livewire` 目录可写，部署脚本会自动发布 Livewire 静态前端资源。
+2. 在 `.env` 中显式设置 `APP_NAME`（不要保留默认占位值）。
+3. 在 `.env` 中填写真实生产数据库配置（不要使用占位密码）。
+4. Web 站点根目录指向 `public`，并启用 Laravel 伪静态规则。
+5. **项目要求 PHP >= 8.3.0**，服务器如有多个 PHP 版本，请确保 `PHP_BIN` 指向 8.3 可执行文件。
+6. 由于 Filament / Livewire 运行时需要前端资产，请确保 `public/vendor/livewire` 目录可写，部署脚本会自动发布 Livewire 静态前端资源。
+
+### 应用名配置（APP_NAME）
+应用品牌名通过环境变量 `APP_NAME` 配置，业务代码统一通过 Laravel 配置读取（`config('app.name')`）。
+
+建议在首发部署时直接设置为目标品牌名，例如：
+
+```env
+APP_NAME="Zorai Radar"
+```
+
+注意：应用名包含空格时必须使用引号，否则会触发 dotenv 解析错误。
+
+项目默认回退值为 `Zorai Radar`（见 `config/app.php`），生产环境仍应显式设置 `APP_NAME`。
+
+修改 `APP_NAME` 后，为确保线上立即生效，请至少执行：
+
+```bash
+PHP_BIN=/usr/bin/php8.3 php artisan config:clear
+PHP_BIN=/usr/bin/php8.3 php artisan config:cache
+```
+
+### 品牌文案占位符规范
+为避免再次出现硬编码品牌名，新增/修改文案请遵循以下规则：
+
+1. 多语言文案统一使用 `:app_name` 占位符，例如：
+   - `'meta_title' => 'Dashboard | :app_name'`
+   - `'share_text' => ':app_name referral invite'`
+2. Blade 渲染翻译时统一传入：
+   - `__('pages.xxx.yyy', ['app_name' => config('app.name')])`
+3. 非翻译场景（导航品牌、页面局部标题）统一读取：
+   - `config('app.name')`
+4. 测试断言优先用配置驱动断言，避免绑定固定品牌字面量。
 
 脚本会自动执行：`composer install --no-dev`、`key:generate`、数据库迁移、默认执行 `db:seed --force`、Livewire 资产发布、`storage/bootstrap` 权限修复，以及 Laravel 缓存重建（`optimize:clear` / `optimize`）。
 
@@ -214,6 +247,12 @@ git clone https://github.com/shenzhen0008/icon.git .
 # 配置生产环境文件
 cp .env.production.example .env
 # 编辑 .env（APP_URL / DB_* / STREAM_CHAT_* / WEB3_WALLETCONNECT_PROJECT_ID）
+
+# 项目名称
+配置位置：在 .env 设置 APP_NAME，config/app.php 只负责读取：envAPP_NAME="你的项目名"
+
+最佳时机：部署脚本执行前就填好，这样首轮缓存/启动就是正确名称。
+也可以部署后再改：可以，但改完必须重建配置缓存才会生效。
 
 # 首发部署
 PHP_BIN=/usr/bin/php APP_DIR=/www/wwwroot/zorai.sbs WEB_USER=www-data WEB_GROUP=www-data bash scripts/deploy.sh

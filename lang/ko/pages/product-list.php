@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'ko',
-    'meta_title' => '상품 마켓 | Icon Market',
+    'meta_title' => '상품 마켓 | :app_name',
     'rules' => '규칙',
     'orders' => '주문',
     'today_profit' => '오늘 예상 수익',

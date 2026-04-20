@@ -39,7 +39,7 @@ class StreamChatTest extends TestCase
 
         $this->get('/stream-chat?locale=en')
             ->assertOk()
-            ->assertSee('Online Support | Icon Market')
+            ->assertSee('Online Support | '.config('app.name'))
             ->assertSee('Connecting to support...')
             ->assertSee('Type your message...')
             ->assertSee('Enable message alert sound? A tone will play when new messages arrive.')

@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'ko',
-    'meta_title' => '주문 상세 | Icon Market',
+    'meta_title' => '주문 상세 | :app_name',
     'title' => '주문 상세',
     'status' => [
         'open' => '보유 중',

@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'ja',
-    'meta_title' => '注文詳細 | Icon Market',
+    'meta_title' => '注文詳細 | :app_name',
     'title' => '注文詳細',
     'status' => [
         'open' => '保有中',

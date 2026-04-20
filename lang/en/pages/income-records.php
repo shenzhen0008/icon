@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'en',
-    'meta_title' => 'Income Records | Icon Market',
+    'meta_title' => 'Income Records | :app_name',
     'title' => 'Income Records',
     'intro' => 'Dedicated income records page for the home panel (:mode).',
     'back_home' => 'Back to Home',

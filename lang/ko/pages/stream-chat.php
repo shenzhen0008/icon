@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'ko',
-    'meta_title' => '온라인 지원 | Icon Market',
+    'meta_title' => '온라인 지원 | :app_name',
     'status_connecting' => '고객지원에 연결 중...',
     'label_image' => '이미지',
     'input_placeholder' => '메시지를 입력하세요...',

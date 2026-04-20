@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'fr',
-    'meta_title' => 'Marché des produits | Icon Market',
+    'meta_title' => 'Marché des produits | :app_name',
     'rules' => 'Règles',
     'orders' => 'Ordres',
     'today_profit' => 'Profit estimé aujourd’hui',

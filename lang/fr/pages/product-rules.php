@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'fr',
-    'meta_title' => 'Règles | Icon Market',
+    'meta_title' => 'Règles | :app_name',
     'hero_title' => 'Trading IA',
     'hero_intro' => 'Le système utilise des modèles de stratégie IA de niveau entreprise pour l’exécution quantitative, l’auto-apprentissage et l’optimisation des paramètres. Dans le cadre des règles définies, il améliore l’efficacité d’allocation et synchronise les résultats de règlement avec les enregistrements d’ordres.',
     'feature_settlement_title' => 'Règlement sécurisé',

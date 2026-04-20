@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'zh-CN',
-    'meta_title' => '我的 | Icon Market',
+    'meta_title' => '我的 | :app_name',
     'payment' => [
         'title' => '存取款方式',
         'subtitle' => '请选择一种存款和提款方式。',

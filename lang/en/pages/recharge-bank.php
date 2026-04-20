@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'en',
-    'meta_title' => 'Bank Funding | Icon Market',
+    'meta_title' => 'Bank Funding | :app_name',
     'tabs' => [
         'receive' => 'RECEIVE',
         'send' => 'SEND',

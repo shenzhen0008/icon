@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'fr',
-    'meta_title' => 'Icon Market | Plateforme de gestion d’actifs numériques',
+    'meta_title' => ':app_name | Plateforme de gestion d’actifs numériques',
     'hero' => [
         'title' => 'Bienvenue sur AI Smart Contracts',
         'subtitle' => 'Trading par intelligence artificielle',
@@ -42,7 +42,7 @@ return [
         'share' => 'Partager',
         'me' => 'Compte',
         'support' => 'Support',
-        'notification_title' => 'Message du support Icon Market',
+        'notification_title' => 'Message du support :app_name',
         'notification_body' => 'Vous avez un nouveau message du support',
     ],
 ];

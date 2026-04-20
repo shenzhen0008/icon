@@ -3,7 +3,7 @@
 return [
     'html_lang' => 'en',
     'register' => [
-        'meta_title' => 'Activate Account | Icon Market',
+        'meta_title' => 'Activate Account | :app_name',
         'title' => 'Set Trading PIN to Activate Account',
         'temp_username' => 'Temporary username: :username',
         'pin_hint' => 'Trading PIN only supports 6 digits.',
@@ -12,7 +12,7 @@ return [
         'submit' => 'Activate Account',
     ],
     'confirm_password' => [
-        'meta_title' => 'Confirm Password | Icon Market',
+        'meta_title' => 'Confirm Password | :app_name',
         'title' => 'Confirm Password',
         'password_label' => 'Password',
         'submit' => 'Confirm',

@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'en',
-    'meta_title' => 'Login | Icon Market',
+    'meta_title' => 'Login | :app_name',
     'title' => 'Login',
     'username_label' => 'Username',
     'password_label' => 'Password',

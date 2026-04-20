@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'de',
-    'meta_title' => 'Handelsverlauf | Icon Market',
+    'meta_title' => 'Handelsverlauf | :app_name',
     'title' => 'Handelsverlauf',
     'intro' => 'Spezielle Handelsverlaufsseite für das Startseiten-Panel (:mode).',
     'back_home' => 'Zurück zur Startseite',

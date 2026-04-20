@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'ja',
-    'meta_title' => 'サポートセンター | Icon Market',
+    'meta_title' => 'サポートセンター | :app_name',
     'section_label' => 'サポート',
     'title' => 'サポートセンター',
     'intro' => 'サイト内から直接オンラインサポートへ連絡できます。',

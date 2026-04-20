@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'ko',
-    'meta_title' => '로그인 | Icon Market',
+    'meta_title' => '로그인 | :app_name',
     'title' => '로그인',
     'username_label' => '사용자명',
     'password_label' => '비밀번호',

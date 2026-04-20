@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'fr',
-    'meta_title' => 'Rechargement bancaire | Icon Market',
+    'meta_title' => 'Rechargement bancaire | :app_name',
     'tabs' => [
         'receive' => 'RECEVOIR',
         'send' => 'ENVOYER',

@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'pt',
-    'meta_title' => 'Registros de negociação | Icon Market',
+    'meta_title' => 'Registros de negociação | :app_name',
     'title' => 'Registros de negociação',
     'intro' => 'Página dedicada de registros de negociação para o painel inicial (:mode).',
     'back_home' => 'Voltar para a página inicial',

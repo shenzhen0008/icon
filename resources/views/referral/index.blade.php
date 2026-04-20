@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>{{ __('pages/referral.meta_title') }}</title>
+  <title>{{ __('pages/referral.meta_title', ['app_name' => config('app.name')]) }}</title>
   <x-meta.favicons />
   @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
@@ -130,7 +130,7 @@
     const i18n = {
       copyLabel: @json(__('pages/referral.copy_link')),
       copiedLabel: @json(__('pages/referral.copied')),
-      shareText: @json(__('pages/referral.share_text')),
+      shareText: @json(__('pages/referral.share_text', ['app_name' => config('app.name')])),
       linkCopiedAlert: @json(__('pages/referral.link_copied_alert')),
     };
 

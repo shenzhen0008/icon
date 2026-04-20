@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'es',
-    'meta_title' => 'Recarga on-chain | Icon Market',
+    'meta_title' => 'Recarga on-chain | :app_name',
     'title' => 'Recarga on-chain',
     'intro' => 'Envía el hash de la transacción tras el pago directo. Los fondos se acreditan tras la verificación del soporte.',
     'back_to_recharge' => 'Volver a recarga estándar',

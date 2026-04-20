@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'pt',
-    'meta_title' => 'Registros de renda | Icon Market',
+    'meta_title' => 'Registros de renda | :app_name',
     'title' => 'Registros de renda',
     'intro' => 'Página dedicada de registros de renda para o painel inicial (:mode).',
     'back_home' => 'Voltar para a página inicial',

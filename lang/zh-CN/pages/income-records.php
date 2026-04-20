@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'zh-CN',
-    'meta_title' => '收入记录 | Icon Market',
+    'meta_title' => '收入记录 | :app_name',
     'title' => '收入记录',
     'intro' => '首页组件专属收入记录页面（:mode）。',
     'back_home' => '返回首页',

@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'ja',
-    'meta_title' => 'マイセンター | Icon Market',
+    'meta_title' => 'マイセンター | :app_name',
     'payment' => [
         'title' => '入金と出金',
         'subtitle' => '入金・出金方法を選択してください。',

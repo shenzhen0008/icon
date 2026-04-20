@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'ko',
-    'meta_title' => '고객지원 센터 | Icon Market',
+    'meta_title' => '고객지원 센터 | :app_name',
     'section_label' => '고객지원',
     'title' => '고객지원 센터',
     'intro' => '웹사이트 내에서 온라인 지원에 직접 문의할 수 있습니다.',

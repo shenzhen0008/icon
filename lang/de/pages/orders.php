@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'de',
-    'meta_title' => 'Aufträge | Icon Market',
+    'meta_title' => 'Aufträge | :app_name',
     'title' => 'Aufträge',
     'intro' => 'Sehen Sie Ihre aktuellen Positionen und letzten Gewinnaufzeichnungen.',
     'positions' => [

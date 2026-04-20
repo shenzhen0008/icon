@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'zh-CN',
-    'meta_title' => 'Icon Market | 数字资产管理平台',
+    'meta_title' => ':app_name | 数字资产管理平台',
     'hero' => [
         'title' => '欢迎来到 AI 智能合约',
         'subtitle' => '人工智能量化交易',
@@ -42,7 +42,7 @@ return [
         'share' => '分享',
         'me' => '我的',
         'support' => '客服',
-        'notification_title' => 'Icon Market 客服新消息',
+        'notification_title' => ':app_name 客服新消息',
         'notification_body' => '你有一条新的客服消息',
     ],
 ];

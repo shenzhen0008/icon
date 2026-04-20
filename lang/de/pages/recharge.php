@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'de',
-    'meta_title' => 'Aufladen | Icon Market',
+    'meta_title' => 'Aufladen | :app_name',
     'tabs' => [
         'receive' => 'EMPFANGEN',
         'send' => 'SENDEN',

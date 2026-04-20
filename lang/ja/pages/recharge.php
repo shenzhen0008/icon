@@ -2,7 +2,7 @@
 
 return [
     'html_lang' => 'ja',
-    'meta_title' => 'チャージ | Icon Market',
+    'meta_title' => 'チャージ | :app_name',
     'tabs' => [
         'receive' => '受取',
         'send' => '送金',
