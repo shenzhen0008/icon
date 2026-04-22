@@ -24,9 +24,8 @@ class CollectClientEnvTest extends TestCase
         $path = (string) config('client_env.log_path', 'client-env/probe-log.jsonl');
         Storage::disk('local')->assertExists($path);
 
-        $lines = preg_split('/\r\n|\r|\n/', trim((string) Storage::disk('local')->get($path)));
-        $lastLine = (string) end($lines);
-        $payload = json_decode($lastLine, true, 512, JSON_THROW_ON_ERROR);
+        $records = $this->readProbeRecords($path);
+        $payload = $records[0];
 
         $this->assertSame('desktop', $payload['server_detect']['device_type']);
     }
@@ -54,15 +53,40 @@ class CollectClientEnvTest extends TestCase
         $path = (string) config('client_env.log_path', 'client-env/probe-log.jsonl');
         Storage::disk('local')->assertExists($path);
 
-        $lines = preg_split('/\r\n|\r|\n/', trim((string) Storage::disk('local')->get($path)));
-        $lastLine = (string) end($lines);
-
-        $payload = json_decode($lastLine, true, 512, JSON_THROW_ON_ERROR);
+        $records = $this->readProbeRecords($path);
+        $payload = $records[0];
 
         $this->assertSame('req_test_001', $payload['request_id']);
         $this->assertSame('Safari', $payload['client_reported']['browser_name']);
         $this->assertSame('mobile', $payload['server_detect']['device_type']);
         $this->assertSame('iOS', $payload['server_detect']['os']['name']);
+    }
+
+    public function test_collect_endpoint_deduplicates_same_browser_for_same_user_key(): void
+    {
+        Storage::fake('local');
+
+        $headers = [
+            'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36',
+        ];
+
+        $this->withHeaders($headers + ['X-Request-Id' => 'req_dup_1'])
+            ->get('/dev/client-env/collect')
+            ->assertOk()
+            ->assertJsonPath('saved', true)
+            ->assertJsonPath('duplicate', false);
+
+        $this->withHeaders($headers + ['X-Request-Id' => 'req_dup_2'])
+            ->get('/dev/client-env/collect')
+            ->assertOk()
+            ->assertJsonPath('saved', false)
+            ->assertJsonPath('duplicate', true);
+
+        $path = (string) config('client_env.log_path', 'client-env/probe-log.jsonl');
+        $records = $this->readProbeRecords($path);
+
+        $this->assertCount(1, $records);
+        $this->assertSame('req_dup_1', $records[0]['request_id']);
     }
 
     public function test_collect_endpoint_rejects_invalid_payload(): void
@@ -81,5 +105,21 @@ class CollectClientEnvTest extends TestCase
                 'browser_name' => 'Chrome',
             ],
         ])->assertForbidden();
+    }
+
+    /**
+     * @return array<int, array<string, mixed>>
+     */
+    private function readProbeRecords(string $path): array
+    {
+        $content = trim((string) Storage::disk('local')->get($path));
+        $blocks = preg_split('/\n\s*\n/', $content) ?: [];
+        $records = [];
+
+        foreach ($blocks as $block) {
+            $records[] = json_decode($block, true, 512, JSON_THROW_ON_ERROR);
+        }
+
+        return $records;
     }
 }

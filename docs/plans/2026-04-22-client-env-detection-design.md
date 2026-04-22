@@ -28,7 +28,8 @@
 
 1. `GET /dev/client-env/detect`：返回识别结果 JSON。
 2. `POST /dev/client-env/collect`：接收并记录一次检测结果（服务端也会补充自身检测值）。
-3. 文档落地：`storage/app/client-env/probe-log.jsonl`（每行一条 JSON）。
+3. 文档落地：`storage/app/private/client-env/probe-log.jsonl`（JSON 记录块）。
+4. 去重策略：同一用户（未登录时按 IP）在同一浏览器环境仅记录一次，重复刷新不重复写入。
 
 不纳入：
 
@@ -92,7 +93,7 @@
 
 ### 6.3 文档记录格式（JSONL）
 
-每行一条 JSON，字段建议：
+每条为一个 JSON 记录块（记录之间空一行），字段建议：
 
 1. `timestamp`
 2. `request_id`
@@ -103,8 +104,8 @@
 
 ## 7. 存储策略
 
-1. 文件路径：`storage/app/client-env/probe-log.jsonl`
-2. 追加写入，不覆盖历史。
+1. 文件路径：`storage/app/private/client-env/probe-log.jsonl`
+2. 追加写入，不覆盖历史；记录之间增加空行，便于人工阅读。
 3. 单条写入失败返回错误，但不影响其它业务（因为是专属调试接口）。
 4. 不写入账号敏感信息。
 
@@ -125,4 +126,4 @@
 交付后你可以直接做两步验证：
 
 1. 访问 `GET /dev/client-env/detect`，确认识别结果。
-2. 调用 `POST /dev/client-env/collect`，确认 `storage/app/client-env/probe-log.jsonl` 产生记录。
+2. 调用 `POST /dev/client-env/collect`，确认 `storage/app/private/client-env/probe-log.jsonl` 产生记录。

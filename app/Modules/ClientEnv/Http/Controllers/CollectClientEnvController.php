@@ -8,6 +8,7 @@ use App\Modules\ClientEnv\Services\ClientEnvDetectorService;
 use App\Modules\ClientEnv\Services\ClientEnvProbeLogService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 
 class CollectClientEnvController extends Controller
 {
@@ -23,25 +24,64 @@ class CollectClientEnvController extends Controller
             abort(403);
         }
 
+        $serverDetect = $this->detectorService->detect($request);
+        $userKey = $this->resolveUserKey($request->ip());
+        $uniqueKey = $this->buildUniqueKey($userKey, $serverDetect);
+
         $entry = [
             'timestamp' => now()->toIso8601String(),
+            'unique_key' => $uniqueKey,
             'request_id' => (string) ($request->headers->get('X-Request-Id') ?: Str::uuid()),
+            'user_key' => $userKey,
             'ip' => $request->ip(),
             'user_agent' => (string) $request->userAgent(),
-            'server_detect' => $this->detectorService->detect($request),
+            'server_detect' => $serverDetect,
             'client_reported' => $request->validated('client'),
         ];
 
-        $this->probeLogService->append($entry);
+        $saved = $this->probeLogService->appendUnique($entry);
 
         return response()->json([
             'ok' => true,
-            'saved' => true,
+            'saved' => $saved,
+            'duplicate' => !$saved,
             'path' => (string) config('client_env.log_path', 'client-env/probe-log.jsonl'),
             'entry' => [
                 'timestamp' => $entry['timestamp'],
                 'request_id' => $entry['request_id'],
+                'unique_key' => $entry['unique_key'],
             ],
         ]);
+    }
+
+    private function resolveUserKey(?string $ip): string
+    {
+        $userId = Auth::id();
+        if ($userId !== null) {
+            return 'user:'.$userId;
+        }
+
+        return 'ip:'.($ip ?: 'unknown');
+    }
+
+    /**
+     * @param array<string, mixed> $serverDetect
+     */
+    private function buildUniqueKey(string $userKey, array $serverDetect): string
+    {
+        $browser = (array) ($serverDetect['browser'] ?? []);
+        $os = (array) ($serverDetect['os'] ?? []);
+
+        $parts = [
+            $userKey,
+            (string) ($serverDetect['device_type'] ?? 'unknown'),
+            (string) ($serverDetect['is_webview'] ?? false),
+            (string) ($browser['name'] ?? 'unknown'),
+            (string) ($browser['version'] ?? 'unknown'),
+            (string) ($os['name'] ?? 'unknown'),
+            (string) ($os['version'] ?? 'unknown'),
+        ];
+
+        return sha1(implode('|', $parts));
     }
 }
