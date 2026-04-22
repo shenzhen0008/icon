@@ -68,7 +68,7 @@
                     @if (!empty($product['product_icon_path']))
                       <img src="{{ $product['product_icon_path'] }}" alt="" class="h-[clamp(1.125rem,4vw,1.5rem)] w-[clamp(1.125rem,4vw,1.5rem)] object-contain">
                     @else
-                      <span class="text-scale-micro font-semibold uppercase text-theme">{{ strtoupper(substr($product['code'], 0, 2)) }}</span>
+                      <img src="{{ asset('images/icon_pro_usdt.svg') }}" alt="" class="h-full w-full object-contain">
                     @endif
                   </div>
                   <div class="min-w-0">

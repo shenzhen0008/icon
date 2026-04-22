@@ -41,6 +41,8 @@ use App\Modules\PopupPush\Http\Controllers\MarkPopupDismissedController;
 use App\Modules\PopupPush\Http\Controllers\MarkPopupShownController;
 use App\Modules\Support\Http\Controllers\StreamChatPageController;
 use App\Modules\User\Http\Controllers\SensitivePageController;
+use App\Modules\ClientEnv\Http\Controllers\CollectClientEnvController;
+use App\Modules\ClientEnv\Http\Controllers\DetectClientEnvController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomeController::class);
@@ -60,6 +62,8 @@ Route::get('/support', SupportPageController::class);
 Route::get('/stream-chat', StreamChatPageController::class);
 Route::post('/stream-chat/guest-token', StreamChatGuestTokenController::class);
 Route::get('/stream-chat/notify-token', StreamChatNotifyTokenController::class);
+Route::get('/dev/client-env/detect', DetectClientEnvController::class);
+Route::match(['get', 'post'], '/dev/client-env/collect', CollectClientEnvController::class);
 
 Route::middleware('guest')->group(function (): void {
     Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
