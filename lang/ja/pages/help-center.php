@@ -20,5 +20,13 @@ return [
             'line1' => 'NYSDFS規制',
             'line2' => 'デジタル通貨ライセンス',
         ],
+        'cibe_accredited' => [
+            'line1' => 'CIBE認定',
+            'line2' => 'イスラム金融サービスライセンス',
+        ],
+        'cibe_certified' => [
+            'line1' => 'CIBE認証',
+            'line2' => 'シャリーア承認済みステーキングサービス（Ethereum）',
+        ],
     ],
 ];

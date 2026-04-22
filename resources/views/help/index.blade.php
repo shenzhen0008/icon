@@ -81,6 +81,20 @@
                 ],
                 'image' => '/images/NYSDFSRegulatedDigitalCurrencyLicense.jpeg',
             ],
+            [
+                'title_lines' => [
+                    __('pages/help-center.license_titles.cibe_accredited.line1'),
+                    __('pages/help-center.license_titles.cibe_accredited.line2'),
+                ],
+                'image' => '/images/CIBE Accredited.jpg',
+            ],
+            [
+                'title_lines' => [
+                    __('pages/help-center.license_titles.cibe_certified.line1'),
+                    __('pages/help-center.license_titles.cibe_certified.line2'),
+                ],
+                'image' => '/images/CIBE Certified.jpg',
+            ],
         ];
       @endphp
 

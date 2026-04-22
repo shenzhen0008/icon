@@ -20,5 +20,13 @@ return [
             'line1' => 'Régulé par NYSDFS',
             'line2' => 'Licence de monnaie numérique',
         ],
+        'cibe_accredited' => [
+            'line1' => 'Accrédité par la CIBE',
+            'line2' => 'Licence de services financiers islamiques',
+        ],
+        'cibe_certified' => [
+            'line1' => 'Certifié par la CIBE',
+            'line2' => 'Services de staking approuvés par la charia (Ethereum)',
+        ],
     ],
 ];

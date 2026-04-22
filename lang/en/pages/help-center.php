@@ -20,5 +20,13 @@ return [
             'line1' => 'NYSDFS Regulated',
             'line2' => 'Digital Currency License',
         ],
+        'cibe_accredited' => [
+            'line1' => 'CIBE Accredited',
+            'line2' => 'Islamic Financial Service License',
+        ],
+        'cibe_certified' => [
+            'line1' => 'CIBE Certified',
+            'line2' => 'Shariah Endorsed Staking Services (Ethereum)',
+        ],
     ],
 ];

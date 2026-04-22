@@ -20,5 +20,13 @@ return [
             'line1' => 'NYSDFS-reguliert',
             'line2' => 'Lizenz für digitale Währungen',
         ],
+        'cibe_accredited' => [
+            'line1' => 'CIBE-akkreditiert',
+            'line2' => 'Lizenz für islamische Finanzdienstleistungen',
+        ],
+        'cibe_certified' => [
+            'line1' => 'CIBE-zertifiziert',
+            'line2' => 'Scharia-konforme Staking-Dienste (Ethereum)',
+        ],
     ],
 ];

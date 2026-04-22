@@ -20,5 +20,13 @@ return [
             'line1' => 'NYSDFS 규제',
             'line2' => '디지털 통화 라이선스',
         ],
+        'cibe_accredited' => [
+            'line1' => 'CIBE 공인',
+            'line2' => '이슬람 금융 서비스 라이선스',
+        ],
+        'cibe_certified' => [
+            'line1' => 'CIBE 인증',
+            'line2' => '샤리아 승인 스테이킹 서비스(Ethereum)',
+        ],
     ],
 ];

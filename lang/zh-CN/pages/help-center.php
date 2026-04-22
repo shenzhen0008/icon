@@ -20,5 +20,13 @@ return [
             'line1' => 'NYSDFS 监管',
             'line2' => '数字货币牌照',
         ],
+        'cibe_accredited' => [
+            'line1' => 'CIBE 认证资质',
+            'line2' => '伊斯兰金融服务牌照',
+        ],
+        'cibe_certified' => [
+            'line1' => 'CIBE 认证',
+            'line2' => '经伊斯兰教法认可的质押服务（Ethereum）',
+        ],
     ],
 ];
