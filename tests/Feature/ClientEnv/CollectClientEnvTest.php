@@ -89,6 +89,32 @@ class CollectClientEnvTest extends TestCase
         $this->assertSame('req_dup_1', $records[0]['request_id']);
     }
 
+    public function test_collect_endpoint_creates_new_record_for_different_user_agent(): void
+    {
+        Storage::fake('local');
+
+        $this->withHeaders([
+            'User-Agent' => 'CustomProbeA/1.0',
+            'X-Request-Id' => 'req_ua_a',
+        ])->get('/dev/client-env/collect')
+            ->assertOk()
+            ->assertJsonPath('saved', true);
+
+        $this->withHeaders([
+            'User-Agent' => 'CustomProbeB/1.0',
+            'X-Request-Id' => 'req_ua_b',
+        ])->get('/dev/client-env/collect')
+            ->assertOk()
+            ->assertJsonPath('saved', true);
+
+        $path = (string) config('client_env.log_path', 'client-env/probe-log.jsonl');
+        $records = $this->readProbeRecords($path);
+
+        $this->assertCount(2, $records);
+        $this->assertSame('req_ua_a', $records[0]['request_id']);
+        $this->assertSame('req_ua_b', $records[1]['request_id']);
+    }
+
     public function test_collect_endpoint_rejects_invalid_payload(): void
     {
         $this->postJson('/dev/client-env/collect', [

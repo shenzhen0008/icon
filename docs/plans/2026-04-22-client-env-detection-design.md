@@ -29,7 +29,7 @@
 1. `GET /dev/client-env/detect`：返回识别结果 JSON。
 2. `POST /dev/client-env/collect`：接收并记录一次检测结果（服务端也会补充自身检测值）。
 3. 文档落地：`storage/app/private/client-env/probe-log.jsonl`（JSON 记录块）。
-4. 去重策略：同一用户（未登录时按 IP）在同一浏览器环境仅记录一次，重复刷新不重复写入。
+4. 去重策略：同一用户（未登录时按 IP）+ 同一 User-Agent 仅记录一次，重复刷新不重复写入。
 
 不纳入：
 

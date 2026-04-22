@@ -26,7 +26,7 @@ class CollectClientEnvController extends Controller
 
         $serverDetect = $this->detectorService->detect($request);
         $userKey = $this->resolveUserKey($request->ip());
-        $uniqueKey = $this->buildUniqueKey($userKey, $serverDetect);
+        $uniqueKey = $this->buildUniqueKey($userKey, (string) $request->userAgent(), $serverDetect);
 
         $entry = [
             'timestamp' => now()->toIso8601String(),
@@ -67,13 +67,15 @@ class CollectClientEnvController extends Controller
     /**
      * @param array<string, mixed> $serverDetect
      */
-    private function buildUniqueKey(string $userKey, array $serverDetect): string
+    private function buildUniqueKey(string $userKey, string $userAgent, array $serverDetect): string
     {
         $browser = (array) ($serverDetect['browser'] ?? []);
         $os = (array) ($serverDetect['os'] ?? []);
+        $uaHash = sha1($userAgent);
 
         $parts = [
             $userKey,
+            $uaHash,
             (string) ($serverDetect['device_type'] ?? 'unknown'),
             (string) ($serverDetect['is_webview'] ?? false),
             (string) ($browser['name'] ?? 'unknown'),
