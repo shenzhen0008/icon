@@ -9,6 +9,7 @@ class GetReferralDashboardService
 {
     public function __construct(
         private readonly InviteCodeGenerator $inviteCodeGenerator,
+        private readonly GetReferralCommissionSettingService $getSettingService,
     ) {
     }
 
@@ -26,6 +27,8 @@ class GetReferralDashboardService
      */
     public function handle(User $user): array
     {
+        $setting = $this->getSettingService->handle();
+
         if ($user->invite_code === null || $user->invite_code === '') {
             $user->invite_code = $this->inviteCodeGenerator->generate((int) config('referral.invite_code_length'));
             $user->save();
@@ -67,12 +70,24 @@ class GetReferralDashboardService
         return [
             'invite_code' => $user->invite_code,
             'invite_url' => url('/').'?invite_code='.$user->invite_code,
-            'level_1_rate' => '5%',
-            'level_2_rate' => '2%',
+            'level_1_rate' => $this->formatRateAsPercent($setting?->level_1_rate, '5%'),
+            'level_2_rate' => $this->formatRateAsPercent($setting?->level_2_rate, '2%'),
             'level_one_count' => count($levelOneUsers),
             'level_two_count' => count($levelTwoUsers),
             'level_one_users' => $levelOneUsers,
             'level_two_users' => $levelTwoUsers,
         ];
+    }
+
+    private function formatRateAsPercent(null|string|float $rate, string $fallback): string
+    {
+        if ($rate === null || $rate === '') {
+            return $fallback;
+        }
+
+        $percentage = number_format((float) $rate * 100, 4, '.', '');
+        $percentage = rtrim(rtrim($percentage, '0'), '.');
+
+        return $percentage.'%';
     }
 }

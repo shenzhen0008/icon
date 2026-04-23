@@ -3,6 +3,7 @@
 namespace Tests\Feature\Referral;
 
 use App\Models\User;
+use App\Modules\Referral\Models\ReferralCommissionSetting;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -88,6 +89,55 @@ class ReferralDashboardPageTest extends TestCase
             ->assertSee('Share Now');
     }
 
+    public function test_referral_dashboard_renders_localized_reward_help_copy_for_supported_locales(): void
+    {
+        $user = User::factory()->create([
+            'invite_code' => 'LOCALE01',
+        ]);
+
+        $assertions = [
+            'ja' => [
+                'meta' => '紹介 | '.config('app.name'),
+                'reward_info' => '報酬詳細',
+                'aria' => 'aria-label="報酬詳細を表示"',
+            ],
+            'ko' => [
+                'meta' => '추천 | '.config('app.name'),
+                'reward_info' => '보상 상세',
+                'aria' => 'aria-label="보상 상세 보기"',
+            ],
+            'fr' => [
+                'meta' => 'Parrainage | '.config('app.name'),
+                'reward_info' => 'Détails des récompenses',
+                'aria' => 'aria-label="Voir les détails des récompenses"',
+            ],
+            'de' => [
+                'meta' => 'Empfehlung | '.config('app.name'),
+                'reward_info' => 'Belohnungsdetails',
+                'aria' => 'aria-label="Belohnungsdetails anzeigen"',
+            ],
+            'es' => [
+                'meta' => 'Referidos | '.config('app.name'),
+                'reward_info' => 'Detalles de recompensa',
+                'aria' => 'aria-label="Ver detalles de recompensa"',
+            ],
+            'pt' => [
+                'meta' => 'Indicação | '.config('app.name'),
+                'reward_info' => 'Detalhes da recompensa',
+                'aria' => 'aria-label="Ver detalhes da recompensa"',
+            ],
+        ];
+
+        foreach ($assertions as $locale => $texts) {
+            $this->actingAs($user)
+                ->get('/referral?locale='.$locale)
+                ->assertOk()
+                ->assertSee($texts['meta'])
+                ->assertSee($texts['reward_info'])
+                ->assertSee($texts['aria'], false);
+        }
+    }
+
     public function test_referral_dashboard_shows_level_counts_only(): void
     {
         $user = User::factory()->create([
@@ -118,6 +168,29 @@ class ReferralDashboardPageTest extends TestCase
             ->assertSee('二级邀请')
             ->assertSee('1')
             ->assertDontSee('OTHER00000000000001');
+    }
+
+    public function test_referral_dashboard_displays_active_commission_rates_from_settings(): void
+    {
+        $user = User::factory()->create([
+            'invite_code' => 'RATECASE01',
+        ]);
+
+        ReferralCommissionSetting::query()
+            ->whereKey(1)
+            ->update([
+                'level_1_rate' => '0.0800',
+                'level_2_rate' => '0.0300',
+                'is_active' => true,
+            ]);
+
+        $this->actingAs($user)
+            ->get('/referral')
+            ->assertOk()
+            ->assertSee('一级奖励 Direct')
+            ->assertSee('二级奖励 Indirect')
+            ->assertSee('8%')
+            ->assertSee('3%');
     }
 
     public function test_navigation_share_entry_links_to_referral_dashboard(): void
