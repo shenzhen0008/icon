@@ -9,6 +9,7 @@ return [
         'crypto_deposit' => '加密货币存款',
         'bank_card' => '银行卡',
         'next_step' => '下一步',
+        'withdrawal_notice' => '申请提款后，提取的 USDT 将在 24 小时内到账至您的钱包地址。单笔最低提款为 30USDT，提款手续费为 3 USDT。',
     ],
     'account' => [
         'title' => '账号信息',

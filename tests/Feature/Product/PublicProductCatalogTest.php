@@ -187,6 +187,31 @@ class PublicProductCatalogTest extends TestCase
         $response->assertDontSee('rounded-lg bg-[rgb(var(--theme-primary))] px-4 py-2 text-sm font-semibold text-theme-secondary');
     }
 
+    public function test_authenticated_user_can_see_max_amount_button_on_product_detail(): void
+    {
+        $user = User::factory()->create();
+
+        $product = Product::query()->create([
+            'name' => 'Mobile AMM',
+            'code' => 'MAMM',
+            'unit_price' => 1000,
+            'is_active' => true,
+            'limit_min_usdt' => 1000,
+            'limit_max_usdt' => 10000,
+            'rate_min_percent' => 1.15,
+            'rate_max_percent' => 2.22,
+            'cycle_days' => 2,
+        ]);
+
+        $response = $this
+            ->actingAs($user)
+            ->get('/products/'.$product->id);
+
+        $response->assertOk();
+        $response->assertSee((string) __('pages/product-detail.max_button'));
+        $response->assertSee('data-max-amount="10000"', false);
+    }
+
     public function test_catalog_falls_back_to_default_symbol_icons_when_product_has_no_symbol_icon_paths(): void
     {
         Product::query()->create([
@@ -211,7 +236,7 @@ class PublicProductCatalogTest extends TestCase
         $response->assertSee('/images/products/symbols/symbol-07.png');
     }
 
-    public function test_authenticated_user_sees_real_profit_summary_in_catalog(): void
+    public function test_authenticated_user_sees_estimated_profit_summary_in_catalog_without_waiting_settlement(): void
     {
         $user = User::factory()->create();
 
@@ -259,7 +284,7 @@ class PublicProductCatalogTest extends TestCase
             ->get('/products');
 
         $response->assertOk();
-        $response->assertSee('$120.50');
+        $response->assertSee('$57.60');
         $response->assertSee('$200.50');
         $response->assertSee('1');
     }

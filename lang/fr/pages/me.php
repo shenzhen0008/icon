@@ -9,6 +9,7 @@ return [
         'crypto_deposit' => 'Dépôt crypto',
         'bank_card' => 'Carte bancaire',
         'next_step' => 'Suivant',
+        'withdrawal_notice' => 'L’USDT retiré arrivera à l’adresse de votre portefeuille dans les 24 heures après la demande de retrait. Le montant minimum par retrait est de 30USDT et les frais de retrait sont de 3 USDT.',
     ],
     'account' => [
         'title' => 'Infos du compte',

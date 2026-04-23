@@ -15,6 +15,7 @@ class Position extends Model
     use HasFactory;
 
     protected $fillable = [
+        'order_no',
         'user_id',
         'product_id',
         'principal',

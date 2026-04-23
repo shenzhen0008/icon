@@ -14,6 +14,7 @@ return [
     'reserve_amount_usdt' => '预订金额(USDT)',
     'purchase_amount_usdt' => '托管金额(USDT)',
     'current_balance' => '当前余额：:balance',
+    'max_button' => '最大',
     'buy_now' => '立即购买',
     'preorder_now' => '立即预订',
 ];

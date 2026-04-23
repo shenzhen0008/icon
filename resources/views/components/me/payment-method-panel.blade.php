@@ -20,6 +20,9 @@
       </label>
     </div>
 
+    <p class="mt-3 text-scale-micro leading-relaxed text-theme-secondary">
+      {{ __('pages/me.payment.withdrawal_notice') }}
+    </p>
     <button type="submit" class="text-scale-ui mx-auto mt-4 flex h-10 min-w-[6.5rem] items-center justify-center rounded-lg bg-[rgb(var(--theme-primary))] px-4 font-semibold text-theme-on-primary transition hover:opacity-90">
       {{ __('pages/me.payment.next_step') }}
     </button>

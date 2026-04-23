@@ -14,6 +14,7 @@ return [
     'reserve_amount_usdt' => 'Valor de garantia (USDT)',
     'purchase_amount_usdt' => 'Valor de garantia (USDT)',
     'current_balance' => 'Saldo atual: :balance',
+    'max_button' => 'MÁX',
     'buy_now' => 'Comprar agora',
     'preorder_now' => 'RESERVAR',
 ];

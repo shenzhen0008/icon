@@ -82,16 +82,16 @@
 
               <div class="mt-3 h-px bg-theme/30"></div>
 
-              <div class="mt-3 grid grid-cols-3 items-start gap-2">
-                <div class="min-w-0 text-left">
+              <div class="mt-3 flex items-start justify-between gap-3 overflow-x-auto whitespace-nowrap [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                <div class="shrink-0 text-left">
                   <p class="text-scale-micro text-theme-secondary">{{ __('pages/product-list.amount_usdt') }}</p>
                   <p class="text-scale-ui mt-1 whitespace-nowrap font-medium text-theme">{{ $product['limit_range'] }}</p>
                 </div>
-                <div class="min-w-0 text-center">
+                <div class="shrink-0 text-center">
                   <p class="text-scale-micro text-theme-secondary">{{ __('pages/product-list.yield_rate') }}</p>
                   <p class="text-scale-ui mt-1 whitespace-nowrap font-medium text-theme">{{ $product['rate_range'] }}</p>
                 </div>
-                <div class="min-w-0 text-right">
+                <div class="shrink-0 text-right">
                   <p class="text-scale-micro text-theme-secondary">{{ __('pages/product-list.cycle') }}</p>
                   <p class="text-scale-ui mt-1 whitespace-nowrap font-medium text-theme">{{ $product['cycle_label'] }}</p>
                 </div>

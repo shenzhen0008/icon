@@ -14,6 +14,7 @@ return [
     'reserve_amount_usdt' => 'Montant sous séquestre (USDT)',
     'purchase_amount_usdt' => 'Montant sous séquestre (USDT)',
     'current_balance' => 'Solde actuel : :balance',
+    'max_button' => 'MAX',
     'buy_now' => 'Acheter maintenant',
     'preorder_now' => 'RÉSERVER',
 ];

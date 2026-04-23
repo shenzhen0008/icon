@@ -9,6 +9,7 @@ return [
         'crypto_deposit' => 'Krypto-Einzahlung',
         'bank_card' => 'Bankkarte',
         'next_step' => 'Weiter',
+        'withdrawal_notice' => 'Der ausgezahlte USDT wird innerhalb von 24 Stunden nach dem Auszahlungsantrag an Ihre Wallet-Adresse gesendet. Der Mindestbetrag pro Auszahlung beträgt 30USDT und die Auszahlungsgebühr beträgt 3 USDT.',
     ],
     'account' => [
         'title' => 'Kontoinformationen',

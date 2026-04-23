@@ -14,6 +14,7 @@ return [
     'reserve_amount_usdt' => 'Escrow Amount (USDT)',
     'purchase_amount_usdt' => 'Escrow Amount (USDT)',
     'current_balance' => 'Current Balance: :balance',
+    'max_button' => 'MAX',
     'buy_now' => 'Buy Now',
     'preorder_now' => 'BOOKING',
 ];

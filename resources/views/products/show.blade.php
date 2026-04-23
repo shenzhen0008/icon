@@ -63,7 +63,29 @@
             @csrf
             <div class="sm:w-48">
               <label class="mb-1 block text-scale-micro text-theme-secondary">{{ __('pages/product-detail.reserve_amount_usdt') }}</label>
-              <input type="number" min="0.01" step="0.01" name="amount" class="w-full rounded-lg border border-theme bg-theme-secondary px-3 py-2 text-scale-body text-theme" required>
+              <div class="relative">
+                <input
+                  type="number"
+                  min="0.01"
+                  step="0.01"
+                  name="amount"
+                  value="{{ old('amount') }}"
+                  @if(!empty($product['limit_max_amount'])) max="{{ $product['limit_max_amount'] }}" @endif
+                  data-max-amount-target
+                  class="w-full rounded-lg border border-theme bg-theme-secondary px-3 py-2 pr-16 text-scale-body text-theme"
+                  required
+                >
+                @if(!empty($product['limit_max_amount']))
+                  <button
+                    type="button"
+                    data-max-amount-trigger
+                    data-max-amount="{{ $product['limit_max_amount'] }}"
+                    class="absolute right-2 top-1/2 inline-flex h-8 -translate-y-1/2 items-center rounded-md border border-[rgb(var(--theme-primary))]/50 px-2.5 text-scale-micro font-semibold leading-none text-[rgb(var(--theme-primary))] transition hover:bg-[rgb(var(--theme-primary))]/10"
+                  >
+                    {{ __('pages/product-detail.max_button') }}
+                  </button>
+                @endif
+              </div>
             </div>
             <button class="text-scale-ui h-[clamp(1.9rem,7vw,2.2rem)] min-w-[clamp(7rem,42vw,9rem)] w-auto self-center whitespace-nowrap rounded-lg bg-[rgb(var(--theme-primary))] px-[clamp(0.6rem,2.5vw,0.9rem)] font-semibold text-theme-on-primary mx-auto sm:min-w-[clamp(7.5rem,20vw,10rem)] sm:self-auto sm:mx-0">
               {{ __('pages/product-detail.preorder_now') }}
@@ -77,7 +99,29 @@
             <input type="hidden" name="product_id" value="{{ $product['id'] }}">
             <div class="sm:w-48">
               <label class="mb-1 block text-scale-micro text-theme-secondary">{{ __('pages/product-detail.purchase_amount_usdt') }}</label>
-              <input type="number" min="0.01" step="0.01" name="amount" class="w-full rounded-lg border border-theme bg-theme-secondary px-3 py-2 text-scale-body text-theme" required>
+              <div class="relative">
+                <input
+                  type="number"
+                  min="0.01"
+                  step="0.01"
+                  name="amount"
+                  value="{{ old('amount') }}"
+                  @if(!empty($product['limit_max_amount'])) max="{{ $product['limit_max_amount'] }}" @endif
+                  data-max-amount-target
+                  class="w-full rounded-lg border border-theme bg-theme-secondary px-3 py-2 pr-16 text-scale-body text-theme"
+                  required
+                >
+                @if(!empty($product['limit_max_amount']))
+                  <button
+                    type="button"
+                    data-max-amount-trigger
+                    data-max-amount="{{ $product['limit_max_amount'] }}"
+                    class="absolute right-2 top-1/2 inline-flex h-8 -translate-y-1/2 items-center rounded-md border border-[rgb(var(--theme-primary))]/50 px-2.5 text-scale-micro font-semibold leading-none text-[rgb(var(--theme-primary))] transition hover:bg-[rgb(var(--theme-primary))]/10"
+                  >
+                    {{ __('pages/product-detail.max_button') }}
+                  </button>
+                @endif
+              </div>
             </div>
             <button class="text-scale-ui h-[clamp(1.9rem,7vw,2.2rem)] min-w-[clamp(7rem,42vw,9rem)] w-auto self-center whitespace-nowrap rounded-lg bg-[rgb(var(--theme-primary))] px-[clamp(0.6rem,2.5vw,0.9rem)] font-semibold text-theme-on-primary mx-auto sm:min-w-[clamp(7.5rem,20vw,10rem)] sm:self-auto sm:mx-0">
               {{ __('pages/product-detail.buy_now') }}
@@ -109,5 +153,17 @@
   </main>
 
   <x-nav.mobile />
+
+  <script>
+    document.querySelectorAll('[data-max-amount-trigger]').forEach((button) => {
+      button.addEventListener('click', () => {
+        const input = button.closest('.sm\\:w-48')?.querySelector('[data-max-amount-target]');
+        if (!input) return;
+        input.value = button.dataset.maxAmount ?? '';
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+        input.dispatchEvent(new Event('change', { bubbles: true }));
+      });
+    });
+  </script>
 </body>
 </html>

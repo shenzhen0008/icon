@@ -315,6 +315,7 @@ DROP TABLE IF EXISTS `positions`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `positions` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `order_no` varchar(6) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `user_id` bigint(20) unsigned NOT NULL,
   `product_id` bigint(20) unsigned NOT NULL,
   `principal` decimal(16,2) NOT NULL,
@@ -324,6 +325,7 @@ CREATE TABLE `positions` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `positions_order_no_unique` (`order_no`),
   KEY `positions_user_id_status_index` (`user_id`,`status`),
   KEY `positions_product_id_status_index` (`product_id`,`status`),
   CONSTRAINT `positions_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE,

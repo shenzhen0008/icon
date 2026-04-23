@@ -41,7 +41,7 @@
       <dl class="mt-4 grid grid-cols-2 gap-3 text-scale-body">
         <div class="rounded-lg border border-theme bg-theme-secondary/40 p-3">
           <dt class="text-theme-secondary">{{ __('pages/positions.labels.order_id') }}</dt>
-          <dd class="mt-1 text-theme">{{ $position['id'] }}</dd>
+          <dd class="mt-1 text-theme">{{ $position['order_no'] }}</dd>
         </div>
         <div class="rounded-lg border border-theme bg-theme-secondary/40 p-3">
           <dt class="text-theme-secondary">{{ __('pages/positions.labels.product') }}</dt>

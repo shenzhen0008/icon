@@ -28,24 +28,27 @@ class PublicProductCatalogController extends Controller
 
         $user = Auth::guard('web')->user();
         if ($user !== null) {
-            $todayProfit = (float) DailySettlement::query()
+            $todaySettledProfit = (float) DailySettlement::query()
                 ->where('user_id', $user->id)
                 ->whereDate('settlement_date', now()->toDateString())
                 ->sum('profit');
 
-            $totalProfit = (float) DailySettlement::query()
+            $totalSettledProfit = (float) DailySettlement::query()
                 ->where('user_id', $user->id)
                 ->sum('profit');
 
-            $ordersCount = Position::query()
+            $openPositions = Position::query()
                 ->where('user_id', $user->id)
                 ->where('status', 'open')
-                ->count();
+                ->with(['product:id,rate_min_percent,rate_max_percent'])
+                ->get(['id', 'product_id', 'principal']);
+
+            $estimatedOpenProfit = (float) $openPositions->sum(fn (Position $position): float => $this->estimatePositionDailyProfit($position));
 
             $summary = [
-                'today_profit' => '$'.number_format($todayProfit, 2, '.', ''),
-                'total_profit' => '$'.number_format($totalProfit, 2, '.', ''),
-                'orders_count' => (string) $ordersCount,
+                'today_profit' => '$'.number_format($estimatedOpenProfit, 2, '.', ''),
+                'total_profit' => '$'.number_format($totalSettledProfit, 2, '.', ''),
+                'orders_count' => (string) $openPositions->count(),
             ];
         } else {
             $this->temporaryAccountService->ensureGuestTempUsername(request());
@@ -117,6 +120,25 @@ class PublicProductCatalogController extends Controller
         return (string) __('pages/product-list.cycle_days_format', [
             'days' => (string) max(0, $cycleDays),
         ]);
+    }
+
+    private function estimatePositionDailyProfit(Position $position): float
+    {
+        $product = $position->product;
+        if ($product === null) {
+            return 0.0;
+        }
+
+        $minPercent = $product->rate_min_percent !== null ? (float) $product->rate_min_percent : null;
+        $maxPercent = $product->rate_max_percent !== null ? (float) $product->rate_max_percent : null;
+
+        if ($minPercent === null || $maxPercent === null) {
+            return 0.0;
+        }
+
+        $averageRate = (($minPercent + $maxPercent) / 2) / 100;
+
+        return round((float) $position->principal * $averageRate, 2);
     }
 
     /**

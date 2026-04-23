@@ -75,6 +75,7 @@ class PurchasePositionService
             $freshUser->save();
 
             $position = Position::query()->create([
+                'order_no' => $this->buildOrderNo(),
                 'user_id' => $freshUser->id,
                 'product_id' => $product->id,
                 'principal' => $amount,
@@ -95,5 +96,26 @@ class PurchasePositionService
 
             return $position;
         });
+    }
+
+    private function buildOrderNo(): string
+    {
+        $maxAttempts = 20;
+
+        for ($attempt = 0; $attempt < $maxAttempts; $attempt++) {
+            $orderNo = (string) random_int(100000, 999999);
+
+            $exists = Position::query()
+                ->where('order_no', $orderNo)
+                ->exists();
+
+            if (! $exists) {
+                return $orderNo;
+            }
+        }
+
+        throw ValidationException::withMessages([
+            'amount' => '订单号生成失败，请稍后重试。',
+        ]);
     }
 }

@@ -14,6 +14,7 @@ return [
     'reserve_amount_usdt' => 'エスクロー金額 (USDT)',
     'purchase_amount_usdt' => 'エスクロー金額 (USDT)',
     'current_balance' => '現在残高: :balance',
+    'max_button' => '最大',
     'buy_now' => '今すぐ購入',
     'preorder_now' => '予約する',
 ];

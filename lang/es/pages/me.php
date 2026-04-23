@@ -9,6 +9,7 @@ return [
         'crypto_deposit' => 'Depósito cripto',
         'bank_card' => 'Tarjeta bancaria',
         'next_step' => 'Siguiente',
+        'withdrawal_notice' => 'El USDT retirado llegará a la dirección de tu billetera dentro de las 24 horas después de solicitar el retiro. El retiro mínimo por transacción es de 30USDT y la comisión de retiro es de 3 USDT.',
     ],
     'account' => [
         'title' => 'Información de la cuenta',

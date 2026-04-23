@@ -9,6 +9,7 @@ return [
         'crypto_deposit' => 'Crypto Deposit',
         'bank_card' => 'Bank Card',
         'next_step' => 'Next',
+        'withdrawal_notice' => 'The USDT withdrawn will arrive at your wallet address within 24 hours after applying for withdrawal. The minimum single withdrawal is 30USDT, and the withdrawal fee is 3 USDT.',
     ],
     'account' => [
         'title' => 'Account Info',

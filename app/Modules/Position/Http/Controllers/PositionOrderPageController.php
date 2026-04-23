@@ -42,13 +42,15 @@ class PositionOrderPageController extends Controller
         return view('positions.show', [
             'position' => [
                 'id' => $position->id,
+                'order_no' => $position->order_no ?: '--',
                 'product_name' => $this->productTranslationService->resolveName($position->product, emptyFallback: '--'),
                 'principal' => number_format((float) $position->principal, 2, '.', ''),
                 'status' => $position->status,
                 'opened_at' => $position->opened_at?->format('Y-m-d H:i') ?? '--',
             ],
             'daily_profits' => $dailyProfits,
-            'can_apply_redemption' => $position->status === 'open',
+            // Temporarily hide redemption entry on position detail page.
+            'can_apply_redemption' => false,
             'redemption_request_status' => $latestRedemptionRequest?->status,
         ]);
     }

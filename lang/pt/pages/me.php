@@ -9,6 +9,7 @@ return [
         'crypto_deposit' => 'Depósito cripto',
         'bank_card' => 'Cartão bancário',
         'next_step' => 'Próximo',
+        'withdrawal_notice' => 'O USDT retirado chegará ao endereço da sua carteira em até 24 horas após a solicitação de saque. O saque mínimo por transação é de 30USDT e a taxa de saque é de 3 USDT.',
     ],
     'account' => [
         'title' => 'Informações da conta',

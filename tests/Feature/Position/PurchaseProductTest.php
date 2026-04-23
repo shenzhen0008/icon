@@ -43,6 +43,7 @@ class PurchaseProductTest extends TestCase
         ]);
 
         $position = Position::query()->where('user_id', $user->id)->latest('id')->firstOrFail();
+        $this->assertMatchesRegularExpression('/^\d{6}$/', (string) $position->order_no);
         $this->assertDatabaseHas('balance_ledgers', [
             'user_id' => $user->id,
             'type' => 'purchase_debit',

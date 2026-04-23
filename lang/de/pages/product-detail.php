@@ -14,6 +14,7 @@ return [
     'reserve_amount_usdt' => 'Treuhandbetrag (USDT)',
     'purchase_amount_usdt' => 'Treuhandbetrag (USDT)',
     'current_balance' => 'Aktueller Kontostand: :balance',
+    'max_button' => 'MAX',
     'buy_now' => 'Jetzt kaufen',
     'preorder_now' => 'VORBESTELLEN',
 ];

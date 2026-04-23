@@ -14,6 +14,7 @@ return [
     'reserve_amount_usdt' => '에스크로 금액 (USDT)',
     'purchase_amount_usdt' => '에스크로 금액 (USDT)',
     'current_balance' => '현재 잔액: :balance',
+    'max_button' => '최대',
     'buy_now' => '지금 구매',
     'preorder_now' => '예약하기',
 ];

@@ -9,6 +9,7 @@ return [
         'crypto_deposit' => '암호화폐 입금',
         'bank_card' => '은행 카드',
         'next_step' => '다음',
+        'withdrawal_notice' => '출금 신청 후 출금한 USDT는 24시간 이내에 회원님의 지갑 주소로 도착합니다. 1회 최소 출금 금액은 30USDT이며, 출금 수수료는 3 USDT입니다.',
     ],
     'account' => [
         'title' => '계정 정보',

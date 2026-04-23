@@ -38,6 +38,7 @@ class ProductDetailController extends Controller
                 'unit_price' => number_format((float) $product->unit_price, 2, '.', ''),
                 'description' => $this->productTranslationService->resolveDescription($product),
                 'limit_range' => $this->formatRange($product->limit_min_usdt, $product->limit_max_usdt),
+                'limit_max_amount' => $this->formatInputAmount($product->limit_max_usdt),
                 'rate_range' => $this->formatPercentRange($product->rate_min_percent, $product->rate_max_percent),
                 'cycle_label' => $this->formatCycleLabel($product->cycle_days),
                 'product_icon_path' => $product->product_icon_path,
@@ -64,6 +65,17 @@ class ProductDetailController extends Controller
         }
 
         return number_format((float) $min, 2, '.', '').'-'.number_format((float) $max, 2, '.', '').'%';
+    }
+
+    private function formatInputAmount(null|float|string $amount): ?string
+    {
+        if ($amount === null) {
+            return null;
+        }
+
+        $formatted = number_format((float) $amount, 2, '.', '');
+
+        return rtrim(rtrim($formatted, '0'), '.');
     }
 
     private function formatCycleLabel(null|int $cycleDays): string

@@ -9,6 +9,7 @@ return [
         'crypto_deposit' => '暗号資産入金',
         'bank_card' => '銀行カード',
         'next_step' => '次へ',
+        'withdrawal_notice' => '出金申請後、出金した USDT は 24 時間以内にあなたのウォレットアドレスへ着金します。1回あたりの最低出金額は 30USDT、出金手数料は 3 USDT です。',
     ],
     'account' => [
         'title' => 'アカウント情報',
