@@ -22,10 +22,22 @@ return [
         'formal_status' => '로그인됨',
         'temp_label' => '임시 계정',
         'temp_status' => '미등록 게스트',
+        'mnemonic_title' => '니모닉',
+        'mnemonic_setup_notice' => '아직 니모닉을 생성하지 않았습니다. 먼저 생성하고 안전하게 보관하세요.',
+        'mnemonic_warning_title' => '중요',
+        'mnemonic_warning_body' => '니모닉은 한 번만 표시됩니다. 즉시 기록하거나 저장하고 안전하게 보관하세요. 분실 시 복구할 수 없습니다.',
+        'mnemonic_description' => '아래 버튼을 눌러 로그인 단어 10개를 다시 생성하세요. 안전하게 보관해야 합니다.',
+        'mnemonic_manage' => '니모닉 페이지로 이동',
+        'mnemonic_regenerate' => '니모닉 생성/재설정',
+        'mnemonic_generated_hint' => '이 문구를 지금 저장하세요. 페이지를 벗어나면 다시 표시되지 않습니다:',
+        'mnemonic_back_to_me' => '마이 센터로 돌아가기',
     ],
     'activate_modal' => [
         'title' => '거래 PIN 설정',
         'close' => '닫기',
+        'switch_set_pin' => '거래 PIN 설정',
+        'switch_password_login' => '계정 비밀번호 로그인',
+        'switch_mnemonic_login' => '니모닉 로그인',
         'description' => '6자리 거래 PIN을 입력하고 확인해 주세요.',
         'pin_label' => '6자리 PIN 입력',
         'pin_confirm_label' => '6자리 PIN 확인',
@@ -51,6 +63,14 @@ return [
         'view_buy' => '상세로 이동해 구매',
         'view_detail' => '상세 보기',
     ],
+    
+    'mnemonic_prompt' => [
+        'title' => '지금 니모닉을 생성할까요?',
+        'description' => '니모닉 문구는 계정 분실을 방지하는 데 도움이 되는 중요한 계정 보안 수단입니다. 지금 생성하고 안전하게 보관하시길 권장합니다.',
+        'go_now' => '지금 생성',
+        'later' => '나중에',
+    ],
+
     'profit_panel' => [
         'title' => '수익 상태',
         'today_settled' => '오늘 정산 수익',

@@ -1,6 +1,6 @@
 @php
   $currentPath = trim(request()->path(), '/');
-  $primaryNavPaths = ['', 'products', 'help', 'referral', 'me', 'support'];
+  $primaryNavPaths = ['', 'login', 'register', 'products', 'help', 'referral', 'me', 'support'];
   $showTopNavBack = ! in_array($currentPath, $primaryNavPaths, true);
   $currentLocale = app()->getLocale();
   $languageDisplayMap = [

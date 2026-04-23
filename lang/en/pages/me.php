@@ -22,10 +22,22 @@ return [
         'formal_status' => 'Signed In',
         'temp_label' => 'Temporary Account',
         'temp_status' => 'Guest Not Registered',
+        'mnemonic_title' => 'Mnemonic',
+        'mnemonic_setup_notice' => 'You have not generated a mnemonic yet. Please generate and save it first.',
+        'mnemonic_warning_title' => 'Important',
+        'mnemonic_warning_body' => 'The mnemonic phrase is shown only once. Please write it down or save it immediately and keep it safe. It cannot be recovered after loss.',
+        'mnemonic_description' => 'Click the button below to generate a new set of 10 login words. Save it safely.',
+        'mnemonic_manage' => 'Open mnemonic page',
+        'mnemonic_regenerate' => 'Generate/Reset Mnemonic',
+        'mnemonic_generated_hint' => 'Save this mnemonic phrase now. It will not be shown again after leaving this page:',
+        'mnemonic_back_to_me' => 'Back to My Center',
     ],
     'activate_modal' => [
         'title' => 'Set Trading PIN',
         'close' => 'Close',
+        'switch_set_pin' => 'Set Trading PIN',
+        'switch_password_login' => 'Password Login',
+        'switch_mnemonic_login' => 'Mnemonic Login',
         'description' => 'Please enter and confirm a 6-digit trading PIN.',
         'pin_label' => 'Enter 6-digit PIN',
         'pin_confirm_label' => 'Confirm 6-digit PIN',
@@ -51,6 +63,14 @@ return [
         'view_buy' => 'Go to Detail to Buy',
         'view_detail' => 'Go to Detail',
     ],
+    
+    'mnemonic_prompt' => [
+        'title' => 'Generate mnemonic now?',
+        'description' => 'A mnemonic phrase is an important account security measure to help prevent account loss. We recommend generating it now and storing it safely.',
+        'go_now' => 'Generate now',
+        'later' => 'Later',
+    ],
+
     'profit_panel' => [
         'title' => 'Profit Status',
         'today_settled' => 'Today Settled Profit',

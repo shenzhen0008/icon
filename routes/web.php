@@ -2,6 +2,7 @@
 
 use App\Modules\User\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Modules\User\Http\Controllers\Auth\ConfirmablePasswordController;
+use App\Modules\User\Http\Controllers\Auth\MnemonicLoginController;
 use App\Modules\User\Http\Controllers\Auth\RegisteredUserController;
 use App\Modules\Help\Http\Controllers\HelpPageController;
 use App\Modules\Product\Http\Controllers\ProductDetailController;
@@ -41,6 +42,8 @@ use App\Modules\PopupPush\Http\Controllers\MarkPopupDismissedController;
 use App\Modules\PopupPush\Http\Controllers\MarkPopupShownController;
 use App\Modules\Support\Http\Controllers\StreamChatPageController;
 use App\Modules\User\Http\Controllers\SensitivePageController;
+use App\Modules\User\Http\Controllers\MnemonicPageController;
+use App\Modules\User\Http\Controllers\MnemonicRegenerateController;
 use App\Modules\ClientEnv\Http\Controllers\CollectClientEnvController;
 use App\Modules\ClientEnv\Http\Controllers\DetectClientEnvController;
 use Illuminate\Support\Facades\Route;
@@ -71,12 +74,15 @@ Route::middleware('guest')->group(function (): void {
 
     Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
     Route::post('/login', [AuthenticatedSessionController::class, 'store']);
+    Route::post('/login/mnemonic', MnemonicLoginController::class);
 });
 
 Route::middleware('auth')->group(function (): void {
     Route::get('/home/hero-panel/trade-records', HeroPanelTradeRecordsPageController::class);
     Route::get('/home/hero-panel/income-records', HeroPanelIncomeRecordsPageController::class);
     Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
+    Route::get('/me/mnemonic', MnemonicPageController::class);
+    Route::post('/me/mnemonic/regenerate', MnemonicRegenerateController::class);
     Route::post('/recharge/requests', SubmitRechargePaymentRequestController::class);
     Route::get('/recharge/bank/entry', BankRechargeEntryController::class);
     Route::get('/recharge/bank', BankRechargePageController::class);

@@ -178,6 +178,7 @@ CREATE TABLE `users` (
   `invite_code` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `referrer_id` bigint(20) unsigned DEFAULT NULL,
   `is_admin` tinyint(1) NOT NULL DEFAULT '0',
+  `mnemonic_lookup` char(64) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -185,6 +186,7 @@ CREATE TABLE `users` (
   UNIQUE KEY `users_username_unique` (`username`),
   UNIQUE KEY `users_email_unique` (`email`),
   UNIQUE KEY `users_invite_code_unique` (`invite_code`),
+  UNIQUE KEY `users_mnemonic_lookup_unique` (`mnemonic_lookup`),
   KEY `idx_users_is_admin` (`is_admin`),
   KEY `users_referrer_id_foreign` (`referrer_id`),
   CONSTRAINT `users_referrer_id_foreign` FOREIGN KEY (`referrer_id`) REFERENCES `users` (`id`) ON DELETE SET NULL

@@ -216,8 +216,39 @@ class AuthenticationFlowTest extends TestCase
         $this->get('/login?locale=en')
             ->assertOk()
             ->assertSee('Login')
+            ->assertSee('Password login')
+            ->assertSee('Mnemonic login')
             ->assertSee('Username')
             ->assertSee('Password')
             ->assertSee('Remember me');
+    }
+
+    public function test_newly_activated_user_sees_mnemonic_setup_prompt_on_me_page(): void
+    {
+        $this->get('/')->assertOk();
+
+        $this->post('/register', [
+            'password' => '123456',
+            'password_confirmation' => '123456',
+        ])->assertRedirect('/me');
+
+        $this->get('/me')
+            ->assertOk()
+            ->assertSee('立即生成助记词？')
+            ->assertSee('/me/mnemonic', false)
+            ->assertSee('稍后再说');
+    }
+
+    public function test_mnemonic_setup_prompt_is_shown_only_once_after_activation(): void
+    {
+        $this->get('/')->assertOk();
+
+        $this->post('/register', [
+            'password' => '123456',
+            'password_confirmation' => '123456',
+        ])->assertRedirect('/me');
+
+        $this->get('/me')->assertSee('立即生成助记词？');
+        $this->get('/me')->assertDontSee('立即生成助记词？');
     }
 }

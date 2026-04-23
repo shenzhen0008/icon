@@ -46,6 +46,7 @@ class RegisteredUserController extends Controller
         Auth::login($user, true);
         $request->session()->regenerate();
         $this->temporaryAccountService->clearFromSession($request);
+        $request->session()->flash('show_mnemonic_setup_prompt', true);
 
         $redirectTo = (string) $request->input('redirect_to', '/me');
         if (! str_starts_with($redirectTo, '/') || str_starts_with($redirectTo, '//')) {

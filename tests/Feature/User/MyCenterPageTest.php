@@ -25,7 +25,9 @@ class MyCenterPageTest extends TestCase
         $response->assertSee('请输入并确认 6 位数字交易 PIN');
         $response->assertSee('输入 6 位 PIN');
         $response->assertSee('确认 6 位 PIN');
-        $response->assertSee('/login?redirect_to=%2Fme', false);
+        $response->assertSee('设置交易 PIN');
+        $response->assertSee('已有账号，去登录');
+        $response->assertSee('data-switch-panel="login"', false);
         $response->assertSee('const shouldAutoOpen = true;', false);
         $response->assertSee('const closeRedirectUrl =', false);
         $response->assertSee('locale=zh-CN', false);
@@ -127,5 +129,29 @@ class MyCenterPageTest extends TestCase
             ->assertSee('Enter 6-digit PIN')
             ->assertSee('Confirm 6-digit PIN')
             ->assertSee('Confirm Registration');
+    }
+
+    public function test_my_center_shows_mnemonic_setup_notice_when_user_has_no_mnemonic(): void
+    {
+        $user = User::factory()->create([
+            'mnemonic_lookup' => null,
+        ]);
+
+        $this->actingAs($user)
+            ->get('/me')
+            ->assertOk()
+            ->assertSee('你还没有生成助记词，请先生成并妥善保存。');
+    }
+
+    public function test_my_center_hides_mnemonic_setup_notice_when_user_has_mnemonic(): void
+    {
+        $user = User::factory()->create([
+            'mnemonic_lookup' => hash('sha256', 'apple book cat dog egg fish game hand ice jump'),
+        ]);
+
+        $this->actingAs($user)
+            ->get('/me')
+            ->assertOk()
+            ->assertDontSee('你还没有生成助记词，请先生成并妥善保存。');
     }
 }

@@ -28,6 +28,20 @@
     @endif
   </dl>
 
+  @if (! $isGuest)
+    <div @class([
+      'mt-4 rounded-xl p-4',
+      'border border-[rgb(var(--theme-primary))]/35 bg-[rgb(var(--theme-primary))]/10' => ! $hasMnemonic,
+      'border border-theme bg-theme-secondary/20' => $hasMnemonic,
+    ])>
+      <h3 class="text-scale-body font-semibold text-theme">{{ __('pages/me.account.mnemonic_title') }}</h3>
+      @if (! $hasMnemonic)
+        <p class="mt-1 text-scale-body font-semibold text-theme">{{ __('pages/me.account.mnemonic_setup_notice') }}</p>
+      @endif
+      <a href="/me/mnemonic" class="mt-3 inline-flex h-[clamp(1.9rem,7vw,2.2rem)] items-center justify-center rounded-lg bg-[rgb(var(--theme-primary))] px-4 py-2 text-scale-ui font-semibold text-theme-on-primary">{{ __('pages/me.account.mnemonic_manage') }}</a>
+    </div>
+  @endif
+
   <script>
     document.getElementById('copy-account-button')?.addEventListener('click', function () {
       const copyText = this.dataset.copyText;

@@ -128,3 +128,13 @@ dialog.theme-pin-modal {
         max-height: calc(100dvh - 1.25rem);
     }
 }
+
+/* 登录页与 PIN 弹窗统一：复用相同的窗口视觉参数。 */
+.pin-window-surface {
+    width: min(94vw, 30rem);
+    margin-inline: auto;
+    border: 1px solid rgb(var(--theme-border));
+    border-radius: 1.25rem;
+    background-color: rgb(var(--theme-bg-card));
+    box-shadow: 0 24px 60px rgb(var(--theme-primary) / 0.22);
+}

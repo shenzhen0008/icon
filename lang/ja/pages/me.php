@@ -22,10 +22,22 @@ return [
         'formal_status' => 'ログイン中',
         'temp_label' => '一時アカウント',
         'temp_status' => '未登録ゲスト',
+        'mnemonic_title' => 'ニーモニック',
+        'mnemonic_setup_notice' => 'まだニーモニックを生成していません。先に生成して安全に保存してください。',
+        'mnemonic_warning_title' => '重要',
+        'mnemonic_warning_body' => 'ニーモニックは一度しか表示されません。必ずすぐに控えて安全に保管してください。紛失しても復元できません。',
+        'mnemonic_description' => '下のボタンでログイン用の10語を再生成します。必ず安全に保存してください。',
+        'mnemonic_manage' => 'ニーモニックページへ',
+        'mnemonic_regenerate' => 'ニーモニックを生成/リセット',
+        'mnemonic_generated_hint' => 'このフレーズは今すぐ保存してください。ページを離れると再表示されません:',
+        'mnemonic_back_to_me' => 'マイセンターへ戻る',
     ],
     'activate_modal' => [
         'title' => '取引PINを設定',
         'close' => '閉じる',
+        'switch_set_pin' => '取引PIN設定',
+        'switch_password_login' => 'アカウントログイン',
+        'switch_mnemonic_login' => '助記語ログイン',
         'description' => '6桁の取引PINを入力し、確認してください。',
         'pin_label' => '6桁PINを入力',
         'pin_confirm_label' => '6桁PINを確認',
@@ -51,6 +63,14 @@ return [
         'view_buy' => '詳細へ進んで購入',
         'view_detail' => '詳細を見る',
     ],
+    
+    'mnemonic_prompt' => [
+        'title' => '今すぐニーモニックを生成しますか？',
+        'description' => 'ニーモニックはアカウントを守るための重要なセキュリティ対策であり、アカウント紛失の防止に役立ちます。今すぐ生成し、安全に保管することをおすすめします。',
+        'go_now' => '今すぐ生成',
+        'later' => 'あとで',
+    ],
+
     'profit_panel' => [
         'title' => '収益状況',
         'today_settled' => '本日確定収益',

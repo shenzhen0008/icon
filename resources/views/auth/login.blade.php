@@ -11,33 +11,122 @@
     <x-layout.background-glow />
     <x-nav.top />
 
-    <main class="mx-auto max-w-md px-6 pb-28 pt-8 md:pb-10">
-        <h1 class="mb-6 text-scale-display font-semibold">{{ __('pages/login.title') }}</h1>
-
-        <form method="POST" action="/login" class="space-y-4 rounded-lg border border-theme bg-theme-secondary p-4">
-            @csrf
-
-            <div>
-                <label class="mb-1 block text-scale-body" for="username">{{ __('pages/login.username_label') }}</label>
-                <input id="username" name="username" value="{{ old('username') }}" class="w-full rounded border border-theme bg-theme-secondary p-2" required>
-                @error('username')<p class="mt-1 text-scale-body text-[rgb(var(--theme-rose))]">{{ $message }}</p>@enderror
+    <main class="mx-auto w-full max-w-[30rem] px-3 pb-[calc(var(--mobile-nav-height,4rem)+env(safe-area-inset-bottom)+0.5rem)] pt-5 md:px-0 md:pb-10 md:pt-10">
+        <section class="pin-window-surface p-5 md:p-6">
+            <div class="mb-5">
+                <h1 class="text-scale-title font-semibold">{{ __('pages/login.title') }}</h1>
+                <p class="mt-2 text-scale-body text-theme-secondary">{{ __('pages/login.subtitle') }}</p>
             </div>
 
-            <div>
-                <label class="mb-1 block text-scale-body" for="password">{{ __('pages/login.password_label') }}</label>
-                <input id="password" type="password" name="password" class="w-full rounded border border-theme bg-theme-secondary p-2" required>
-                @error('password')<p class="mt-1 text-scale-body text-[rgb(var(--theme-rose))]">{{ $message }}</p>@enderror
-            </div>
+        @php
+            $activeLoginMode = $errors->has('mnemonic_phrase') ? 'mnemonic' : 'password';
+        @endphp
 
-            <label class="flex items-center gap-2 text-scale-body">
-                <input type="checkbox" name="remember" value="1" class="rounded border-theme bg-theme-secondary">
-                {{ __('pages/login.remember_me') }}
-            </label>
+        <div class="mb-5 grid grid-cols-2 rounded-xl border border-theme bg-theme-secondary p-1" id="login-mode-switcher">
+            <button
+                type="button"
+                data-login-mode-trigger="password"
+                class="text-scale-ui rounded-lg px-3 py-2 font-semibold transition"
+                aria-pressed="{{ $activeLoginMode === 'password' ? 'true' : 'false' }}"
+            >
+                {{ __('pages/login.password_mode_label') }}
+            </button>
+            <button
+                type="button"
+                data-login-mode-trigger="mnemonic"
+                class="text-scale-ui rounded-lg px-3 py-2 font-semibold transition"
+                aria-pressed="{{ $activeLoginMode === 'mnemonic' ? 'true' : 'false' }}"
+            >
+                {{ __('pages/login.mnemonic_mode_label') }}
+            </button>
+        </div>
 
-            <button class="text-scale-ui flex h-[clamp(1.9rem,7vw,2.2rem)] w-full items-center justify-center rounded-2xl bg-[rgb(var(--theme-primary))] px-[clamp(0.6rem,2.5vw,0.9rem)] font-semibold text-theme-on-primary shadow-lg shadow-[rgb(var(--theme-primary))]/20 transition hover:bg-[rgb(var(--theme-primary))]/90">{{ __('pages/login.submit') }}</button>
-        </form>
+        <section data-login-mode-panel="password" @class(['hidden' => $activeLoginMode !== 'password'])>
+            <form method="POST" action="/login" class="space-y-4">
+                @csrf
+
+                <div>
+                    <label class="mb-1 block text-scale-body" for="username">{{ __('pages/login.username_label') }}</label>
+                    <input id="username" name="username" value="{{ old('username') }}" class="w-full rounded-xl border border-theme bg-theme-secondary px-3 py-2.5" required>
+                    @error('username')<p class="mt-1 text-scale-body text-[rgb(var(--theme-rose))]">{{ $message }}</p>@enderror
+                </div>
+
+                <div>
+                    <label class="mb-1 block text-scale-body" for="password">{{ __('pages/login.password_label') }}</label>
+                    <input id="password" type="password" name="password" class="w-full rounded-xl border border-theme bg-theme-secondary px-3 py-2.5" required>
+                    @error('password')<p class="mt-1 text-scale-body text-[rgb(var(--theme-rose))]">{{ $message }}</p>@enderror
+                </div>
+
+                <label class="flex items-center gap-2 text-scale-body">
+                    <input type="checkbox" name="remember" value="1" class="rounded border-theme bg-theme-secondary">
+                    {{ __('pages/login.remember_me') }}
+                </label>
+
+                <button class="text-scale-ui w-full rounded-lg bg-[rgb(var(--theme-primary))] px-4 py-2.5 font-semibold text-theme-on-primary">{{ __('pages/login.submit') }}</button>
+            </form>
+        </section>
+
+        <section data-login-mode-panel="mnemonic" @class(['hidden' => $activeLoginMode !== 'mnemonic'])>
+            <form method="POST" action="/login/mnemonic" class="space-y-4">
+                @csrf
+
+                <div>
+                    <label class="mb-1 block text-scale-body" for="mnemonic_phrase">{{ __('pages/login.mnemonic_label') }}</label>
+                    <textarea
+                        id="mnemonic_phrase"
+                        name="mnemonic_phrase"
+                        rows="3"
+                        class="w-full rounded-xl border border-theme bg-theme-secondary px-3 py-2.5"
+                        placeholder="{{ __('pages/login.mnemonic_placeholder') }}"
+                        required
+                    >{{ old('mnemonic_phrase') }}</textarea>
+                    @error('mnemonic_phrase')<p class="mt-1 text-scale-body text-[rgb(var(--theme-rose))]">{{ $message }}</p>@enderror
+                </div>
+                <p class="-mt-1 text-scale-body text-theme-secondary">{{ __('pages/login.mnemonic_security_tip') }}</p>
+
+                <label class="flex items-center gap-2 text-scale-body">
+                    <input type="checkbox" name="remember" value="1" class="rounded border-theme bg-theme-secondary">
+                    {{ __('pages/login.remember_me') }}
+                </label>
+
+                <button class="text-scale-ui w-full rounded-lg bg-[rgb(var(--theme-primary))] px-4 py-2.5 font-semibold text-theme-on-primary">{{ __('pages/login.mnemonic_submit') }}</button>
+            </form>
+        </section>
+        </section>
     </main>
 
     <x-nav.mobile />
+
+    <script>
+        (() => {
+            const triggerSelector = '[data-login-mode-trigger]';
+            const panelSelector = '[data-login-mode-panel]';
+            const activeTriggerClasses = ['bg-[rgb(var(--theme-primary))]', 'text-theme-on-primary'];
+            const inactiveTriggerClasses = ['text-theme-secondary'];
+
+            const setMode = (mode) => {
+                document.querySelectorAll(triggerSelector).forEach((button) => {
+                    const isActive = button.dataset.loginModeTrigger === mode;
+                    activeTriggerClasses.forEach((className) => {
+                        button.classList.toggle(className, isActive);
+                    });
+                    inactiveTriggerClasses.forEach((className) => {
+                        button.classList.toggle(className, !isActive);
+                    });
+                    button.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+                });
+
+                document.querySelectorAll(panelSelector).forEach((panel) => {
+                    panel.classList.toggle('hidden', panel.dataset.loginModePanel !== mode);
+                });
+            };
+
+            document.querySelectorAll(triggerSelector).forEach((button) => {
+                button.addEventListener('click', () => setMode(button.dataset.loginModeTrigger));
+            });
+
+            setMode(@json($activeLoginMode));
+        })();
+    </script>
 </body>
 </html>

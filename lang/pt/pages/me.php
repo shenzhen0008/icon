@@ -22,10 +22,22 @@ return [
         'formal_status' => 'Conectado',
         'temp_label' => 'Conta temporária',
         'temp_status' => 'Convidado não registrado',
+        'mnemonic_title' => 'Frase mnemônica',
+        'mnemonic_setup_notice' => 'Você ainda não gerou uma frase mnemônica. Gere e salve primeiro.',
+        'mnemonic_warning_title' => 'Importante',
+        'mnemonic_warning_body' => 'A frase mnemônica será exibida apenas uma vez. Anote ou salve imediatamente e guarde em local seguro. Não poderá ser recuperada em caso de perda.',
+        'mnemonic_description' => 'Clique no botão para gerar 10 novas palavras de login. Guarde em local seguro.',
+        'mnemonic_manage' => 'Abrir página mnemônica',
+        'mnemonic_regenerate' => 'Gerar/redefinir frase mnemônica',
+        'mnemonic_generated_hint' => 'Salve esta frase agora. Ela não será exibida novamente após sair da página:',
+        'mnemonic_back_to_me' => 'Voltar para Minha central',
     ],
     'activate_modal' => [
         'title' => 'Definir PIN de negociação',
         'close' => 'Fechar',
+        'switch_set_pin' => 'Definir PIN',
+        'switch_password_login' => 'Login com senha',
+        'switch_mnemonic_login' => 'Login mnemônico',
         'description' => 'Digite e confirme um PIN de negociação de 6 dígitos.',
         'pin_label' => 'Digite o PIN de 6 dígitos',
         'pin_confirm_label' => 'Confirme o PIN de 6 dígitos',
@@ -51,6 +63,14 @@ return [
         'view_buy' => 'Ir ao detalhe para comprar',
         'view_detail' => 'Ir ao detalhe',
     ],
+    
+    'mnemonic_prompt' => [
+        'title' => 'Gerar frase mnemônica agora?',
+        'description' => 'A frase mnemônica é uma medida importante de segurança da conta e ajuda a evitar a perda da conta. Recomendamos gerar agora e guardar em local seguro.',
+        'go_now' => 'Gerar agora',
+        'later' => 'Mais tarde',
+    ],
+
     'profit_panel' => [
         'title' => 'Status de lucro',
         'today_settled' => 'Lucro liquidado hoje',

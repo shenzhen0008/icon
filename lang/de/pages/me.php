@@ -22,10 +22,22 @@ return [
         'formal_status' => 'Angemeldet',
         'temp_label' => 'Temporäres Konto',
         'temp_status' => 'Gast, nicht registriert',
+        'mnemonic_title' => 'Merkwort',
+        'mnemonic_setup_notice' => 'Sie haben noch kein Merkwort erstellt. Bitte zuerst erstellen und sicher speichern.',
+        'mnemonic_warning_title' => 'Wichtiger Hinweis',
+        'mnemonic_warning_body' => 'Das Merkwort wird nur einmal angezeigt. Bitte sofort notieren oder speichern und sicher aufbewahren. Nach Verlust kann es nicht wiederhergestellt werden.',
+        'mnemonic_description' => 'Klicken Sie auf die Schaltfläche, um 10 neue Login-Wörter zu erzeugen. Bitte sicher speichern.',
+        'mnemonic_manage' => 'Merkwort-Seite öffnen',
+        'mnemonic_regenerate' => 'Merkwort erzeugen/zurücksetzen',
+        'mnemonic_generated_hint' => 'Bitte jetzt speichern. Nach Verlassen der Seite wird die Phrase nicht erneut angezeigt:',
+        'mnemonic_back_to_me' => 'Zurück zu Mein Bereich',
     ],
     'activate_modal' => [
         'title' => 'Trading-PIN festlegen',
         'close' => 'Schließen',
+        'switch_set_pin' => 'Trading-PIN festlegen',
+        'switch_password_login' => 'Passwort-Login',
+        'switch_mnemonic_login' => 'Merkwort-Login',
         'description' => 'Bitte geben Sie eine 6-stellige Trading-PIN ein und bestätigen Sie diese.',
         'pin_label' => '6-stellige PIN eingeben',
         'pin_confirm_label' => '6-stellige PIN bestätigen',
@@ -51,6 +63,14 @@ return [
         'view_buy' => 'Zum Detail und kaufen',
         'view_detail' => 'Zum Detail',
     ],
+    
+    'mnemonic_prompt' => [
+        'title' => 'Jetzt Merkwort erstellen?',
+        'description' => 'Die Merkwort-Phrase ist eine wichtige Sicherheitsmaßnahme für Ihr Konto und hilft, den Kontoverlust zu vermeiden. Wir empfehlen, sie jetzt zu erstellen und sicher aufzubewahren.',
+        'go_now' => 'Jetzt erstellen',
+        'later' => 'Später',
+    ],
+
     'profit_panel' => [
         'title' => 'Gewinnstatus',
         'today_settled' => 'Heute abgerechneter Gewinn',

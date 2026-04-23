@@ -234,6 +234,17 @@ class GlobalNavigationTest extends TestCase
         $this->assertStringContainsString('Zorai Radar', $topNavMarkup);
     }
 
+    public function test_login_page_top_nav_shows_brand_name_without_back_button(): void
+    {
+        config(['app.name' => 'Zorai Radar']);
+
+        $response = $this->get('/login')->assertOk();
+        $topNavMarkup = $this->topNavMarkup($response->getContent());
+
+        $this->assertStringContainsString('Zorai Radar', $topNavMarkup);
+        $this->assertStringNotContainsString('data-top-nav-back', $topNavMarkup);
+    }
+
     public function test_frontend_pages_use_unified_desktop_main_container_width(): void
     {
         $product = Product::query()->create([

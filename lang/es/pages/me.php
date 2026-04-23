@@ -22,10 +22,22 @@ return [
         'formal_status' => 'Sesión iniciada',
         'temp_label' => 'Cuenta temporal',
         'temp_status' => 'Invitado no registrado',
+        'mnemonic_title' => 'Frase mnemónica',
+        'mnemonic_setup_notice' => 'Aún no has generado una frase mnemónica. Genérala y guárdala primero.',
+        'mnemonic_warning_title' => 'Importante',
+        'mnemonic_warning_body' => 'La frase mnemónica solo se mostrará una vez. Guárdala o anótala de inmediato y consérvala de forma segura. No se puede recuperar si se pierde.',
+        'mnemonic_description' => 'Pulsa el botón para generar 10 nuevas palabras de acceso. Guárdalas de forma segura.',
+        'mnemonic_manage' => 'Abrir página mnemónica',
+        'mnemonic_regenerate' => 'Generar/restablecer frase mnemónica',
+        'mnemonic_generated_hint' => 'Guarda esta frase ahora. No volverá a mostrarse al salir de la página:',
+        'mnemonic_back_to_me' => 'Volver a Mi Centro',
     ],
     'activate_modal' => [
         'title' => 'Configurar PIN de trading',
         'close' => 'Cerrar',
+        'switch_set_pin' => 'Configurar PIN',
+        'switch_password_login' => 'Acceso con contraseña',
+        'switch_mnemonic_login' => 'Acceso con mnemónica',
         'description' => 'Por favor, introduce y confirma un PIN de trading de 6 dígitos.',
         'pin_label' => 'Introduce PIN de 6 dígitos',
         'pin_confirm_label' => 'Confirma PIN de 6 dígitos',
@@ -51,6 +63,14 @@ return [
         'view_buy' => 'Ir al detalle para comprar',
         'view_detail' => 'Ir al detalle',
     ],
+    
+    'mnemonic_prompt' => [
+        'title' => '¿Generar frase mnemónica ahora?',
+        'description' => 'La frase mnemónica es una medida importante de seguridad de la cuenta y ayuda a evitar la pérdida de acceso. Recomendamos generarla ahora y guardarla de forma segura.',
+        'go_now' => 'Generar ahora',
+        'later' => 'Más tarde',
+    ],
+
     'profit_panel' => [
         'title' => 'Estado de ganancias',
         'today_settled' => 'Ganancia liquidada hoy',

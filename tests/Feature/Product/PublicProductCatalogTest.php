@@ -85,7 +85,9 @@ class PublicProductCatalogTest extends TestCase
         $response->assertSee('立即购买');
         $response->assertSee('data-open-activate-modal', false);
         $response->assertSee('id="activate-modal"', false);
-        $response->assertSee('/login?redirect_to=%2Fproducts', false);
+        $response->assertSee('设置交易 PIN');
+        $response->assertSee('已有账号，去登录');
+        $response->assertSee('data-switch-panel="login"', false);
         $response->assertSee('theme-pin-modal');
         $response->assertSee('text-theme-on-primary');
         $response->assertDontSee('rounded-2xl bg-[rgb(var(--theme-primary))] px-4 py-2 text-xl font-medium text-theme-secondary');

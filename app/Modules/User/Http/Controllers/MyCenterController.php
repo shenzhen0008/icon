@@ -37,6 +37,8 @@ class MyCenterController extends Controller
 
             return view('me.index', [
                 'isGuest' => false,
+                'hasMnemonic' => filled($user->mnemonic_lookup),
+                'showMnemonicSetupPrompt' => ! filled($user->mnemonic_lookup) && (bool) $request->session()->pull('show_mnemonic_setup_prompt', false),
                 'profile' => [
                     'label' => __('pages/me.account.formal_label'),
                     'id' => $user->username,
@@ -57,6 +59,8 @@ class MyCenterController extends Controller
 
         return view('me.index', [
             'isGuest' => true,
+            'hasMnemonic' => false,
+            'showMnemonicSetupPrompt' => false,
             'profile' => [
                 'label' => __('pages/me.account.temp_label'),
                 'id' => $temporaryUsername,

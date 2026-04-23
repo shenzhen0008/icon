@@ -12,8 +12,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Gate;
 
-#[Fillable(['username', 'name', 'remark', 'email', 'email_verified_at', 'password', 'balance', 'invite_code', 'referrer_id', 'is_admin'])]
-#[Hidden(['password', 'remember_token'])]
+#[Fillable(['username', 'name', 'remark', 'email', 'email_verified_at', 'password', 'balance', 'invite_code', 'referrer_id', 'is_admin', 'mnemonic_lookup'])]
+#[Hidden(['password', 'remember_token', 'mnemonic_lookup'])]
 class User extends Authenticatable implements FilamentUser
 {
     /** @use HasFactory<UserFactory> */

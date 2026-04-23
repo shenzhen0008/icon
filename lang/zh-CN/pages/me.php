@@ -22,10 +22,22 @@ return [
         'formal_status' => '已登录',
         'temp_label' => '临时账号',
         'temp_status' => '访客未注册',
+        'mnemonic_title' => '助记词',
+        'mnemonic_setup_notice' => '你还没有生成助记词，请先生成并妥善保存。',
+        'mnemonic_warning_title' => '重要提示',
+        'mnemonic_warning_body' => '助记词仅会显示一次，请立即截图或抄写并妥善保管，遗失后将无法恢复原词组。',
+        'mnemonic_description' => '点击下方按钮将重新生成 10 个登录单词，请妥善保存。',
+        'mnemonic_manage' => '进入助记词页面',
+        'mnemonic_regenerate' => '生成/重置助记词',
+        'mnemonic_generated_hint' => '请立即保存以下助记词，离开页面后将不再展示：',
+        'mnemonic_back_to_me' => '返回我的页面',
     ],
     'activate_modal' => [
         'title' => '设置交易 PIN',
         'close' => '关闭',
+        'switch_set_pin' => '设置交易 PIN',
+        'switch_password_login' => '账号密码登录',
+        'switch_mnemonic_login' => '助记词登录',
         'description' => '请输入并确认 6 位数字交易 PIN',
         'pin_label' => '输入 6 位 PIN',
         'pin_confirm_label' => '确认 6 位 PIN',
@@ -51,6 +63,14 @@ return [
         'view_buy' => '前往详情购买',
         'view_detail' => '前往详情查看',
     ],
+    
+    'mnemonic_prompt' => [
+        'title' => '立即生成助记词？',
+        'description' => '助记词是重要的账号安全措施，可防止账户丢失，建议立即生成并妥善保管。',
+        'go_now' => '立即生成',
+        'later' => '稍后再说',
+    ],
+
     'profit_panel' => [
         'title' => '收益状态',
         'today_settled' => '今日已结算收益',

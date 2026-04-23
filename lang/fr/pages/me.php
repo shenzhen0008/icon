@@ -22,10 +22,22 @@ return [
         'formal_status' => 'Connecté',
         'temp_label' => 'Compte temporaire',
         'temp_status' => 'Invité non enregistré',
+        'mnemonic_title' => 'Phrase mnémonique',
+        'mnemonic_setup_notice' => 'Vous n\'avez pas encore généré de phrase mnémonique. Générez-la et enregistrez-la d\'abord.',
+        'mnemonic_warning_title' => 'Important',
+        'mnemonic_warning_body' => 'La phrase mnémonique ne sera affichée qu\'une seule fois. Notez-la ou enregistrez-la immédiatement et conservez-la en lieu sûr. Elle ne pourra pas être récupérée en cas de perte.',
+        'mnemonic_description' => 'Cliquez sur le bouton pour générer 10 nouveaux mots de connexion. Conservez-les en lieu sûr.',
+        'mnemonic_manage' => 'Ouvrir la page mnémonique',
+        'mnemonic_regenerate' => 'Générer/réinitialiser la phrase',
+        'mnemonic_generated_hint' => 'Enregistrez cette phrase maintenant. Elle ne sera plus affichée après avoir quitté cette page :',
+        'mnemonic_back_to_me' => 'Retour à Mon espace',
     ],
     'activate_modal' => [
         'title' => 'Définir le PIN de trading',
         'close' => 'Fermer',
+        'switch_set_pin' => 'Définir PIN',
+        'switch_password_login' => 'Connexion mot de passe',
+        'switch_mnemonic_login' => 'Connexion mnémonique',
         'description' => 'Veuillez saisir et confirmer un PIN de trading à 6 chiffres.',
         'pin_label' => 'Saisir le PIN à 6 chiffres',
         'pin_confirm_label' => 'Confirmer le PIN à 6 chiffres',
@@ -51,6 +63,14 @@ return [
         'view_buy' => 'Aller au détail pour acheter',
         'view_detail' => 'Voir le détail',
     ],
+    
+    'mnemonic_prompt' => [
+        'title' => 'Générer la phrase mnémonique maintenant ?',
+        'description' => 'La phrase mnémonique est une mesure de sécurité importante pour le compte et aide à éviter la perte du compte. Nous recommandons de la générer maintenant et de la conserver en lieu sûr.',
+        'go_now' => 'Générer maintenant',
+        'later' => 'Plus tard',
+    ],
+
     'profit_panel' => [
         'title' => 'Statut des bénéfices',
         'today_settled' => 'Bénéfice réglé aujourd’hui',
