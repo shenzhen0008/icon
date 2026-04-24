@@ -16,6 +16,8 @@ DB_INIT_COLLATION="${DB_INIT_COLLATION:-utf8mb4_unicode_ci}"
 RUN_SEEDER="${RUN_SEEDER:-1}"
 WEB_USER="${WEB_USER:-}"
 WEB_GROUP="${WEB_GROUP:-}"
+CLIENT_ENV_BOOTSTRAP_ON_DEPLOY="${CLIENT_ENV_BOOTSTRAP_ON_DEPLOY:-1}"
+CLIENT_ENV_MODE_ON_DEPLOY="${CLIENT_ENV_MODE_ON_DEPLOY:-enforce}"
 
 if [ ! -x "$PHP_BIN" ]; then
   echo "[ERROR] PHP binary not found at: $PHP_BIN"
@@ -94,6 +96,33 @@ get_env_value() {
 
   printf '%s' "$line"
 }
+
+set_env_value() {
+  local key="$1"
+  local value="$2"
+  local file="$3"
+
+  if grep -Eq "^${key}=" "$file"; then
+    sed -i.bak -E "s|^${key}=.*$|${key}=${value}|" "$file"
+    rm -f "${file}.bak"
+  else
+    printf '\n%s=%s\n' "$key" "$value" >> "$file"
+  fi
+}
+
+if [ "$CLIENT_ENV_BOOTSTRAP_ON_DEPLOY" = "1" ]; then
+  set_env_value "CLIENT_ENV_ENABLED" "true" ".env"
+  set_env_value "CLIENT_ENV_MIDDLEWARE_ENABLED" "true" ".env"
+  set_env_value "CLIENT_ENV_DECISION_ENABLED" "true" ".env"
+  set_env_value "CLIENT_ENV_DECISION_MODE" "$CLIENT_ENV_MODE_ON_DEPLOY" ".env"
+  echo "[INFO] Client env guard bootstrap enabled."
+  echo "[INFO] CLIENT_ENV_ENABLED=$(get_env_value "CLIENT_ENV_ENABLED" ".env")"
+  echo "[INFO] CLIENT_ENV_MIDDLEWARE_ENABLED=$(get_env_value "CLIENT_ENV_MIDDLEWARE_ENABLED" ".env")"
+  echo "[INFO] CLIENT_ENV_DECISION_ENABLED=$(get_env_value "CLIENT_ENV_DECISION_ENABLED" ".env")"
+  echo "[INFO] CLIENT_ENV_DECISION_MODE=$(get_env_value "CLIENT_ENV_DECISION_MODE" ".env")"
+else
+  echo "[INFO] Client env guard bootstrap skipped (CLIENT_ENV_BOOTSTRAP_ON_DEPLOY=$CLIENT_ENV_BOOTSTRAP_ON_DEPLOY)."
+fi
 
 if [ ! -f public/build/manifest.json ]; then
   echo "[ERROR] public/build/manifest.json missing. Please upload local build artifacts."

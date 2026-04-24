@@ -22,6 +22,7 @@ return [
         'excluded_paths' => [
             'admin',
             'admin/*',
+            'livewire/*',
             'client-env/access-reminder',
         ],
         'enforce_paths' => [

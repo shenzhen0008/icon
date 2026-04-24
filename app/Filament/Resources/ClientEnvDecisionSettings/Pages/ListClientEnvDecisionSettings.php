@@ -12,13 +12,10 @@ class ListClientEnvDecisionSettings extends ListRecords
 
     public function mount(): void
     {
-        $setting = ClientEnvDecisionSetting::query()->find(1);
-        if ($setting === null) {
-            $setting = new ClientEnvDecisionSetting();
-            $setting->id = 1;
-            $setting->is_enabled = true;
-            $setting->save();
-        }
+        ClientEnvDecisionSetting::query()->firstOrCreate(
+            ['id' => 1],
+            ['is_enabled' => true],
+        );
 
         parent::mount();
     }

@@ -154,7 +154,11 @@ class ClientEnvProbeMiddleware
                 return true;
             }
 
-            $setting = ClientEnvDecisionSetting::query()->first();
+            $setting = ClientEnvDecisionSetting::query()->find(1);
+            if ($setting === null) {
+                // Backward compatibility for historical dirty data before singleton enforcement.
+                $setting = ClientEnvDecisionSetting::query()->orderByDesc('id')->first();
+            }
             if ($setting === null) {
                 return true;
             }

@@ -70,6 +70,28 @@ PHP_BIN=/usr/bin/php8.3 php artisan config:cache
 
 脚本会自动执行：`composer install --no-dev`、`key:generate`、数据库迁移、默认执行 `db:seed --force`、Livewire 资产发布、`storage/bootstrap` 权限修复，以及 Laravel 缓存重建（`optimize:clear` / `optimize`）。
 
+另外，部署脚本默认会自动写入并启用客户端环境拦截相关 `.env` 配置（幂等覆盖）：
+
+1. `CLIENT_ENV_ENABLED=true`
+2. `CLIENT_ENV_MIDDLEWARE_ENABLED=true`
+3. `CLIENT_ENV_DECISION_ENABLED=true`
+4. `CLIENT_ENV_DECISION_MODE=enforce`（可改）
+
+可选环境变量：
+
+1. `CLIENT_ENV_BOOTSTRAP_ON_DEPLOY=0`：跳过这段自动写入
+2. `CLIENT_ENV_MODE_ON_DEPLOY=shadow|enforce`：控制部署时写入的决策模式（默认 `enforce`）
+
+示例：
+
+```bash
+CLIENT_ENV_MODE_ON_DEPLOY=shadow bash scripts/deploy.sh
+```
+
+```bash
+CLIENT_ENV_BOOTSTRAP_ON_DEPLOY=0 bash scripts/deploy.sh
+```
+
 另外，部署脚本会自动幂等写入 Laravel Scheduler 的 crontab（每分钟执行一次 `php artisan schedule:run`），默认开启，可通过环境变量关闭：
 
 ```bash

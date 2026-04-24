@@ -139,6 +139,44 @@ class ClientEnvDecisionFlowTest extends TestCase
             ->assertJsonPath('reason', 'decision_disabled');
     }
 
+    public function test_decision_prefers_singleton_row_id_1_when_multiple_setting_rows_exist(): void
+    {
+        ClientEnvDecisionSetting::query()->create([
+            'is_enabled' => true,
+        ]);
+        ClientEnvDecisionSetting::query()->create([
+            'is_enabled' => true,
+        ]);
+        ClientEnvDecisionSetting::query()->updateOrCreate(
+            ['id' => 1],
+            ['is_enabled' => false],
+        );
+
+        config()->set('client_env.middleware.enabled', true);
+        config()->set('client_env.middleware.persist', false);
+        config()->set('client_env.middleware.excluded_paths', []);
+        config()->set('client_env.decision.enabled', true);
+        config()->set('client_env.decision.mode', 'enforce');
+        config()->set('client_env.decision.enforce_paths', ['__test/client-env-decision-singleton']);
+
+        Route::middleware('web')->get('/__test/client-env-decision-singleton', function (Request $request) {
+            $decision = (array) $request->attributes->get('client_env_decision', []);
+
+            return response()->json([
+                'decision' => $decision['decision'] ?? null,
+                'reason' => $decision['reason_code'] ?? null,
+            ]);
+        });
+
+        $this->withHeaders([
+            'X-Request-Id' => 'req_decision_singleton_1',
+            'User-Agent' => '',
+        ])->getJson('/__test/client-env-decision-singleton')
+            ->assertOk()
+            ->assertJsonPath('decision', 'allow')
+            ->assertJsonPath('reason', 'decision_disabled');
+    }
+
     public function test_admin_path_is_excluded_from_second_layer_decision(): void
     {
         config()->set('client_env.middleware.enabled', true);
@@ -188,5 +226,33 @@ class ClientEnvDecisionFlowTest extends TestCase
             'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/135.0.0.0 Safari/537.36',
         ])->getJson('/__test/client-env-decision-enforce-all')
             ->assertForbidden();
+    }
+
+    public function test_livewire_path_is_excluded_from_second_layer_decision(): void
+    {
+        config()->set('client_env.middleware.enabled', true);
+        config()->set('client_env.middleware.persist', false);
+        config()->set('client_env.middleware.excluded_paths', []);
+        config()->set('client_env.decision.enabled', true);
+        config()->set('client_env.decision.mode', 'enforce');
+        config()->set('client_env.decision.excluded_paths', ['admin/*', 'livewire/*']);
+        config()->set('client_env.decision.enforce_paths', ['*']);
+
+        Route::middleware('web')->post('/livewire/mock-update', function (Request $request) {
+            $decision = (array) $request->attributes->get('client_env_decision', []);
+
+            return response()->json([
+                'decision' => $decision['decision'] ?? null,
+                'reason' => $decision['reason_code'] ?? null,
+            ]);
+        });
+
+        $this->withHeaders([
+            'X-Request-Id' => 'req_decision_livewire_excluded_1',
+            'User-Agent' => '',
+        ])->postJson('/livewire/mock-update')
+            ->assertOk()
+            ->assertJsonPath('decision', 'allow')
+            ->assertJsonPath('reason', 'excluded_path');
     }
 }

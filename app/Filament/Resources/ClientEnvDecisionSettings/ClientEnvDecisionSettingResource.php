@@ -27,6 +27,11 @@ class ClientEnvDecisionSettingResource extends Resource
 
     protected static ?int $navigationSort = 16;
 
+    public static function canCreate(): bool
+    {
+        return false;
+    }
+
     public static function getNavigationUrl(): string
     {
         return static::getUrl('edit', ['record' => 1]);
@@ -53,4 +58,3 @@ class ClientEnvDecisionSettingResource extends Resource
         ];
     }
 }
-
