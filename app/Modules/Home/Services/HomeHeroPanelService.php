@@ -160,6 +160,10 @@ class HomeHeroPanelService
 
     public function incomeRecordQuery(int $userId): QueryBuilder
     {
+        $savingsRate = DB::table('savings_yield_settings')
+            ->where('id', 1)
+            ->value('daily_rate');
+
         $settlementQuery = DailySettlement::query()
             ->leftJoin('products', 'products.id', '=', 'daily_settlements.product_id')
             ->where('daily_settlements.user_id', $userId)
@@ -197,8 +201,9 @@ class HomeHeroPanelService
                 "NULL as product_id, ".
                 "'储蓄收益' as product_name, ".
                 "balance_ledgers.amount as profit, ".
-                "NULL as rate, ".
-                "balance_ledgers.occurred_at as occurred_at"
+                "? as rate, ".
+                "balance_ledgers.occurred_at as occurred_at",
+                [$savingsRate]
             );
 
         return DB::query()

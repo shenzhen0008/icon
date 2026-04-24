@@ -24,6 +24,15 @@ class HomeHeroPanelFeedTest extends TestCase
             'balance' => '1200.50',
         ]);
 
+        \DB::table('savings_yield_settings')->updateOrInsert([
+            'id' => 1,
+        ], [
+            'daily_rate' => '0.0123',
+            'is_active' => true,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
         $product = Product::query()->create([
             'name' => 'Mobile AMM',
             'code' => 'MOB-AMM',
@@ -149,6 +158,7 @@ class HomeHeroPanelFeedTest extends TestCase
             ->assertJsonPath('trade_records.2.title', 'Mobile AMM')
             ->assertJsonPath('income_records.0.product_name', '储蓄收益')
             ->assertJsonPath('income_records.0.profit', '3.40')
+            ->assertJsonPath('income_records.0.rate_percent', '1.23%')
             ->assertJsonPath('income_records.1.product_name', '推荐提成')
             ->assertJsonPath('income_records.1.profit', '15.10');
 
