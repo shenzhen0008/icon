@@ -18,6 +18,7 @@ return [
         'settlement_time_mobile' => 'Heure',
     ],
     'income_type' => [
+        'savings_interest' => 'Savings Interest',
         'referral_commission' => 'Commission de parrainage',
         'referral_commission_legacy_name' => '推荐提成',
     ],

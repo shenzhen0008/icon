@@ -1,0 +1,11 @@
+# Additional cron entries (optional)
+#
+# This file is read by scripts/deploy.sh when INSTALL_SCHEDULER_CRON=1.
+# One cron line per row. Empty lines and lines starting with # are ignored.
+#
+# Supported placeholders:
+# - {{APP_DIR}}
+# - {{PHP_BIN}}
+#
+# Example:
+# 0 3 * * * cd {{APP_DIR}} && {{PHP_BIN}} artisan some:command >> {{APP_DIR}}/storage/logs/some-command.log 2>&1

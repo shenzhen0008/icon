@@ -76,6 +76,17 @@ PHP_BIN=/usr/bin/php8.3 php artisan config:cache
 INSTALL_SCHEDULER_CRON=0 bash scripts/deploy.sh
 ```
 
+如需注册额外自动任务（除 Laravel Scheduler 外），可在 `scripts/cron.tasks` 追加 cron 行；部署时会自动幂等注册。支持占位符：
+
+1. `{{APP_DIR}}`
+2. `{{PHP_BIN}}`
+
+也可通过环境变量改任务文件位置：
+
+```bash
+CRON_TASKS_FILE=scripts/cron.tasks bash scripts/deploy.sh
+```
+
 建议部署后检查：
 
 ```bash

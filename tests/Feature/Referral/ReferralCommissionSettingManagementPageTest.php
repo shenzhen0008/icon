@@ -26,7 +26,8 @@ class ReferralCommissionSettingManagementPageTest extends TestCase
             ->assertOk()
             ->assertSee('推荐提成比例')
             ->assertSee('一级提成比例')
-            ->assertSee('二级提成比例');
+            ->assertSee('二级提成比例')
+            ->assertSee('手动触发当日结算');
     }
 
     public function test_admin_can_save_valid_referral_commission_rates(): void

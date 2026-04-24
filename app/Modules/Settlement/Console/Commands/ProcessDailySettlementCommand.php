@@ -2,7 +2,7 @@
 
 namespace App\Modules\Settlement\Console\Commands;
 
-use App\Modules\Settlement\Services\DailySettlementService;
+use App\Modules\Settlement\Services\RunDailyIncomeSettlementService;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
 use Illuminate\Validation\ValidationException;
@@ -13,16 +13,39 @@ class ProcessDailySettlementCommand extends Command
 
     protected $description = 'Process daily settlement for all products.';
 
-    public function handle(DailySettlementService $service): int
+    public function handle(RunDailyIncomeSettlementService $runDailyIncomeSettlementService): int
     {
         $dateOption = $this->option('date');
         $date = is_string($dateOption) && $dateOption !== ''
             ? $this->normalizeDate($dateOption)
             : now(config('settlement.timezone', 'Asia/Shanghai'))->toDateString();
 
-        $service->settleAllProductsByDate($date);
+        $result = $runDailyIncomeSettlementService->handle($date);
 
         $this->info(sprintf('daily settlement finished for %s', $date));
+        if (! $result['lock_acquired']) {
+            $this->warn((string) $result['message']);
+
+            return self::SUCCESS;
+        }
+
+        $savingsStats = $result['savings_yield'];
+        $referralStats = $result['referral_commission'];
+
+        $this->info(sprintf(
+            'savings yield scanned=%d granted=%d skipped=%d failed=%d',
+            $savingsStats['scanned'],
+            $savingsStats['granted'],
+            $savingsStats['skipped'],
+            $savingsStats['failed'],
+        ));
+        $this->info(sprintf(
+            'referral commission scanned=%d granted=%d skipped=%d failed=%d',
+            $referralStats['scanned'],
+            $referralStats['granted'],
+            $referralStats['skipped'],
+            $referralStats['failed'],
+        ));
 
         return self::SUCCESS;
     }
@@ -38,4 +61,3 @@ class ProcessDailySettlementCommand extends Command
         }
     }
 }
-

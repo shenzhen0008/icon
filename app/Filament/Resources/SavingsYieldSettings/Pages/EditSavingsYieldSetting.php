@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Filament\Resources\ReferralCommissionSettings\Pages;
+namespace App\Filament\Resources\SavingsYieldSettings\Pages;
 
-use App\Filament\Resources\ReferralCommissionSettings\ReferralCommissionSettingResource;
-use App\Modules\Referral\Models\ReferralCommissionSetting;
+use App\Filament\Resources\SavingsYieldSettings\SavingsYieldSettingResource;
+use App\Modules\Savings\Models\SavingsYieldSetting;
 use App\Modules\Settlement\Services\RunDailyIncomeSettlementService;
 use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
@@ -11,18 +11,17 @@ use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
 use Throwable;
 
-class EditReferralCommissionSetting extends EditRecord
+class EditSavingsYieldSetting extends EditRecord
 {
-    protected static string $resource = ReferralCommissionSettingResource::class;
+    protected static string $resource = SavingsYieldSettingResource::class;
 
     public function mount(int|string $record): void
     {
-        ReferralCommissionSetting::query()->firstOrCreate([
+        SavingsYieldSetting::query()->firstOrCreate([
             'id' => 1,
         ], [
-            'level_1_rate' => '0.0500',
-            'level_2_rate' => '0.0200',
-            'is_active' => true,
+            'daily_rate' => '0.0000',
+            'is_active' => false,
         ]);
 
         parent::mount(1);

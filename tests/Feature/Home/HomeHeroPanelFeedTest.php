@@ -95,6 +95,17 @@ class HomeHeroPanelFeedTest extends TestCase
             'occurred_at' => '2026-04-16 11:50:00',
         ]);
 
+        BalanceLedger::query()->create([
+            'user_id' => $user->id,
+            'type' => 'savings_interest_credit',
+            'amount' => '3.40',
+            'before_balance' => '1215.60',
+            'after_balance' => '1219.00',
+            'biz_ref_type' => 'savings_interest',
+            'biz_ref_id' => '2026-04-16:'.$user->id,
+            'occurred_at' => '2026-04-16 11:55:00',
+        ]);
+
         $settlementWithin24h = DailySettlement::query()->create([
             'user_id' => $user->id,
             'product_id' => $product->id,
@@ -130,14 +141,16 @@ class HomeHeroPanelFeedTest extends TestCase
                 'mode' => 'live',
                 'badge' => '#live',
                 'available_balance' => '1200.50',
-                'total_earnings' => '100.00',
-                'earnings_24h' => '30.00',
+                'total_earnings' => '103.40',
+                'earnings_24h' => '33.40',
             ])
             ->assertJsonPath('trade_records.0.event_type', 'withdrawal_refund')
             ->assertJsonPath('trade_records.1.event_type', 'withdrawal_debit')
             ->assertJsonPath('trade_records.2.title', 'Mobile AMM')
-            ->assertJsonPath('income_records.0.product_name', '推荐提成')
-            ->assertJsonPath('income_records.0.profit', '15.10');
+            ->assertJsonPath('income_records.0.product_name', '储蓄收益')
+            ->assertJsonPath('income_records.0.profit', '3.40')
+            ->assertJsonPath('income_records.1.product_name', '推荐提成')
+            ->assertJsonPath('income_records.1.profit', '15.10');
 
         Carbon::setTestNow();
     }

@@ -47,6 +47,7 @@
     };
     $incomeTypeLabels = [
       'referral_commission' => __('pages/income-records.income_type.referral_commission'),
+      'savings_interest' => __('pages/income-records.income_type.savings_interest'),
     ];
   @endphp
 

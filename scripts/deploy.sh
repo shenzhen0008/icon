@@ -8,6 +8,7 @@ APP_DIR="${APP_DIR:-$DEFAULT_APP_DIR}"
 COMPOSER_BIN="${COMPOSER_BIN:-/usr/bin/composer}"
 ENV_TEMPLATE=".env.production.example"
 INSTALL_SCHEDULER_CRON="${INSTALL_SCHEDULER_CRON:-1}"
+CRON_TASKS_FILE="${CRON_TASKS_FILE:-scripts/cron.tasks}"
 MYSQL_BIN="${MYSQL_BIN:-mysql}"
 DB_INIT_ENABLED="${DB_INIT_ENABLED:-0}"
 DB_INIT_CHARSET="${DB_INIT_CHARSET:-utf8mb4}"
@@ -34,6 +35,24 @@ if [ ! -d "$APP_DIR" ]; then
   echo "[ERROR] APP_DIR not found: $APP_DIR"
   exit 1
 fi
+
+install_cron_entry() {
+  local label="$1"
+  local entry="$2"
+  local current="$3"
+
+  if printf '%s\n' "$current" | grep -Fqx "$entry"; then
+    echo "[INFO] $label already exists."
+    printf '%s' "$current"
+    return
+  fi
+
+  local merged
+  merged="$(printf '%s\n%s\n' "$current" "$entry" | awk 'NF && !seen[$0]++')"
+  printf '%s\n' "$merged" | crontab -
+  echo "[INFO] $label installed."
+  printf '%s' "$merged"
+}
 
 if [ -z "$WEB_USER" ] || [ -z "$WEB_GROUP" ]; then
   if id -u www >/dev/null 2>&1; then
@@ -167,14 +186,25 @@ if [ "$INSTALL_SCHEDULER_CRON" = "1" ]; then
 
     SCHEDULER_CRON="* * * * * cd $APP_DIR && $PHP_BIN artisan schedule:run >> $SCHEDULER_LOG 2>&1"
     CURRENT_CRONTAB="$(crontab -l 2>/dev/null || true)"
+    CURRENT_CRONTAB="$(install_cron_entry 'Scheduler crontab entry' "$SCHEDULER_CRON" "$CURRENT_CRONTAB")"
 
-    if printf '%s\n' "$CURRENT_CRONTAB" | grep -Fqx "$SCHEDULER_CRON"; then
-      echo "[INFO] Scheduler crontab entry already exists."
+    CRON_TASKS_ABS_PATH="$APP_DIR/$CRON_TASKS_FILE"
+    if [ -f "$CRON_TASKS_ABS_PATH" ]; then
+      while IFS= read -r raw_line || [ -n "$raw_line" ]; do
+        line="$(printf '%s' "$raw_line" | sed 's/^[[:space:]]*//; s/[[:space:]]*$//')"
+        if [ -z "$line" ]; then
+          continue
+        fi
+        case "$line" in
+          \#*) continue ;;
+        esac
+
+        line="${line//\{\{APP_DIR\}\}/$APP_DIR}"
+        line="${line//\{\{PHP_BIN\}\}/$PHP_BIN}"
+        CURRENT_CRONTAB="$(install_cron_entry "Cron task from $CRON_TASKS_FILE" "$line" "$CURRENT_CRONTAB")"
+      done < "$CRON_TASKS_ABS_PATH"
     else
-      printf '%s\n%s\n' "$CURRENT_CRONTAB" "$SCHEDULER_CRON" \
-        | awk 'NF && !seen[$0]++' \
-        | crontab -
-      echo "[INFO] Scheduler crontab entry installed."
+      echo "[INFO] No extra cron tasks file found at $CRON_TASKS_ABS_PATH, skipped."
     fi
   else
     echo "[WARN] crontab command not found; skip scheduler crontab setup."

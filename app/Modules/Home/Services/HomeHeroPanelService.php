@@ -28,10 +28,6 @@ class HomeHeroPanelService
         'withdrawal_refund',
     ];
 
-    private const INCOME_LEDGER_TYPES = [
-        'referral_commission_credit',
-    ];
-
     /**
      * @return array{
      *     mode:string,
@@ -123,11 +119,22 @@ class HomeHeroPanelService
         $totalEarnings = (float) DailySettlement::query()
             ->where('user_id', $user->id)
             ->sum('profit');
+        $totalSavingsEarnings = (float) BalanceLedger::query()
+            ->where('user_id', $user->id)
+            ->where('type', 'savings_interest_credit')
+            ->where('biz_ref_type', 'savings_interest')
+            ->sum('amount');
 
         $earnings24h = (float) DailySettlement::query()
             ->where('user_id', $user->id)
             ->where('created_at', '>=', $windowStart)
             ->sum('profit');
+        $savingsEarnings24h = (float) BalanceLedger::query()
+            ->where('user_id', $user->id)
+            ->where('type', 'savings_interest_credit')
+            ->where('biz_ref_type', 'savings_interest')
+            ->where('occurred_at', '>=', $windowStart)
+            ->sum('amount');
 
         $tradeRecords = $this->tradeRecordQuery($user->id)
             ->limit(20)
@@ -144,8 +151,8 @@ class HomeHeroPanelService
             'mode' => 'live',
             'badge' => '#live',
             'available_balance' => $this->formatMoney((float) $user->balance),
-            'total_earnings' => $this->formatMoney($totalEarnings),
-            'earnings_24h' => $this->formatMoney($earnings24h),
+            'total_earnings' => $this->formatMoney($totalEarnings + $totalSavingsEarnings),
+            'earnings_24h' => $this->formatMoney($earnings24h + $savingsEarnings24h),
             'trade_records' => $tradeRecords,
             'income_records' => $incomeRecords,
         ];
@@ -168,7 +175,7 @@ class HomeHeroPanelService
 
         $commissionQuery = BalanceLedger::query()
             ->where('balance_ledgers.user_id', $userId)
-            ->whereIn('balance_ledgers.type', self::INCOME_LEDGER_TYPES)
+            ->where('balance_ledgers.type', 'referral_commission_credit')
             ->where('balance_ledgers.biz_ref_type', 'referral_commission')
             ->selectRaw(
                 "'referral_commission' as income_type, ".
@@ -180,8 +187,22 @@ class HomeHeroPanelService
                 "balance_ledgers.occurred_at as occurred_at"
             );
 
+        $savingsQuery = BalanceLedger::query()
+            ->where('balance_ledgers.user_id', $userId)
+            ->where('balance_ledgers.type', 'savings_interest_credit')
+            ->where('balance_ledgers.biz_ref_type', 'savings_interest')
+            ->selectRaw(
+                "'savings_interest' as income_type, ".
+                "balance_ledgers.id as sort_id, ".
+                "NULL as product_id, ".
+                "'储蓄收益' as product_name, ".
+                "balance_ledgers.amount as profit, ".
+                "NULL as rate, ".
+                "balance_ledgers.occurred_at as occurred_at"
+            );
+
         return DB::query()
-            ->fromSub($settlementQuery->unionAll($commissionQuery), 'income_records')
+            ->fromSub($settlementQuery->unionAll($commissionQuery)->unionAll($savingsQuery), 'income_records')
             ->orderByDesc('occurred_at')
             ->orderByDesc('sort_id');
     }

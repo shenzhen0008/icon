@@ -19,6 +19,7 @@ return [
     ],
     'income_type' => [
         'referral_commission' => '推荐提成',
+        'savings_interest' => '储蓄收益',
         'referral_commission_legacy_name' => '推荐提成',
     ],
     'empty' => '暂无收入记录',

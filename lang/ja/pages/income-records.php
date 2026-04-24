@@ -18,6 +18,7 @@ return [
         'settlement_time_mobile' => '時間',
     ],
     'income_type' => [
+        'savings_interest' => 'Savings Interest',
         'referral_commission' => '紹介コミッション',
         'referral_commission_legacy_name' => '推荐提成',
     ],

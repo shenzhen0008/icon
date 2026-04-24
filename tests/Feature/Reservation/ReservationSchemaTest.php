@@ -60,5 +60,14 @@ class ReservationSchemaTest extends TestCase
             'created_at',
             'updated_at',
         ]));
+
+        $this->assertTrue(Schema::hasTable('savings_yield_settings'));
+        $this->assertTrue(Schema::hasColumns('savings_yield_settings', [
+            'id',
+            'daily_rate',
+            'is_active',
+            'created_at',
+            'updated_at',
+        ]));
     }
 }

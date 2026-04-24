@@ -3,6 +3,7 @@
 namespace App\Modules\User\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Modules\Balance\Models\BalanceLedger;
 use App\Modules\Position\Services\ListUserPositionsService;
 use App\Modules\Settlement\Models\DailySettlement;
 use App\Modules\User\Services\TemporaryAccountService;
@@ -30,10 +31,21 @@ class MyCenterController extends Controller
                 ->where('user_id', $user->id)
                 ->whereDate('settlement_date', now()->toDateString())
                 ->sum('profit');
+            $todaySavingsProfit = (float) BalanceLedger::query()
+                ->where('user_id', $user->id)
+                ->where('type', 'savings_interest_credit')
+                ->where('biz_ref_type', 'savings_interest')
+                ->whereDate('occurred_at', now()->toDateString())
+                ->sum('amount');
 
             $totalProfit = (float) DailySettlement::query()
                 ->where('user_id', $user->id)
                 ->sum('profit');
+            $totalSavingsProfit = (float) BalanceLedger::query()
+                ->where('user_id', $user->id)
+                ->where('type', 'savings_interest_credit')
+                ->where('biz_ref_type', 'savings_interest')
+                ->sum('amount');
 
             return view('me.index', [
                 'isGuest' => false,
@@ -46,8 +58,8 @@ class MyCenterController extends Controller
                     'created_at' => $user->created_at?->format('Y-m-d H:i') ?? '--',
                 ],
                 'summary' => [
-                    'today_profit' => number_format($todayProfit, 2, '.', ''),
-                    'total_profit' => number_format($totalProfit, 2, '.', ''),
+                    'today_profit' => number_format($todayProfit + $todaySavingsProfit, 2, '.', ''),
+                    'total_profit' => number_format($totalProfit + $totalSavingsProfit, 2, '.', ''),
                     'principal' => number_format((float) collect($positions)->sum(fn (array $position): float => (float) $position['principal']), 2, '.', ''),
                     'balance' => number_format((float) $user->balance, 2, '.', ''),
                 ],

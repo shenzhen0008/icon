@@ -88,6 +88,17 @@ class HeroPanelRecordPagesTest extends TestCase
             'occurred_at' => now()->subHour(),
         ]);
 
+        BalanceLedger::query()->create([
+            'user_id' => $user->id,
+            'type' => 'savings_interest_credit',
+            'amount' => '3.40',
+            'before_balance' => '415.10',
+            'after_balance' => '418.50',
+            'biz_ref_type' => 'savings_interest',
+            'biz_ref_id' => now()->toDateString().':'.$user->id,
+            'occurred_at' => now()->subMinutes(30),
+        ]);
+
         $this->actingAs($user)
             ->get('/home/hero-panel/trade-records')
             ->assertOk()
@@ -104,6 +115,7 @@ class HeroPanelRecordPagesTest extends TestCase
             ->assertSee('Alpha Pool')
             ->assertSee('10.00')
             ->assertSee('推荐提成')
+            ->assertSee('储蓄收益')
             ->assertSee('15.10');
     }
 
@@ -197,13 +209,25 @@ class HeroPanelRecordPagesTest extends TestCase
             'occurred_at' => now()->subHour(),
         ]);
 
+        BalanceLedger::query()->create([
+            'user_id' => $user->id,
+            'type' => 'savings_interest_credit',
+            'amount' => '3.40',
+            'before_balance' => '415.10',
+            'after_balance' => '418.50',
+            'biz_ref_type' => 'savings_interest',
+            'biz_ref_id' => now()->toDateString().':'.$user->id,
+            'occurred_at' => now()->subMinutes(30),
+        ]);
+
         $this->actingAs($user)
             ->get('/home/hero-panel/income-records?locale=en')
             ->assertOk()
             ->assertSee('Income Records')
             ->assertSee('Product')
             ->assertSee('Back to Home')
-            ->assertSee('Referral Commission');
+            ->assertSee('Referral Commission')
+            ->assertSee('Savings Interest');
     }
 
     public function test_income_records_page_uses_translated_product_title_for_current_locale(): void

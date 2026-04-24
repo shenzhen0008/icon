@@ -504,6 +504,23 @@ CREATE TABLE `referral_commission_settings` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `savings_yield_settings`
+--
+
+DROP TABLE IF EXISTS `savings_yield_settings`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `savings_yield_settings` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `daily_rate` decimal(8,4) NOT NULL DEFAULT '0.0000',
+  `is_active` tinyint(1) NOT NULL DEFAULT '0',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `recharge_receivers`
 --
 
