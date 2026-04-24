@@ -44,6 +44,7 @@ use App\Modules\Support\Http\Controllers\StreamChatPageController;
 use App\Modules\User\Http\Controllers\SensitivePageController;
 use App\Modules\User\Http\Controllers\MnemonicPageController;
 use App\Modules\User\Http\Controllers\MnemonicRegenerateController;
+use App\Modules\ClientEnv\Http\Controllers\ClientEnvAccessReminderPageController;
 use App\Modules\ClientEnv\Http\Controllers\CollectClientEnvController;
 use App\Modules\ClientEnv\Http\Controllers\DetectClientEnvController;
 use Illuminate\Support\Facades\Route;
@@ -65,6 +66,8 @@ Route::get('/support', SupportPageController::class);
 Route::get('/stream-chat', StreamChatPageController::class);
 Route::post('/stream-chat/guest-token', StreamChatGuestTokenController::class);
 Route::get('/stream-chat/notify-token', StreamChatNotifyTokenController::class);
+Route::get('/client-env/access-reminder', ClientEnvAccessReminderPageController::class)
+    ->name('client-env.access-reminder');
 Route::get('/dev/client-env/detect', DetectClientEnvController::class);
 Route::match(['get', 'post'], '/dev/client-env/collect', CollectClientEnvController::class);
 

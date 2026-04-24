@@ -4,6 +4,50 @@ return [
     'enabled' => env('CLIENT_ENV_ENABLED', true),
     'expose_raw_user_agent' => env('CLIENT_ENV_EXPOSE_RAW_UA', false),
     'log_path' => env('CLIENT_ENV_LOG_PATH', 'client-env/probe-log.jsonl'),
+    'middleware' => [
+        'enabled' => env('CLIENT_ENV_MIDDLEWARE_ENABLED', true),
+        'persist' => env('CLIENT_ENV_MIDDLEWARE_PERSIST', true),
+        'attribute_key' => env('CLIENT_ENV_MIDDLEWARE_ATTRIBUTE_KEY', 'client_env_probe'),
+        'input_key' => env('CLIENT_ENV_MIDDLEWARE_INPUT_KEY', 'client'),
+        'header_name' => env('CLIENT_ENV_MIDDLEWARE_HEADER_NAME', 'X-Client-Env'),
+        'excluded_paths' => [
+            'up',
+            'dev/client-env/*',
+        ],
+    ],
+    'decision' => [
+        'enabled' => env('CLIENT_ENV_DECISION_ENABLED', true),
+        'attribute_key' => env('CLIENT_ENV_DECISION_ATTRIBUTE_KEY', 'client_env_decision'),
+        'mode' => env('CLIENT_ENV_DECISION_MODE', 'shadow'), // shadow|enforce
+        'excluded_paths' => [
+            'admin',
+            'admin/*',
+            'client-env/access-reminder',
+        ],
+        'enforce_paths' => [
+            '*',
+        ],
+        'deny_score_threshold' => (int) env('CLIENT_ENV_DECISION_DENY_SCORE_THRESHOLD', 85),
+        'rule_version' => env('CLIENT_ENV_DECISION_RULE_VERSION', 'v1'),
+        'wallet_keywords' => [
+            'okex',
+            'okapp',
+            'defiwallet',
+            'metamaskmobile',
+            'metamask',
+            'coinbase',
+            'coinbasewallet',
+            'coinbase wallet',
+            'org.toshi',
+            'toshi',
+            'baseapp',
+        ],
+        'audit' => [
+            'enabled' => env('CLIENT_ENV_DECISION_AUDIT_ENABLED', true),
+            'allow_sample_rate' => (int) env('CLIENT_ENV_DECISION_AUDIT_ALLOW_SAMPLE_RATE', 10), // 0~100
+            'allow_dedupe_ttl_seconds' => (int) env('CLIENT_ENV_DECISION_AUDIT_ALLOW_DEDUPE_TTL', 86400),
+        ],
+    ],
     'webview_keywords' => [
         'webview',
         '; wv)',

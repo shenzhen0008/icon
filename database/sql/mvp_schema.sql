@@ -772,6 +772,48 @@ CREATE TABLE `popup_receipts` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `client_env_decision_logs`
+--
+
+DROP TABLE IF EXISTS `client_env_decision_logs`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `client_env_decision_logs` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `request_id` char(36) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `user_id` bigint(20) unsigned DEFAULT NULL,
+  `ip_hash` char(64) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `fingerprint_hash` char(64) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `decision` enum('allow','deny') COLLATE utf8mb4_unicode_ci NOT NULL,
+  `reason_code` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `risk_score` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `route_key` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `rule_version` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uniq_client_env_decision_logs_request_id` (`request_id`),
+  KEY `idx_client_env_decision_created_at` (`decision`,`created_at`),
+  KEY `idx_client_env_fingerprint_created_at` (`fingerprint_hash`,`created_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `client_env_decision_settings`
+--
+
+DROP TABLE IF EXISTS `client_env_decision_settings`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `client_env_decision_settings` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `is_enabled` tinyint(1) NOT NULL DEFAULT '1',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Dumping events for database 'icon_market'
 --
 
