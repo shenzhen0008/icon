@@ -17,4 +17,9 @@ return [
     'max_button' => '최대',
     'buy_now' => '지금 구매',
     'preorder_now' => '예약하기',
+    'purchase_limit_reached' => '이 상품의 구매 한도에 도달했습니다.',
+    'purchase_success_notice' => '에스크로가 성공적으로 접수되었습니다. 주문 페이지에서 주문을 확인해 주세요.',
+    'insufficient_balance_prompt_title' => '계정의 에스크로 금액이 부족합니다. 입금 페이지로 이동하시겠습니까?',
+    'insufficient_balance_prompt_confirm' => '지금 이동',
+    'insufficient_balance_prompt_cancel' => '취소',
 ];

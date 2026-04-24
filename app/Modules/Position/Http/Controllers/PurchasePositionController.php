@@ -29,9 +29,11 @@ class PurchasePositionController extends Controller
                 (float) $request->validated('amount'),
             );
         } catch (InsufficientBalanceException) {
-            return redirect('/recharge');
+            return back()
+                ->withInput($request->only('amount'))
+                ->with('show_insufficient_balance_prompt', true);
         }
 
-        return back();
+        return back()->with('success', (string) __('pages/product-detail.purchase_success_notice'));
     }
 }

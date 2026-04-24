@@ -5,6 +5,7 @@ namespace Tests\Feature\Position;
 use App\Models\User;
 use App\Modules\Position\Models\Position;
 use App\Modules\Product\Models\Product;
+use App\Modules\Product\Models\UserProductPurchaseLimit;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -31,6 +32,7 @@ class PurchaseProductTest extends TestCase
         ]);
 
         $response->assertRedirect('/products/'.$product->id);
+        $response->assertSessionHas('success', __('pages/product-detail.purchase_success_notice'));
 
         $user->refresh();
         $this->assertSame('5000.00', number_format((float) $user->balance, 2, '.', ''));
@@ -106,7 +108,8 @@ class PurchaseProductTest extends TestCase
         $this->from('/products/'.$product->id)->actingAs($user)->post('/positions/purchase', [
             'product_id' => $product->id,
             'amount' => 4000,
-        ])->assertRedirect('/recharge');
+        ])->assertRedirect('/products/'.$product->id)
+            ->assertSessionHas('show_insufficient_balance_prompt', true);
 
         $user->refresh();
         $this->assertSame('3000.00', number_format((float) $user->balance, 2, '.', ''));
@@ -211,6 +214,52 @@ class PurchaseProductTest extends TestCase
 
         $this->assertDatabaseCount('positions', 1);
         $this->assertDatabaseCount('balance_ledgers', 0);
+    }
+
+    public function test_purchase_limit_can_be_overridden_for_specific_user_and_product(): void
+    {
+        $user = User::factory()->create([
+            'balance' => 20000,
+        ]);
+
+        $product = Product::query()->create([
+            'name' => 'Product Override',
+            'code' => 'POV',
+            'unit_price' => 1000,
+            'is_active' => true,
+            'purchase_limit_count' => 2,
+        ]);
+
+        UserProductPurchaseLimit::query()->create([
+            'user_id' => $user->id,
+            'product_id' => $product->id,
+            'allowed_purchase_limit' => 3,
+            'updated_by' => $user->id,
+        ]);
+
+        $this->from('/products/'.$product->id)->actingAs($user)->post('/positions/purchase', [
+            'product_id' => $product->id,
+            'amount' => 1000,
+        ])->assertRedirect('/products/'.$product->id);
+
+        $this->from('/products/'.$product->id)->actingAs($user)->post('/positions/purchase', [
+            'product_id' => $product->id,
+            'amount' => 1000,
+        ])->assertRedirect('/products/'.$product->id);
+
+        $this->from('/products/'.$product->id)->actingAs($user)->post('/positions/purchase', [
+            'product_id' => $product->id,
+            'amount' => 1000,
+        ])->assertRedirect('/products/'.$product->id);
+
+        $this->from('/products/'.$product->id)->actingAs($user)->post('/positions/purchase', [
+            'product_id' => $product->id,
+            'amount' => 1000,
+        ])->assertRedirect('/products/'.$product->id)
+            ->assertSessionHasErrors(['amount']);
+
+        $this->assertDatabaseCount('positions', 3);
+        $this->assertDatabaseCount('balance_ledgers', 3);
     }
 
     public function test_purchase_fails_when_total_amount_is_below_product_min_limit(): void

@@ -17,4 +17,9 @@ return [
     'max_button' => '最大',
     'buy_now' => '今すぐ購入',
     'preorder_now' => '予約する',
+    'purchase_limit_reached' => 'この商品の購入上限に達しました。',
+    'purchase_success_notice' => 'エスクローが正常に完了しました。注文ページで注文をご確認ください。',
+    'insufficient_balance_prompt_title' => '口座のエスクロー残高が不足しています。入金ページへ移動しますか？',
+    'insufficient_balance_prompt_confirm' => '今すぐ移動',
+    'insufficient_balance_prompt_cancel' => 'キャンセル',
 ];

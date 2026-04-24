@@ -17,4 +17,9 @@ return [
     'max_button' => 'MAX',
     'buy_now' => 'Jetzt kaufen',
     'preorder_now' => 'VORBESTELLEN',
+    'purchase_limit_reached' => 'Sie haben das Kauflimit für dieses Produkt erreicht.',
+    'purchase_success_notice' => 'Treuhandauftrag erfolgreich. Bitte prüfen Sie Ihre Order auf der Bestellseite.',
+    'insufficient_balance_prompt_title' => 'Ihr Treuhandguthaben ist nicht ausreichend. Möchten Sie zur Einzahlungsseite wechseln?',
+    'insufficient_balance_prompt_confirm' => 'Jetzt wechseln',
+    'insufficient_balance_prompt_cancel' => 'Abbrechen',
 ];

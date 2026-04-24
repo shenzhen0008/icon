@@ -8,6 +8,9 @@
   @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="min-h-screen bg-theme text-theme">
+  @php
+    $localeQuery = 'locale='.urlencode(app()->getLocale());
+  @endphp
   <x-layout.background-glow />
   <x-nav.top />
 
@@ -58,6 +61,11 @@
     @unless($isGuest)
       <section class="mt-6 rounded-2xl border border-theme bg-theme-card p-6">
         <h2 class="text-scale-body font-semibold text-theme">{{ $product['trade_mode'] === 'reserve' ? __('pages/product-detail.reserve_heading') : __('pages/product-detail.buy_heading') }}</h2>
+        @if (session('success'))
+          <div class="mt-3 rounded-xl border border-[rgb(var(--theme-primary))]/30 bg-[rgb(var(--theme-primary))]/10 p-3 text-scale-body text-[rgb(var(--theme-primary))]">
+            {{ session('success') }}
+          </div>
+        @endif
         @if ($product['trade_mode'] === 'reserve')
           <form method="POST" action="/products/{{ $product['id'] }}/reservations" class="mt-4 flex flex-col gap-3 sm:flex-row sm:items-end">
             @csrf
@@ -142,6 +150,19 @@
           </div>
         @endif
       </section>
+
+      @if (session('show_insufficient_balance_prompt'))
+        <dialog id="insufficient-balance-prompt" class="theme-modal theme-pin-modal">
+          <div class="p-5 md:p-6">
+            <p class="text-scale-body font-semibold text-theme">{{ __('pages/product-detail.insufficient_balance_prompt_title') }}</p>
+
+            <div class="mt-5 flex flex-wrap gap-3">
+              <a href="/recharge?{{ $localeQuery }}" class="text-scale-ui inline-flex h-[clamp(1.9rem,7vw,2.2rem)] items-center justify-center rounded-lg bg-[rgb(var(--theme-primary))] px-4 py-2 font-semibold text-theme-on-primary">{{ __('pages/product-detail.insufficient_balance_prompt_confirm') }}</a>
+              <button id="insufficient-balance-prompt-cancel" type="button" class="text-scale-ui inline-flex h-[clamp(1.9rem,7vw,2.2rem)] items-center justify-center rounded-lg border border-theme bg-theme-secondary px-4 py-2 font-semibold text-theme">{{ __('pages/product-detail.insufficient_balance_prompt_cancel') }}</button>
+            </div>
+          </div>
+        </dialog>
+      @endif
     @endunless
 
     @if ($isGuest && !empty($product['description']))
@@ -155,6 +176,16 @@
   <x-nav.mobile />
 
   <script>
+    (() => {
+      const promptModal = document.getElementById('insufficient-balance-prompt');
+      const cancelButton = document.getElementById('insufficient-balance-prompt-cancel');
+      if (!promptModal || typeof promptModal.showModal !== 'function') {
+        return;
+      }
+      promptModal.showModal();
+      cancelButton?.addEventListener('click', () => promptModal.close());
+    })();
+
     document.querySelectorAll('[data-max-amount-trigger]').forEach((button) => {
       button.addEventListener('click', () => {
         const input = button.closest('.sm\\:w-48')?.querySelector('[data-max-amount-target]');

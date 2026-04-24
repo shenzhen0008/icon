@@ -17,4 +17,9 @@ return [
     'max_button' => '最大',
     'buy_now' => '立即购买',
     'preorder_now' => '立即预订',
+    'purchase_limit_reached' => '已达到该产品限购次数。',
+    'purchase_success_notice' => '托管成功，请在订单页面中查看托管订单',
+    'insufficient_balance_prompt_title' => '你的账户托管金额不足是否跳转存储页面',
+    'insufficient_balance_prompt_confirm' => '立即跳转',
+    'insufficient_balance_prompt_cancel' => '取消',
 ];

@@ -17,4 +17,9 @@ return [
     'max_button' => 'MÁX',
     'buy_now' => 'Comprar agora',
     'preorder_now' => 'RESERVAR',
+    'purchase_limit_reached' => 'Você atingiu o limite de compra deste produto.',
+    'purchase_success_notice' => 'Custódia enviada com sucesso. Verifique seu pedido na página de pedidos.',
+    'insufficient_balance_prompt_title' => 'Seu saldo de custódia é insuficiente. Deseja ir para a página de depósito?',
+    'insufficient_balance_prompt_confirm' => 'Ir agora',
+    'insufficient_balance_prompt_cancel' => 'Cancelar',
 ];

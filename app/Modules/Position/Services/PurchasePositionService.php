@@ -7,6 +7,7 @@ use App\Modules\Balance\Models\BalanceLedger;
 use App\Modules\Position\Exceptions\InsufficientBalanceException;
 use App\Modules\Position\Models\Position;
 use App\Modules\Product\Models\Product;
+use App\Modules\Product\Models\UserProductPurchaseLimit;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
@@ -33,9 +34,22 @@ class PurchasePositionService
                 ->lockForUpdate()
                 ->count();
 
-            if ($product->purchase_limit_count !== null && $purchasedCount >= (int) $product->purchase_limit_count) {
+            $effectivePurchaseLimitCount = $product->purchase_limit_count;
+            if ($effectivePurchaseLimitCount !== null) {
+                $userOverrideLimitCount = UserProductPurchaseLimit::query()
+                    ->where('user_id', $user->id)
+                    ->where('product_id', $product->id)
+                    ->lockForUpdate()
+                    ->value('allowed_purchase_limit');
+
+                if ($userOverrideLimitCount !== null) {
+                    $effectivePurchaseLimitCount = max(0, (int) $userOverrideLimitCount);
+                }
+            }
+
+            if ($effectivePurchaseLimitCount !== null && $purchasedCount >= (int) $effectivePurchaseLimitCount) {
                 throw ValidationException::withMessages([
-                    'amount' => '已达到该产品限购次数。',
+                    'amount' => (string) __('pages/product-detail.purchase_limit_reached'),
                 ]);
             }
 

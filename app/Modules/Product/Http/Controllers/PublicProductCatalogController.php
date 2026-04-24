@@ -5,6 +5,7 @@ namespace App\Modules\Product\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Modules\Position\Models\Position;
 use App\Modules\Product\Models\Product;
+use App\Modules\Product\Models\UserProductPurchaseLimit;
 use App\Modules\Product\Services\ProductTranslationService;
 use App\Modules\Settlement\Models\DailySettlement;
 use App\Modules\User\Services\TemporaryAccountService;
@@ -27,6 +28,8 @@ class PublicProductCatalogController extends Controller
         ];
 
         $user = Auth::guard('web')->user();
+        $purchasedCountByProductId = [];
+        $purchaseLimitOverrideByProductId = [];
         if ($user !== null) {
             $todaySettledProfit = (float) DailySettlement::query()
                 ->where('user_id', $user->id)
@@ -50,6 +53,20 @@ class PublicProductCatalogController extends Controller
                 'total_profit' => '$'.number_format($totalSettledProfit, 2, '.', ''),
                 'orders_count' => (string) $openPositions->count(),
             ];
+
+            $purchasedCountByProductId = Position::query()
+                ->where('user_id', $user->id)
+                ->selectRaw('product_id, COUNT(*) as purchased_count')
+                ->groupBy('product_id')
+                ->pluck('purchased_count', 'product_id')
+                ->map(static fn (mixed $count): int => (int) $count)
+                ->all();
+
+            $purchaseLimitOverrideByProductId = UserProductPurchaseLimit::query()
+                ->where('user_id', $user->id)
+                ->pluck('allowed_purchase_limit', 'product_id')
+                ->map(static fn (mixed $count): int => max(0, (int) $count))
+                ->all();
         } else {
             $this->temporaryAccountService->ensureGuestTempUsername(request());
         }
@@ -66,7 +83,11 @@ class PublicProductCatalogController extends Controller
                 'code' => $product->code,
                 'trade_mode' => $product->trade_mode,
                 'unit_price' => number_format((float) $product->unit_price, 2, '.', ''),
-                'purchase_limit_label' => $this->formatPurchaseLimitLabel($product->purchase_limit_count),
+                'purchase_limit_label' => $this->formatPurchaseLimitLabel(
+                    $product->purchase_limit_count,
+                    $purchaseLimitOverrideByProductId[$product->id] ?? null,
+                    $purchasedCountByProductId[$product->id] ?? 0,
+                ),
                 'limit_range' => $this->formatRange($product->limit_min_usdt, $product->limit_max_usdt),
                 'rate_range' => $this->formatPercentRange($product->rate_min_percent, $product->rate_max_percent),
                 'cycle_label' => $this->formatCycleLabel($product->cycle_days),
@@ -100,14 +121,18 @@ class PublicProductCatalogController extends Controller
         return number_format((float) $min, 2, '.', '').'-'.number_format((float) $max, 2, '.', '').'%';
     }
 
-    private function formatPurchaseLimitLabel(null|int $purchaseLimitCount): string
+    private function formatPurchaseLimitLabel(null|int $purchaseLimitCount, ?int $overrideLimitCount = null, int $purchasedCount = 0): string
     {
-        if ($purchaseLimitCount === null) {
+        $effectivePurchaseLimitCount = $overrideLimitCount ?? $purchaseLimitCount;
+
+        if ($effectivePurchaseLimitCount === null) {
             return (string) __('pages/product-list.purchase_limit_unlimited');
         }
 
+        $remainingCount = max(0, $effectivePurchaseLimitCount - max(0, $purchasedCount));
+
         return (string) __('pages/product-list.purchase_limit_count', [
-            'count' => (string) max(0, $purchaseLimitCount),
+            'count' => (string) $remainingCount,
         ]);
     }
 

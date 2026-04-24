@@ -24,6 +24,9 @@ class UserManagementPageTest extends AdminPanelTestCase
             ->assertSee('客服工作台')
             ->assertSee('/stream-chat-agent', false);
         $this->get('/admin/users')->assertOk();
+        $this->get('/admin/users')
+            ->assertOk()
+            ->assertSee('限购覆盖');
         $this->get('/admin/users/create')
             ->assertOk()
             ->assertSee('备注')

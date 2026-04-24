@@ -17,4 +17,9 @@ return [
     'max_button' => 'MAX',
     'buy_now' => 'Acheter maintenant',
     'preorder_now' => 'RÉSERVER',
+    'purchase_limit_reached' => 'Vous avez atteint la limite d’achat de ce produit.',
+    'purchase_success_notice' => 'Séquestre soumis avec succès. Veuillez consulter votre commande sur la page des commandes.',
+    'insufficient_balance_prompt_title' => 'Le montant disponible en séquestre est insuffisant. Voulez-vous aller à la page de dépôt ?',
+    'insufficient_balance_prompt_confirm' => 'Y aller',
+    'insufficient_balance_prompt_cancel' => 'Annuler',
 ];

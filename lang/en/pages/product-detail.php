@@ -17,4 +17,9 @@ return [
     'max_button' => 'MAX',
     'buy_now' => 'Buy Now',
     'preorder_now' => 'BOOKING',
+    'purchase_limit_reached' => 'You have reached the purchase limit for this product.',
+    'purchase_success_notice' => 'Escrow submitted successfully. Please check your order on the Orders page.',
+    'insufficient_balance_prompt_title' => 'Your escrow balance is insufficient. Do you want to go to the deposit page?',
+    'insufficient_balance_prompt_confirm' => 'Go Now',
+    'insufficient_balance_prompt_cancel' => 'Cancel',
 ];

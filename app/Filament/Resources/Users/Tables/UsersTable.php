@@ -2,12 +2,18 @@
 
 namespace App\Filament\Resources\Users\Tables;
 
+use App\Models\User;
+use App\Modules\Product\Models\Product;
+use App\Modules\Product\Models\UserProductPurchaseLimit;
 use App\Modules\PopupPush\Services\PopupCampaignService;
+use Filament\Actions\Action;
 use Filament\Actions\BulkAction;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Notifications\Notification;
 use Filament\Tables\Columns\TextColumn;
@@ -46,6 +52,46 @@ class UsersTable
             ])
             ->recordActions([
                 EditAction::make(),
+                Action::make('set_purchase_limit_override')
+                    ->label('限购覆盖')
+                    ->icon('heroicon-o-adjustments-horizontal')
+                    ->modalHeading('设置用户产品可购次数')
+                    ->form([
+                        Select::make('product_id')
+                            ->label('产品')
+                            ->options(static fn (): array => Product::query()
+                                ->orderBy('sort')
+                                ->orderBy('id')
+                                ->pluck('name', 'id')
+                                ->mapWithKeys(static fn (mixed $name, mixed $id): array => [(string) $id => (string) $name])
+                                ->all())
+                            ->searchable()
+                            ->required(),
+                        TextInput::make('allowed_purchase_limit')
+                            ->label('允许购买次数')
+                            ->numeric()
+                            ->rule('integer')
+                            ->minValue(0)
+                            ->step(1)
+                            ->required(),
+                    ])
+                    ->action(function (User $record, array $data): void {
+                        UserProductPurchaseLimit::query()->updateOrCreate(
+                            [
+                                'user_id' => $record->id,
+                                'product_id' => (int) $data['product_id'],
+                            ],
+                            [
+                                'allowed_purchase_limit' => max(0, (int) $data['allowed_purchase_limit']),
+                                'updated_by' => auth()->id(),
+                            ],
+                        );
+
+                        Notification::make()
+                            ->title('限购覆盖已更新')
+                            ->success()
+                            ->send();
+                    }),
                 DeleteAction::make(),
             ])
             ->toolbarActions([

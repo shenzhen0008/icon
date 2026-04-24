@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Modules\Position\Models\Position;
 use App\Modules\Product\Models\Product;
 use App\Modules\Product\Models\ProductTranslation;
+use App\Modules\Product\Models\UserProductPurchaseLimit;
 use App\Modules\Settlement\Models\DailySettlement;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -214,6 +215,64 @@ class PublicProductCatalogTest extends TestCase
         $response->assertSee('data-max-amount="10000"', false);
     }
 
+    public function test_product_detail_renders_purchase_success_flash_message(): void
+    {
+        $user = User::factory()->create();
+        $successMessage = 'purchase-success-banner-check';
+
+        $product = Product::query()->create([
+            'name' => 'Mobile AMM',
+            'code' => 'MAMM',
+            'unit_price' => 1000,
+            'is_active' => true,
+            'limit_min_usdt' => 1000,
+            'limit_max_usdt' => 10000,
+            'rate_min_percent' => 1.15,
+            'rate_max_percent' => 2.22,
+            'cycle_days' => 2,
+        ]);
+
+        $response = $this
+            ->actingAs($user)
+            ->withSession([
+                'success' => $successMessage,
+            ])
+            ->get('/products/'.$product->id);
+
+        $response->assertOk();
+        $response->assertSee($successMessage);
+    }
+
+    public function test_product_detail_renders_insufficient_balance_prompt_dialog(): void
+    {
+        $user = User::factory()->create();
+
+        $product = Product::query()->create([
+            'name' => 'Mobile AMM',
+            'code' => 'MAMM',
+            'unit_price' => 1000,
+            'is_active' => true,
+            'limit_min_usdt' => 1000,
+            'limit_max_usdt' => 10000,
+            'rate_min_percent' => 1.15,
+            'rate_max_percent' => 2.22,
+            'cycle_days' => 2,
+        ]);
+
+        $response = $this
+            ->actingAs($user)
+            ->withSession([
+                'show_insufficient_balance_prompt' => true,
+            ])
+            ->get('/products/'.$product->id.'?locale=zh-CN');
+
+        $response->assertOk();
+        $response->assertSee('id="insufficient-balance-prompt"', false);
+        $response->assertSee((string) __('pages/product-detail.insufficient_balance_prompt_title'));
+        $response->assertSee((string) __('pages/product-detail.insufficient_balance_prompt_confirm'));
+        $response->assertSee((string) __('pages/product-detail.insufficient_balance_prompt_cancel'));
+    }
+
     public function test_catalog_falls_back_to_default_symbol_icons_when_product_has_no_symbol_icon_paths(): void
     {
         Product::query()->create([
@@ -344,6 +403,77 @@ class PublicProductCatalogTest extends TestCase
         $response->assertSee('Cycle');
         $response->assertSee('Purchase Limit: 2');
         $response->assertSee('量化策略A');
+    }
+
+    public function test_catalog_shows_remaining_purchase_count_for_authenticated_user(): void
+    {
+        $user = User::factory()->create();
+
+        $product = Product::query()->create([
+            'name' => 'Limited Product',
+            'code' => 'LMT',
+            'unit_price' => 1000,
+            'is_active' => true,
+            'sort' => 0,
+            'purchase_limit_count' => 2,
+            'limit_min_usdt' => 1000,
+            'limit_max_usdt' => 10000,
+            'rate_min_percent' => 1.10,
+            'rate_max_percent' => 1.30,
+            'cycle_days' => 3,
+        ]);
+
+        Position::query()->create([
+            'user_id' => $user->id,
+            'product_id' => $product->id,
+            'principal' => 1000,
+            'status' => 'open',
+            'opened_at' => now(),
+        ]);
+
+        $response = $this->actingAs($user)->get('/products?locale=en');
+
+        $response->assertOk();
+        $response->assertSee('Purchase Limit: 1');
+    }
+
+    public function test_catalog_uses_user_purchase_limit_override_when_rendering_remaining_count(): void
+    {
+        $user = User::factory()->create();
+
+        $product = Product::query()->create([
+            'name' => 'Override Product',
+            'code' => 'OVP',
+            'unit_price' => 1000,
+            'is_active' => true,
+            'sort' => 0,
+            'purchase_limit_count' => 2,
+            'limit_min_usdt' => 1000,
+            'limit_max_usdt' => 10000,
+            'rate_min_percent' => 1.10,
+            'rate_max_percent' => 1.30,
+            'cycle_days' => 3,
+        ]);
+
+        Position::query()->create([
+            'user_id' => $user->id,
+            'product_id' => $product->id,
+            'principal' => 1000,
+            'status' => 'open',
+            'opened_at' => now(),
+        ]);
+
+        UserProductPurchaseLimit::query()->create([
+            'user_id' => $user->id,
+            'product_id' => $product->id,
+            'allowed_purchase_limit' => 5,
+            'updated_by' => $user->id,
+        ]);
+
+        $response = $this->actingAs($user)->get('/products?locale=en');
+
+        $response->assertOk();
+        $response->assertSee('Purchase Limit: 4');
     }
 
     public function test_product_detail_localizes_fixed_copy_but_keeps_product_name_from_backend_data(): void
