@@ -243,11 +243,11 @@ git commit -m "update navigation and product card sizing"
 git push origin main
 
 ## 服务器端更新：
-cd /www/wwwroot/your-domain.com
+cd /www/wwwroot/zorai.sbs
 
 # 拉取修复代码
 git pull origin main
-
+PHP_BIN=/usr/bin/php8.3 php artisan optimize:clear
 # 推荐：走统一部署脚本（默认执行 composer + migrate + seed + optimize）
 PHP_BIN=/usr/bin/php8.3 APP_DIR=/www/wwwroot/your-domain.com bash scripts/deploy.sh
 
