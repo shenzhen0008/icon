@@ -14,7 +14,16 @@
   <x-layout.background-glow />
   <x-nav.top />
 
-  <main class="mx-auto w-full max-w-4xl px-4 pb-28 pt-6 md:pb-10 md:pt-8">
+  <main class="relative mx-auto w-full max-w-4xl px-4 pb-28 pt-[12rem] md:pb-10 md:pt-[30rem]">
+    <div aria-hidden="true" class="pointer-events-none absolute inset-x-0 top-0 -z-10 overflow-visible">
+      <div class="absolute inset-x-0 top-0 h-[14rem] bg-gradient-to-b from-[#0f47d9] via-[#2b66f6]/95 via-45% to-transparent md:h-[36rem]"></div>
+      <img
+        src="{{ asset('images/help.png') }}"
+        alt=""
+        class="relative h-auto w-full object-contain object-top opacity-82 saturate-125"
+      >
+    </div>
+
     <section class="rounded-3xl border border-theme bg-theme-card p-6 shadow-xl shadow-[rgb(var(--theme-primary))]/10">
       <div class="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
         <div>

@@ -13,10 +13,20 @@
 
   <x-nav.top />
 
-  <main class="mx-auto w-full max-w-4xl px-4 pb-28 pt-8 md:pb-12">
+  <main class="relative mx-auto w-full max-w-4xl px-4 pb-28 pt-[12rem] md:pb-12 md:pt-[30rem]">
+    <div aria-hidden="true" class="pointer-events-none absolute inset-x-0 top-0 -z-10 overflow-visible">
+      <div class="absolute inset-x-0 top-0 h-[14rem] bg-gradient-to-b from-[#0f47d9] via-[#2b66f6]/95 via-45% to-transparent md:h-[36rem]"></div>
+      <img
+        src="{{ asset('images/home.png') }}"
+        alt=""
+        class="relative h-auto w-full object-contain object-top opacity-82 saturate-125"
+      >
+    </div>
+
     <x-home.hero :summary="$summary" :payment-config="$paymentConfig" :payment-assets="$homePaymentAssets" :is-guest="$isGuest" :show-record-buttons="false" />
     <x-home.stats :summary="$summary" />
     <x-home.exchange-metrics :metrics="$metrics" :shared-profit="$sharedExchangeProfit" />
+    <x-home.friendly-links />
   </main>
 
   <x-nav.mobile />

@@ -11,39 +11,23 @@
   <x-layout.background-glow />
   <x-nav.top />
 
-  <main class="flex min-h-[calc(var(--app-vh,100dvh)-var(--top-nav-height,4rem)-var(--mobile-nav-height,4rem))] w-full flex-col pt-0 md:mx-auto md:max-w-4xl md:min-h-0 md:px-4 md:pb-10 md:pt-3">
-    <section class="relative overflow-hidden border border-[rgb(var(--theme-primary))]/20 bg-gradient-to-br from-[rgb(var(--theme-primary))]/85 via-[rgb(var(--theme-accent))]/75 to-[rgb(var(--theme-primary))]/70 px-4 pb-24 pt-4 text-white shadow-[0_16px_34px_rgb(var(--theme-primary))/0.2] md:rounded-[8px]">
+  <main class="relative flex min-h-[calc(var(--app-vh,100dvh)-var(--top-nav-height,4rem)-var(--mobile-nav-height,4rem))] w-full flex-col pt-[12rem] md:mx-auto md:max-w-4xl md:min-h-0 md:px-4 md:pb-10 md:pt-[30rem]">
+    <div aria-hidden="true" class="pointer-events-none absolute inset-x-0 top-0 -z-10 overflow-visible">
+      <div class="absolute inset-x-0 top-0 h-[14rem] bg-gradient-to-b from-[#0f47d9] via-[#2b66f6]/95 via-45% to-transparent md:h-[36rem]"></div>
+      <img
+        src="{{ asset('images/share.png') }}"
+        alt=""
+        class="relative h-auto w-full object-contain object-top opacity-82 saturate-125"
+      >
+    </div>
+
+    <section class="relative px-4 pb-24 pt-4 text-white">
       <div class="relative z-10 max-w-[18rem] md:max-w-[20rem]">
         <p class="text-scale-micro font-semibold uppercase tracking-[0.12em] text-white/80">{{ __('pages/referral.hero_tagline') }}</p>
         <h1 class="mt-1.5 whitespace-nowrap text-[clamp(1.72rem,7vw,2.3rem)] font-semibold leading-[1.04]">{{ __('pages/referral.hero_title') }}</h1>
-        <p class="mt-2 text-scale-body leading-5 text-white/85">
+        <p class="mt-2 text-scale-body leading-5 text-white/90">
           {{ __('pages/referral.hero_subtitle') }}
         </p>
-      </div>
-
-      <div class="pointer-events-none absolute inset-x-0 bottom-0 top-[5.1rem]">
-        <div class="absolute left-[-1.75rem] top-4 h-36 w-36 rounded-full bg-white/14"></div>
-        <div class="absolute right-[-2.15rem] top-8 h-44 w-44 rounded-full bg-white/12"></div>
-        <div class="absolute left-1/2 top-8 h-28 w-28 -translate-x-1/2 rounded-full bg-[#8eb1ff]/35 blur-xl"></div>
-
-        <img
-          src="{{ asset('images/card.png') }}"
-          alt=""
-          aria-hidden="true"
-          class="absolute bottom-3 left-3 h-24 w-auto opacity-90 sm:h-28"
-        >
-        <img
-          src="{{ asset('images/coin.png') }}"
-          alt=""
-          aria-hidden="true"
-          class="absolute right-6 top-2 h-12 w-12 rotate-[12deg] drop-shadow-[0_10px_18px_rgba(255,177,0,0.35)]"
-        >
-        <img
-          src="{{ asset('images/coin.png') }}"
-          alt=""
-          aria-hidden="true"
-          class="absolute right-16 top-16 h-10 w-10 -rotate-[10deg] opacity-95 drop-shadow-[0_10px_18px_rgba(255,177,0,0.35)]"
-        >
       </div>
     </section>
 

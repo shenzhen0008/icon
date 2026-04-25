@@ -20,8 +20,34 @@
   @endphp
 
   <main class="mx-auto w-full max-w-4xl px-4 pb-28 pt-6 md:pb-10 md:pt-8">
-    <section class="rounded-2xl border border-theme bg-theme-card p-5">
-      <h1 class="text-scale-title font-semibold">{{ __('pages/positions.title') }}</h1>
+    <section class="overflow-hidden rounded-2xl border border-theme bg-theme-card p-2 text-theme shadow-xl shadow-[rgb(var(--theme-primary))]/10">
+      <div class="flex items-center justify-between gap-3">
+        <div class="min-w-0">
+          <h1 class="text-scale-title truncate font-semibold leading-none text-theme">{{ $position['product_name'] }}</h1>
+        </div>
+        <span class="shrink-0 rounded-full border border-[rgb(var(--theme-primary))]/30 bg-[rgb(var(--theme-primary))]/10 px-2 py-1 text-scale-micro font-semibold text-[rgb(var(--theme-primary))]" data-status-key="{{ $position['status'] }}">
+          {{ $statusLabels[$position['status']] ?? $position['status'] }}
+        </span>
+      </div>
+
+      <div class="mt-3 h-px bg-theme/30"></div>
+
+      <div class="mt-3 flex items-start justify-between gap-3 overflow-x-auto whitespace-nowrap [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <div class="shrink-0 text-left">
+          <p class="text-scale-micro text-theme-secondary">{{ __('pages/positions.labels.escrow_amount') }}</p>
+          <p class="text-scale-ui mt-1 whitespace-nowrap font-medium text-theme">{{ $position['principal'] }}</p>
+        </div>
+        <div class="shrink-0 text-center">
+          <p class="text-scale-micro text-theme-secondary">{{ __('pages/positions.labels.yield_rate') }}</p>
+          <p class="text-scale-ui mt-1 whitespace-nowrap font-medium text-theme">{{ $position['rate_range'] }}</p>
+        </div>
+        <div class="shrink-0 text-right">
+          <p class="text-scale-micro text-theme-secondary">{{ __('pages/positions.labels.cycle') }}</p>
+          <p class="text-scale-ui mt-1 whitespace-nowrap font-medium text-theme">{{ $position['cycle_label'] }}</p>
+        </div>
+      </div>
+
+      <h2 class="mt-3 text-scale-body font-semibold">{{ __('pages/positions.title') }}</h2>
 
       @if ($can_apply_redemption)
         <form method="POST" action="/me/positions/{{ $position['id'] }}/redemption-requests" class="mt-4" onsubmit="return confirm(@js(__('pages/positions.redemption_confirm')));">
@@ -38,22 +64,58 @@
         <p class="mt-3 text-scale-body text-[rgb(var(--theme-rose))]">{{ $message }}</p>
       @enderror
 
-      <dl class="mt-4 grid grid-cols-2 gap-3 text-scale-body">
-        <div class="rounded-lg border border-theme bg-theme-secondary/40 p-3">
+      <dl class="mt-4 divide-y divide-theme overflow-hidden rounded-xl border border-theme bg-theme-secondary/40 text-scale-body">
+        <div class="flex items-center justify-between gap-3 px-4 py-3">
+          <dt class="text-theme-secondary">{{ __('pages/positions.labels.order_type') }}</dt>
+          <dd class="flex items-center justify-end gap-2 text-right text-theme">
+            <span class="flex h-[clamp(1.75rem,6vw,2.25rem)] w-[clamp(1.75rem,6vw,2.25rem)] shrink-0 items-center justify-center overflow-hidden rounded-full border border-theme bg-theme-secondary/80 text-theme">
+              @if (!empty($position['product_icon_path']))
+                <img src="{{ $position['product_icon_path'] }}" alt="" class="h-[clamp(1.125rem,4vw,1.5rem)] w-[clamp(1.125rem,4vw,1.5rem)] object-contain">
+              @else
+                <img src="{{ asset('images/icon_pro_usdt.svg') }}" alt="" class="h-full w-full object-contain">
+              @endif
+            </span>
+            <span>{{ $position['product_name'] }}</span>
+          </dd>
+        </div>
+        <div class="flex items-center justify-between gap-3 px-4 py-3">
+          <dt class="text-theme-secondary">{{ __('pages/positions.labels.escrow_amount') }}</dt>
+          <dd class="text-right text-theme">{{ $position['principal'] }}</dd>
+        </div>
+        <div class="flex items-center justify-between gap-3 px-4 py-3">
+          <dt class="text-theme-secondary">{{ __('pages/positions.labels.yield_rate') }}</dt>
+          <dd class="text-right text-theme">{{ $position['rate_range'] }}</dd>
+        </div>
+        <div class="flex items-center justify-between gap-3 px-4 py-3">
+          <dt class="text-theme-secondary">{{ __('pages/positions.labels.profit') }}</dt>
+          <dd class="text-right text-theme">{{ $position['total_profit'] }}</dd>
+        </div>
+        <div class="flex items-center justify-between gap-3 px-4 py-3">
+          <dt class="text-theme-secondary">{{ __('pages/positions.labels.order_time') }}</dt>
+          <dd class="text-right text-theme">{{ $position['opened_at'] }}</dd>
+        </div>
+        <div class="flex items-center justify-between gap-3 px-4 py-3">
+          <dt class="text-theme-secondary">{{ __('pages/positions.labels.expire_date') }}</dt>
+          <dd class="text-right text-theme">{{ $position['expire_at'] }}</dd>
+        </div>
+        <div class="flex items-center justify-between gap-3 px-4 py-3">
           <dt class="text-theme-secondary">{{ __('pages/positions.labels.order_id') }}</dt>
-          <dd class="mt-1 text-theme">{{ $position['order_no'] }}</dd>
+          <dd class="text-right text-theme">{{ $position['order_no'] }}</dd>
         </div>
-        <div class="rounded-lg border border-theme bg-theme-secondary/40 p-3">
-          <dt class="text-theme-secondary">{{ __('pages/positions.labels.product') }}</dt>
-          <dd class="mt-1 text-theme">{{ $position['product_name'] }}</dd>
+        <div class="flex items-center justify-between gap-3 px-4 py-3">
+          <dt class="text-theme-secondary">{{ __('pages/positions.labels.order_status') }}</dt>
+          <dd class="text-right text-theme">{{ $statusLabels[$position['status']] ?? $position['status'] }}</dd>
         </div>
-        <div class="rounded-lg border border-theme bg-theme-secondary/40 p-3">
-          <dt class="text-theme-secondary">{{ __('pages/positions.labels.principal') }}</dt>
-          <dd class="mt-1 text-theme">{{ $position['principal'] }}</dd>
-        </div>
-        <div class="rounded-lg border border-theme bg-theme-secondary/40 p-3">
-          <dt class="text-theme-secondary">{{ __('pages/positions.labels.status') }}</dt>
-          <dd class="mt-1 text-theme" data-status-key="{{ $position['status'] }}">{{ $statusLabels[$position['status']] ?? $position['status'] }}</dd>
+        <div class="px-4 py-3">
+          <div class="mt-2.5 rounded-2xl border border-theme bg-theme-secondary/20 px-2 py-[0.1rem]">
+            <div class="flex flex-nowrap items-center gap-2 overflow-x-auto overflow-y-hidden whitespace-nowrap pb-[0.05rem] [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              @foreach ($position['symbol_icon_paths'] as $iconPath)
+                <span class="flex h-[clamp(1.95rem,6.8vw,2.45rem)] w-[clamp(1.95rem,6.8vw,2.45rem)] shrink-0 items-center justify-center overflow-hidden rounded-full border border-theme bg-theme-card">
+                  <img src="{{ $iconPath }}" alt="" class="h-[clamp(1.45rem,5.2vw,1.82rem)] w-[clamp(1.45rem,5.2vw,1.82rem)] object-contain">
+                </span>
+              @endforeach
+            </div>
+          </div>
         </div>
       </dl>
     </section>

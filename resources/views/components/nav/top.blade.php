@@ -14,9 +14,11 @@
       'es' => ['code' => 'ES', 'flag' => asset('images/flags/es.svg')],
   ];
   $currentLanguageDisplay = $languageDisplayMap[$currentLocale] ?? $languageDisplayMap['zh-CN'];
+  $topNavActiveClass = 'text-white';
+  $topNavInactiveClass = 'text-white/75 hover:text-white';
 @endphp
 
-<header id="top-nav" class="sticky top-0 z-30 border-b border-theme bg-theme-secondary/90 backdrop-blur">
+<header id="top-nav" class="sticky top-0 z-30 border-b border-white/20 bg-[linear-gradient(180deg,rgba(10,28,90,0.88),rgba(22,56,150,0.72))] shadow-[0_10px_30px_rgba(7,21,66,0.28)] backdrop-blur">
   <div class="mx-auto flex w-full max-w-4xl items-center justify-between px-[clamp(0.75rem,3.5vw,1.5rem)] py-[clamp(0.6rem,2.5vw,1rem)]">
     @if ($showTopNavBack)
       <a
@@ -24,23 +26,23 @@
         data-keep-locale
         data-top-nav-back
         aria-label="{{ __('pages/home.nav.back') }}"
-        class="ml-1 inline-flex h-9 w-9 items-center justify-center rounded-full text-[1.85rem] font-semibold leading-none text-[rgb(var(--theme-primary))] transition hover:bg-[rgb(var(--theme-primary))]/10"
+        class="ml-1 inline-flex h-9 w-9 items-center justify-center rounded-full text-[1.85rem] font-semibold leading-none text-white transition hover:bg-white/15"
       >
         <svg viewBox="0 0 20 20" fill="none" aria-hidden="true" class="h-6 w-6">
           <path d="M13 4L7 10L13 16" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
       </a>
     @else
-      <a href="/" data-keep-locale class="text-[1.04rem] font-semibold tracking-[0.22em] leading-none text-[rgb(var(--theme-primary))] md:text-[1.1rem]">{{ config('app.name') }}</a>
+      <a href="/" data-keep-locale class="text-[1.04rem] font-semibold tracking-[0.22em] leading-none text-white md:text-[1.1rem]">{{ config('app.name') }}</a>
     @endif
 
     <nav class="hidden items-center gap-[clamp(0.8rem,3vw,1.5rem)] text-scale-ui md:flex">
-      <a href="/" data-keep-locale class="{{ request()->is('/') ? 'text-[rgb(var(--theme-primary))]' : 'text-theme-secondary hover:text-[rgb(var(--theme-primary))]' }}">{{ __('pages/home.nav.home') }}</a>
-      <a href="/products" data-keep-locale class="{{ request()->is('products') || request()->is('products/*') ? 'text-[rgb(var(--theme-primary))]' : 'text-theme-secondary hover:text-[rgb(var(--theme-primary))]' }}">{{ __('pages/home.nav.products') }}</a>
-      <a href="/help" data-keep-locale class="{{ request()->is('help') ? 'text-[rgb(var(--theme-primary))]' : 'text-theme-secondary hover:text-[rgb(var(--theme-primary))]' }}">{{ __('pages/home.nav.help') }}</a>
-      <a href="/referral" data-keep-locale class="{{ request()->is('referral') ? 'text-[rgb(var(--theme-primary))]' : 'text-theme-secondary hover:text-[rgb(var(--theme-primary))]' }}">{{ __('pages/home.nav.share') }}</a>
-      <a href="/me" data-keep-locale class="{{ request()->is('me') ? 'text-[rgb(var(--theme-primary))]' : 'text-theme-secondary hover:text-[rgb(var(--theme-primary))]' }}">{{ __('pages/home.nav.me') }}</a>
-      <a href="/support" data-keep-locale class="{{ request()->is('support') ? 'text-[rgb(var(--theme-primary))]' : 'text-theme-secondary hover:text-[rgb(var(--theme-primary))]' }}">{{ __('pages/home.nav.support') }}</a>
+      <a href="/" data-keep-locale class="{{ request()->is('/') ? $topNavActiveClass : $topNavInactiveClass }}">{{ __('pages/home.nav.home') }}</a>
+      <a href="/products" data-keep-locale class="{{ request()->is('products') || request()->is('products/*') ? $topNavActiveClass : $topNavInactiveClass }}">{{ __('pages/home.nav.products') }}</a>
+      <a href="/help" data-keep-locale class="{{ request()->is('help') ? $topNavActiveClass : $topNavInactiveClass }}">{{ __('pages/home.nav.help') }}</a>
+      <a href="/referral" data-keep-locale class="{{ request()->is('referral') ? $topNavActiveClass : $topNavInactiveClass }}">{{ __('pages/home.nav.share') }}</a>
+      <a href="/me" data-keep-locale class="{{ request()->is('me') ? $topNavActiveClass : $topNavInactiveClass }}">{{ __('pages/home.nav.me') }}</a>
+      <a href="/support" data-keep-locale class="{{ request()->is('support') ? $topNavActiveClass : $topNavInactiveClass }}">{{ __('pages/home.nav.support') }}</a>
     </nav>
 
     <div class="ml-3 inline-flex items-center gap-2 md:ml-4">
@@ -52,7 +54,7 @@
           aria-haspopup="true"
           aria-expanded="false"
           aria-controls="language-menu"
-          class="inline-flex items-center justify-center gap-1 rounded-full p-[0.4rem] text-theme transition hover:bg-[rgb(var(--theme-primary))]/10"
+          class="inline-flex items-center justify-center gap-1 rounded-full p-[0.4rem] text-white transition hover:bg-white/15"
         >
           <img
             src="{{ $currentLanguageDisplay['flag'] }}"
@@ -61,7 +63,7 @@
             aria-hidden="true"
             data-language-current-flag
           >
-          <span class="text-scale-ui inline-block font-semibold uppercase leading-none text-theme-secondary scale-110" data-language-current-code>{{ $currentLanguageDisplay['code'] }}</span>
+          <span class="text-scale-ui inline-block font-semibold uppercase leading-none text-white/90 scale-110" data-language-current-code>{{ $currentLanguageDisplay['code'] }}</span>
         </button>
         <div
           id="language-menu"
@@ -82,7 +84,7 @@
       <button
         id="theme-toggle"
         type="button"
-        class="inline-flex items-center justify-center rounded-full p-[0.4rem] text-theme transition hover:bg-[rgb(var(--theme-primary))]/10"
+        class="inline-flex items-center justify-center rounded-full p-[0.4rem] text-white transition hover:bg-white/15"
       >
         <img src="{{ asset('images/assets/sun.svg') }}" alt="" class="h-[1.35rem] w-[1.35rem] shrink-0 object-contain scale-110" aria-hidden="true">
       </button>

@@ -20,7 +20,7 @@ class PositionOrderPageController extends Controller
     {
         Gate::authorize('view', $position);
 
-        $position->loadMissing(['product:id,name', 'product.translations']);
+        $position->loadMissing(['product:id,name,code,cycle_days,rate_min_percent,rate_max_percent,product_icon_path,symbol_icon_paths', 'product.translations']);
 
         $latestRedemptionRequest = PositionRedemptionRequest::query()
             ->where('position_id', $position->id)
@@ -39,19 +39,92 @@ class PositionOrderPageController extends Controller
             ])
             ->all();
 
+        $totalProfit = (float) DailySettlement::query()
+            ->where('position_id', $position->id)
+            ->sum('profit');
+
+        $expireAt = null;
+        $cycleDays = $position->product?->cycle_days;
+        if ($position->opened_at !== null && is_numeric($cycleDays) && (int) $cycleDays > 0) {
+            $expireAt = $position->opened_at->copy()->addDays((int) $cycleDays);
+        }
+
         return view('positions.show', [
             'position' => [
                 'id' => $position->id,
                 'order_no' => $position->order_no ?: '--',
                 'product_name' => $this->productTranslationService->resolveName($position->product, emptyFallback: '--'),
-                'principal' => number_format((float) $position->principal, 2, '.', ''),
+                'product_code' => $position->product?->code ?? '--',
+                'principal' => number_format((float) $position->principal, 2, '.', '').'USDT',
+                'rate_range' => $this->formatPercentRange($position->product?->rate_min_percent, $position->product?->rate_max_percent),
+                'cycle_label' => $this->formatCycleLabel($position->product?->cycle_days),
+                'total_profit' => number_format($totalProfit, 2, '.', '').'USDT',
                 'status' => $position->status,
-                'opened_at' => $position->opened_at?->format('Y-m-d H:i') ?? '--',
+                'opened_at' => $position->opened_at?->translatedFormat('F j, Y g:i:s A') ?? '--',
+                'expire_at' => $expireAt?->translatedFormat('F j, Y g:i:s A') ?? '--',
+                'product_icon_path' => $position->product?->product_icon_path,
+                'symbol_icon_paths' => $this->resolveSymbolIconPaths($position->product?->symbol_icon_paths),
             ],
             'daily_profits' => $dailyProfits,
             // Temporarily hide redemption entry on position detail page.
             'can_apply_redemption' => false,
             'redemption_request_status' => $latestRedemptionRequest?->status,
         ]);
+    }
+
+    private function formatPercentRange(null|float|string $min, null|float|string $max): string
+    {
+        if ($min === null || $max === null) {
+            return '--';
+        }
+
+        return number_format((float) $min, 2, '.', '').'-'.number_format((float) $max, 2, '.', '').'%';
+    }
+
+    private function formatCycleLabel(null|int $cycleDays): string
+    {
+        if ($cycleDays === null) {
+            return '--';
+        }
+
+        return (string) __('pages/positions.cycle_days_format', [
+            'days' => (string) max(0, $cycleDays),
+        ]);
+    }
+
+    /**
+     * @param mixed $rawIconPaths
+     * @return array<int, string>
+     */
+    private function resolveSymbolIconPaths(mixed $rawIconPaths): array
+    {
+        $iconPaths = [];
+
+        if (is_array($rawIconPaths)) {
+            $iconPaths = $rawIconPaths;
+        } elseif (is_string($rawIconPaths) && trim($rawIconPaths) !== '') {
+            $decoded = json_decode($rawIconPaths, true);
+            if (is_array($decoded)) {
+                $iconPaths = $decoded;
+            } else {
+                $iconPaths = array_map('trim', explode(',', $rawIconPaths));
+            }
+        }
+
+        $iconPaths = array_values(array_filter($iconPaths, static fn (mixed $path): bool => is_string($path) && trim($path) !== ''));
+
+        if ($iconPaths !== []) {
+            return $iconPaths;
+        }
+
+        return [
+            '/images/products/symbols/symbol-01.png',
+            '/images/products/symbols/symbol-02.png',
+            '/images/products/symbols/symbol-03.png',
+            '/images/products/symbols/symbol-04.png',
+            '/images/products/symbols/symbol-05.png',
+            '/images/products/symbols/symbol-06.png',
+            '/images/products/symbols/symbol-07.png',
+        ];
     }
 }

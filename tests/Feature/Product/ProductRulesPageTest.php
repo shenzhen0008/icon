@@ -19,7 +19,7 @@ class ProductRulesPageTest extends TestCase
             ->assertDontSee('到账方式')
             ->assertSee('风险提示')
             ->assertSee('前往产品市场')
-            ->assertSee('rounded-2xl border border-[rgb(var(--theme-primary))]/20 bg-theme-card/95 p-3 shadow-xl', false)
+            ->assertSee('rounded-2xl border border-theme bg-theme-card p-3 shadow-xl', false)
             ->assertSee('space-y-3 pt-3', false)
             ->assertDontSee('rounded-3xl border border-theme bg-theme-card p-6 shadow-xl', false)
             ->assertDontSee('rounded-3xl border border-[rgb(var(--theme-primary))]/20 bg-gradient-to-br from-[rgb(var(--theme-primary))]/10 to-[rgb(var(--theme-accent))]/10 p-5 shadow-lg shadow-[rgb(var(--theme-primary))]/10', false)

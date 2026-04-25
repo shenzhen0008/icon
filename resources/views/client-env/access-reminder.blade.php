@@ -23,6 +23,7 @@
   @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="min-h-screen bg-theme text-theme">
+  <x-layout.background-glow />
 
   <main class="mx-auto flex min-h-screen w-full max-w-2xl items-center px-4 py-12">
     <section

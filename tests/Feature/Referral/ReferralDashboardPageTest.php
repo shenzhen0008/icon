@@ -29,7 +29,8 @@ class ReferralDashboardPageTest extends TestCase
 
         $response->assertOk()
             ->assertSee('bg-theme text-theme', false)
-            ->assertSee('bg-[rgb(var(--theme-primary))]/20 blur-3xl', false)
+            ->assertSee('linear-gradient(180deg,#0f47d9_0%,#2f66ef_22%', false)
+            ->assertDontSee('bg-[rgb(var(--theme-primary))]/20 blur-3xl', false)
             ->assertSee('bg-theme-card', false)
             ->assertSee('border-theme', false)
             ->assertSee('bg-[rgb(var(--theme-primary))]', false)
