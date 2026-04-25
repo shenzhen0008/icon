@@ -26,7 +26,9 @@
         aria-label="{{ __('pages/home.nav.back') }}"
         class="ml-1 inline-flex h-9 w-9 items-center justify-center rounded-full text-[1.85rem] font-semibold leading-none text-[rgb(var(--theme-primary))] transition hover:bg-[rgb(var(--theme-primary))]/10"
       >
-        &lt;
+        <svg viewBox="0 0 20 20" fill="none" aria-hidden="true" class="h-6 w-6">
+          <path d="M13 4L7 10L13 16" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
       </a>
     @else
       <a href="/" data-keep-locale class="text-[1.04rem] font-semibold tracking-[0.22em] leading-none text-[rgb(var(--theme-primary))] md:text-[1.1rem]">{{ config('app.name') }}</a>
