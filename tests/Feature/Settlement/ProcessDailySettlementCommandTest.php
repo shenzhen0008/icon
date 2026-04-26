@@ -176,4 +176,58 @@ class ProcessDailySettlementCommandTest extends TestCase
             'commission_amount' => 5,
         ]);
     }
+
+    public function test_command_auto_returns_principal_for_matured_position(): void
+    {
+        $user = User::factory()->create([
+            'balance' => 0,
+        ]);
+
+        $product = Product::query()->create([
+            'name' => 'Cycle Product',
+            'code' => 'CYCLE-P',
+            'unit_price' => 1000,
+            'is_active' => true,
+            'cycle_days' => 2,
+        ]);
+
+        $position = Position::query()->create([
+            'user_id' => $user->id,
+            'product_id' => $product->id,
+            'principal' => 1000,
+            'status' => 'open',
+            'opened_at' => '2026-04-01 08:00:00',
+        ]);
+
+        ProductDailyReturn::query()->create([
+            'product_id' => $product->id,
+            'return_date' => '2026-04-03',
+            'rate' => 0.1,
+        ]);
+
+        $this->artisan('settlement:daily', ['--date' => '2026-04-03'])
+            ->assertExitCode(0);
+
+        $this->assertDatabaseHas('daily_settlements', [
+            'position_id' => $position->id,
+            'settlement_date' => '2026-04-03',
+            'profit' => 100,
+        ]);
+
+        $this->assertDatabaseHas('balance_ledgers', [
+            'user_id' => $user->id,
+            'type' => 'principal_return_credit',
+            'amount' => 1000,
+            'biz_ref_type' => 'position',
+            'biz_ref_id' => (string) $position->id,
+        ]);
+
+        $this->assertDatabaseHas('positions', [
+            'id' => $position->id,
+            'status' => 'closed',
+        ]);
+
+        $user->refresh();
+        $this->assertSame('1100.00', number_format((float) $user->balance, 2, '.', ''));
+    }
 }

@@ -48,15 +48,16 @@
           <p class="text-scale-body text-theme-secondary">{{ __('pages/product-list.orders_count') }}</p>
           <div class="flex items-center gap-2">
             <p class="text-scale-title font-semibold text-[rgb(var(--theme-accent))]">{{ $summary['orders_count'] }}</p>
-            <button
-              type="button"
+            <a
+              href="/me/orders"
+              data-keep-locale
               aria-label="more"
               class="inline-flex items-center justify-center text-black"
             >
               <svg viewBox="0 0 20 20" fill="none" aria-hidden="true" class="h-5 w-5">
                 <path d="M7 4L13 10L7 16" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
               </svg>
-            </button>
+            </a>
           </div>
         </div>
       </div>

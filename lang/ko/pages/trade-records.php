@@ -20,6 +20,7 @@ return [
     ],
     'event_type' => [
         'purchase_debit' => '구매',
+        'principal_return_credit' => '원금 반환',
         'withdrawal_debit' => '출금',
         'withdrawal_refund' => '출금 환불',
     ],

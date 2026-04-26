@@ -20,6 +20,7 @@ return [
     ],
     'event_type' => [
         'purchase_debit' => '購入',
+        'principal_return_credit' => '元本返還',
         'withdrawal_debit' => '出金',
         'withdrawal_refund' => '出金返金',
     ],

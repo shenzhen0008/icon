@@ -20,6 +20,7 @@ return [
     ],
     'event_type' => [
         'purchase_debit' => 'Compra',
+        'principal_return_credit' => 'Devolução do principal',
         'withdrawal_debit' => 'Saque',
         'withdrawal_refund' => 'Reembolso de saque',
     ],

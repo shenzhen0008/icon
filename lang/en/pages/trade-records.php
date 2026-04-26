@@ -20,6 +20,7 @@ return [
     ],
     'event_type' => [
         'purchase_debit' => 'Purchase',
+        'principal_return_credit' => 'Principal Return',
         'withdrawal_debit' => 'Withdrawal',
         'withdrawal_refund' => 'Withdrawal Refund',
     ],

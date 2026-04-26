@@ -47,6 +47,7 @@
     };
     $eventTypeLabels = [
       'purchase_debit' => __('pages/trade-records.event_type.purchase_debit'),
+      'principal_return_credit' => __('pages/trade-records.event_type.principal_return_credit'),
       'withdrawal_debit' => __('pages/trade-records.event_type.withdrawal_debit'),
       'withdrawal_refund' => __('pages/trade-records.event_type.withdrawal_refund'),
     ];

@@ -21,18 +21,7 @@
 
   <main class="mx-auto w-full max-w-4xl px-4 pb-28 pt-6 md:pb-10 md:pt-8">
     <section class="overflow-hidden rounded-2xl border border-theme bg-theme-card p-2 text-theme shadow-xl shadow-[rgb(var(--theme-primary))]/10">
-      <div class="flex items-center justify-between gap-3">
-        <div class="min-w-0">
-          <h1 class="text-scale-title truncate font-semibold leading-none text-theme">{{ $position['product_name'] }}</h1>
-        </div>
-        <span class="shrink-0 rounded-full border border-[rgb(var(--theme-primary))]/30 bg-[rgb(var(--theme-primary))]/10 px-2 py-1 text-scale-micro font-semibold text-[rgb(var(--theme-primary))]" data-status-key="{{ $position['status'] }}">
-          {{ $statusLabels[$position['status']] ?? $position['status'] }}
-        </span>
-      </div>
-
-      <div class="mt-3 h-px bg-theme/30"></div>
-
-      <div class="mt-3 flex items-start justify-between gap-3 overflow-x-auto whitespace-nowrap [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      <div class="flex items-start justify-between gap-3 overflow-x-auto whitespace-nowrap [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         <div class="shrink-0 text-left">
           <p class="text-scale-micro text-theme-secondary">{{ __('pages/positions.labels.escrow_amount') }}</p>
           <p class="text-scale-ui mt-1 whitespace-nowrap font-medium text-theme">{{ $position['principal'] }}</p>

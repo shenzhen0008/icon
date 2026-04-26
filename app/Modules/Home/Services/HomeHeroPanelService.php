@@ -24,6 +24,7 @@ class HomeHeroPanelService
 
     private const TRADE_LEDGER_TYPES = [
         'purchase_debit',
+        'principal_return_credit',
         'withdrawal_debit',
         'withdrawal_refund',
     ];
@@ -352,6 +353,13 @@ class HomeHeroPanelService
                 return match ($ledger->type) {
                     'purchase_debit' => [
                         'event_type' => 'purchase_debit',
+                        'title' => $this->productTranslationService->resolveName($positions->get((string) $ledger->biz_ref_id)?->product, emptyFallback: '--'),
+                        'amount' => $this->formatMoney(abs((float) $ledger->amount)),
+                        'status' => 'completed',
+                        'occurred_at' => $occurredAt,
+                    ],
+                    'principal_return_credit' => [
+                        'event_type' => 'principal_return_credit',
                         'title' => $this->productTranslationService->resolveName($positions->get((string) $ledger->biz_ref_id)?->product, emptyFallback: '--'),
                         'amount' => $this->formatMoney(abs((float) $ledger->amount)),
                         'status' => 'completed',

@@ -20,6 +20,7 @@ return [
     ],
     'event_type' => [
         'purchase_debit' => '购买',
+        'principal_return_credit' => '本金返还',
         'withdrawal_debit' => '提款',
         'withdrawal_refund' => '提款退款',
     ],

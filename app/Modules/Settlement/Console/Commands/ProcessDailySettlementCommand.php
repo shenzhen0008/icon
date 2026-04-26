@@ -29,9 +29,17 @@ class ProcessDailySettlementCommand extends Command
             return self::SUCCESS;
         }
 
+        $principalReturnStats = $result['principal_return'];
         $savingsStats = $result['savings_yield'];
         $referralStats = $result['referral_commission'];
 
+        $this->info(sprintf(
+            'principal return scanned=%d returned=%d skipped=%d failed=%d',
+            $principalReturnStats['scanned'],
+            $principalReturnStats['returned'],
+            $principalReturnStats['skipped'],
+            $principalReturnStats['failed'],
+        ));
         $this->info(sprintf(
             'savings yield scanned=%d granted=%d skipped=%d failed=%d',
             $savingsStats['scanned'],

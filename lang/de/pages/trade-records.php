@@ -20,6 +20,7 @@ return [
     ],
     'event_type' => [
         'purchase_debit' => 'Kauf',
+        'principal_return_credit' => 'Kapitalrückzahlung',
         'withdrawal_debit' => 'Auszahlung',
         'withdrawal_refund' => 'Auszahlungsrückerstattung',
     ],
