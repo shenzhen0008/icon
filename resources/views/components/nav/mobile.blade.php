@@ -17,3 +17,4 @@
     </a>
   </div>
 </nav>
+<x-layout.legal-links-footer />

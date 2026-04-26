@@ -7,11 +7,11 @@
     <x-meta.favicons />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="min-h-screen bg-theme text-theme">
+<body class="bg-theme text-theme">
     <x-layout.background-glow />
     <x-nav.top />
 
-    <main class="mx-auto max-w-md px-6 pb-28 pt-8 md:pb-10">
+    <main class="mx-auto max-w-md px-6 pb-4 pt-8 md:pb-8">
         <h1 class="mb-2 text-scale-display font-semibold">{{ __('pages/auth.register.title') }}</h1>
         <p class="mb-6 text-scale-body text-theme-secondary">{{ __('pages/auth.register.temp_username', ['username' => session(config('user.temp_username_session_key'))]) }}</p>
         <p class="mb-6 text-scale-body text-theme-secondary">{{ __('pages/auth.register.pin_hint') }}</p>

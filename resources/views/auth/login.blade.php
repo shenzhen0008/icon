@@ -7,11 +7,11 @@
     <x-meta.favicons />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="min-h-screen bg-theme text-theme">
+<body class="bg-theme text-theme">
     <x-layout.background-glow />
     <x-nav.top />
 
-    <main class="mx-auto w-full max-w-[30rem] px-3 pb-[calc(var(--mobile-nav-height,4rem)+env(safe-area-inset-bottom)+0.5rem)] pt-5 md:px-0 md:pb-10 md:pt-10">
+    <main class="mx-auto w-full max-w-[30rem] px-3 pb-4 pt-5 md:px-0 md:pb-8 md:pt-10">
         <section class="pin-window-surface p-5 md:p-6">
             <div class="mb-5">
                 <h1 class="text-scale-title font-semibold">{{ __('pages/login.title') }}</h1>

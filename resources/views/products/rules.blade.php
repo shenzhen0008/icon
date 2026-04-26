@@ -7,14 +7,14 @@
   <x-meta.favicons />
   @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="min-h-screen bg-theme text-theme">
+<body class="bg-theme text-theme">
   @php
     $localeQuery = 'locale='.urlencode(app()->getLocale());
   @endphp
   <x-layout.background-glow />
   <x-nav.top />
 
-  <main class="mx-auto w-full max-w-4xl px-4 pb-24 pt-1 md:pb-8 md:pt-2">
+  <main class="mx-auto w-full max-w-4xl px-4 pb-4 pt-1 md:pb-8 md:pt-2">
     <section class="rounded-2xl border border-white/20 bg-[rgba(9,28,86,0.52)] px-2 py-3 shadow-lg shadow-[rgba(7,21,66,0.25)] backdrop-blur-sm sm:px-4">
       <div>
         <h1 class="text-scale-title font-semibold leading-tight text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.35)]">{{ __('pages/product-rules.hero_title') }}</h1>

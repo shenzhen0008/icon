@@ -7,7 +7,7 @@
   <x-meta.favicons />
   @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="min-h-screen bg-theme text-theme">
+<body class="bg-theme text-theme">
   <x-layout.background-glow />
   <x-nav.top />
   @php
@@ -51,7 +51,7 @@
     ];
   @endphp
 
-  <main class="mx-auto w-full max-w-4xl px-4 pb-28 pt-8 md:pb-10">
+  <main class="mx-auto w-full max-w-4xl px-4 pb-4 pt-8 md:pb-8">
     <section class="rounded-2xl border border-theme bg-theme-card p-5">
       <div class="flex items-center justify-between gap-3">
         <div>

@@ -7,11 +7,11 @@
   <x-meta.favicons />
   @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="min-h-screen bg-theme text-theme">
+<body class="bg-theme text-theme">
   <x-layout.background-glow />
   <x-nav.top />
 
-  <main class="mx-auto w-full max-w-4xl px-4 pb-[calc(var(--mobile-nav-height,4.25rem)+1.5rem+env(safe-area-inset-bottom))] pt-8 md:px-6 md:pb-10">
+  <main class="mx-auto w-full max-w-4xl px-4 pb-4 pt-8 md:px-6 md:pb-8">
     <div class="mb-5">
       <p class="text-scale-micro uppercase tracking-[0.24em] text-[rgb(var(--theme-primary))]">{{ __('pages/support.section_label') }}</p>
       <h1 class="mt-2 text-scale-display font-semibold">{{ __('pages/support.title') }}</h1>

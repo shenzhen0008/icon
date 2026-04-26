@@ -7,14 +7,14 @@
   <x-meta.favicons />
   @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="min-h-screen bg-theme text-theme">
+<body class="bg-theme text-theme">
   @php
     $localeQuery = 'locale='.urlencode(app()->getLocale());
   @endphp
   <x-layout.background-glow />
   <x-nav.top />
 
-  <main class="relative mx-auto w-full max-w-4xl px-4 pb-28 pt-[12rem] md:pb-10 md:pt-[30rem]">
+  <main class="relative mx-auto w-full max-w-4xl px-4 pb-4 pt-[12rem] md:pb-8 md:pt-[30rem]">
     <div aria-hidden="true" class="pointer-events-none absolute inset-x-0 top-0 -z-10 overflow-visible">
       <div class="absolute inset-x-0 top-0 h-[14rem] bg-gradient-to-b from-[#0f47d9] via-[#2b66f6]/95 via-45% to-transparent md:h-[36rem]"></div>
       <img
