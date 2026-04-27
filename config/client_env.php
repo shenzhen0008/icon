@@ -38,6 +38,7 @@ return [
             'defiwallet',
             'metamaskmobile',
             'metamask',
+            'trust',
             'trustwallet',
             'tokenpocket',
             'imtoken',
