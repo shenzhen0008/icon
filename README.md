@@ -265,6 +265,11 @@ git restore "public/日志.txt"
 git commit -m "update navigation and product card sizing"
 git push origin main
 
+## ssh推送
+ssh -T git@github.com
+git push origin main
+
+
 ## 服务器端更新：
 cd /www/wwwroot/zorai.sbs
 
