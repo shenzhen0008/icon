@@ -98,6 +98,24 @@ CLIENT_ENV_BOOTSTRAP_ON_DEPLOY=0 bash scripts/deploy.sh
 INSTALL_SCHEDULER_CRON=0 bash scripts/deploy.sh
 ```
 
+部署脚本默认会写入结算调度配置（可通过环境变量覆盖）：
+
+1. `SETTLEMENT_ENABLED=true`
+2. `SETTLEMENT_RUN_AT=00:05`
+3. `SETTLEMENT_TIMEZONE=Asia/Shanghai`
+
+可关闭该自动写入：
+
+```bash
+SETTLEMENT_BOOTSTRAP_ON_DEPLOY=0 bash scripts/deploy.sh
+```
+
+可覆盖默认值：
+
+```bash
+SETTLEMENT_RUN_AT_ON_DEPLOY=00:10 SETTLEMENT_TIMEZONE_ON_DEPLOY=Asia/Shanghai bash scripts/deploy.sh
+```
+
 如需注册额外自动任务（除 Laravel Scheduler 外），可在 `scripts/cron.tasks` 追加 cron 行；部署时会自动幂等注册。支持占位符：
 
 1. `{{APP_DIR}}`
@@ -115,6 +133,11 @@ CRON_TASKS_FILE=scripts/cron.tasks bash scripts/deploy.sh
 crontab -l
 php artisan schedule:list
 ```
+
+部署脚本会自动校验：
+
+1. `crontab` 中存在当前项目的 `schedule:run` 条目
+2. `php artisan schedule:list` 中存在 `settlement:daily`
 
 数据库说明：
 

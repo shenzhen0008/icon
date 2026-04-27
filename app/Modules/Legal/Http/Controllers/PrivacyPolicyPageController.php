@@ -16,8 +16,7 @@ class PrivacyPolicyPageController extends Controller
     {
         $payload = $this->loadLegalDocumentService->handle('privacy', app()->getLocale());
 
-        return view('legal.document', [
-            'document_type' => 'privacy',
+        return view('legal.privacy-preview', [
             'document_title' => (string) __('pages/legal.privacy_title'),
             'document_html' => $payload['html'],
             'document_updated_at' => $payload['updated_at'],

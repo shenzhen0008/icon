@@ -56,9 +56,6 @@
         <p>
           <span class="font-semibold text-slate-200">Last Updated:</span>
           {{ $document_updated_at }}
-          <span class="mx-2 text-slate-500">|</span>
-          <span class="font-semibold text-slate-200">Language:</span>
-          {{ strtoupper($document_resolved_locale) === 'EN' ? 'English' : strtoupper($document_resolved_locale) }}
         </p>
       </div>
 

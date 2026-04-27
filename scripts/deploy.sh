@@ -18,6 +18,10 @@ WEB_USER="${WEB_USER:-}"
 WEB_GROUP="${WEB_GROUP:-}"
 CLIENT_ENV_BOOTSTRAP_ON_DEPLOY="${CLIENT_ENV_BOOTSTRAP_ON_DEPLOY:-1}"
 CLIENT_ENV_MODE_ON_DEPLOY="${CLIENT_ENV_MODE_ON_DEPLOY:-enforce}"
+SETTLEMENT_BOOTSTRAP_ON_DEPLOY="${SETTLEMENT_BOOTSTRAP_ON_DEPLOY:-1}"
+SETTLEMENT_ENABLED_ON_DEPLOY="${SETTLEMENT_ENABLED_ON_DEPLOY:-true}"
+SETTLEMENT_RUN_AT_ON_DEPLOY="${SETTLEMENT_RUN_AT_ON_DEPLOY:-00:05}"
+SETTLEMENT_TIMEZONE_ON_DEPLOY="${SETTLEMENT_TIMEZONE_ON_DEPLOY:-Asia/Shanghai}"
 
 if [ ! -x "$PHP_BIN" ]; then
   echo "[ERROR] PHP binary not found at: $PHP_BIN"
@@ -124,6 +128,18 @@ else
   echo "[INFO] Client env guard bootstrap skipped (CLIENT_ENV_BOOTSTRAP_ON_DEPLOY=$CLIENT_ENV_BOOTSTRAP_ON_DEPLOY)."
 fi
 
+if [ "$SETTLEMENT_BOOTSTRAP_ON_DEPLOY" = "1" ]; then
+  set_env_value "SETTLEMENT_ENABLED" "$SETTLEMENT_ENABLED_ON_DEPLOY" ".env"
+  set_env_value "SETTLEMENT_RUN_AT" "$SETTLEMENT_RUN_AT_ON_DEPLOY" ".env"
+  set_env_value "SETTLEMENT_TIMEZONE" "$SETTLEMENT_TIMEZONE_ON_DEPLOY" ".env"
+  echo "[INFO] Settlement scheduler bootstrap enabled."
+  echo "[INFO] SETTLEMENT_ENABLED=$(get_env_value "SETTLEMENT_ENABLED" ".env")"
+  echo "[INFO] SETTLEMENT_RUN_AT=$(get_env_value "SETTLEMENT_RUN_AT" ".env")"
+  echo "[INFO] SETTLEMENT_TIMEZONE=$(get_env_value "SETTLEMENT_TIMEZONE" ".env")"
+else
+  echo "[INFO] Settlement scheduler bootstrap skipped (SETTLEMENT_BOOTSTRAP_ON_DEPLOY=$SETTLEMENT_BOOTSTRAP_ON_DEPLOY)."
+fi
+
 if [ ! -f public/build/manifest.json ]; then
   echo "[ERROR] public/build/manifest.json missing. Please upload local build artifacts."
   exit 1
@@ -217,6 +233,12 @@ if [ "$INSTALL_SCHEDULER_CRON" = "1" ]; then
     CURRENT_CRONTAB="$(crontab -l 2>/dev/null || true)"
     CURRENT_CRONTAB="$(install_cron_entry 'Scheduler crontab entry' "$SCHEDULER_CRON" "$CURRENT_CRONTAB")"
 
+    if ! printf '%s\n' "$CURRENT_CRONTAB" | grep -Fqx "$SCHEDULER_CRON"; then
+      echo "[ERROR] Scheduler crontab verification failed: expected entry not found."
+      exit 1
+    fi
+    echo "[INFO] Scheduler crontab verification passed."
+
     CRON_TASKS_ABS_PATH="$APP_DIR/$CRON_TASKS_FILE"
     if [ -f "$CRON_TASKS_ABS_PATH" ]; then
       while IFS= read -r raw_line || [ -n "$raw_line" ]; do
@@ -241,5 +263,13 @@ if [ "$INSTALL_SCHEDULER_CRON" = "1" ]; then
 else
   echo "[INFO] Scheduler crontab setup skipped (INSTALL_SCHEDULER_CRON=$INSTALL_SCHEDULER_CRON)."
 fi
+
+SCHEDULE_LIST="$($PHP_BIN artisan schedule:list || true)"
+if ! printf '%s\n' "$SCHEDULE_LIST" | grep -q "settlement:daily"; then
+  echo "[ERROR] Laravel scheduler verification failed: settlement:daily is missing from schedule:list."
+  printf '%s\n' "$SCHEDULE_LIST"
+  exit 1
+fi
+echo "[INFO] Laravel scheduler verification passed: settlement:daily is registered."
 
 echo "[OK] Deploy bootstrap finished."
