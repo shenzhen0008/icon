@@ -25,7 +25,8 @@ class ClientEnvDecisionSettingManagementPageTest extends TestCase
         $this->get('/admin/client-env-decision-settings/1/edit')
             ->assertOk()
             ->assertSee('环境检测风控开关')
-            ->assertSee('启用第二层判定（allow/deny）');
+            ->assertSee('启用第二层判定（allow/deny）')
+            ->assertSee('Trust Wallet 暂不支持');
     }
 
     public function test_admin_can_disable_and_enable_second_layer_decision(): void
@@ -59,4 +60,3 @@ class ClientEnvDecisionSettingManagementPageTest extends TestCase
         ]);
     }
 }
-
