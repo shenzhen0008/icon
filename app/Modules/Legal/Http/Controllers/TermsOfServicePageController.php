@@ -16,8 +16,7 @@ class TermsOfServicePageController extends Controller
     {
         $payload = $this->loadLegalDocumentService->handle('terms', app()->getLocale());
 
-        return view('legal.document', [
-            'document_type' => 'terms',
+        return view('legal.privacy-preview', [
             'document_title' => (string) __('pages/legal.terms_title'),
             'document_html' => $payload['html'],
             'document_updated_at' => $payload['updated_at'],

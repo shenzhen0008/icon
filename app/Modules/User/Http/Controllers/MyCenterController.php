@@ -26,16 +26,17 @@ class MyCenterController extends Controller
 
         if ($user !== null) {
             $positions = $this->listUserPositionsService->handle($user);
+            $businessDate = now((string) config('settlement.timezone', 'Asia/Shanghai'))->toDateString();
 
             $todayProfit = (float) DailySettlement::query()
                 ->where('user_id', $user->id)
-                ->whereDate('settlement_date', now()->toDateString())
+                ->whereDate('settlement_date', $businessDate)
                 ->sum('profit');
             $todaySavingsProfit = (float) BalanceLedger::query()
                 ->where('user_id', $user->id)
                 ->where('type', 'savings_interest_credit')
                 ->where('biz_ref_type', 'savings_interest')
-                ->whereDate('occurred_at', now()->toDateString())
+                ->whereDate('settlement_date', $businessDate)
                 ->sum('amount');
 
             $totalProfit = (float) DailySettlement::query()

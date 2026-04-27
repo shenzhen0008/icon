@@ -25,7 +25,7 @@ class LoadLegalDocumentService
 
         return [
             'html' => Str::markdown($markdown, [
-                'html_input' => 'strip',
+                'html_input' => 'allow',
                 'allow_unsafe_links' => false,
             ]),
             'resolved_locale' => $resolvedLocale,

@@ -62,6 +62,7 @@ class DailySettlementTest extends TestCase
             'after_balance' => 100,
             'biz_ref_type' => 'daily_settlement',
             'biz_ref_id' => (string) $position->id . ':2026-04-04',
+            'settlement_date' => '2026-04-04',
         ]);
     }
 
@@ -316,6 +317,7 @@ class DailySettlementTest extends TestCase
             'amount' => 5,
             'biz_ref_type' => 'referral_commission',
             'biz_ref_id' => 'settlement:'.$settlementId.':level:1',
+            'settlement_date' => '2026-04-16',
         ]);
     }
 }

@@ -150,6 +150,7 @@ class DailySettlementService
                 'after_balance' => $afterBalance,
                 'biz_ref_type' => 'daily_settlement',
                 'biz_ref_id' => $position->id . ':' . $date,
+                'settlement_date' => $date,
                 'occurred_at' => now(),
             ]);
 

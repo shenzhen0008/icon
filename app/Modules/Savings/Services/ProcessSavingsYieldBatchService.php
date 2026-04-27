@@ -106,6 +106,7 @@ class ProcessSavingsYieldBatchService
                 'after_balance' => $afterBalance,
                 'biz_ref_type' => 'savings_interest',
                 'biz_ref_id' => $bizRefId,
+                'settlement_date' => $date,
                 'occurred_at' => now(),
             ]);
 

@@ -19,6 +19,7 @@ class BalanceLedger extends Model
         'after_balance',
         'biz_ref_type',
         'biz_ref_id',
+        'settlement_date',
         'occurred_at',
     ];
 
@@ -28,6 +29,7 @@ class BalanceLedger extends Model
             'amount' => 'decimal:2',
             'before_balance' => 'decimal:2',
             'after_balance' => 'decimal:2',
+            'settlement_date' => 'date',
             'occurred_at' => 'datetime',
         ];
     }

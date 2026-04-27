@@ -175,6 +175,7 @@ class HomeHeroPanelService
                 "COALESCE(products.name, '--') as product_name, ".
                 "daily_settlements.profit as profit, ".
                 "daily_settlements.rate as rate, ".
+                "daily_settlements.settlement_date as settlement_date, ".
                 "daily_settlements.created_at as occurred_at"
             );
 
@@ -189,6 +190,7 @@ class HomeHeroPanelService
                 "'推荐提成' as product_name, ".
                 "balance_ledgers.amount as profit, ".
                 "NULL as rate, ".
+                "balance_ledgers.settlement_date as settlement_date, ".
                 "balance_ledgers.occurred_at as occurred_at"
             );
 
@@ -203,6 +205,7 @@ class HomeHeroPanelService
                 "'储蓄收益' as product_name, ".
                 "balance_ledgers.amount as profit, ".
                 "? as rate, ".
+                "balance_ledgers.settlement_date as settlement_date, ".
                 "balance_ledgers.occurred_at as occurred_at",
                 [$savingsRate]
             );
@@ -215,15 +218,36 @@ class HomeHeroPanelService
 
     private function formatIncomeOccurredAt(mixed $occurredAt): string
     {
+        $timezone = (string) config('settlement.timezone', 'Asia/Shanghai');
+
         if ($occurredAt instanceof Carbon) {
-            return $occurredAt->format('Y-m-d H:i:s');
+            return $occurredAt->clone()->setTimezone($timezone)->format('Y-m-d H:i:s');
         }
 
         if (is_string($occurredAt) && trim($occurredAt) !== '') {
-            return $occurredAt;
+            try {
+                return Carbon::parse($occurredAt, 'UTC')
+                    ->setTimezone($timezone)
+                    ->format('Y-m-d H:i:s');
+            } catch (\Throwable) {
+                return $occurredAt;
+            }
         }
 
         return '--';
+    }
+
+    private function formatSettlementAt(mixed $settlementDate, mixed $occurredAt): string
+    {
+        if ($settlementDate instanceof Carbon) {
+            return $settlementDate->format('Y-m-d').' '.(string) config('settlement.run_at', '00:05').':00';
+        }
+
+        if (is_string($settlementDate) && trim($settlementDate) !== '') {
+            return $settlementDate.' '.(string) config('settlement.run_at', '00:05').':00';
+        }
+
+        return $this->formatIncomeOccurredAt($occurredAt);
     }
 
     private function formatMoney(float $value): string
@@ -248,7 +272,7 @@ class HomeHeroPanelService
                 'rate_percent' => $record->rate === null
                     ? '--'
                     : number_format((float) $record->rate * 100, 2, '.', '').'%',
-                'settlement_at' => $this->formatIncomeOccurredAt($record->occurred_at ?? null),
+                'settlement_at' => $this->formatSettlementAt($record->settlement_date ?? null, $record->occurred_at ?? null),
             ])
             ->values()
             ->all();

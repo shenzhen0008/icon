@@ -140,6 +140,7 @@ class GrantReferralCommissionForSettlementService
                 'after_balance' => $afterBalance,
                 'biz_ref_type' => 'referral_commission',
                 'biz_ref_id' => $bizRefId,
+                'settlement_date' => $settlement->settlement_date->toDateString(),
                 'occurred_at' => now(),
             ]);
 

@@ -41,6 +41,7 @@ class ProcessSavingsYieldBatchServiceTest extends TestCase
             'after_balance' => 101,
             'biz_ref_type' => 'savings_interest',
             'biz_ref_id' => '2026-04-24:'.$user->id,
+            'settlement_date' => '2026-04-24',
         ]);
     }
 

@@ -602,11 +602,13 @@ CREATE TABLE `balance_ledgers` (
   `after_balance` decimal(16,2) NOT NULL,
   `biz_ref_type` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
   `biz_ref_id` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `settlement_date` date DEFAULT NULL,
   `occurred_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `balance_ledgers_biz_unique` (`user_id`,`type`,`biz_ref_type`,`biz_ref_id`),
+  KEY `balance_ledgers_user_id_settlement_date_index` (`user_id`,`settlement_date`),
   KEY `balance_ledgers_user_id_occurred_at_index` (`user_id`,`occurred_at`),
   CONSTRAINT `balance_ledgers_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

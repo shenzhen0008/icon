@@ -57,6 +57,7 @@ class ProcessReferralCommissionCommandTest extends TestCase
             'amount' => 5,
             'biz_ref_type' => 'referral_commission',
             'biz_ref_id' => 'settlement:'.$settlement->id.':level:1',
+            'settlement_date' => '2026-04-15',
         ]);
     }
 
