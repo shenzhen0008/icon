@@ -328,3 +328,11 @@ PHP_BIN=/usr/bin/php APP_DIR=/www/wwwroot/zorai.sbs WEB_USER=www-data WEB_GROUP=
 
 重启php8.3
 /etc/init.d/php-fpm-83 restart
+
+
+
+
+cd /Users/linke/Creator-social
+git remote set-url origin git@github.com:shenzhen0008/Creator-social.git
+git remote -v
+git push origin main

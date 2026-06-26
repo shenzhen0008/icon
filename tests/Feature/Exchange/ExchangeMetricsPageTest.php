@@ -91,11 +91,15 @@ class ExchangeMetricsPageTest extends TestCase
             $content,
         );
         $this->assertStringContainsString(
-            'class="text-scale-title font-semibold text-[rgb(var(--theme-primary))]" id="summary-participant-count"',
+            'class="text-scale-title font-semibold text-[rgb(var(--theme-primary))]"',
             $content,
         );
         $this->assertStringContainsString(
-            'class="text-scale-title font-semibold text-[rgb(var(--theme-accent))]" id="summary-total-profit"',
+            'class="text-scale-title font-semibold text-[rgb(var(--theme-accent))]"',
+            $content,
+        );
+        $this->assertStringContainsString(
+            'data-summary-ticker-step-seconds=',
             $content,
         );
         $this->assertStringNotContainsString(
@@ -147,7 +151,13 @@ class ExchangeMetricsPageTest extends TestCase
             ->assertDontSee('animateValue', false)
             ->assertDontSee('/exchange-metrics', false)
             ->assertDontSee('fetch(\'/exchange-metrics\'', false)
-            ->assertSee('setInterval(refreshSummary, 3000);', false)
+            ->assertDontSee('setInterval(refreshSummary, 3000);', false)
+            ->assertSee('const summaryRefreshIntervalMs = 15000;', false)
+            ->assertSee('startSummaryTicker();', false)
+            ->assertSee('data-summary-ticker-base-value=', false)
+            ->assertSee('data-summary-ticker-step-seconds=', false)
+            ->assertSee("document.visibilityState === 'hidden'", false)
+            ->assertSee('let isRefreshingSummary = false;', false)
             ->assertSee("fetch('/home-summary'", false);
     }
 

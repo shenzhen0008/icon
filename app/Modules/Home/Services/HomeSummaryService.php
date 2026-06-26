@@ -34,6 +34,18 @@ class HomeSummaryService
         return [
             'participant_count' => $this->formatInteger($setting->summary_people_count),
             'total_profit' => $this->formatMoney($setting->summary_total_profit),
+            'participant_ticker' => [
+                'base_value' => (string) (int) round((float) $setting->summary_people_count),
+                'step_seconds' => (int) $setting->summary_people_step_seconds,
+                'min_delta' => (string) (float) $setting->summary_people_min_delta,
+                'max_delta' => (string) (float) $setting->summary_people_max_delta,
+            ],
+            'profit_ticker' => [
+                'base_value' => number_format((float) $setting->summary_total_profit, 2, '.', ''),
+                'step_seconds' => (int) $setting->summary_profit_step_seconds,
+                'min_delta' => number_format((float) $setting->summary_profit_min_delta, 2, '.', ''),
+                'max_delta' => number_format((float) $setting->summary_profit_max_delta, 2, '.', ''),
+            ],
             'popup' => $this->popupFeedService->resolveForUser($userId),
         ];
     }

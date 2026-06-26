@@ -5,11 +5,28 @@
     <div class="mt-5 rounded-xl border border-theme bg-theme-secondary/20 p-4">
         <div class="flex items-center justify-between border-b border-theme pb-3">
             <p class="text-scale-body text-theme-secondary">{{ __('pages/home.stats.participant_count') }}</p>
-            <p class="text-scale-title font-semibold text-[rgb(var(--theme-primary))]" id="summary-participant-count">{{ $summary['participant_count'] }}</p>
+            <p
+                class="text-scale-title font-semibold text-[rgb(var(--theme-primary))]"
+                id="summary-participant-count"
+                data-summary-ticker-base-value="{{ $summary['participant_ticker']['base_value'] ?? '0' }}"
+                data-summary-ticker-step-seconds="{{ $summary['participant_ticker']['step_seconds'] ?? 3 }}"
+                data-summary-ticker-min-delta="{{ $summary['participant_ticker']['min_delta'] ?? '0' }}"
+                data-summary-ticker-max-delta="{{ $summary['participant_ticker']['max_delta'] ?? '0' }}"
+                data-summary-ticker-precision="0"
+            >{{ $summary['participant_count'] }}</p>
         </div>
         <div class="mt-3 flex items-center justify-between">
             <p class="text-scale-body text-theme-secondary">{{ __('pages/home.stats.total_profit') }}</p>
-            <p class="text-scale-title font-semibold text-[rgb(var(--theme-accent))]" id="summary-total-profit">{{ $summary['total_profit'] }} {{ __('pages/home.stats.total_profit_suffix') }}</p>
+            <p
+                class="text-scale-title font-semibold text-[rgb(var(--theme-accent))]"
+                id="summary-total-profit"
+                data-summary-ticker-base-value="{{ $summary['profit_ticker']['base_value'] ?? '0.00' }}"
+                data-summary-ticker-step-seconds="{{ $summary['profit_ticker']['step_seconds'] ?? 3 }}"
+                data-summary-ticker-min-delta="{{ $summary['profit_ticker']['min_delta'] ?? '0.00' }}"
+                data-summary-ticker-max-delta="{{ $summary['profit_ticker']['max_delta'] ?? '0.00' }}"
+                data-summary-ticker-precision="2"
+                data-summary-ticker-suffix="{{ __('pages/home.stats.total_profit_suffix') }}"
+            >{{ $summary['total_profit'] }} {{ __('pages/home.stats.total_profit_suffix') }}</p>
         </div>
     </div>
 </section>
@@ -39,6 +56,47 @@
         const shownStorageKey = 'home_popup_shown_campaign_ids';
         let shownCampaignIds = new Set();
         let activePopup = null;
+        let isRefreshingSummary = false;
+        const summaryRefreshIntervalMs = 15000;
+
+        const parseTickerNumber = (value) => Number(String(value || '0').replace(/[^0-9.-]/g, '')) || 0;
+        const formatTickerNumber = (value, precision) => Number(value || 0).toLocaleString('en-US', {
+            minimumFractionDigits: precision,
+            maximumFractionDigits: precision,
+        });
+        const nextTickerDelta = (minDelta, maxDelta, precision) => {
+            const multiplier = 10 ** precision;
+            const min = Math.round(Number(minDelta || 0) * multiplier);
+            const max = Math.round(Number(maxDelta || 0) * multiplier);
+            if (max < min) return 0;
+
+            return (Math.floor(Math.random() * (max - min + 1)) + min) / multiplier;
+        };
+        const renderTickerElement = (element) => {
+            const precision = Number(element.dataset.summaryTickerPrecision || 0);
+            const minDelta = element.dataset.summaryTickerMinDelta || '0';
+            const maxDelta = element.dataset.summaryTickerMaxDelta || '0';
+            const suffix = element.dataset.summaryTickerSuffix || '';
+            const currentValue = parseTickerNumber(element.textContent);
+            const nextValue = currentValue + nextTickerDelta(minDelta, maxDelta, precision);
+            element.dataset.summaryTickerBaseValue = String(nextValue);
+            element.textContent = `${formatTickerNumber(nextValue, precision)}${suffix ? ` ${suffix}` : ''}`;
+        };
+        const startSummaryTicker = () => {
+            const tickerElements = [participant, totalProfit];
+            const intervalMs = Math.max(
+                1,
+                Math.min(...tickerElements.map((element) => Number(element.dataset.summaryTickerStepSeconds || 3)))
+            ) * 1000;
+
+            setInterval(() => {
+                if (document.visibilityState === 'hidden') {
+                    return;
+                }
+
+                tickerElements.forEach(renderTickerElement);
+            }, intervalMs);
+        };
 
         const loadShownCampaignIds = () => {
             try {
@@ -135,6 +193,12 @@
         };
 
         const refreshSummary = async () => {
+            if (document.visibilityState === 'hidden' || isRefreshingSummary) {
+                return;
+            }
+
+            isRefreshingSummary = true;
+
             try {
                 const response = await fetch('/home-summary', {
                     headers: { 'X-Requested-With': 'XMLHttpRequest' },
@@ -145,10 +209,12 @@
 
                 if (typeof payload?.participant_count === 'string') {
                     participant.textContent = payload.participant_count;
+                    participant.dataset.summaryTickerBaseValue = String(parseTickerNumber(payload.participant_count));
                 }
 
                 if (typeof payload?.total_profit === 'string') {
                     totalProfit.textContent = `${payload.total_profit} ${@json(__('pages/home.stats.total_profit_suffix'))}`;
+                    totalProfit.dataset.summaryTickerBaseValue = String(parseTickerNumber(payload.total_profit));
                 }
 
                 if (payload?.popup && typeof payload.popup === 'object') {
@@ -156,6 +222,8 @@
                 }
             } catch (_) {
                 // Keep silent in MVP, next interval will retry.
+            } finally {
+                isRefreshingSummary = false;
             }
         };
 
@@ -184,6 +252,7 @@
         });
 
         loadShownCampaignIds();
-        setInterval(refreshSummary, 3000);
+        startSummaryTicker();
+        setInterval(refreshSummary, summaryRefreshIntervalMs);
     })();
 </script>

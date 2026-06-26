@@ -37,9 +37,9 @@ class ClientEnvProbeMiddleware
             $decisionAttributeKey = (string) config('client_env.decision.attribute_key', 'client_env_decision');
             $request->attributes->set($decisionAttributeKey, $decision);
 
-            if ((bool) config('client_env.middleware.persist', true)) {
+            if ($this->shouldPersistProbe($request)) {
                 try {
-                    $this->probeLogService->appendUnique($entry);
+                    $this->probeLogService->append($entry);
                 } catch (Throwable) {
                     // Probe persistence should not block regular request handling.
                 }
@@ -69,6 +69,24 @@ class ClientEnvProbeMiddleware
 
         $path = ltrim($request->path(), '/');
         $excludedPaths = (array) config('client_env.middleware.excluded_paths', []);
+
+        foreach ($excludedPaths as $pattern) {
+            if ($pattern !== null && Str::is((string) $pattern, $path)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private function shouldPersistProbe(Request $request): bool
+    {
+        if (!(bool) config('client_env.middleware.persist', true)) {
+            return false;
+        }
+
+        $path = ltrim($request->path(), '/');
+        $excludedPaths = (array) config('client_env.middleware.persist_excluded_paths', []);
 
         foreach ($excludedPaths as $pattern) {
             if ($pattern !== null && Str::is((string) $pattern, $path)) {

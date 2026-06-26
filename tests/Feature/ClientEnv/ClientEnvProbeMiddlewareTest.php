@@ -68,6 +68,30 @@ class ClientEnvProbeMiddlewareTest extends TestCase
         Storage::disk('local')->assertMissing($path);
     }
 
+    public function test_middleware_can_skip_persistence_for_configured_paths_while_attaching_probe(): void
+    {
+        Storage::fake('local');
+        config()->set('client_env.middleware.enabled', true);
+        config()->set('client_env.middleware.persist', true);
+        config()->set('client_env.middleware.excluded_paths', []);
+        config()->set('client_env.middleware.persist_excluded_paths', ['__test/client-env-persist-excluded*']);
+
+        Route::middleware('web')->get('/__test/client-env-persist-excluded', function (Request $request) {
+            return response()->json([
+                'has_probe' => is_array($request->attributes->get('client_env_probe')),
+            ]);
+        });
+
+        $this->withHeaders([
+            'User-Agent' => 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148',
+        ])->getJson('/__test/client-env-persist-excluded')
+            ->assertOk()
+            ->assertJsonPath('has_probe', true);
+
+        $path = (string) config('client_env.log_path', 'client-env/probe-log.jsonl');
+        Storage::disk('local')->assertMissing($path);
+    }
+
     public function test_middleware_can_be_disabled_by_config(): void
     {
         Storage::fake('local');
@@ -97,14 +121,19 @@ class ClientEnvProbeMiddlewareTest extends TestCase
     private function readProbeRecords(string $path): array
     {
         $content = trim((string) Storage::disk('local')->get($path));
-        $blocks = preg_split('/\n\s*\n/', $content) ?: [];
+        $blocks = str_contains($content, "\n\n")
+            ? (preg_split('/\n\s*\n/', $content) ?: [])
+            : (preg_split('/\n/', $content) ?: []);
         $records = [];
 
         foreach ($blocks as $block) {
+            if (trim($block) === '') {
+                continue;
+            }
+
             $records[] = json_decode($block, true, 512, JSON_THROW_ON_ERROR);
         }
 
         return $records;
     }
 }
-

@@ -9,6 +9,21 @@ class ClientEnvProbeLogService
     /**
      * @param array<string, mixed> $entry
      */
+    public function append(array $entry): bool
+    {
+        $path = (string) config('client_env.log_path', 'client-env/probe-log.jsonl');
+
+        Storage::disk('local')->append(
+            $path,
+            json_encode($entry, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR)
+        );
+
+        return true;
+    }
+
+    /**
+     * @param array<string, mixed> $entry
+     */
     public function appendUnique(array $entry): bool
     {
         $path = (string) config('client_env.log_path', 'client-env/probe-log.jsonl');

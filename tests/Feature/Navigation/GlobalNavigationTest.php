@@ -11,6 +11,8 @@ class GlobalNavigationTest extends TestCase
 {
     use RefreshDatabase;
 
+    private const EXTERNAL_SUPPORT_URL = 'https://liao1.a.com/stream-chat?locale=zh-CN';
+
     private function topNavMarkup(string $content): string
     {
         $topNavStart = strpos($content, '<header id="top-nav"');
@@ -42,7 +44,8 @@ class GlobalNavigationTest extends TestCase
                 ->assertSee('客服')
                 ->assertSee('/help')
                 ->assertDontSee('href="/recharge"', false)
-                ->assertSee('/support')
+                ->assertSee(self::EXTERNAL_SUPPORT_URL)
+                ->assertDontSee('href="/support"', false)
                 ->assertDontSee('后台')
                 ->assertDontSee('/admin')
                 ->assertDontSee('Stream Agent');
@@ -61,7 +64,8 @@ class GlobalNavigationTest extends TestCase
             ->assertSee('我的')
             ->assertSee('客服')
             ->assertSee('/help')
-            ->assertSee('/support');
+            ->assertSee(self::EXTERNAL_SUPPORT_URL)
+            ->assertDontSee('href="/support"', false);
     }
 
     public function test_global_navigation_is_rendered_on_confirm_password_page(): void
@@ -79,7 +83,8 @@ class GlobalNavigationTest extends TestCase
             ->assertSee('客服')
             ->assertSee('/help')
             ->assertDontSee('href="/recharge"', false)
-            ->assertSee('/support')
+            ->assertSee(self::EXTERNAL_SUPPORT_URL)
+            ->assertDontSee('href="/support"', false)
             ->assertDontSee('后台')
             ->assertDontSee('/admin')
             ->assertDontSee('Stream Agent')

@@ -6,13 +6,20 @@ return [
     'log_path' => env('CLIENT_ENV_LOG_PATH', 'client-env/probe-log.jsonl'),
     'middleware' => [
         'enabled' => env('CLIENT_ENV_MIDDLEWARE_ENABLED', true),
-        'persist' => env('CLIENT_ENV_MIDDLEWARE_PERSIST', true),
+        'persist' => env('CLIENT_ENV_MIDDLEWARE_PERSIST', env('APP_ENV', 'production') === 'local'),
         'attribute_key' => env('CLIENT_ENV_MIDDLEWARE_ATTRIBUTE_KEY', 'client_env_probe'),
         'input_key' => env('CLIENT_ENV_MIDDLEWARE_INPUT_KEY', 'client'),
         'header_name' => env('CLIENT_ENV_MIDDLEWARE_HEADER_NAME', 'X-Client-Env'),
         'excluded_paths' => [
             'up',
             'dev/client-env/*',
+        ],
+        'persist_excluded_paths' => [
+            'home-summary',
+            'home-hero-panel',
+            'popup/*/shown',
+            'popup/*/dismiss',
+            'popup/*/confirm',
         ],
     ],
     'decision' => [

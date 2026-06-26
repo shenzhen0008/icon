@@ -3,6 +3,7 @@
   $primaryNavPaths = ['', 'login', 'register', 'products', 'help', 'referral', 'me', 'support'];
   $showTopNavBack = ! in_array($currentPath, $primaryNavPaths, true);
   $currentLocale = app()->getLocale();
+  $externalSupportUrl = 'https://liao1.a.com/stream-chat?locale='.urlencode($currentLocale);
   $languageDisplayMap = [
       'zh-CN' => ['code' => 'ZH', 'flag' => asset('images/flags/cn.svg')],
       'en' => ['code' => 'EN', 'flag' => asset('images/flags/us.svg')],
@@ -42,7 +43,7 @@
       <a href="/help" data-keep-locale class="{{ request()->is('help') ? $topNavActiveClass : $topNavInactiveClass }}">{{ __('pages/home.nav.help') }}</a>
       <a href="/referral" data-keep-locale class="{{ request()->is('referral') ? $topNavActiveClass : $topNavInactiveClass }}">{{ __('pages/home.nav.share') }}</a>
       <a href="/me" data-keep-locale class="{{ request()->is('me') ? $topNavActiveClass : $topNavInactiveClass }}">{{ __('pages/home.nav.me') }}</a>
-      <a href="/support" data-keep-locale class="{{ request()->is('support') ? $topNavActiveClass : $topNavInactiveClass }}">{{ __('pages/home.nav.support') }}</a>
+      <a href="{{ $externalSupportUrl }}" class="{{ request()->is('support') ? $topNavActiveClass : $topNavInactiveClass }}">{{ __('pages/home.nav.support') }}</a>
     </nav>
 
     <div class="ml-3 inline-flex items-center gap-2 md:ml-4">
