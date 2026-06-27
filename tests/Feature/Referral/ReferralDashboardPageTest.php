@@ -68,6 +68,20 @@ class ReferralDashboardPageTest extends TestCase
         $this->assertNotNull($user->invite_code);
     }
 
+    public function test_referral_dashboard_marks_private_page_cache_context(): void
+    {
+        $user = User::factory()->create([
+            'invite_code' => 'CACHE01',
+        ]);
+
+        $this->actingAs($user)
+            ->get('/referral')
+            ->assertOk()
+            ->assertSee('data-page-cache-root', false)
+            ->assertSee('data-page-cache-key="/referral"', false)
+            ->assertSee('data-page-cache-context="user:'.$user->id.'"', false);
+    }
+
     public function test_referral_dashboard_renders_english_ui_copy_when_locale_is_en(): void
     {
         $user = User::factory()->create([

@@ -11,7 +11,7 @@
   <x-layout.background-glow />
   <x-nav.top />
 
-  <main class="relative flex min-h-[calc(var(--app-vh,100dvh)-var(--top-nav-height,4rem)-var(--mobile-nav-height,4rem))] w-full flex-col pt-[12rem] md:mx-auto md:max-w-4xl md:min-h-0 md:px-4 md:pb-10 md:pt-[30rem]">
+  <main data-page-cache-root data-page-cache-key="/referral" data-page-cache-context="{{ auth('web')->id() === null ? 'guest' : 'user:'.auth('web')->id() }}" class="relative flex min-h-[calc(var(--app-vh,100dvh)-var(--top-nav-height,4rem)-var(--mobile-nav-height,4rem))] w-full flex-col pt-[12rem] md:mx-auto md:max-w-4xl md:min-h-0 md:px-4 md:pb-10 md:pt-[30rem]">
     <div aria-hidden="true" class="pointer-events-none absolute inset-x-0 top-0 -z-10 overflow-visible">
       <div class="absolute inset-x-0 top-0 h-[14rem] bg-gradient-to-b from-[#0f47d9] via-[#2b66f6]/95 via-45% to-transparent md:h-[36rem]"></div>
       <img

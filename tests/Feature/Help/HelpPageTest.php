@@ -26,6 +26,14 @@ class HelpPageTest extends TestCase
             ->assertSee('<summary', false);
     }
 
+    public function test_help_page_marks_main_content_as_page_cache_root(): void
+    {
+        $this->get('/help')
+            ->assertOk()
+            ->assertSee('data-page-cache-root', false)
+            ->assertSee('data-page-cache-key="/help"', false);
+    }
+
     public function test_help_page_localizes_fixed_ui_copy_for_english_without_changing_faq_data_source(): void
     {
         $this->get('/help?locale=en')

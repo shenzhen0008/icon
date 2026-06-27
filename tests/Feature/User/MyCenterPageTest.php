@@ -91,6 +91,28 @@ class MyCenterPageTest extends TestCase
             ->assertDontSee('设置密码并注册');
     }
 
+    public function test_authenticated_my_center_with_no_blocking_prompt_marks_private_page_cache_context(): void
+    {
+        $user = User::factory()->create([
+            'mnemonic_lookup' => hash('sha256', 'apple book cat dog egg fish game hand ice jump'),
+        ]);
+
+        $this->actingAs($user)
+            ->get('/me')
+            ->assertOk()
+            ->assertSee('data-page-cache-root', false)
+            ->assertSee('data-page-cache-key="/me"', false)
+            ->assertSee('data-page-cache-context="user:'.$user->id.'"', false);
+    }
+
+    public function test_guest_my_center_keeps_full_page_navigation_for_activation_modal(): void
+    {
+        $this->get('/me')
+            ->assertOk()
+            ->assertDontSee('data-page-cache-root', false)
+            ->assertSee('const shouldAutoOpen = true;', false);
+    }
+
     public function test_my_center_places_account_panel_after_profit_panel(): void
     {
         $response = $this->get('/me');

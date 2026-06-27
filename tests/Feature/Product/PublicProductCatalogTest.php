@@ -99,6 +99,14 @@ class PublicProductCatalogTest extends TestCase
         $response->assertSee('overflow-x-auto overflow-y-hidden whitespace-nowrap pb-[0.05rem]', false);
     }
 
+    public function test_product_catalog_page_marks_main_content_as_page_cache_root(): void
+    {
+        $this->get('/products')
+            ->assertOk()
+            ->assertSee('data-page-cache-root', false)
+            ->assertSee('data-page-cache-key="/products"', false);
+    }
+
     public function test_guest_can_view_product_detail_without_activate_prompt_section(): void
     {
         $product = Product::query()->create([

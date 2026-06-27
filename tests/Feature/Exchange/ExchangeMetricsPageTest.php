@@ -29,6 +29,14 @@ class ExchangeMetricsPageTest extends TestCase
             ->assertDontSee('#damo');
     }
 
+    public function test_home_page_marks_main_content_as_page_cache_root(): void
+    {
+        $this->get('/')
+            ->assertOk()
+            ->assertSee('data-page-cache-root', false)
+            ->assertSee('data-page-cache-key="/"', false);
+    }
+
     public function test_home_page_displays_exchange_metrics_section(): void
     {
         \DB::table('home_display_settings')->where('id', 1)->update([

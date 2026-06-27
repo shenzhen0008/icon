@@ -11,7 +11,14 @@
   <x-layout.background-glow />
   <x-nav.top />
 
-  <main class="mx-auto w-full max-w-4xl px-4 pb-4 pt-8 md:pb-8">
+  <main
+    @if (! $isGuest && ! $showMnemonicSetupPrompt)
+      data-page-cache-root
+      data-page-cache-key="/me"
+      data-page-cache-context="{{ auth('web')->id() === null ? 'guest' : 'user:'.auth('web')->id() }}"
+    @endif
+    class="mx-auto w-full max-w-4xl px-4 pb-4 pt-8 md:pb-8"
+  >
     <x-home.hero :payment-config="[]" :payment-assets="[]" :is-guest="$isGuest" :show-title="false" :show-subtitle="false" />
 
     <div class="space-y-5">
