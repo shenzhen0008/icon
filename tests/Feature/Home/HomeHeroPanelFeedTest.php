@@ -197,12 +197,13 @@ class HomeHeroPanelFeedTest extends TestCase
             ->assertSee("setMode(savedMode === 'live' ? 'live' : 'damo');", false);
     }
 
-    public function test_home_page_seeds_demo_payload_for_instant_mode_switching(): void
+    public function test_home_page_seeds_demo_and_live_payloads_for_instant_mode_switching(): void
     {
         $this->get('/')
             ->assertOk()
             ->assertSee('const panelPayloadCache = {', false)
-            ->assertSee('demo: {"mode":"demo"', false)
+            ->assertSee('"demo":{"mode":"demo"', false)
+            ->assertSee('"live":{"mode":"live"', false)
             ->assertSee('const cachedPayload = panelPayloadCache[mode];', false)
             ->assertSee('if (cachedPayload) {', false);
     }

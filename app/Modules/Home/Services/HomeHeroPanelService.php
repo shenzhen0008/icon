@@ -114,6 +114,18 @@ class HomeHeroPanelService
      */
     private function resolveLive(?int $userId): array
     {
+        if ($userId === null) {
+            return [
+                'mode' => 'live',
+                'badge' => '#live',
+                'available_balance' => '0.00',
+                'total_earnings' => '0.00',
+                'earnings_24h' => '0.00',
+                'trade_records' => [],
+                'income_records' => [],
+            ];
+        }
+
         $user = User::query()->findOrFail($userId);
         $windowStart = now()->subDay();
 

@@ -6,12 +6,19 @@
     'showSubtitle' => true,
     'showRecordButtons' => true,
     'heroPanelPayload' => null,
+    'heroPanelPayloads' => null,
 ])
 
 @php
-    $initialHeroPanelPayload = is_array($heroPanelPayload)
-        ? $heroPanelPayload
-        : app(\App\Modules\Home\Services\HomeHeroPanelService::class)->resolve('demo');
+    $heroPanelPayloadCache = is_array($heroPanelPayloads)
+        ? $heroPanelPayloads
+        : [];
+    if (is_array($heroPanelPayload) && ! isset($heroPanelPayloadCache['demo'])) {
+        $heroPanelPayloadCache['demo'] = $heroPanelPayload;
+    }
+    $heroPanelPayloadCache['demo'] ??= app(\App\Modules\Home\Services\HomeHeroPanelService::class)->resolve('demo');
+    $heroPanelPayloadCache['live'] ??= app(\App\Modules\Home\Services\HomeHeroPanelService::class)->resolve('live', auth('web')->id());
+    $initialHeroPanelPayload = $heroPanelPayloadCache['demo'];
     $availableBalance = number_format((float) ($initialHeroPanelPayload['available_balance'] ?? 0), 2, '.', ',');
     $localeQuery = 'locale='.urlencode(app()->getLocale());
 @endphp
@@ -145,9 +152,7 @@
         const formatMoneyWithPrefix = (value) => `$${formatMoney(value)}`;
         const modeStorageKey = 'home_hero_panel_mode';
 
-        const panelPayloadCache = {
-            demo: @json($initialHeroPanelPayload),
-        };
+        const panelPayloadCache = @json($heroPanelPayloadCache);
         let currentPayload = panelPayloadCache.demo;
         let currentMode = 'demo';
 

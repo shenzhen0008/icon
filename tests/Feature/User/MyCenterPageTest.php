@@ -108,6 +108,23 @@ class MyCenterPageTest extends TestCase
             ->assertSee("setMode(savedMode === 'live' ? 'live' : 'damo');", false);
     }
 
+    public function test_my_center_seeds_demo_and_live_payloads_for_instant_mode_switching(): void
+    {
+        $user = User::factory()->create([
+            'balance' => '1234.56',
+        ]);
+
+        $this->actingAs($user)
+            ->get('/me')
+            ->assertOk()
+            ->assertSee('const panelPayloadCache = {', false)
+            ->assertSee('"demo":{"mode":"demo"', false)
+            ->assertSee('"live":{"mode":"live"', false)
+            ->assertSee('"available_balance":"1234.56"', false)
+            ->assertSee('const cachedPayload = panelPayloadCache[mode];', false)
+            ->assertSee('if (cachedPayload) {', false);
+    }
+
     public function test_my_center_renders_english_ui_copy_when_locale_is_en(): void
     {
         $this->get('/me?locale=en')

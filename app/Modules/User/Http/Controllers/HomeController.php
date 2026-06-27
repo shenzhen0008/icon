@@ -143,7 +143,10 @@ class HomeController extends Controller
             'isGuest' => ! Auth::guard('web')->check(),
             'metrics' => $metrics,
             'summary' => $summary,
-            'heroPanelPayload' => $this->homeHeroPanelService->resolve('demo'),
+            'heroPanelPayloads' => [
+                'demo' => $this->homeHeroPanelService->resolve('demo'),
+                'live' => $this->homeHeroPanelService->resolve('live', Auth::guard('web')->id()),
+            ],
             'sharedExchangeProfit' => [
                 'base_value' => number_format((float) $homeDisplaySetting->shared_exchange_profit_base_value, 2, '.', ''),
                 'step_seconds' => $homeDisplaySetting->shared_exchange_profit_step_seconds,

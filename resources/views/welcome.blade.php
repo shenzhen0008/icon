@@ -23,7 +23,7 @@
       >
     </div>
 
-    <x-home.hero :summary="$summary" :hero-panel-payload="$heroPanelPayload" :payment-config="$paymentConfig" :payment-assets="$homePaymentAssets" :is-guest="$isGuest" :show-record-buttons="false" />
+    <x-home.hero :summary="$summary" :hero-panel-payloads="$heroPanelPayloads" :payment-config="$paymentConfig" :payment-assets="$homePaymentAssets" :is-guest="$isGuest" :show-record-buttons="false" />
     <x-home.stats :summary="$summary" />
     <x-home.exchange-metrics :metrics="$metrics" :shared-profit="$sharedExchangeProfit" />
     <x-home.friendly-links />
