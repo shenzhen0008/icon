@@ -20,6 +20,7 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 
         $middleware->web(append: [
+            \App\Http\Middleware\PerformanceProbeMiddleware::class,
             \App\Modules\I18n\Http\Middleware\SetLocaleFromSessionMiddleware::class,
             \App\Modules\Referral\Http\Middleware\CaptureInviteCodeMiddleware::class,
             \App\Modules\ClientEnv\Http\Middleware\ClientEnvProbeMiddleware::class,

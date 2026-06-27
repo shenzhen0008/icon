@@ -165,6 +165,8 @@ class GlobalNavigationTest extends TestCase
         $response->assertSee('/images/flags/fr.svg', false);
         $response->assertSee('/images/flags/br.svg', false);
         $response->assertSee('/images/flags/es.svg', false);
+        $response->assertSee('loading="lazy"', false);
+        $response->assertSee('decoding="async"', false);
         $response->assertDontSee('/images/assets/globe.svg', false);
         $response->assertSee('/images/assets/sun.svg', false);
         $response->assertDontSee('商务');

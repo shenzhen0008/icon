@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Modules\Balance\Models\RechargeReceiver;
 use App\Modules\Exchange\Models\ExchangeMetric;
 use App\Modules\Home\Models\HomeDisplaySetting;
+use App\Modules\Home\Services\HomeHeroPanelService;
 use App\Modules\Home\Services\HomeSummaryService;
 use App\Modules\User\Services\TemporaryAccountService;
 use Illuminate\Support\Facades\Auth;
@@ -17,6 +18,7 @@ class HomeController extends Controller
     public function __construct(
         private readonly TemporaryAccountService $temporaryAccountService,
         private readonly HomeSummaryService $homeSummaryService,
+        private readonly HomeHeroPanelService $homeHeroPanelService,
     )
     {
     }
@@ -141,6 +143,7 @@ class HomeController extends Controller
             'isGuest' => ! Auth::guard('web')->check(),
             'metrics' => $metrics,
             'summary' => $summary,
+            'heroPanelPayload' => $this->homeHeroPanelService->resolve('demo'),
             'sharedExchangeProfit' => [
                 'base_value' => number_format((float) $homeDisplaySetting->shared_exchange_profit_base_value, 2, '.', ''),
                 'step_seconds' => $homeDisplaySetting->shared_exchange_profit_step_seconds,

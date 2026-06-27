@@ -5,10 +5,14 @@
     'showTitle' => true,
     'showSubtitle' => true,
     'showRecordButtons' => true,
+    'heroPanelPayload' => null,
 ])
 
 @php
-    $availableBalance = number_format((float) (auth()->user()?->balance ?? 0), 2, '.', ',');
+    $initialHeroPanelPayload = is_array($heroPanelPayload)
+        ? $heroPanelPayload
+        : app(\App\Modules\Home\Services\HomeHeroPanelService::class)->resolve('demo');
+    $availableBalance = number_format((float) ($initialHeroPanelPayload['available_balance'] ?? 0), 2, '.', ',');
     $localeQuery = 'locale='.urlencode(app()->getLocale());
 @endphp
 
@@ -49,11 +53,11 @@
         </x-slot:top>
         <x-slot:left>
                 <p class="text-scale-body text-theme-secondary whitespace-nowrap">{{ __('pages/home.hero.total_earnings') }}</p>
-                <p id="hero-total-earnings" class="mt-2 h-8 overflow-hidden text-ellipsis whitespace-nowrap font-mono text-scale-title font-semibold leading-none tabular-nums text-theme sm:h-9 text-scale-display">$0.00</p>
+                <p id="hero-total-earnings" class="mt-2 h-8 overflow-hidden text-ellipsis whitespace-nowrap font-mono text-scale-title font-semibold leading-none tabular-nums text-theme sm:h-9 text-scale-display">${{ number_format((float) ($initialHeroPanelPayload['total_earnings'] ?? 0), 2, '.', ',') }}</p>
         </x-slot:left>
         <x-slot:right>
                 <p class="text-scale-body text-theme-secondary whitespace-nowrap">{{ __('pages/home.hero.earnings_24h') }}</p>
-                <p id="hero-earnings-24h" class="mt-2 h-8 overflow-hidden text-ellipsis whitespace-nowrap font-mono text-scale-title font-semibold leading-none tabular-nums text-theme sm:h-9 text-scale-display">$0.00</p>
+                <p id="hero-earnings-24h" class="mt-2 h-8 overflow-hidden text-ellipsis whitespace-nowrap font-mono text-scale-title font-semibold leading-none tabular-nums text-theme sm:h-9 text-scale-display">${{ number_format((float) ($initialHeroPanelPayload['earnings_24h'] ?? 0), 2, '.', ',') }}</p>
         </x-slot:right>
     </x-ui.metric-split-card>
 
@@ -141,7 +145,10 @@
         const formatMoneyWithPrefix = (value) => `$${formatMoney(value)}`;
         const modeStorageKey = 'home_hero_panel_mode';
 
-        let currentPayload = null;
+        const panelPayloadCache = {
+            demo: @json($initialHeroPanelPayload),
+        };
+        let currentPayload = panelPayloadCache.demo;
         let currentMode = 'demo';
 
         const readSavedMode = () => {
@@ -216,8 +223,16 @@
             setButtonActiveState(damoBtn, damoActive);
             setButtonActiveState(liveBtn, !damoActive);
 
+            const cachedPayload = panelPayloadCache[mode];
+            if (cachedPayload) {
+                currentPayload = cachedPayload;
+                renderPanel(cachedPayload);
+                return;
+            }
+
             try {
                 const payload = await fetchPanelData(mode);
+                panelPayloadCache[mode] = payload;
                 currentPayload = payload;
                 renderPanel(payload);
             } catch (error) {
