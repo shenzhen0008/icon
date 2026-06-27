@@ -69,7 +69,6 @@
       const soundDismissEl = document.getElementById('stream-chat-sound-dismiss');
       const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content ?? '';
       const pendingUploads = new Map();
-      const streamNotifyBootstrapKey = 'stream_chat_notify_bootstrap_ready';
       const i18n = {
         nameSelf: @json(__('pages/stream-chat.name_self')),
         nameSupportDefault: @json(__('pages/stream-chat.name_support_default')),
@@ -269,7 +268,6 @@
             set: { name: payload.channel.name },
           }).catch(() => {});
         }
-        localStorage.setItem(streamNotifyBootstrapKey, '1');
         renderHistory(channel.state.messages);
 
         channel.on('message.new', (event) => {

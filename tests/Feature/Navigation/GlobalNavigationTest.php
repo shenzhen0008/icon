@@ -11,7 +11,7 @@ class GlobalNavigationTest extends TestCase
 {
     use RefreshDatabase;
 
-    private const EXTERNAL_SUPPORT_URL = 'https://liao1.a.com/stream-chat?locale=zh-CN';
+    private const SUPPORT_URL = '/stream-chat?locale=zh-CN';
 
     private function topNavMarkup(string $content): string
     {
@@ -44,7 +44,8 @@ class GlobalNavigationTest extends TestCase
                 ->assertSee('客服')
                 ->assertSee('/help')
                 ->assertDontSee('href="/recharge"', false)
-                ->assertSee(self::EXTERNAL_SUPPORT_URL)
+                ->assertSee('href="'.self::SUPPORT_URL.'"', false)
+                ->assertDontSee('https://liao1.a.com/stream-chat', false)
                 ->assertDontSee('href="/support"', false)
                 ->assertDontSee('后台')
                 ->assertDontSee('/admin')
@@ -52,7 +53,7 @@ class GlobalNavigationTest extends TestCase
 
             $topNavMarkup = $this->topNavMarkup($response->getContent());
             $this->assertStringNotContainsString('Stream Chat', $topNavMarkup);
-            $this->assertStringNotContainsString('href="/stream-chat"', $topNavMarkup);
+            $this->assertStringContainsString('href="'.self::SUPPORT_URL.'"', $topNavMarkup);
         }
 
         $this->get('/me')
@@ -64,7 +65,8 @@ class GlobalNavigationTest extends TestCase
             ->assertSee('我的')
             ->assertSee('客服')
             ->assertSee('/help')
-            ->assertSee(self::EXTERNAL_SUPPORT_URL)
+            ->assertSee('href="'.self::SUPPORT_URL.'"', false)
+            ->assertDontSee('https://liao1.a.com/stream-chat', false)
             ->assertDontSee('href="/support"', false);
     }
 
@@ -83,7 +85,8 @@ class GlobalNavigationTest extends TestCase
             ->assertSee('客服')
             ->assertSee('/help')
             ->assertDontSee('href="/recharge"', false)
-            ->assertSee(self::EXTERNAL_SUPPORT_URL)
+            ->assertSee('href="'.self::SUPPORT_URL.'"', false)
+            ->assertDontSee('https://liao1.a.com/stream-chat', false)
             ->assertDontSee('href="/support"', false)
             ->assertDontSee('后台')
             ->assertDontSee('/admin')
@@ -92,7 +95,7 @@ class GlobalNavigationTest extends TestCase
 
         $topNavMarkup = $this->topNavMarkup($response->getContent());
         $this->assertStringNotContainsString('Stream Chat', $topNavMarkup);
-        $this->assertStringNotContainsString('href="/stream-chat"', $topNavMarkup);
+        $this->assertStringContainsString('href="'.self::SUPPORT_URL.'"', $topNavMarkup);
     }
 
     public function test_mobile_navigation_uses_theme_variable_classes(): void
@@ -181,8 +184,9 @@ class GlobalNavigationTest extends TestCase
         $response->assertSee('h-[1.35rem] w-[1.35rem] shrink-0 object-contain scale-110', false);
         $response->assertSee('data-theme="business"', false);
         $response->assertSee("const savedTheme = localStorage.getItem('theme') || 'business';", false);
-        $response->assertSee("const streamNotifyBootstrapKey = 'stream_chat_notify_bootstrap_ready';", false);
-        $response->assertSee("localStorage.getItem(streamNotifyBootstrapKey) === '1'", false);
+        $response->assertDontSee('stream_chat_notify_bootstrap_ready', false);
+        $response->assertDontSee('/stream-chat/notify-token', false);
+        $response->assertDontSee("import('https://cdn.jsdelivr.net/npm/stream-chat/+esm')", false);
     }
 
     public function test_public_pages_disable_mobile_zoom_via_viewport_meta(): void

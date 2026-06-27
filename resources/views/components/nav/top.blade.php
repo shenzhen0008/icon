@@ -3,7 +3,7 @@
   $primaryNavPaths = ['', 'login', 'register', 'products', 'help', 'referral', 'me', 'support'];
   $showTopNavBack = ! in_array($currentPath, $primaryNavPaths, true);
   $currentLocale = app()->getLocale();
-  $externalSupportUrl = 'https://liao1.a.com/stream-chat?locale='.urlencode($currentLocale);
+  $supportUrl = '/stream-chat?locale='.urlencode($currentLocale);
   $languageDisplayMap = [
       'zh-CN' => ['code' => 'ZH', 'flag' => asset('images/flags/cn.svg')],
       'en' => ['code' => 'EN', 'flag' => asset('images/flags/us.svg')],
@@ -43,7 +43,7 @@
       <a href="/help" data-keep-locale class="{{ request()->is('help') ? $topNavActiveClass : $topNavInactiveClass }}">{{ __('pages/home.nav.help') }}</a>
       <a href="/referral" data-keep-locale class="{{ request()->is('referral') ? $topNavActiveClass : $topNavInactiveClass }}">{{ __('pages/home.nav.share') }}</a>
       <a href="/me" data-keep-locale class="{{ request()->is('me') ? $topNavActiveClass : $topNavInactiveClass }}">{{ __('pages/home.nav.me') }}</a>
-      <a href="{{ $externalSupportUrl }}" class="{{ request()->is('support') ? $topNavActiveClass : $topNavInactiveClass }}">{{ __('pages/home.nav.support') }}</a>
+      <a href="{{ $supportUrl }}" class="{{ request()->is('stream-chat') ? $topNavActiveClass : $topNavInactiveClass }}">{{ __('pages/home.nav.support') }}</a>
     </nav>
 
     <div class="ml-3 inline-flex items-center gap-2 md:ml-4">
@@ -216,173 +216,4 @@
   window.addEventListener('resize', syncLayoutInsets);
   window.visualViewport?.addEventListener('resize', syncLayoutInsets);
   window.visualViewport?.addEventListener('scroll', syncLayoutInsets);
-</script>
-
-<script type="module">
-  const streamNotifyBootstrapKey = 'stream_chat_notify_bootstrap_ready';
-  const shouldBootstrapNotify = localStorage.getItem(streamNotifyBootstrapKey) === '1';
-
-  if (!window.location.pathname.startsWith('/stream-chat') && shouldBootstrapNotify && !window.IconMarketStreamNotify?.ready) {
-        const state = {
-          ready: true,
-          client: null,
-          channel: null,
-          userId: '',
-          unreadCount: 0,
-          reconnectTimer: null,
-          disposed: false,
-          channelSubscribed: false,
-          baseTitle: document.title,
-        };
-
-        window.IconMarketStreamNotify = state;
-        const unreadStorageKey = 'stream_chat_unread_count';
-        const initialUnread = Number(localStorage.getItem(unreadStorageKey) || '0');
-        state.unreadCount = Number.isFinite(initialUnread) ? Math.max(0, initialUnread) : 0;
-
-        const renderUnreadBadges = () => {
-          const hasUnread = state.unreadCount > 0;
-          document.querySelectorAll('[data-stream-chat-unread-dot]').forEach((node) => {
-            node.classList.toggle('hidden', !hasUnread);
-          });
-        };
-
-        const setUnreadCount = (count) => {
-          state.unreadCount = Math.max(0, count);
-          localStorage.setItem(unreadStorageKey, String(state.unreadCount));
-          renderUnreadBadges();
-          updateTitle();
-        };
-
-        const updateTitle = () => {
-          document.title = state.unreadCount > 0
-            ? `(${state.unreadCount}) ${state.baseTitle}`
-            : state.baseTitle;
-        };
-
-        const beep = async () => {
-          const soundEnabled = localStorage.getItem('stream_chat_sound_enabled') === '1';
-          if (!soundEnabled) return;
-          const AudioCtx = window.AudioContext || window.webkitAudioContext;
-          if (!AudioCtx) return;
-          if (!state.audioCtx) {
-            state.audioCtx = new AudioCtx();
-          }
-          if (state.audioCtx.state === 'suspended') {
-            await state.audioCtx.resume();
-          }
-          const now = state.audioCtx.currentTime;
-          const tone = (freq, delay, duration, peakGain) => {
-            const oscillator = state.audioCtx.createOscillator();
-            const gainNode = state.audioCtx.createGain();
-            oscillator.type = 'triangle';
-            oscillator.frequency.setValueAtTime(freq, now + delay);
-            gainNode.gain.setValueAtTime(0.0001, now + delay);
-            gainNode.gain.exponentialRampToValueAtTime(peakGain, now + delay + 0.02);
-            gainNode.gain.exponentialRampToValueAtTime(0.0001, now + delay + duration);
-            oscillator.connect(gainNode);
-            gainNode.connect(state.audioCtx.destination);
-            oscillator.start(now + delay);
-            oscillator.stop(now + delay + duration + 0.02);
-          };
-
-          tone(1046, 0, 0.16, 0.09);
-          tone(1318, 0.11, 0.2, 0.085);
-        };
-
-        const showBrowserNotification = (messageText) => {
-          if (!('Notification' in window)) return;
-          if (Notification.permission !== 'granted') return;
-          if (!document.hidden) return;
-
-          const notification = new Notification(@json(__('pages/home.nav.notification_title', ['app_name' => config('app.name')])), {
-            body: messageText || @json(__('pages/home.nav.notification_body')),
-          });
-          setTimeout(() => notification.close(), 5000);
-        };
-
-        const scheduleReconnect = () => {
-          if (state.disposed || state.reconnectTimer !== null) return;
-          state.reconnectTimer = window.setTimeout(() => {
-            state.reconnectTimer = null;
-            bootstrap().catch(() => scheduleReconnect());
-          }, 3000);
-        };
-
-        const bootstrap = async () => {
-          if (state.disposed) return;
-
-          const tokenRes = await fetch('/stream-chat/notify-token', {
-            headers: { Accept: 'application/json' },
-          });
-          if (tokenRes.status === 404) {
-            localStorage.removeItem(streamNotifyBootstrapKey);
-            return;
-          }
-          if (!tokenRes.ok) {
-            scheduleReconnect();
-            return;
-          }
-
-          const payload = await tokenRes.json();
-          const { StreamChat } = await import('https://cdn.jsdelivr.net/npm/stream-chat/+esm');
-          const client = state.client ?? StreamChat.getInstance(payload.apiKey);
-
-          if (!state.client) {
-            await client.connectUser(payload.user, payload.token);
-            state.client = client;
-            state.userId = payload.user.id;
-            client.on('connection.changed', (event) => {
-              if (!event.online) scheduleReconnect();
-            });
-          }
-
-          const channel = client.channel(payload.channel.type, payload.channel.id, {
-            name: payload.channel.name,
-            members: payload.channel.members,
-          });
-          state.channel = channel;
-
-          await channel.watch({ watch: true, state: true });
-
-          if (!state.channelSubscribed) {
-            state.channelSubscribed = true;
-            channel.on('message.new', (event) => {
-              if (event.message?.user?.id === state.userId) return;
-              setUnreadCount(state.unreadCount + 1);
-              beep().catch(() => {});
-              showBrowserNotification(event.message?.text);
-            });
-          }
-        };
-        renderUnreadBadges();
-        updateTitle();
-
-        window.addEventListener('storage', (event) => {
-          if (event.key !== unreadStorageKey) return;
-          const nextValue = Number(event.newValue || '0');
-          state.unreadCount = Number.isFinite(nextValue) ? Math.max(0, nextValue) : 0;
-          renderUnreadBadges();
-          updateTitle();
-        });
-
-        window.addEventListener('stream-chat-unread-updated', (event) => {
-          const nextValue = Number(event.detail?.count ?? 0);
-          state.unreadCount = Number.isFinite(nextValue) ? Math.max(0, nextValue) : 0;
-          renderUnreadBadges();
-          updateTitle();
-        });
-
-        window.addEventListener('beforeunload', () => {
-          state.disposed = true;
-          if (state.reconnectTimer !== null) {
-            window.clearTimeout(state.reconnectTimer);
-          }
-          if (state.client) {
-            state.client.disconnectUser().catch(() => {});
-          }
-        });
-
-        bootstrap().catch(() => scheduleReconnect());
-  }
 </script>

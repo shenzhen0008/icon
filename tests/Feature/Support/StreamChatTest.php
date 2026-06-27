@@ -25,11 +25,8 @@ class StreamChatTest extends TestCase
             ->assertSee('stream-chat-file')
             ->assertSee('stream-chat-sound-prompt')
             ->assertSee('await channel.watch();', false)
-            ->assertSee("localStorage.setItem(streamNotifyBootstrapKey, '1');", false)
-            ->assertSeeInOrder([
-                'await channel.watch();',
-                "localStorage.setItem(streamNotifyBootstrapKey, '1');",
-            ], false);
+            ->assertDontSee('stream_chat_notify_bootstrap_ready', false)
+            ->assertDontSee("localStorage.setItem(streamNotifyBootstrapKey, '1');", false);
     }
 
     public function test_stream_chat_page_renders_english_ui_copy_when_locale_is_en(): void
