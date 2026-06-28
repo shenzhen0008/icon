@@ -98,11 +98,14 @@ const writeSnapshot = (key, snapshot, storage = window.sessionStorage) => {
 
 const currentPageRoot = () => document.querySelector('[data-page-cache-root]') || document.querySelector('main');
 
-const currentPageContext = () => {
-  const root = document.querySelector('[data-page-cache-root]');
+export const resolvePageCacheContext = (root = document) => {
+  const pageRoot = root.querySelector?.('[data-page-cache-root]');
+  const contextSource = pageRoot || root.querySelector?.('[data-page-cache-context]');
 
-  return root?.dataset.pageCacheContext || 'guest';
+  return contextSource?.dataset.pageCacheContext || 'guest';
 };
+
+const currentPageContext = () => resolvePageCacheContext();
 
 const snapshotFromDocument = (doc) => {
   const root = doc.querySelector('[data-page-cache-root]');

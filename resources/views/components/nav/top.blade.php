@@ -19,7 +19,7 @@
   $topNavInactiveClass = 'text-white/75 hover:text-white';
 @endphp
 
-<header id="top-nav" class="sticky top-0 z-30 border-b border-white/20 bg-[linear-gradient(180deg,rgba(10,28,90,0.88),rgba(22,56,150,0.72))] shadow-[0_10px_30px_rgba(7,21,66,0.28)] backdrop-blur">
+<header id="top-nav" data-page-cache-context="{{ auth('web')->id() === null ? 'guest' : 'user:'.auth('web')->id() }}" class="sticky top-0 z-30 border-b border-white/20 bg-[linear-gradient(180deg,rgba(10,28,90,0.88),rgba(22,56,150,0.72))] shadow-[0_10px_30px_rgba(7,21,66,0.28)] backdrop-blur">
   <div class="mx-auto flex w-full max-w-4xl items-center justify-between px-[clamp(0.75rem,3.5vw,1.5rem)] py-[clamp(0.6rem,2.5vw,1rem)]">
     @if ($showTopNavBack)
       <a

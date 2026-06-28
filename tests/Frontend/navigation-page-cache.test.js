@@ -5,6 +5,7 @@ import {
   buildPageCacheKey,
   canUseSnapshotForContext,
   isPageCacheablePath,
+  resolvePageCacheContext,
   shouldHandlePageCacheClick,
 } from '../../resources/js/navigation-page-cache.js';
 
@@ -61,4 +62,22 @@ test('canUseSnapshotForContext requires matching page cache context', () => {
   assert.equal(canUseSnapshotForContext({ context: 'user:10' }, 'user:20'), false);
   assert.equal(canUseSnapshotForContext({ context: 'user:10' }, 'guest'), false);
   assert.equal(canUseSnapshotForContext({}, 'guest'), false);
+});
+
+test('resolvePageCacheContext falls back to global navigation context on non-cache pages', () => {
+  const root = {
+    querySelector(selector) {
+      if (selector === '[data-page-cache-root]') {
+        return null;
+      }
+
+      if (selector === '[data-page-cache-context]') {
+        return { dataset: { pageCacheContext: 'user:10' } };
+      }
+
+      return null;
+    },
+  };
+
+  assert.equal(resolvePageCacheContext(root), 'user:10');
 });
