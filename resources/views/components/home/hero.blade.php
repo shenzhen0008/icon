@@ -23,7 +23,14 @@
     $localeQuery = 'locale='.urlencode(app()->getLocale());
 @endphp
 
-<section id="home-data-panel" class="mb-8 overflow-hidden rounded-2xl border border-theme bg-theme-card p-5 shadow-xl shadow-theme">
+<section
+    id="home-data-panel"
+    class="mb-8 overflow-hidden rounded-2xl border border-theme bg-theme-card p-5 shadow-xl shadow-theme"
+    data-mode-badge-demo="{{ __('pages/home.hero.mode_demo_badge') }}"
+    data-mode-badge-live="{{ __('pages/home.hero.mode_live_badge') }}"
+    data-locale="{{ app()->getLocale() }}"
+    data-live-load-failed="{{ __('pages/home.hero.live_load_failed') }}"
+>
     <div class="flex items-start gap-4">
         <div>
             @if ($showTitle)
@@ -122,136 +129,4 @@
     </div>
 </section>
 
-<script>
-    (() => {
-        const panel = document.getElementById('home-data-panel');
-        if (!panel) return;
-
-        const modeBadge = document.getElementById('hero-mode-badge');
-        const availableBalance = document.getElementById('hero-available-balance');
-        const totalEarnings = document.getElementById('hero-total-earnings');
-        const earnings24h = document.getElementById('hero-earnings-24h');
-        const damoBtn = document.getElementById('hero-damo-btn');
-        const liveBtn = document.getElementById('hero-live-btn');
-
-        const modeMap = {
-            damo: 'demo',
-            live: 'live',
-        };
-        const modeBadgeText = {
-            demo: @json(__('pages/home.hero.mode_demo_badge')),
-            live: @json(__('pages/home.hero.mode_live_badge')),
-        };
-
-        const tradeRecordBtn = document.getElementById('hero-trade-record-btn');
-        const incomeRecordBtn = document.getElementById('hero-income-record-btn');
-        const formatMoney = (value) => Number(value || 0).toLocaleString('en-US', {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-        });
-        const formatMoneyWithPrefix = (value) => `$${formatMoney(value)}`;
-        const modeStorageKey = 'home_hero_panel_mode';
-
-        const panelPayloadCache = @json($heroPanelPayloadCache);
-        let currentPayload = panelPayloadCache.demo;
-        let currentMode = 'demo';
-
-        const readSavedMode = () => {
-            try {
-                const savedMode = window.localStorage.getItem(modeStorageKey);
-                return savedMode === 'live' ? 'live' : 'demo';
-            } catch (error) {
-                return 'demo';
-            }
-        };
-
-        const persistMode = (mode) => {
-            try {
-                window.localStorage.setItem(modeStorageKey, mode);
-            } catch (error) {
-                // Ignore storage failures and keep the UI usable.
-            }
-        };
-
-        const fetchPanelData = async (mode) => {
-            const response = await fetch(`/home-hero-panel?mode=${encodeURIComponent(mode)}`, {
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                },
-            });
-
-            if (!response.ok) {
-                const errorBody = await response.json().catch(() => ({}));
-                throw new Error(errorBody?.message || `HTTP ${response.status}`);
-            }
-
-            return response.json();
-        };
-
-        const renderPanel = (payload) => {
-            if (!payload) return;
-
-            if (modeBadge) modeBadge.textContent = modeBadgeText[payload.mode] ?? modeBadgeText.demo;
-            if (availableBalance) availableBalance.textContent = formatMoneyWithPrefix(payload.available_balance);
-            if (totalEarnings) totalEarnings.textContent = formatMoneyWithPrefix(payload.total_earnings);
-            if (earnings24h) earnings24h.textContent = formatMoneyWithPrefix(payload.earnings_24h);
-        };
-
-        const syncRecordLinks = (mode) => {
-            const locale = @json(app()->getLocale());
-            const suffix = `?mode=${encodeURIComponent(mode)}&locale=${encodeURIComponent(locale)}`;
-            if (tradeRecordBtn) tradeRecordBtn.setAttribute('href', `/home/hero-panel/trade-records${suffix}`);
-            if (incomeRecordBtn) incomeRecordBtn.setAttribute('href', `/home/hero-panel/income-records${suffix}`);
-        };
-
-        const setMode = async (uiMode) => {
-            const mode = modeMap[uiMode];
-            if (!mode) return;
-            currentMode = mode;
-            persistMode(mode);
-            syncRecordLinks(mode);
-
-            const damoActive = uiMode === 'damo';
-            const setButtonActiveState = (button, active) => {
-                button?.classList.toggle('bg-gradient-to-r', active);
-                button?.classList.toggle('from-cyan-500', active);
-                button?.classList.toggle('to-blue-500', active);
-                button?.classList.toggle('text-slate-950', active);
-                button?.classList.toggle('hover:from-cyan-400', active);
-                button?.classList.toggle('hover:to-blue-400', active);
-
-                button?.classList.toggle('bg-slate-700', !active);
-                button?.classList.toggle('text-slate-100', !active);
-                button?.classList.toggle('hover:bg-slate-600', !active);
-            };
-
-            setButtonActiveState(damoBtn, damoActive);
-            setButtonActiveState(liveBtn, !damoActive);
-
-            const cachedPayload = panelPayloadCache[mode];
-            if (cachedPayload) {
-                currentPayload = cachedPayload;
-                renderPanel(cachedPayload);
-                return;
-            }
-
-            try {
-                const payload = await fetchPanelData(mode);
-                panelPayloadCache[mode] = payload;
-                currentPayload = payload;
-                renderPanel(payload);
-            } catch (error) {
-                if (mode === 'live') {
-                    alert(@json(__('pages/home.hero.live_load_failed')));
-                    setMode('damo');
-                }
-            }
-        };
-
-        damoBtn?.addEventListener('click', () => setMode('damo'));
-        liveBtn?.addEventListener('click', () => setMode('live'));
-
-        const savedMode = readSavedMode();
-        setMode(savedMode === 'live' ? 'live' : 'damo');
-    })();
-</script>
+<script id="home-hero-panel-payloads" type="application/json">@json($heroPanelPayloadCache)</script>

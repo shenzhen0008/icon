@@ -170,6 +170,13 @@ const restoreSnapshot = (key, snapshot, url, pushState = true) => {
   }
 
   window.scrollTo(0, snapshot.scrollY || 0);
+  window.dispatchEvent(new CustomEvent('page-cache:restored', {
+    detail: {
+      key,
+      pathname: url.pathname,
+      url: url.toString(),
+    },
+  }));
 };
 
 const fetchSnapshot = async (url) => {

@@ -191,20 +191,18 @@ class HomeHeroPanelFeedTest extends TestCase
     {
         $this->get('/')
             ->assertOk()
-            ->assertSee("const modeStorageKey = 'home_hero_panel_mode';", false)
-            ->assertSee("localStorage.getItem(modeStorageKey)", false)
-            ->assertSee("localStorage.setItem(modeStorageKey, mode);", false)
-            ->assertSee("setMode(savedMode === 'live' ? 'live' : 'damo');", false);
+            ->assertSee('id="home-data-panel"', false)
+            ->assertSee('data-mode-badge-demo=', false)
+            ->assertSee('data-mode-badge-live=', false)
+            ->assertSee('data-locale=', false);
     }
 
     public function test_home_page_seeds_demo_and_live_payloads_for_instant_mode_switching(): void
     {
         $this->get('/')
             ->assertOk()
-            ->assertSee('const panelPayloadCache = {', false)
+            ->assertSee('id="home-hero-panel-payloads" type="application/json"', false)
             ->assertSee('"demo":{"mode":"demo"', false)
-            ->assertSee('"live":{"mode":"live"', false)
-            ->assertSee('const cachedPayload = panelPayloadCache[mode];', false)
-            ->assertSee('if (cachedPayload) {', false);
+            ->assertSee('"live":{"mode":"live"', false);
     }
 }

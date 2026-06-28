@@ -125,9 +125,9 @@ class MyCenterPageTest extends TestCase
     {
         $this->get('/me')
             ->assertOk()
-            ->assertSee("const modeStorageKey = 'home_hero_panel_mode';", false)
-            ->assertSee("localStorage.getItem(modeStorageKey)", false)
-            ->assertSee("setMode(savedMode === 'live' ? 'live' : 'damo');", false);
+            ->assertSee('id="home-data-panel"', false)
+            ->assertSee('data-mode-badge-demo=', false)
+            ->assertSee('data-mode-badge-live=', false);
     }
 
     public function test_my_center_seeds_demo_and_live_payloads_for_instant_mode_switching(): void
@@ -139,12 +139,10 @@ class MyCenterPageTest extends TestCase
         $this->actingAs($user)
             ->get('/me')
             ->assertOk()
-            ->assertSee('const panelPayloadCache = {', false)
+            ->assertSee('id="home-hero-panel-payloads" type="application/json"', false)
             ->assertSee('"demo":{"mode":"demo"', false)
             ->assertSee('"live":{"mode":"live"', false)
-            ->assertSee('"available_balance":"1234.56"', false)
-            ->assertSee('const cachedPayload = panelPayloadCache[mode];', false)
-            ->assertSee('if (cachedPayload) {', false);
+            ->assertSee('"available_balance":"1234.56"', false);
     }
 
     public function test_my_center_renders_english_ui_copy_when_locale_is_en(): void
