@@ -24,6 +24,8 @@ const parsePayloadCache = (root) => {
   }
 };
 
+const canUseSeedPayload = (mode) => mode === 'demo';
+
 export const initHomeHeroPanel = ({
   root = document,
   fetchFn = globalThis.window?.fetch?.bind(globalThis.window),
@@ -130,7 +132,7 @@ export const initHomeHeroPanel = ({
     setButtonActiveState(demoBtn, demoActive);
     setButtonActiveState(liveBtn, !demoActive);
 
-    const cachedPayload = panelPayloadCache[mode];
+    const cachedPayload = canUseSeedPayload(mode) ? panelPayloadCache[mode] : null;
     if (cachedPayload) {
       renderPanel(cachedPayload);
       return;
@@ -138,7 +140,9 @@ export const initHomeHeroPanel = ({
 
     try {
       const payload = await fetchPanelData(mode);
-      panelPayloadCache[mode] = payload;
+      if (canUseSeedPayload(mode)) {
+        panelPayloadCache[mode] = payload;
+      }
       renderPanel(payload);
     } catch {
       if (mode === 'live') {
@@ -148,12 +152,8 @@ export const initHomeHeroPanel = ({
     }
   };
 
-  demoBtn?.addEventListener('click', () => {
-    void setMode('demo');
-  });
-  liveBtn?.addEventListener('click', () => {
-    void setMode('live');
-  });
+  demoBtn?.addEventListener('click', () => setMode('demo'));
+  liveBtn?.addEventListener('click', () => setMode('live'));
 
   void setMode(readSavedMode());
 

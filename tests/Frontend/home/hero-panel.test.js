@@ -37,11 +37,11 @@ const createElement = ({ textContent = '', dataset = {} } = {}) => ({
     this.listeners[type] = listener;
   },
   click() {
-    this.listeners.click?.();
+    return this.listeners.click?.();
   },
 });
 
-test('initHomeHeroPanel rebinds restored demo and live buttons', () => {
+test('initHomeHeroPanel rebinds restored demo and live buttons', async () => {
   const panel = createElement({
     dataset: {
       modeBadgeDemo: '#demo',
@@ -100,21 +100,111 @@ test('initHomeHeroPanel rebinds restored demo and live buttons', () => {
       this.value = value;
     },
   };
+  const fetchRequests = [];
+  const fetchFn = async (url) => {
+    fetchRequests.push(url);
 
-  initHomeHeroPanel({ root, storage });
-  liveButton.click();
+    return {
+      ok: true,
+      json: async () => ({
+        mode: 'live',
+        available_balance: '250.00',
+        total_earnings: '25.00',
+        earnings_24h: '2.50',
+      }),
+    };
+  };
+
+  initHomeHeroPanel({ root, storage, fetchFn });
+  await liveButton.click();
 
   assert.equal(panel.dataset.homeHeroPanelStarted, 'true');
+  assert.deepEqual(fetchRequests, ['/home-hero-panel?mode=live']);
   assert.equal(modeBadge.textContent, '#live');
-  assert.equal(availableBalance.textContent, '$200.00');
-  assert.equal(totalEarnings.textContent, '$20.00');
-  assert.equal(earnings24h.textContent, '$2.00');
+  assert.equal(availableBalance.textContent, '$250.00');
+  assert.equal(totalEarnings.textContent, '$25.00');
+  assert.equal(earnings24h.textContent, '$2.50');
   assert.equal(tradeRecordButton.attributes.href, '/home/hero-panel/trade-records?mode=live&locale=en');
   assert.equal(incomeRecordButton.attributes.href, '/home/hero-panel/income-records?mode=live&locale=en');
   assert.equal(storage.value, 'live');
 });
 
-test('initHomeHeroPanel binds restored markup even when serialized started flag exists', () => {
+test('initHomeHeroPanel always fetches fresh live data instead of using cached seed payload', async () => {
+  const panel = createElement({
+    dataset: {
+      modeBadgeDemo: '#demo',
+      modeBadgeLive: '#live',
+      locale: 'en',
+      liveLoadFailed: 'Live failed',
+    },
+  });
+  const modeBadge = createElement();
+  const availableBalance = createElement();
+  const totalEarnings = createElement();
+  const earnings24h = createElement();
+  const payloadScript = createElement({
+    textContent: JSON.stringify({
+      demo: {
+        mode: 'demo',
+        available_balance: '100.00',
+        total_earnings: '10.00',
+        earnings_24h: '1.00',
+      },
+      live: {
+        mode: 'live',
+        available_balance: '200.00',
+        total_earnings: '20.00',
+        earnings_24h: '2.00',
+      },
+    }),
+  });
+  const elements = {
+    '#home-data-panel': panel,
+    '#hero-mode-badge': modeBadge,
+    '#hero-available-balance': availableBalance,
+    '#hero-total-earnings': totalEarnings,
+    '#hero-earnings-24h': earnings24h,
+    '#hero-damo-btn': createElement(),
+    '#hero-live-btn': createElement(),
+    '#hero-trade-record-btn': createElement(),
+    '#hero-income-record-btn': createElement(),
+    '#home-hero-panel-payloads': payloadScript,
+  };
+  const root = {
+    querySelector(selector) {
+      return elements[selector] ?? null;
+    },
+  };
+  const storage = {
+    getItem: () => 'demo',
+    setItem: () => {},
+  };
+  const fetchRequests = [];
+  const fetchFn = async (url) => {
+    fetchRequests.push(url);
+
+    return {
+      ok: true,
+      json: async () => ({
+        mode: 'live',
+        available_balance: '321.00',
+        total_earnings: '32.10',
+        earnings_24h: '3.21',
+      }),
+    };
+  };
+
+  const api = initHomeHeroPanel({ root, storage, fetchFn });
+  await api.setMode('live');
+
+  assert.deepEqual(fetchRequests, ['/home-hero-panel?mode=live']);
+  assert.equal(modeBadge.textContent, '#live');
+  assert.equal(availableBalance.textContent, '$321.00');
+  assert.equal(totalEarnings.textContent, '$32.10');
+  assert.equal(earnings24h.textContent, '$3.21');
+});
+
+test('initHomeHeroPanel binds restored markup even when serialized started flag exists', async () => {
   const panel = createElement({
     dataset: {
       homeHeroPanelStarted: 'true',
@@ -157,8 +247,18 @@ test('initHomeHeroPanel binds restored markup even when serialized started flag 
     },
   };
 
-  initHomeHeroPanel({ root, storage: { getItem: () => 'demo', setItem: () => {} } });
-  liveButton.click();
+  const fetchFn = async () => ({
+    ok: true,
+    json: async () => ({
+      mode: 'live',
+      available_balance: '250.00',
+      total_earnings: '25.00',
+      earnings_24h: '2.50',
+    }),
+  });
+
+  initHomeHeroPanel({ root, storage: { getItem: () => 'demo', setItem: () => {} }, fetchFn });
+  await liveButton.click();
 
   assert.equal(modeBadge.textContent, '#live');
 });
