@@ -11,13 +11,6 @@
         </span>
         <input type="radio" name="payment-method" value="crypto" class="h-4 w-4 border-theme text-[rgb(var(--theme-primary))] focus:ring-[rgb(var(--theme-primary))]/35" checked>
       </label>
-      <label class="flex cursor-pointer items-center justify-between gap-3 rounded-xl border border-theme bg-theme-secondary/20 p-4 transition hover:border-[rgb(var(--theme-primary))]/45">
-        <span class="flex items-center gap-2 text-scale-body text-theme">
-          <img src="/images/card.png" alt="" class="h-5 w-5 object-contain" aria-hidden="true">
-          <span>{{ __('pages/me.payment.bank_card') }}</span>
-        </span>
-        <input type="radio" name="payment-method" value="bank-card" class="h-4 w-4 border-theme text-[rgb(var(--theme-primary))] focus:ring-[rgb(var(--theme-primary))]/35">
-      </label>
     </div>
 
     <p class="mt-3 text-scale-micro leading-relaxed text-theme-secondary">

@@ -29,6 +29,8 @@ return [
         'excluded_paths' => [
             'admin',
             'admin/*',
+            'stream-chat-agent',
+            'stream-chat-agent/*',
             'livewire/*',
             'client-env/access-reminder',
         ],

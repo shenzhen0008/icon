@@ -91,6 +91,20 @@ class MyCenterPageTest extends TestCase
             ->assertDontSee('设置密码并注册');
     }
 
+    public function test_my_center_temporarily_hides_bank_card_payment_option(): void
+    {
+        $user = User::factory()->create();
+
+        $this->actingAs($user)
+            ->get('/me')
+            ->assertOk()
+            ->assertSee('加密货币存款')
+            ->assertSee('value="crypto"', false)
+            ->assertDontSee('银行卡')
+            ->assertDontSee('value="bank-card"', false)
+            ->assertDontSee('/images/card.png', false);
+    }
+
     public function test_authenticated_my_center_with_no_blocking_prompt_marks_private_page_cache_context(): void
     {
         $user = User::factory()->create([
@@ -153,7 +167,7 @@ class MyCenterPageTest extends TestCase
             ->assertSee('Deposit & Withdrawal')
             ->assertSee('Please choose a deposit and withdrawal method.')
             ->assertSee('Crypto Deposit')
-            ->assertSee('Bank Card')
+            ->assertDontSee('Bank Card')
             ->assertSee('Next')
             ->assertSee('Account Info')
             ->assertSee('Temporary Account')

@@ -255,4 +255,47 @@ class ClientEnvDecisionFlowTest extends TestCase
             ->assertJsonPath('decision', 'allow')
             ->assertJsonPath('reason', 'excluded_path');
     }
+
+    public function test_stream_chat_agent_path_is_excluded_from_second_layer_decision(): void
+    {
+        config()->set('client_env.middleware.enabled', true);
+        config()->set('client_env.middleware.persist', false);
+        config()->set('client_env.middleware.excluded_paths', []);
+        config()->set('client_env.decision.enabled', true);
+        config()->set('client_env.decision.mode', 'enforce');
+        config()->set('client_env.decision.enforce_paths', ['*']);
+
+        Route::middleware('web')->get('/stream-chat-agent', function (Request $request) {
+            $decision = (array) $request->attributes->get('client_env_decision', []);
+
+            return response()->json([
+                'decision' => $decision['decision'] ?? null,
+                'reason' => $decision['reason_code'] ?? null,
+            ]);
+        });
+        Route::middleware('web')->post('/stream-chat-agent/token', function (Request $request) {
+            $decision = (array) $request->attributes->get('client_env_decision', []);
+
+            return response()->json([
+                'decision' => $decision['decision'] ?? null,
+                'reason' => $decision['reason_code'] ?? null,
+            ]);
+        });
+
+        $this->withHeaders([
+            'X-Request-Id' => 'req_decision_stream_chat_agent_excluded_1',
+            'User-Agent' => '',
+        ])->getJson('/stream-chat-agent')
+            ->assertOk()
+            ->assertJsonPath('decision', 'allow')
+            ->assertJsonPath('reason', 'excluded_path');
+
+        $this->withHeaders([
+            'X-Request-Id' => 'req_decision_stream_chat_agent_token_excluded_1',
+            'User-Agent' => '',
+        ])->postJson('/stream-chat-agent/token')
+            ->assertOk()
+            ->assertJsonPath('decision', 'allow')
+            ->assertJsonPath('reason', 'excluded_path');
+    }
 }
