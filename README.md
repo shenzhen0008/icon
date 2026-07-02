@@ -262,7 +262,7 @@ git add -A
 git restore --staged "public/日志.txt"
 git restore "public/日志.txt"
 
-git commit -m "update navigation and product card sizing"
+git commit -m "-index"
 git push origin main
 
 ## ssh推送

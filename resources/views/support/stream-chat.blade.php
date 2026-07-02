@@ -53,7 +53,7 @@
     @endif
   </main>
 
-  <x-nav.mobile />
+  <x-nav.mobile :show-legal-footer="false" />
 
   @if ($streamEnabled)
     <script type="module">
@@ -254,6 +254,7 @@
         const payload = await response.json();
         const client = StreamChat.getInstance(payload.apiKey);
         currentUserId = payload.user.id;
+        localStorage.setItem('stream_chat_has_session', '1');
 
         await client.connectUser(payload.user, payload.token);
 
@@ -263,6 +264,7 @@
         });
 
         await channel.watch();
+        channel.markRead().catch(() => {});
         if ((channel.data?.name || '') !== payload.channel.name) {
           channel.updatePartial({
             set: { name: payload.channel.name },
@@ -288,6 +290,7 @@
           renderMessage(event.message);
           if (messagesEl) messagesEl.scrollTop = messagesEl.scrollHeight;
           if (event.message?.user?.id !== currentUserId) {
+            channel.markRead().catch(() => {});
             clearUnreadBadge();
             beep().catch(() => {});
           }

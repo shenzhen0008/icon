@@ -93,6 +93,17 @@ html {
 .text-scale-title { font-size: var(--font-scale-title); }
 .text-scale-display { font-size: var(--font-scale-display); }
 
+.animate-unread-dot-blink {
+    animation: unread-dot-blink 1s step-end infinite;
+}
+
+@keyframes unread-dot-blink {
+    0% { opacity: 1; }
+    49% { opacity: 1; }
+    50% { opacity: 0; }
+    100% { opacity: 0; }
+}
+
 /* 统一主题弹窗：跟随主题变量，移动端保持居中并留出安全边距。 */
 dialog.theme-modal {
     width: min(92vw, 28rem);

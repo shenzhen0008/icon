@@ -54,4 +54,16 @@ class TypographySystemTest extends TestCase
         $this->assertIsInt($desktopCapPosition);
         $this->assertGreaterThan($fluidScalePosition, $desktopCapPosition);
     }
+
+    public function test_unread_dot_blink_animation_turns_fully_off_between_flashes(): void
+    {
+        $css = file_get_contents(resource_path('css/app.css'));
+
+        $this->assertIsString($css);
+        $this->assertStringContainsString('.animate-unread-dot-blink', $css);
+        $this->assertStringContainsString('animation: unread-dot-blink 1s step-end infinite;', $css);
+        $this->assertStringContainsString('@keyframes unread-dot-blink', $css);
+        $this->assertStringContainsString('49% { opacity: 1; }', $css);
+        $this->assertStringContainsString('50% { opacity: 0; }', $css);
+    }
 }

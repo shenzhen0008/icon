@@ -20,7 +20,7 @@
 
   @php
     $mode = request()->query('mode', 'receive');
-    $mode = in_array($mode, ['receive', 'send', 'convert'], true) ? $mode : 'receive';
+    $mode = in_array($mode, ['receive', 'send'], true) ? $mode : 'receive';
   @endphp
 
   <main class="mx-auto w-full max-w-4xl px-4 pb-4 pt-8 md:pb-8">
@@ -28,10 +28,9 @@
 
     <section class="rounded-3xl border border-[rgb(var(--theme-primary))]/20 bg-gradient-to-br from-[rgb(var(--theme-primary))]/10 to-[rgb(var(--theme-accent))]/10 p-6 shadow-xl shadow-[rgb(var(--theme-primary))]/10">
       <div class="rounded-2xl border border-theme bg-theme-card p-3" id="fund-mode-tabs" data-initial-mode="{{ $mode }}">
-        <div class="grid grid-cols-3 gap-2">
+        <div class="grid grid-cols-2 gap-2">
           <button type="button" data-fund-mode-button="receive" class="rounded-lg border px-3 py-2 text-scale-body font-semibold transition">{{ __('pages/recharge.tabs.receive') }}</button>
           <button type="button" data-fund-mode-button="send" class="rounded-lg border px-3 py-2 text-scale-body font-semibold transition">{{ __('pages/recharge.tabs.send') }}</button>
-          <button type="button" data-fund-mode-button="convert" class="rounded-lg border px-3 py-2 text-scale-body font-semibold transition">{{ __('pages/recharge.tabs.convert') }}</button>
         </div>
       </div>
 
@@ -188,16 +187,6 @@
               <button class="text-scale-ui mx-auto flex h-[clamp(1.9rem,7vw,2.2rem)] w-full items-center justify-center rounded-lg bg-[rgb(var(--theme-primary))] px-[clamp(0.6rem,2.5vw,0.9rem)] font-semibold text-theme-on-primary shadow-lg shadow-[rgb(var(--theme-primary))]/20 transition hover:bg-[rgb(var(--theme-primary))]/90">{{ __('pages/recharge.send.submit') }}</button>
             </form>
           @endif
-        </div>
-      </div>
-
-      <div data-fund-mode-panel="convert" class="{{ $mode === 'convert' ? '' : 'hidden' }}">
-        <div class="mt-6 rounded-2xl border border-theme bg-theme-card p-5">
-          <h2 class="text-scale-title font-semibold text-theme">{{ __('pages/recharge.convert.title') }}</h2>
-          <p class="mt-2 text-scale-body text-theme-secondary">{{ __('pages/recharge.convert.subtitle') }}</p>
-          <div class="mt-4 rounded-lg border border-[rgb(var(--theme-primary))]/25 bg-[rgb(var(--theme-primary))]/8 px-3 py-2 text-scale-body text-theme-secondary">
-            {{ __('pages/recharge.convert.placeholder') }}
-          </div>
         </div>
       </div>
     </section>

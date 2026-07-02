@@ -41,10 +41,11 @@ class GlobalNavigationTest extends TestCase
                 ->assertSee('帮助')
                 ->assertSee('分享')
                 ->assertSee('我的')
-                ->assertSee('客服')
                 ->assertSee('/help')
                 ->assertDontSee('href="/recharge"', false)
                 ->assertSee('href="'.self::SUPPORT_URL.'"', false)
+                ->assertSee('data-top-nav-support', false)
+                ->assertSee('aria-label="客服"', false)
                 ->assertDontSee('https://liao1.a.com/stream-chat', false)
                 ->assertDontSee('href="/support"', false)
                 ->assertDontSee('后台')
@@ -54,6 +55,16 @@ class GlobalNavigationTest extends TestCase
             $topNavMarkup = $this->topNavMarkup($response->getContent());
             $this->assertStringNotContainsString('Stream Chat', $topNavMarkup);
             $this->assertStringContainsString('href="'.self::SUPPORT_URL.'"', $topNavMarkup);
+            $this->assertStringContainsString('data-top-nav-support', $topNavMarkup);
+            $this->assertStringContainsString('aria-label="客服"', $topNavMarkup);
+            $this->assertStringContainsString('h-9 w-9', $topNavMarkup);
+            $this->assertStringContainsString('h-[1.6rem] w-[1.6rem]', $topNavMarkup);
+            $this->assertStringContainsString('data-stream-chat-unread-dot', $topNavMarkup);
+            $this->assertStringContainsString('hidden absolute right-1 top-1 h-2.5 w-2.5 animate-unread-dot-blink', $topNavMarkup);
+            $this->assertStringNotContainsString('animate-[pulse_', $topNavMarkup);
+            $this->assertStringNotContainsString('animate-pulse', $topNavMarkup);
+            $this->assertStringNotContainsString('animate-ping', $topNavMarkup);
+            $this->assertStringNotContainsString('>客服<', $topNavMarkup);
         }
 
         $this->get('/me')
@@ -63,9 +74,10 @@ class GlobalNavigationTest extends TestCase
             ->assertSee('帮助')
             ->assertSee('分享')
             ->assertSee('我的')
-            ->assertSee('客服')
             ->assertSee('/help')
             ->assertSee('href="'.self::SUPPORT_URL.'"', false)
+            ->assertSee('data-top-nav-support', false)
+            ->assertSee('aria-label="客服"', false)
             ->assertDontSee('https://liao1.a.com/stream-chat', false)
             ->assertDontSee('href="/support"', false);
     }
@@ -82,10 +94,11 @@ class GlobalNavigationTest extends TestCase
             ->assertSee('帮助')
             ->assertSee('分享')
             ->assertSee('我的')
-            ->assertSee('客服')
             ->assertSee('/help')
             ->assertDontSee('href="/recharge"', false)
             ->assertSee('href="'.self::SUPPORT_URL.'"', false)
+            ->assertSee('data-top-nav-support', false)
+            ->assertSee('aria-label="客服"', false)
             ->assertDontSee('https://liao1.a.com/stream-chat', false)
             ->assertDontSee('href="/support"', false)
             ->assertDontSee('后台')
@@ -96,6 +109,16 @@ class GlobalNavigationTest extends TestCase
         $topNavMarkup = $this->topNavMarkup($response->getContent());
         $this->assertStringNotContainsString('Stream Chat', $topNavMarkup);
         $this->assertStringContainsString('href="'.self::SUPPORT_URL.'"', $topNavMarkup);
+        $this->assertStringContainsString('data-top-nav-support', $topNavMarkup);
+        $this->assertStringContainsString('aria-label="客服"', $topNavMarkup);
+        $this->assertStringContainsString('h-9 w-9', $topNavMarkup);
+        $this->assertStringContainsString('h-[1.6rem] w-[1.6rem]', $topNavMarkup);
+        $this->assertStringContainsString('data-stream-chat-unread-dot', $topNavMarkup);
+        $this->assertStringContainsString('hidden absolute right-1 top-1 h-2.5 w-2.5 animate-unread-dot-blink', $topNavMarkup);
+        $this->assertStringNotContainsString('animate-[pulse_', $topNavMarkup);
+        $this->assertStringNotContainsString('animate-pulse', $topNavMarkup);
+        $this->assertStringNotContainsString('animate-ping', $topNavMarkup);
+        $this->assertStringNotContainsString('>客服<', $topNavMarkup);
     }
 
     public function test_mobile_navigation_uses_theme_variable_classes(): void
@@ -141,6 +164,9 @@ class GlobalNavigationTest extends TestCase
 
         $response->assertOk();
         $this->assertSame(1, substr_count($response->getContent(), 'const savedTheme'));
+        $response->assertSee('data-top-nav-support', false);
+        $response->assertSee('aria-label="客服"', false);
+        $response->assertSee('data-stream-chat-unread-dot', false);
         $response->assertSee('id="language-toggle"', false);
         $response->assertSee('id="language-menu"', false);
         $response->assertSee('id="theme-toggle"', false);

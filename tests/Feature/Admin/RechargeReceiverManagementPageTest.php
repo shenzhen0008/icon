@@ -37,7 +37,7 @@ class RechargeReceiverManagementPageTest extends AdminPanelTestCase
             ->assertSee('币种代码')
             ->assertSee('收款地址')
             ->assertSee('USDT')
-            ->assertSee('USDC')
+            ->assertDontSee('USDC')
             ->assertSee('BTC')
             ->assertSee('ETH')
             ->assertDontSee('DOGE');

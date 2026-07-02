@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'allowed_receive_assets' => ['USDT', 'USDC', 'BTC', 'ETH'],
+    'allowed_receive_assets' => ['USDT', 'BTC', 'ETH'],
 
     'bank_receiver' => [
         'enabled' => (bool) env('RECHARGE_BANK_ENABLED', true),

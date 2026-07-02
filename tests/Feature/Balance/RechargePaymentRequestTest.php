@@ -25,15 +25,15 @@ class RechargePaymentRequestTest extends TestCase
             ->assertOk()
             ->assertSee('充值')
             ->assertSee('提款')
-            ->assertSee('兑换')
+            ->assertDontSee('兑换')
             ->assertSee('data-fund-mode-button="receive"', false)
             ->assertSee('data-fund-mode-button="send"', false)
-            ->assertSee('data-fund-mode-button="convert"', false)
+            ->assertDontSee('data-fund-mode-button="convert"', false)
             ->assertSee('data-fund-mode-panel="receive"', false)
             ->assertSee('data-fund-mode-panel="send"', false)
-            ->assertSee('data-fund-mode-panel="convert"', false)
+            ->assertDontSee('data-fund-mode-panel="convert"', false)
             ->assertSee('USDT')
-            ->assertSee('USDC')
+            ->assertDontSee('USDC')
             ->assertSee('BTC')
             ->assertSee('ETH')
             ->assertDontSee('DOGE')
@@ -64,7 +64,7 @@ class RechargePaymentRequestTest extends TestCase
             ->assertSee('Recharge | '.config('app.name'))
             ->assertSee('RECEIVE')
             ->assertSee('SEND')
-            ->assertSee('CONVERT')
+            ->assertDontSee('CONVERT')
             ->assertSee('Currency Type')
             ->assertSee('Network:')
             ->assertSee('Copy Address')
@@ -168,14 +168,26 @@ class RechargePaymentRequestTest extends TestCase
         Storage::fake('public');
 
         $this->createReceiver('USDT', 'TRC20', 'T-usdt', isActive: true);
+        $this->createReceiver('USDC', 'TRC20', 'T-usdc', isActive: true);
         $this->createReceiver('DOGE', 'Dogecoin', 'D-doge', isActive: true);
 
         $this->get('/recharge')
             ->assertOk()
             ->assertSee('USDT')
+            ->assertDontSee('USDC')
             ->assertDontSee('DOGE');
 
         $user = User::factory()->create();
+
+        $this->actingAs($user)
+            ->from('/recharge')
+            ->post('/recharge/requests', [
+                'asset_code' => 'USDC',
+                'payment_amount' => '10',
+                'receipt_image' => UploadedFile::fake()->image('receipt.png'),
+            ])
+            ->assertRedirect('/recharge')
+            ->assertSessionHasErrors(['asset_code']);
 
         $this->actingAs($user)
             ->from('/recharge')

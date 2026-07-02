@@ -25,6 +25,10 @@ class StreamChatTest extends TestCase
             ->assertSee('stream-chat-file')
             ->assertSee('stream-chat-sound-prompt')
             ->assertSee('await channel.watch();', false)
+            ->assertSee("localStorage.setItem('stream_chat_has_session', '1');", false)
+            ->assertSee('channel.markRead().catch(() => {});', false)
+            ->assertDontSee('/privacy', false)
+            ->assertDontSee('/terms', false)
             ->assertDontSee('stream_chat_notify_bootstrap_ready', false)
             ->assertDontSee("localStorage.setItem(streamNotifyBootstrapKey, '1');", false);
     }

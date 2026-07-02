@@ -43,10 +43,22 @@
       <a href="/help" data-keep-locale class="{{ request()->is('help') ? $topNavActiveClass : $topNavInactiveClass }}">{{ __('pages/home.nav.help') }}</a>
       <a href="/referral" data-keep-locale class="{{ request()->is('referral') ? $topNavActiveClass : $topNavInactiveClass }}">{{ __('pages/home.nav.share') }}</a>
       <a href="/me" data-keep-locale class="{{ request()->is('me') ? $topNavActiveClass : $topNavInactiveClass }}">{{ __('pages/home.nav.me') }}</a>
-      <a href="{{ $supportUrl }}" class="{{ request()->is('stream-chat') ? $topNavActiveClass : $topNavInactiveClass }}">{{ __('pages/home.nav.support') }}</a>
     </nav>
 
     <div class="ml-3 inline-flex items-center gap-2 md:ml-4">
+      <a
+        href="{{ $supportUrl }}"
+        data-top-nav-support
+        aria-label="{{ __('pages/home.nav.support') }}"
+        title="{{ __('pages/home.nav.support') }}"
+        class="relative inline-flex h-9 w-9 items-center justify-center rounded-full text-white transition hover:bg-white/15 {{ request()->is('stream-chat') ? 'bg-white/20' : '' }}"
+      >
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" class="h-[1.6rem] w-[1.6rem]">
+          <path d="M5.5 17.5C4.1 16.3 3.25 14.65 3.25 12.85C3.25 9.05 7.15 6 12 6C16.85 6 20.75 9.05 20.75 12.85C20.75 16.65 16.85 19.7 12 19.7C10.95 19.7 9.95 19.55 9.02 19.27L5.35 20.35L5.5 17.5Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M8.5 12.75H8.52M12 12.75H12.02M15.5 12.75H15.52" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" />
+        </svg>
+        <span data-stream-chat-unread-dot aria-hidden="true" class="hidden absolute right-1 top-1 h-2.5 w-2.5 animate-unread-dot-blink rounded-full border border-white bg-[rgb(var(--theme-rose))]"></span>
+      </a>
       <div class="relative">
         <button
           id="language-toggle"
