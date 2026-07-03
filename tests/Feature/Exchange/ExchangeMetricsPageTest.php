@@ -50,6 +50,34 @@ class ExchangeMetricsPageTest extends TestCase
         $this->assertStringNotContainsString('overflow-hidden text-ellipsis whitespace-nowrap font-mono', $content);
     }
 
+    public function test_home_hero_metric_labels_are_truncated_to_avoid_overlapping_values(): void
+    {
+        $response = $this->get('/')
+            ->assertOk();
+
+        $content = $response->getContent();
+
+        $this->assertStringContainsString(
+            'class="min-w-0 truncate text-scale-body text-theme-secondary whitespace-nowrap"',
+            $content,
+        );
+        $this->assertStringContainsString(
+            'class="truncate text-scale-body text-theme-secondary whitespace-nowrap"',
+            $content,
+        );
+    }
+
+    public function test_home_hero_mode_badge_uses_compact_width_to_leave_room_for_balance(): void
+    {
+        $response = $this->get('/')
+            ->assertOk();
+
+        $this->assertStringContainsString(
+            'id="hero-mode-badge" class="justify-self-end inline-flex w-14 justify-center rounded-lg border border-theme bg-theme-secondary/30 px-2 py-1 text-scale-micro text-theme"',
+            $response->getContent(),
+        );
+    }
+
     public function test_home_page_displays_exchange_metrics_section(): void
     {
         \DB::table('home_display_settings')->where('id', 1)->update([

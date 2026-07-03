@@ -58,19 +58,19 @@
     >
         <x-slot:top>
             <div class="grid grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-2">
-                <p class="min-w-0 text-scale-body text-theme-secondary whitespace-nowrap">{{ __('pages/home.hero.available_balance') }}</p>
+                <p class="min-w-0 truncate text-scale-body text-theme-secondary whitespace-nowrap">{{ __('pages/home.hero.available_balance') }}</p>
                 <p id="hero-available-balance" data-fit-number data-fit-number-min="12" class="max-w-full justify-self-end whitespace-nowrap font-mono text-scale-title font-semibold leading-none tabular-nums text-theme">
                     ${{ $availableBalance }}
                 </p>
-                <span id="hero-mode-badge" class="justify-self-end inline-flex w-20 justify-center rounded-full border border-theme bg-theme-secondary/30 px-3 py-1 text-scale-body text-theme">{{ __('pages/home.hero.mode_demo_badge') }}</span>
+                <span id="hero-mode-badge" class="justify-self-end inline-flex w-14 justify-center rounded-lg border border-theme bg-theme-secondary/30 px-2 py-1 text-scale-micro text-theme">{{ __('pages/home.hero.mode_demo_badge') }}</span>
             </div>
         </x-slot:top>
         <x-slot:left>
-                <p class="text-scale-body text-theme-secondary whitespace-nowrap">{{ __('pages/home.hero.total_earnings') }}</p>
+                <p class="truncate text-scale-body text-theme-secondary whitespace-nowrap">{{ __('pages/home.hero.total_earnings') }}</p>
                 <p id="hero-total-earnings" data-fit-number data-fit-number-min="12" class="mt-2 max-w-full whitespace-nowrap font-mono text-scale-title font-semibold leading-none tabular-nums text-theme text-scale-display">${{ number_format((float) ($initialHeroPanelPayload['total_earnings'] ?? 0), 2, '.', ',') }}</p>
         </x-slot:left>
         <x-slot:right>
-                <p class="text-scale-body text-theme-secondary whitespace-nowrap">{{ __('pages/home.hero.earnings_24h') }}</p>
+                <p class="truncate text-scale-body text-theme-secondary whitespace-nowrap">{{ __('pages/home.hero.earnings_24h') }}</p>
                 <p id="hero-earnings-24h" data-fit-number data-fit-number-min="12" class="mt-2 max-w-full whitespace-nowrap font-mono text-scale-title font-semibold leading-none tabular-nums text-theme text-scale-display">${{ number_format((float) ($initialHeroPanelPayload['earnings_24h'] ?? 0), 2, '.', ',') }}</p>
         </x-slot:right>
     </x-ui.metric-split-card>

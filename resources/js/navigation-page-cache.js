@@ -1,6 +1,6 @@
 const CACHE_PREFIX = 'icon-market:page-cache:';
 const CACHE_TTL_MS = 10 * 60 * 1000;
-const CACHEABLE_PATHS = new Set(['/', '/help', '/products', '/referral', '/me']);
+const CACHEABLE_PATHS = new Set(['/', '/help', '/referral', '/me']);
 const LOCALE_QUERY_KEY = 'locale';
 
 export const isPageCacheablePath = (pathname) => CACHEABLE_PATHS.has(pathname);

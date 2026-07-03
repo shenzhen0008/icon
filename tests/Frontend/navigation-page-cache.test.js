@@ -13,11 +13,11 @@ import {
 
 test('isPageCacheablePath allows rolled out top-level pages only', () => {
   assert.equal(isPageCacheablePath('/help'), true);
-  assert.equal(isPageCacheablePath('/products'), true);
   assert.equal(isPageCacheablePath('/'), true);
   assert.equal(isPageCacheablePath('/referral'), true);
   assert.equal(isPageCacheablePath('/me'), true);
   assert.equal(isPageCacheablePath('/help/faq'), false);
+  assert.equal(isPageCacheablePath('/products'), false);
   assert.equal(isPageCacheablePath('/products/1'), false);
   assert.equal(isPageCacheablePath('/me/orders'), false);
   assert.equal(isPageCacheablePath('/home-summary'), false);
@@ -26,13 +26,11 @@ test('isPageCacheablePath allows rolled out top-level pages only', () => {
 
 test('buildPageCacheKey preserves locale query for same-origin cacheable links', () => {
   const helpKey = buildPageCacheKey('/help?locale=en', 'https://zorai.sbs');
-  const productKey = buildPageCacheKey('/products?locale=en', 'https://zorai.sbs');
   const homeKey = buildPageCacheKey('/?locale=en', 'https://zorai.sbs');
   const referralKey = buildPageCacheKey('/referral?locale=en', 'https://zorai.sbs');
   const myCenterKey = buildPageCacheKey('/me?locale=en', 'https://zorai.sbs');
 
   assert.equal(helpKey, '/help?locale=en');
-  assert.equal(productKey, '/products?locale=en');
   assert.equal(homeKey, '/?locale=en');
   assert.equal(referralKey, '/referral?locale=en');
   assert.equal(myCenterKey, '/me?locale=en');
@@ -40,6 +38,7 @@ test('buildPageCacheKey preserves locale query for same-origin cacheable links',
 
 test('buildPageCacheKey rejects external URLs and non-cacheable paths', () => {
   assert.equal(buildPageCacheKey('https://example.com/help', 'https://zorai.sbs'), null);
+  assert.equal(buildPageCacheKey('/products?locale=en', 'https://zorai.sbs'), null);
   assert.equal(buildPageCacheKey('/products/1', 'https://zorai.sbs'), null);
   assert.equal(buildPageCacheKey('/me/orders', 'https://zorai.sbs'), null);
   assert.equal(buildPageCacheKey('/home-summary', 'https://zorai.sbs'), null);
