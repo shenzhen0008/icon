@@ -37,6 +37,19 @@ class ExchangeMetricsPageTest extends TestCase
             ->assertSee('data-page-cache-key="/"', false);
     }
 
+    public function test_home_hero_numbers_are_marked_for_adaptive_fitting(): void
+    {
+        $response = $this->get('/')
+            ->assertOk();
+
+        $content = $response->getContent();
+
+        $this->assertStringContainsString('id="hero-available-balance" data-fit-number', $content);
+        $this->assertStringContainsString('id="hero-total-earnings" data-fit-number', $content);
+        $this->assertStringContainsString('id="hero-earnings-24h" data-fit-number', $content);
+        $this->assertStringNotContainsString('overflow-hidden text-ellipsis whitespace-nowrap font-mono', $content);
+    }
+
     public function test_home_page_displays_exchange_metrics_section(): void
     {
         \DB::table('home_display_settings')->where('id', 1)->update([

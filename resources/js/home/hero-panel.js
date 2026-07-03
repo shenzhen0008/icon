@@ -1,3 +1,5 @@
+import { fitNumberTextElements, observeFitNumberText } from '../fit-number-text.js';
+
 const MODE_STORAGE_KEY = 'home_hero_panel_mode';
 const initializedPanels = new WeakSet();
 
@@ -46,6 +48,7 @@ export const initHomeHeroPanel = ({
   const tradeRecordBtn = root.querySelector?.('#hero-trade-record-btn');
   const incomeRecordBtn = root.querySelector?.('#hero-income-record-btn');
   const panelPayloadCache = parsePayloadCache(root);
+  observeFitNumberText(root);
 
   initializedPanels.add(panel);
   panel.dataset.homeHeroPanelStarted = 'true';
@@ -100,6 +103,7 @@ export const initHomeHeroPanel = ({
     if (availableBalance) availableBalance.textContent = formatMoneyWithPrefix(payload.available_balance);
     if (totalEarnings) totalEarnings.textContent = formatMoneyWithPrefix(payload.total_earnings);
     if (earnings24h) earnings24h.textContent = formatMoneyWithPrefix(payload.earnings_24h);
+    fitNumberTextElements(root);
   };
 
   const syncRecordLinks = (mode) => {

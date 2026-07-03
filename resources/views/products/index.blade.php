@@ -47,7 +47,7 @@
         <div class="flex items-center justify-between">
           <p class="text-scale-body text-theme-secondary">{{ __('pages/product-list.orders_count') }}</p>
           <div class="flex items-center gap-2">
-            <p class="text-scale-title font-semibold text-[rgb(var(--theme-accent))]">{{ $summary['orders_count'] }}</p>
+            <a href="/me/orders" data-keep-locale class="text-scale-title font-semibold text-[rgb(var(--theme-accent))]">{{ $summary['orders_count'] }}</a>
             <a
               href="/me/orders"
               data-keep-locale

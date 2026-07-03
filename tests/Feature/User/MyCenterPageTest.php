@@ -85,6 +85,9 @@ class MyCenterPageTest extends TestCase
             ->assertSee('id="payment-method-form"', false)
             ->assertSee('action="/recharge/entry"', false)
             ->assertSee('AbC123xYz987QwErT654X')
+            ->assertSee('data-copy-account-button', false)
+            ->assertSee('data-copy-text="AbC123xYz987QwErT654X"', false)
+            ->assertSee('data-copy-success-label="已复制"', false)
             ->assertSee('退出登录')
             ->assertDontSee('这是管理员备注')
             ->assertDontSee('前往充值')
@@ -140,6 +143,9 @@ class MyCenterPageTest extends TestCase
         $this->get('/me')
             ->assertOk()
             ->assertSee('id="home-data-panel"', false)
+            ->assertSee('id="hero-available-balance" data-fit-number', false)
+            ->assertSee('id="hero-total-earnings" data-fit-number', false)
+            ->assertSee('id="hero-earnings-24h" data-fit-number', false)
             ->assertSee('data-mode-badge-demo=', false)
             ->assertSee('data-mode-badge-live=', false);
     }

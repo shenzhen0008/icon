@@ -74,6 +74,10 @@ class PublicProductCatalogTest extends TestCase
         $response->assertSee('规则');
         $response->assertSee('href="/products/rules"', false);
         $response->assertSee('订单');
+        $this->assertStringContainsString(
+            'href="/me/orders" data-keep-locale class="text-scale-title font-semibold text-[rgb(var(--theme-accent))]"',
+            $response->getContent(),
+        );
         $response->assertSee('自动质押');
         $response->assertSee('限额(USDT)');
         $response->assertSee('限购：不限次');

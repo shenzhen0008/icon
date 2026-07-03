@@ -1,8 +1,51 @@
 const CACHE_PREFIX = 'icon-market:page-cache:';
 const CACHE_TTL_MS = 10 * 60 * 1000;
 const CACHEABLE_PATHS = new Set(['/', '/help', '/products', '/referral', '/me']);
+const LOCALE_QUERY_KEY = 'locale';
 
 export const isPageCacheablePath = (pathname) => CACHEABLE_PATHS.has(pathname);
+
+export const appendLocaleToHref = (href, locale, origin = window.location.origin) => {
+  if (!href || !locale || href.startsWith('#')) {
+    return href;
+  }
+
+  let url;
+  try {
+    url = new URL(href, origin);
+  } catch {
+    return href;
+  }
+
+  if (url.origin !== origin || !url.pathname.startsWith('/')) {
+    return href;
+  }
+
+  if (!url.searchParams.has(LOCALE_QUERY_KEY)) {
+    url.searchParams.set(LOCALE_QUERY_KEY, locale);
+  }
+
+  return `${url.pathname}${url.search}${url.hash}`;
+};
+
+const currentLocale = () => {
+  const localeFromUrl = new URL(window.location.href).searchParams.get(LOCALE_QUERY_KEY);
+  return localeFromUrl || document.documentElement.lang || '';
+};
+
+export const applyLocaleToKeepLocaleAnchors = (
+  root = document,
+  locale = currentLocale(),
+  origin = window.location.origin,
+) => {
+  root.querySelectorAll?.('a[data-keep-locale]').forEach((anchor) => {
+    const href = anchor.getAttribute('href');
+    const nextHref = appendLocaleToHref(href, locale, origin);
+    if (nextHref && nextHref !== href) {
+      anchor.setAttribute('href', nextHref);
+    }
+  });
+};
 
 export const buildPageCacheKey = (href, origin = window.location.origin) => {
   if (!href) {
@@ -164,6 +207,7 @@ const restoreSnapshot = (key, snapshot, url, pushState = true) => {
   }
 
   root.outerHTML = snapshot.rootHtml;
+  applyLocaleToKeepLocaleAnchors();
   document.title = snapshot.title || document.title;
   document.body.className = snapshot.bodyClass || document.body.className;
   updateNavigationState(url.pathname);
@@ -204,10 +248,19 @@ export const initNavigationPageCache = () => {
     return;
   }
 
+  applyLocaleToKeepLocaleAnchors();
   window.history.replaceState({ pageCacheKey: buildPageCacheKey(window.location.href) }, '', window.location.href);
 
   document.addEventListener('click', async (event) => {
     const anchor = event.target.closest?.('a[href]');
+    if (anchor?.matches?.('a[data-keep-locale]')) {
+      const href = anchor.getAttribute('href');
+      const nextHref = appendLocaleToHref(href, currentLocale());
+      if (nextHref && nextHref !== href) {
+        anchor.setAttribute('href', nextHref);
+      }
+    }
+
     if (!shouldHandlePageCacheClick(event, anchor, window.location.origin, currentPageContext())) {
       return;
     }

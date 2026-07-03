@@ -5,7 +5,7 @@
     <p class="text-scale-micro text-theme-secondary">{{ $profile['label'] }}</p>
     <div class="mt-1 flex flex-nowrap items-center justify-between gap-2">
       <p class="min-w-0 flex-1 whitespace-nowrap text-[clamp(0.78rem,3.1vw,0.96rem)] font-semibold tracking-[0.02em] text-theme">{{ $profile['id'] }}</p>
-      <button type="button" id="copy-account-button" data-copy-text="{{ $profile['id'] }}" class="shrink-0 rounded-xl border border-theme bg-theme-secondary px-2.5 py-1 text-[clamp(0.68rem,2.8vw,0.8rem)] font-semibold text-theme transition hover:border-[rgb(var(--theme-primary))] hover:text-[rgb(var(--theme-primary))]">{{ __('pages/me.account.copy_account') }}</button>
+      <button type="button" id="copy-account-button" data-copy-account-button data-copy-text="{{ $profile['id'] }}" data-copy-success-label="{{ __('pages/me.account.copied') }}" class="shrink-0 rounded-xl border border-theme bg-theme-secondary px-2.5 py-1 text-[clamp(0.68rem,2.8vw,0.8rem)] font-semibold text-theme transition hover:border-[rgb(var(--theme-primary))] hover:text-[rgb(var(--theme-primary))]">{{ __('pages/me.account.copy_account') }}</button>
     </div>
   </div>
 
@@ -41,19 +41,4 @@
       <a href="/me/mnemonic" class="mt-3 inline-flex h-[clamp(1.9rem,7vw,2.2rem)] items-center justify-center rounded-lg bg-[rgb(var(--theme-primary))] px-4 py-2 text-scale-ui font-semibold text-theme-on-primary">{{ __('pages/me.account.mnemonic_manage') }}</a>
     </div>
   @endif
-
-  <script>
-    document.getElementById('copy-account-button')?.addEventListener('click', function () {
-      const copyText = this.dataset.copyText;
-      if (!copyText) return;
-
-      navigator.clipboard.writeText(copyText).then(() => {
-        const originalText = this.textContent;
-        this.textContent = @json(__('pages/me.account.copied'));
-        setTimeout(() => {
-          this.textContent = originalText;
-        }, 1500);
-      });
-    });
-  </script>
 </x-ui.metric-split-card>

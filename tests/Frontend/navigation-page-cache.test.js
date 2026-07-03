@@ -2,6 +2,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 
 import {
+  appendLocaleToHref,
+  applyLocaleToKeepLocaleAnchors,
   buildPageCacheKey,
   canUseSnapshotForContext,
   isPageCacheablePath,
@@ -42,6 +44,47 @@ test('buildPageCacheKey rejects external URLs and non-cacheable paths', () => {
   assert.equal(buildPageCacheKey('/me/orders', 'https://zorai.sbs'), null);
   assert.equal(buildPageCacheKey('/home-summary', 'https://zorai.sbs'), null);
   assert.equal(buildPageCacheKey('/home-hero-panel?mode=live', 'https://zorai.sbs'), null);
+});
+
+test('appendLocaleToHref preserves current locale on same-origin relative links', () => {
+  assert.equal(appendLocaleToHref('/help', 'zh-CN', 'https://zorai.sbs'), '/help?locale=zh-CN');
+  assert.equal(appendLocaleToHref('/products?sort=latest#top', 'zh-CN', 'https://zorai.sbs'), '/products?sort=latest&locale=zh-CN#top');
+  assert.equal(appendLocaleToHref('/help?locale=en', 'zh-CN', 'https://zorai.sbs'), '/help?locale=en');
+  assert.equal(appendLocaleToHref('https://example.com/help', 'zh-CN', 'https://zorai.sbs'), 'https://example.com/help');
+  assert.equal(appendLocaleToHref('#section', 'zh-CN', 'https://zorai.sbs'), '#section');
+});
+
+test('applyLocaleToKeepLocaleAnchors updates marked links in restored markup', () => {
+  const links = [
+    {
+      attrs: { href: '/products' },
+      getAttribute(name) {
+        return this.attrs[name] ?? null;
+      },
+      setAttribute(name, value) {
+        this.attrs[name] = value;
+      },
+    },
+    {
+      attrs: { href: '/help?locale=en' },
+      getAttribute(name) {
+        return this.attrs[name] ?? null;
+      },
+      setAttribute(name, value) {
+        this.attrs[name] = value;
+      },
+    },
+  ];
+  const root = {
+    querySelectorAll(selector) {
+      return selector === 'a[data-keep-locale]' ? links : [];
+    },
+  };
+
+  applyLocaleToKeepLocaleAnchors(root, 'zh-CN', 'https://zorai.sbs');
+
+  assert.equal(links[0].attrs.href, '/products?locale=zh-CN');
+  assert.equal(links[1].attrs.href, '/help?locale=en');
 });
 
 test('shouldHandlePageCacheClick ignores modified clicks and new-tab targets', () => {
