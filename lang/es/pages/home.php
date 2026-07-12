@@ -8,7 +8,7 @@ return [
         'subtitle' => 'Trading con inteligencia artificial',
         'trade_records' => 'Registros de operaciones',
         'income_records' => 'Registros de ingresos',
-        'available_balance' => 'Saldo (SDT)',
+        'available_balance' => 'Saldo (USDT)',
         'total_earnings' => 'Ganancias totales (USDT)',
         'earnings_24h' => 'Ganancias 24h (USDT)',
         'mode_demo' => 'DEMO',

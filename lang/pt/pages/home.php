@@ -8,7 +8,7 @@ return [
         'subtitle' => 'Negociação com inteligência artificial',
         'trade_records' => 'Registros de negociação',
         'income_records' => 'Registros de renda',
-        'available_balance' => 'Saldo (SDT)',
+        'available_balance' => 'Saldo (USDT)',
         'total_earnings' => 'Ganhos totais (USDT)',
         'earnings_24h' => 'Ganhos 24h (USDT)',
         'mode_demo' => 'DEMO',

@@ -19,7 +19,7 @@ class HomePageLocalizationTest extends TestCase
 
         $response->assertOk();
         $response->assertSee('Digital Asset Management Platform');
-        $response->assertSee('Balance (SDT)');
+        $response->assertSee('Balance (USDT)');
         $response->assertSee('Live Trading Platforms');
         $response->assertSee('Total Profit');
         $response->assertSee('Support');

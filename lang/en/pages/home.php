@@ -8,7 +8,7 @@ return [
         'subtitle' => 'Artificial intelligence trading',
         'trade_records' => 'Trade Records',
         'income_records' => 'Income Records',
-        'available_balance' => 'Balance (SDT)',
+        'available_balance' => 'Balance (USDT)',
         'total_earnings' => 'Total earnings (USDT)',
         'earnings_24h' => 'Earnings 24h (USDT)',
         'mode_demo' => 'DEMO',
