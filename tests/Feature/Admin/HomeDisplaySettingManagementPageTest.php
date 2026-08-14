@@ -20,7 +20,11 @@ class HomeDisplaySettingManagementPageTest extends AdminPanelTestCase
             ->assertSee('人数跳动秒数')
             ->assertSee('获利跳动范围最小值')
             ->assertSee('统一平台获利基础值')
-            ->assertSee('平台获利跳动秒数');
+            ->assertSee('平台获利跳动秒数')
+            ->assertSee('BTC Volume 倍率')
+            ->assertSee('ETH Volume 倍率')
+            ->assertDontSee('24h Volume 跳动秒数')
+            ->assertDontSee('Liquidity 跳动秒数');
     }
 
     public function test_admin_can_save_home_display_values(): void
@@ -41,6 +45,8 @@ class HomeDisplaySettingManagementPageTest extends AdminPanelTestCase
                 'shared_exchange_profit_step_seconds' => '3',
                 'shared_exchange_profit_min_delta' => '-5',
                 'shared_exchange_profit_max_delta' => '10',
+                'shared_exchange_btc_volume_multiplier' => '1.2345',
+                'shared_exchange_eth_volume_multiplier' => '2.3456',
             ])
             ->call('save')
             ->assertHasNoFormErrors();
@@ -59,6 +65,8 @@ class HomeDisplaySettingManagementPageTest extends AdminPanelTestCase
             'shared_exchange_profit_step_seconds' => 3,
             'shared_exchange_profit_min_delta' => '-5.00',
             'shared_exchange_profit_max_delta' => '10.00',
+            'shared_exchange_btc_volume_multiplier' => '1.2345',
+            'shared_exchange_eth_volume_multiplier' => '2.3456',
         ]);
     }
 }

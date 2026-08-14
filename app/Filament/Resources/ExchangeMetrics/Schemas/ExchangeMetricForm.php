@@ -38,18 +38,33 @@ class ExchangeMetricForm
                 Section::make('展示数据')
                     ->columns(2)
                     ->schema([
-                        TextInput::make('display_btc_volume')
-                            ->label('BTC 24h Volume')
-                            ->required(),
                         TextInput::make('display_btc_liquidity')
                             ->label('BTC Liquidity')
-                            ->required(),
-                        TextInput::make('display_eth_volume')
-                            ->label('ETH 24h Volume')
                             ->required(),
                         TextInput::make('display_eth_liquidity')
                             ->label('ETH Liquidity')
                             ->required(),
+                    ]),
+                Section::make('Liquidity 跳动设置')
+                    ->description('当前交易平台的 BTC/ETH Liquidity 共用这组跳动范围；24h Volume 会按首页展示数值里的 BTC/ETH 倍率自动计算。')
+                    ->columns(3)
+                    ->schema([
+                        TextInput::make('liquidity_step_seconds')
+                            ->label('跳动秒数')
+                            ->required()
+                            ->numeric()
+                            ->integer()
+                            ->minValue(1),
+                        TextInput::make('liquidity_min_delta')
+                            ->label('跳动范围最小值')
+                            ->required()
+                            ->numeric()
+                            ->step('0.01'),
+                        TextInput::make('liquidity_max_delta')
+                            ->label('跳动范围最大值')
+                            ->required()
+                            ->numeric()
+                            ->step('0.01'),
                     ]),
             ]);
     }

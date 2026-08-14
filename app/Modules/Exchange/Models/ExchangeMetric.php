@@ -12,10 +12,11 @@ class ExchangeMetric extends Model
     protected $fillable = [
         'exchange_code',
         'exchange_name',
-        'display_btc_volume',
         'display_btc_liquidity',
-        'display_eth_volume',
         'display_eth_liquidity',
+        'liquidity_step_seconds',
+        'liquidity_min_delta',
+        'liquidity_max_delta',
         'sort',
         'is_active',
     ];
@@ -25,6 +26,9 @@ class ExchangeMetric extends Model
         return [
             'sort' => 'int',
             'is_active' => 'bool',
+            'liquidity_step_seconds' => 'int',
+            'liquidity_min_delta' => 'decimal:2',
+            'liquidity_max_delta' => 'decimal:2',
         ];
     }
 }

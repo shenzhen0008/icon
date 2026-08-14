@@ -87,15 +87,18 @@ class ExchangeMetricsPageTest extends TestCase
             'shared_exchange_profit_step_seconds' => 3,
             'shared_exchange_profit_min_delta' => '-5.00',
             'shared_exchange_profit_max_delta' => '10.00',
+            'shared_exchange_btc_volume_multiplier' => '1.2345',
+            'shared_exchange_eth_volume_multiplier' => '2.3456',
         ]);
 
         ExchangeMetric::query()
             ->where('exchange_code', 'binance')
             ->update([
-                'display_btc_volume' => '$1.50',
                 'display_btc_liquidity' => '947',
-                'display_eth_volume' => '$2.50',
                 'display_eth_liquidity' => '999',
+                'liquidity_step_seconds' => 5,
+                'liquidity_min_delta' => '-5.00',
+                'liquidity_max_delta' => '10.00',
             ]);
 
         $this->get('/')
@@ -119,8 +122,11 @@ class ExchangeMetricsPageTest extends TestCase
             ->assertDontSee('$2057')
             ->assertSee('data-shared-profit-base-value="2057.31"', false)
             ->assertSee('data-shared-profit-step-seconds="3"', false)
-            ->assertSee('base-anchored-ticker:ready', false)
-            ->assertSee('new Date()', false)
+            ->assertSee('data-btc-volume-multiplier="1.2345"', false)
+            ->assertSee('data-eth-volume-multiplier="2.3456"', false)
+            ->assertSee('data-liquidity-step-seconds="5"', false)
+            ->assertSee('data-liquidity-min-delta="-5.00"', false)
+            ->assertSee('data-liquidity-max-delta="10.00"', false)
             ->assertDontSee('2026-04-16 12:34:56');
     }
 

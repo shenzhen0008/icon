@@ -25,7 +25,7 @@
 
     <x-home.hero :summary="$summary" :hero-panel-payloads="$heroPanelPayloads" :payment-config="$paymentConfig" :payment-assets="$homePaymentAssets" :is-guest="$isGuest" :show-record-buttons="false" />
     <x-home.stats :summary="$summary" />
-    <x-home.exchange-metrics :metrics="$metrics" :shared-profit="$sharedExchangeProfit" />
+    <x-home.exchange-metrics :metrics="$metrics" :shared-profit="$sharedExchangeProfit" :volume-multipliers="$sharedExchangeVolumeMultipliers" />
     <x-home.friendly-links />
   </main>
 

@@ -24,14 +24,13 @@ class ExchangeMetricsTable
                     ->label('交易所名称')
                     ->searchable()
                     ->sortable(),
-                TextColumn::make('display_btc_volume')
-                    ->label('BTC 24h Volume'),
                 TextColumn::make('display_btc_liquidity')
                     ->label('BTC Liquidity'),
-                TextColumn::make('display_eth_volume')
-                    ->label('ETH 24h Volume'),
                 TextColumn::make('display_eth_liquidity')
                     ->label('ETH Liquidity'),
+                TextColumn::make('liquidity_step_seconds')
+                    ->label('Liquidity 秒数')
+                    ->toggleable(),
                 TextColumn::make('sort')
                     ->label('排序')
                     ->sortable(),

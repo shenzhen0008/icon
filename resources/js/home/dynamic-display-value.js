@@ -41,7 +41,7 @@ export const startBaseAnchoredTicker = ({
   maxDelta,
   stepSeconds,
   precision,
-  setIntervalFn = window.setInterval.bind(window),
+  setIntervalFn = globalThis.setInterval.bind(globalThis),
 }) => {
   if (!Array.isArray(elements) || elements.length === 0) return null;
 
@@ -60,6 +60,124 @@ export const startBaseAnchoredTicker = ({
 
     elements.forEach((element, index) => {
       element.textContent = nextValues[index] ?? formatValue(base, safePrecision);
+    });
+  };
+
+  render();
+  return setIntervalFn(render, intervalMs);
+};
+
+const resolveNumberPresentation = (value) => {
+  const text = String(value || '0');
+  const match = text.match(/^(.*?)([-+]?[\d,]*\.?\d+)(.*?)$/);
+
+  return {
+    baseValue: parseTickerNumber(match?.[2] ?? text),
+    prefix: match?.[1] ?? '',
+    suffix: match?.[3] ?? '',
+  };
+};
+
+export const startElementAnchoredTicker = ({
+  elements,
+  minDelta,
+  maxDelta,
+  stepSeconds,
+  precision,
+  randomizer,
+  setIntervalFn = globalThis.setInterval.bind(globalThis),
+}) => {
+  if (!Array.isArray(elements) || elements.length === 0) return null;
+
+  const presentations = elements.map((element) => resolveNumberPresentation(element.textContent));
+  const intervalMs = Math.max(1, Number(stepSeconds || 1)) * 1000;
+  const safePrecision = Number.isInteger(precision) ? precision : 2;
+
+  const render = () => {
+    elements.forEach((element, index) => {
+      const presentation = presentations[index];
+      const [value] = buildBaseAnchoredTickValues({
+        elementCount: 1,
+        baseValue: presentation.baseValue,
+        minDelta,
+        maxDelta,
+        precision: safePrecision,
+        randomizer,
+      });
+      element.textContent = `${presentation.prefix}${value}${presentation.suffix}`;
+    });
+  };
+
+  render();
+  return setIntervalFn(render, intervalMs);
+};
+
+const formatPresentedValue = ({ value, prefix, suffix, precision }) => `${prefix}${formatValue(value, precision)}${suffix}`;
+
+export const startLiquidityDrivenVolumeTicker = ({
+  row,
+  btcVolumeMultiplier = 1,
+  ethVolumeMultiplier = 1,
+  minDelta,
+  maxDelta,
+  stepSeconds,
+  precision,
+  randomizer,
+  setIntervalFn = globalThis.setInterval.bind(globalThis),
+}) => {
+  if (!row) return null;
+
+  const pairs = [
+    {
+      volumeElement: row.querySelector?.('[data-field="btc_value"]'),
+      liquidityElement: row.querySelector?.('[data-field="btc_liquidity"]'),
+      volumeMultiplier: btcVolumeMultiplier,
+    },
+    {
+      volumeElement: row.querySelector?.('[data-field="eth_value"]'),
+      liquidityElement: row.querySelector?.('[data-field="eth_liquidity"]'),
+      volumeMultiplier: ethVolumeMultiplier,
+    },
+  ].filter(({ volumeElement, liquidityElement }) => volumeElement && liquidityElement);
+
+  if (pairs.length === 0) return null;
+
+  const safePrecision = Number.isInteger(precision) ? precision : 2;
+  const presentations = pairs.map(({ volumeElement, liquidityElement, volumeMultiplier }) => {
+    const volumePresentation = resolveNumberPresentation(volumeElement.textContent);
+    const liquidityPresentation = resolveNumberPresentation(liquidityElement.textContent);
+    const multiplier = Number(volumeMultiplier || 0);
+
+    return { volumePresentation, liquidityPresentation, multiplier };
+  });
+  const intervalMs = Math.max(1, Number(stepSeconds || 1)) * 1000;
+
+  const render = () => {
+    pairs.forEach(({ volumeElement, liquidityElement }, index) => {
+      const presentation = presentations[index];
+      const [liquidityValue] = buildBaseAnchoredTickValues({
+        elementCount: 1,
+        baseValue: presentation.liquidityPresentation.baseValue,
+        minDelta,
+        maxDelta,
+        precision: safePrecision,
+        randomizer,
+      });
+      const liquidityNumber = parseTickerNumber(liquidityValue);
+      const volumeNumber = liquidityNumber * presentation.multiplier;
+
+      liquidityElement.textContent = formatPresentedValue({
+        value: liquidityNumber,
+        prefix: presentation.liquidityPresentation.prefix,
+        suffix: presentation.liquidityPresentation.suffix,
+        precision: safePrecision,
+      });
+      volumeElement.textContent = formatPresentedValue({
+        value: volumeNumber,
+        prefix: presentation.volumePresentation.prefix,
+        suffix: presentation.volumePresentation.suffix,
+        precision: safePrecision,
+      });
     });
   };
 
@@ -89,7 +207,7 @@ const renderSummaryTickerElement = (element, randomizer) => {
 
 export const startHomeSummaryTicker = ({
   root = document,
-  setIntervalFn = window.setInterval.bind(window),
+  setIntervalFn = globalThis.setInterval.bind(globalThis),
   visibilityStateProvider = () => document.visibilityState,
   randomizer,
 } = {}) => {
@@ -122,7 +240,7 @@ export const startHomeSummaryTicker = ({
 
 export const startHomeExchangeMetrics = ({
   root = document,
-  setIntervalFn = window.setInterval.bind(window),
+  setIntervalFn = globalThis.setInterval.bind(globalThis),
 } = {}) => {
   const list = root.querySelector?.('#exchange-metrics-list');
   if (!list || initializedExchangeMetricLists.has(list)) {
@@ -132,6 +250,7 @@ export const startHomeExchangeMetrics = ({
   const section = list.closest?.('section[data-shared-profit-base-value]');
   const updatedFields = Array.from(list.querySelectorAll?.('[data-field="updated_at"]') || []);
   const profitFields = Array.from(list.querySelectorAll?.('[data-field="profit_value"]') || []);
+  const detailRows = Array.from(list.querySelectorAll?.('[data-detail-row]') || []);
 
   initializedExchangeMetricLists.add(list);
   list.dataset.homeExchangeMetricsStarted = 'true';
@@ -169,7 +288,20 @@ export const startHomeExchangeMetrics = ({
     })
     : null;
 
-  return { updatedAtIntervalId, profitIntervalId };
+  const liquidityIntervalIds = detailRows
+    .map((row) => startLiquidityDrivenVolumeTicker({
+      row,
+      btcVolumeMultiplier: section?.dataset.btcVolumeMultiplier,
+      ethVolumeMultiplier: section?.dataset.ethVolumeMultiplier,
+      minDelta: row.dataset.liquidityMinDelta,
+      maxDelta: row.dataset.liquidityMaxDelta,
+      stepSeconds: Number(row.dataset.liquidityStepSeconds || 3),
+      precision: 2,
+      setIntervalFn,
+    }))
+    .filter((intervalId) => intervalId !== null);
+
+  return { updatedAtIntervalId, profitIntervalId, liquidityIntervalIds };
 };
 
 export const initHomeDynamicDisplay = (root = document) => {
@@ -189,4 +321,6 @@ if (typeof window !== 'undefined') {
   });
   window.dispatchEvent(new CustomEvent('base-anchored-ticker:ready'));
   window.dispatchEvent(new CustomEvent('home-dynamic-display:ready'));
+
+  initHomeDynamicDisplay();
 }

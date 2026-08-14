@@ -85,6 +85,20 @@ class HomeDisplaySettingForm
                             ->required()
                             ->numeric()
                             ->step('0.01'),
+                        TextInput::make('shared_exchange_btc_volume_multiplier')
+                            ->label('BTC Volume 倍率')
+                            ->helperText('前台按 当前 BTC Liquidity × 此倍率 计算 BTC 24h Volume。')
+                            ->required()
+                            ->numeric()
+                            ->step('0.0001')
+                            ->minValue(0),
+                        TextInput::make('shared_exchange_eth_volume_multiplier')
+                            ->label('ETH Volume 倍率')
+                            ->helperText('前台按 当前 ETH Liquidity × 此倍率 计算 ETH 24h Volume。')
+                            ->required()
+                            ->numeric()
+                            ->step('0.0001')
+                            ->minValue(0),
                     ]),
             ]);
     }

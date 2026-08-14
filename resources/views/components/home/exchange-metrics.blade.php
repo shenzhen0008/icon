@@ -1,6 +1,7 @@
 @props([
     'metrics' => [],
     'sharedProfit' => [],
+    'volumeMultipliers' => [],
 ])
 
 <section
@@ -9,6 +10,8 @@
     data-shared-profit-step-seconds="{{ $sharedProfit['step_seconds'] ?? 3 }}"
     data-shared-profit-min-delta="{{ $sharedProfit['min_delta'] ?? '0.00' }}"
     data-shared-profit-max-delta="{{ $sharedProfit['max_delta'] ?? '0.00' }}"
+    data-btc-volume-multiplier="{{ $volumeMultipliers['btc'] ?? '1.0000' }}"
+    data-eth-volume-multiplier="{{ $volumeMultipliers['eth'] ?? '1.0000' }}"
 >
     <div class="mb-4 flex items-center justify-between gap-3">
         <h2 class="text-scale-title font-semibold text-theme">{{ __('pages/home.exchange.title') }}</h2>
@@ -40,7 +43,13 @@
                     <span class="font-semibold text-[rgb(var(--theme-primary))]" data-field="profit_value">{{ $metric['profit_value'] }}</span>
                 </button>
 
-                <div class="hidden border-t border-theme px-4 py-3 text-scale-body" data-detail-row="{{ $metric['exchange_code'] }}">
+                <div
+                    class="hidden border-t border-theme px-4 py-3 text-scale-body"
+                    data-detail-row="{{ $metric['exchange_code'] }}"
+                    data-liquidity-step-seconds="{{ $metric['liquidity_step_seconds'] ?? 3 }}"
+                    data-liquidity-min-delta="{{ $metric['liquidity_min_delta'] ?? '0.00' }}"
+                    data-liquidity-max-delta="{{ $metric['liquidity_max_delta'] ?? '0.00' }}"
+                >
                     <div class="grid grid-cols-3 border-b border-theme pb-2 text-scale-micro text-theme-secondary">
                         <span>{{ __('pages/home.exchange.currency') }}</span>
                         <span class="text-center">{{ __('pages/home.exchange.volume_24h') }}</span>
@@ -61,7 +70,7 @@
                             </span>
                             <span>BTC</span>
                         </span>
-                        <span class="text-center text-theme" data-field="btc_value">{{ $metric['btc_value'] }}</span>
+                        <span class="text-center text-theme" data-field="btc_value">--</span>
                         <span class="text-right text-theme" data-field="btc_liquidity">{{ $metric['btc_liquidity'] }}</span>
                     </div>
                     <div class="mt-2 grid grid-cols-3 items-center gap-2">
@@ -78,7 +87,7 @@
                             </span>
                             <span>ETH</span>
                         </span>
-                        <span class="text-center text-theme" data-field="eth_value">{{ $metric['eth_value'] }}</span>
+                        <span class="text-center text-theme" data-field="eth_value">--</span>
                         <span class="text-right text-theme" data-field="eth_liquidity">{{ $metric['eth_liquidity'] }}</span>
                     </div>
                     <p class="mt-2 text-scale-micro text-theme-secondary" data-field="updated_at">{{ __('pages/home.exchange.updated_prefix') }}: --</p>
@@ -87,57 +96,3 @@
         @endforeach
     </div>
 </section>
-
-<script>
-    (() => {
-        const list = document.getElementById('exchange-metrics-list');
-        if (!list) return;
-        const section = list.closest('section[data-shared-profit-base-value]');
-        const updatedFields = Array.from(list.querySelectorAll('[data-field="updated_at"]'));
-        const profitFields = Array.from(list.querySelectorAll('[data-field="profit_value"]'));
-
-        const refreshUpdatedAt = () => {
-            const now = new Date();
-            const timestamp = now.toLocaleString('sv-SE', { hour12: false }).replace('T', ' ');
-            updatedFields.forEach((field) => {
-                field.textContent = `${@json(__('pages/home.exchange.updated_prefix'))}: ${timestamp}`;
-            });
-        };
-
-        const startProfitTicker = () => {
-            if (!section || profitFields.length === 0 || typeof window.startBaseAnchoredTicker !== 'function') {
-                return;
-            }
-
-            window.startBaseAnchoredTicker({
-                elements: profitFields,
-                baseValue: section.dataset.sharedProfitBaseValue,
-                minDelta: section.dataset.sharedProfitMinDelta,
-                maxDelta: section.dataset.sharedProfitMaxDelta,
-                stepSeconds: Number(section.dataset.sharedProfitStepSeconds || 3),
-                precision: 2,
-            });
-        };
-
-        const ensureProfitTicker = () => {
-            if (typeof window.startBaseAnchoredTicker === 'function') {
-                startProfitTicker();
-                return;
-            }
-
-            window.addEventListener('base-anchored-ticker:ready', startProfitTicker, { once: true });
-        };
-
-        list.querySelectorAll('[data-toggle-row]').forEach((button) => {
-            const code = button.dataset.code;
-            if (!code) return;
-
-            const detail = list.querySelector(`[data-detail-row="${code}"]`);
-            button.addEventListener('click', () => detail?.classList.toggle('hidden'));
-        });
-
-        refreshUpdatedAt();
-        ensureProfitTicker();
-        setInterval(refreshUpdatedAt, 1000);
-    })();
-</script>

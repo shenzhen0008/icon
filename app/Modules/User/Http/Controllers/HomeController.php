@@ -41,10 +41,11 @@ class HomeController extends Controller
                 'exchange_code' => $metric->exchange_code,
                 'exchange_name' => $metric->exchange_name,
                 'logo_url' => (string) ($logos[$metric->exchange_code] ?? ''),
-                'btc_value' => (string) $metric->display_btc_volume,
                 'btc_liquidity' => (string) $metric->display_btc_liquidity,
-                'eth_value' => (string) $metric->display_eth_volume,
                 'eth_liquidity' => (string) $metric->display_eth_liquidity,
+                'liquidity_step_seconds' => $metric->liquidity_step_seconds,
+                'liquidity_min_delta' => number_format((float) $metric->liquidity_min_delta, 2, '.', ''),
+                'liquidity_max_delta' => number_format((float) $metric->liquidity_max_delta, 2, '.', ''),
                 'profit_value' => number_format((float) $homeDisplaySetting->shared_exchange_profit_base_value, 2, '.', ','),
             ])
             ->all();
@@ -152,6 +153,10 @@ class HomeController extends Controller
                 'step_seconds' => $homeDisplaySetting->shared_exchange_profit_step_seconds,
                 'min_delta' => number_format((float) $homeDisplaySetting->shared_exchange_profit_min_delta, 2, '.', ''),
                 'max_delta' => number_format((float) $homeDisplaySetting->shared_exchange_profit_max_delta, 2, '.', ''),
+            ],
+            'sharedExchangeVolumeMultipliers' => [
+                'btc' => number_format((float) $homeDisplaySetting->shared_exchange_btc_volume_multiplier, 4, '.', ''),
+                'eth' => number_format((float) $homeDisplaySetting->shared_exchange_eth_volume_multiplier, 4, '.', ''),
             ],
             'homePaymentAssets' => $homePaymentAssets,
             'paymentConfig' => [

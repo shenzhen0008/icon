@@ -21,6 +21,8 @@ class HomeDisplaySetting extends Model
         'shared_exchange_profit_step_seconds',
         'shared_exchange_profit_min_delta',
         'shared_exchange_profit_max_delta',
+        'shared_exchange_btc_volume_multiplier',
+        'shared_exchange_eth_volume_multiplier',
     ];
 
     protected function casts(): array
@@ -38,6 +40,8 @@ class HomeDisplaySetting extends Model
             'shared_exchange_profit_step_seconds' => 'int',
             'shared_exchange_profit_min_delta' => 'decimal:2',
             'shared_exchange_profit_max_delta' => 'decimal:2',
+            'shared_exchange_btc_volume_multiplier' => 'decimal:4',
+            'shared_exchange_eth_volume_multiplier' => 'decimal:4',
         ];
     }
 }

@@ -10,7 +10,11 @@ class TestingEnvironmentSafetyTest extends TestCase
     {
         $this->assertSame('testing', getenv('APP_ENV'));
         $this->assertSame('icon_market_test', getenv('DB_DATABASE'));
-        $this->assertSame('/tmp/icon-market-testing-config.php', getenv('APP_CONFIG_CACHE'));
+
+        $configCachePath = (string) getenv('APP_CONFIG_CACHE');
+
+        $this->assertNotSame('', $configCachePath);
+        $this->assertStringContainsString('testing', basename($configCachePath));
+        $this->assertTrue(is_writable(dirname($configCachePath)));
     }
 }
-

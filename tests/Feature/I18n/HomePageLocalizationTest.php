@@ -105,9 +105,7 @@ class HomePageLocalizationTest extends TestCase
 
         ExchangeMetric::query()->firstOrCreate(['exchange_code' => 'BINANCE'], [
             'exchange_name' => 'Binance',
-            'display_btc_volume' => '$100',
             'display_btc_liquidity' => '200',
-            'display_eth_volume' => '$300',
             'display_eth_liquidity' => '400',
             'is_active' => true,
             'sort' => 1,
