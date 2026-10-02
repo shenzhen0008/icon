@@ -7,7 +7,45 @@ import {
   startHomeExchangeMetrics,
   startHomeSummaryTicker,
   startLiquidityDrivenVolumeTicker,
+  refreshHomeSummary,
 } from '../../../resources/js/home/dynamic-display-value.js';
+
+test('summary refresh follows current DOM after cached navigation and does not apply stale responses', async () => {
+  const previousDocument = globalThis.document;
+  const previousFetch = globalThis.fetch;
+  const makeNodes = () => ({
+    'summary-participant-count': { textContent: '0', dataset: {}, isConnected: true },
+    'summary-total-profit': { textContent: '0', dataset: { summaryTickerSuffix: 'USDT' }, isConnected: true },
+  });
+  let nodes = makeNodes();
+  let calls = 0;
+  let resolveFetch;
+  globalThis.document = { visibilityState: 'visible', getElementById: (id) => nodes[id] };
+  globalThis.fetch = () => { calls++; return new Promise((resolve) => { resolveFetch = resolve; }); };
+  try {
+    const pending = refreshHomeSummary();
+    await refreshHomeSummary();
+    assert.equal(calls, 1);
+    const oldNodes = nodes;
+    Object.values(oldNodes).forEach((node) => { node.isConnected = false; });
+    nodes = makeNodes();
+    resolveFetch({ ok: true, json: async () => ({ participant_count: '100', total_profit: '1,000.00' }) });
+    await pending;
+    assert.equal(oldNodes['summary-participant-count'].textContent, '0');
+    assert.equal(nodes['summary-participant-count'].textContent, '0');
+    const current = refreshHomeSummary();
+    resolveFetch({ ok: true, json: async () => ({ participant_count: '100', total_profit: '1,000.00' }) });
+    await current;
+    assert.equal(nodes['summary-participant-count'].textContent, '100');
+    assert.equal(nodes['summary-total-profit'].textContent, '1,000.00 USDT');
+    nodes = {};
+    await refreshHomeSummary();
+    assert.equal(calls, 2);
+  } finally {
+    globalThis.document = previousDocument;
+    globalThis.fetch = previousFetch;
+  }
+});
 
 test('buildBaseAnchoredTickValues generates an independent value for each element', () => {
   const picks = [-2, -1, 3];

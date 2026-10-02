@@ -207,13 +207,9 @@ class ExchangeMetricsPageTest extends TestCase
             ->assertDontSee('/exchange-metrics', false)
             ->assertDontSee('fetch(\'/exchange-metrics\'', false)
             ->assertDontSee('setInterval(refreshSummary, 3000);', false)
-            ->assertSee('const summaryRefreshIntervalMs = 15000;', false)
-            ->assertSee('startSummaryTicker();', false)
             ->assertSee('data-summary-ticker-base-value=', false)
             ->assertSee('data-summary-ticker-step-seconds=', false)
-            ->assertSee("document.visibilityState === 'hidden'", false)
-            ->assertSee('let isRefreshingSummary = false;', false)
-            ->assertSee("fetch('/home-summary'", false);
+            ->assertDontSee('home-popup-modal', false);
     }
 
     public function test_exchange_metrics_feed_route_is_removed(): void

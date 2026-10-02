@@ -12,17 +12,16 @@ class PopupPushFeedTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_guest_home_summary_returns_null_popup_even_if_campaign_exists(): void
+    public function test_pending_popup_requires_authentication_and_returns_targeted_activity(): void
     {
         $target = User::factory()->create();
         $campaignId = $this->createCampaignForUsers([$target->id]);
 
-        $this->get('/home-summary')
-            ->assertOk()
-            ->assertJsonPath('popup', null);
+        $this->get('/popup/pending')->assertRedirect('/login');
+        $this->getJson('/popup/pending')->assertUnauthorized();
 
         $this->actingAs($target)
-            ->get('/home-summary')
+            ->getJson('/popup/pending')
             ->assertOk()
             ->assertJsonPath('popup.campaign_id', $campaignId);
     }
@@ -35,7 +34,7 @@ class PopupPushFeedTest extends TestCase
         $this->createCampaignForUsers([$target->id]);
 
         $this->actingAs($otherUser)
-            ->get('/home-summary')
+            ->getJson('/popup/pending?user_id='.$target->id)
             ->assertOk()
             ->assertJsonPath('popup', null);
     }
@@ -56,7 +55,7 @@ class PopupPushFeedTest extends TestCase
             ->assertJson(['ok' => true]);
 
         $this->actingAs($target)
-            ->get('/home-summary')
+            ->getJson('/popup/pending')
             ->assertOk()
             ->assertJsonPath('popup', null);
 
@@ -82,15 +81,94 @@ class PopupPushFeedTest extends TestCase
         );
 
         $this->actingAs($target)
-            ->get('/home-summary')
+            ->getJson('/popup/pending')
             ->assertOk()
             ->assertJsonPath('popup.campaign_id', $campaignId);
 
         Carbon::setTestNow();
     }
 
+    public function test_pending_response_is_private_and_not_cacheable(): void
+    {
+        $response = $this->actingAs(User::factory()->create())->getJson('/popup/pending')->assertOk();
+
+        $this->assertTrue($response->headers->hasCacheControlDirective('private'));
+        $this->assertTrue($response->headers->hasCacheControlDirective('no-store'));
+    }
+
+    public function test_only_latest_activity_is_returned_until_confirmed(): void
+    {
+        $target = User::factory()->create();
+        $older = $this->createCampaignForUsers([$target->id]);
+        $latest = $this->createCampaignForUsers([$target->id]);
+        DB::table('popup_campaigns')->whereIn('id', [$older, $latest])->update(['created_at' => now()]);
+
+        $this->actingAs($target)->getJson('/popup/pending')->assertJsonPath('popup.campaign_id', $latest);
+        $this->postJson("/popup/{$latest}/shown")->assertOk();
+        $this->getJson('/popup/pending')->assertJsonPath('popup.campaign_id', $latest);
+        $this->postJson("/popup/{$latest}/confirm")->assertOk();
+        $this->getJson('/popup/pending')->assertJsonPath('popup.campaign_id', $older);
+
+        DB::table('popup_campaigns')->where('id', $older)->update(['created_at' => now()->addMinute()]);
+        DB::table('popup_receipts')->where('campaign_id', $latest)->delete();
+        $this->getJson('/popup/pending')->assertJsonPath('popup.campaign_id', $older);
+    }
+
+    public function test_inactive_future_and_expired_activities_are_not_returned(): void
+    {
+        $target = User::factory()->create();
+        $inactive = $this->createCampaignForUsers([$target->id]);
+        DB::table('popup_campaigns')->where('id', $inactive)->update(['status' => 'draft']);
+        $this->createCampaignForUsers([$target->id], startsAt: now()->addDay()->toDateTimeString());
+        $this->createCampaignForUsers([$target->id], endsAt: now()->subDay()->toDateTimeString());
+
+        $this->actingAs($target)->getJson('/popup/pending')->assertOk()->assertJsonPath('popup', null);
+    }
+
+    public function test_receipts_reject_non_targets_invalid_ids_and_anonymous_users(): void
+    {
+        $target = User::factory()->create();
+        $campaign = $this->createCampaignForUsers([$target->id]);
+
+        foreach (['shown', 'confirm'] as $action) {
+            $this->postJson("/popup/{$campaign}/{$action}")->assertUnauthorized();
+        }
+
+        $this->actingAs(User::factory()->create());
+        foreach (['shown', 'confirm'] as $action) {
+            $this->postJson("/popup/{$campaign}/{$action}")->assertUnprocessable()->assertJsonValidationErrors('campaign_id');
+            $this->postJson("/popup/999999999/{$action}")->assertUnprocessable()->assertJsonValidationErrors('campaign_id');
+        }
+
+        $this->assertDatabaseCount('popup_receipts', 0);
+    }
+
+    public function test_receipts_are_idempotent_and_stats_do_not_include_popup(): void
+    {
+        $target = User::factory()->create();
+        $campaign = $this->createCampaignForUsers([$target->id]);
+        $this->actingAs($target);
+        foreach (['shown', 'confirm', 'shown', 'confirm'] as $action) {
+            $this->postJson("/popup/{$campaign}/{$action}")->assertOk()->assertJsonPath('ok', true);
+        }
+        $this->assertDatabaseCount('popup_receipts', 1);
+        $this->getJson('/home-summary')->assertOk()->assertJsonMissingPath('popup');
+        $this->postJson("/popup/{$campaign}/dismiss")->assertNotFound();
+    }
+
+    public function test_common_pages_mount_popup_once_outside_main(): void
+    {
+        $this->actingAs(User::factory()->create());
+        foreach (['/', '/me', '/products', '/recharge', '/me/orders'] as $path) {
+            $response = $this->get($path)->assertOk();
+            $html = $response->getContent();
+            $this->assertSame(1, substr_count($html, 'id="pending-popup-modal"'), $path);
+            $this->assertLessThan(strpos($html, '<main'), strpos($html, 'id="pending-popup-modal"'), $path);
+        }
+    }
+
     /**
-     * @param array<int> $userIds
+     * @param  array<int>  $userIds
      */
     private function createCampaignForUsers(array $userIds, ?string $startsAt = null, ?string $endsAt = null): int
     {

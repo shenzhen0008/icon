@@ -24,6 +24,7 @@ return [
         'total_profit' => 'Lucro total',
         'total_profit_suffix' => 'USDT',
         'popup_confirm' => 'Entendido',
+        'popup_confirm_failed' => 'A confirmação falhou. Tente novamente.',
         'popup_salutation_default' => 'Usuário',
     ],
     'exchange' => [

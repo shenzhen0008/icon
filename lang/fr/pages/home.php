@@ -24,6 +24,7 @@ return [
         'total_profit' => 'Profit total',
         'total_profit_suffix' => 'USDT',
         'popup_confirm' => 'Compris',
+        'popup_confirm_failed' => 'La confirmation a échoué. Veuillez réessayer.',
         'popup_salutation_default' => 'Utilisateur',
     ],
     'exchange' => [

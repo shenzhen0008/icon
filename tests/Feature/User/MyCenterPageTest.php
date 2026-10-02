@@ -187,7 +187,7 @@ class MyCenterPageTest extends TestCase
             ->assertSee('Please enter and confirm a 6-digit trading PIN.')
             ->assertSee('Enter 6-digit PIN')
             ->assertSee('Confirm 6-digit PIN')
-            ->assertSee('Confirm Registration');
+            ->assertSee('Create Account');
     }
 
     public function test_my_center_shows_mnemonic_setup_notice_when_user_has_no_mnemonic(): void

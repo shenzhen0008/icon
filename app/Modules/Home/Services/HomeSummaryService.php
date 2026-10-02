@@ -3,18 +3,14 @@
 namespace App\Modules\Home\Services;
 
 use App\Modules\Home\Models\HomeDisplaySetting;
-use App\Modules\PopupPush\Services\PopupFeedService;
 
 class HomeSummaryService
 {
     public function __construct(
         private readonly DynamicDisplayValueService $dynamicDisplayValueService,
-        private readonly PopupFeedService $popupFeedService,
-    )
-    {
-    }
+    ) {}
 
-    public function resolve(?int $userId = null): array
+    public function resolve(): array
     {
         $setting = HomeDisplaySetting::query()->firstOrCreate([
             'id' => 1,
@@ -46,7 +42,6 @@ class HomeSummaryService
                 'min_delta' => number_format((float) $setting->summary_profit_min_delta, 2, '.', ''),
                 'max_delta' => number_format((float) $setting->summary_profit_max_delta, 2, '.', ''),
             ],
-            'popup' => $this->popupFeedService->resolveForUser($userId),
         ];
     }
 

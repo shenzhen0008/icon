@@ -17,8 +17,8 @@ return [
         'persist_excluded_paths' => [
             'home-summary',
             'home-hero-panel',
+            'popup/pending',
             'popup/*/shown',
-            'popup/*/dismiss',
             'popup/*/confirm',
         ],
     ],

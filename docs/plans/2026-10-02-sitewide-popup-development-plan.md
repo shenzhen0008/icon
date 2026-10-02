@@ -66,6 +66,7 @@
 | `resources/views/components/popup-push/pending.blade.php` | 新增 | 弹窗 DOM、读取、防重、展示与确认逻辑 |
 | `resources/views/components/nav/top.blade.php` | 修改 | 在 main 外挂载一次 `x-popup-push.pending` |
 | `resources/views/components/home/stats.blade.php` | 修改 | 同时删除原弹窗 DOM、状态、监听器和回执逻辑，保留统计刷新 |
+| `resources/js/home/dynamic-display-value.js` | 修改 | 复用现有 ticker，将统计刷新统一放在公共脚本中，每次定位当前 DOM，支持缓存恢复 |
 | `tests/Frontend/PopupPush/pending-popup.test.js` | 新增 | 用现有工具验证核心前端行为，不新增测试依赖 |
 | 现有语言字典中弹窗文案所在文件 | 必要时修改 | 复用确认文案，补充可重试的确认失败提示 |
 
@@ -165,7 +166,32 @@ npm run build
 
 | 阶段 | 状态 | 变更文件 | 执行命令与结果 | 手工验证 / 限制 |
 | --- | --- | --- | --- | --- |
-| 一：读取接口 | 未开始 | — | — | — |
-| 二：公共组件 | 未开始 | — | — | — |
-| 三：旧逻辑清理 | 未开始 | — | — | — |
-| 四：集成验收 | 未开始 | — | — | — |
+| 一：读取接口 | 已完成 | PendingPopupController、routes/web.php、config/client_env.php、PopupPushFeedTest | `php artisan test --filter=PopupPushFeedTest`：10 项通过、71 个断言 | 认证、目标用户、缓存响应头、有效期、最新活动排序、无效回执均通过 |
+| 二：公共组件 | 已完成 | popup-push/pending.blade.php、nav/top.blade.php、home/stats.blade.php、home/dynamic-display-value.js、8 种语言 home.php、前端测试 | 前端全量检查：44 项通过；`npm run build` 通过 | 五类业务页展示与确认、文本安全、Escape 禁用、失败重试、main 外挂载均已在浏览器验证 |
+| 三：旧逻辑清理 | 已完成 | HomeSummaryService、HomeSummaryFeedController、PopupReceiptService、删除 MarkPopupDismissedController、相关测试 | 搜索运行时代码确认旧键、旧 DOM、dismiss 调用已移除；PHP Pint 检查通过 | `/home-summary` 无 popup；dismiss 返回 404；HomeController 原本无用户参数，无需改动 |
+| 四：集成验收 | 已完成 | 本执行记录、构建 manifest 及对应产物 | `php artisan test`：311 项通过、2130 个断言；前端 44 项通过；构建通过 | 真实页面缓存恢复后统计请求继续运行，跨标签页防重、同活动跨账号隔离、匿名登录/注册不请求均通过 |
+
+### 实施说明与验证环境
+
+- 首页原本同时存在 stats 内联 ticker 与公共 ticker，缓存恢复又不会执行 main 内的脚本。现在删除 stats 内联脚本，复用公共 ticker，并在公共脚本中保留每 15 秒的统计刷新；请求返回后若旧节点已断开则不写入。新增前端检查覆盖缓存切换及旧响应。
+- 原有 `tests/Feature/User/MyCenterPageTest.php` 仍期待英文 `Confirm Registration`，但当前字典和页面已使用 `Create Account`；仅修正这条过期断言，使完整质量门禁通过。
+- 浏览器验证使用 Browser 技能及独立 `icon_market_test` 数据库，本地 MySQL 5.7.39；创建的 PopupDevA / PopupDevB 及测试活动仅用于验收。未修改正式数据库、数据库结构或依赖。
+- Windows 的测试运行采用以下进程级环境覆盖，没有修改 phpunit.xml 或正式环境配置。原配置的 `/tmp` 缓存路径和测试密码不适用于本机。
+
+```powershell
+$popupTestCache = 'storage/framework/cache/popup-testing'
+New-Item -ItemType Directory -Force -Path $popupTestCache | Out-Null
+foreach ($cacheKind in @('CONFIG','EVENTS','PACKAGES','ROUTES','SERVICES')) {
+    Set-Item -Path "Env:APP_${cacheKind}_CACHE" -Value "$popupTestCache/icon-market-testing-$($cacheKind.ToLower()).php"
+}
+$env:DB_PASSWORD = '' # 本机测试库配置；其他环境使用其测试库凭据
+php artisan test
+node --test tests/Frontend/*.test.js tests/Frontend/home/*.test.js tests/Frontend/PopupPush/*.test.js
+npm run build
+```
+
+- 前端检查直接执行实际 Blade 组件脚本，覆盖请求锁、防重、账号键隔离、storage 事件、存储异常、读取失败、确认失败和重试，不引入 DOM 框架或生产测试抽象。
+- 浏览器分别验证 `/`、`/me`、`/products`、`/recharge`、`/me/orders`。确认失败通过测试页的网络阻断模拟，随后解除阻断并验证确认成功；同一活动在账号 A 已展示后，切换账号 B 仍可显示。两个标签页先后检查不重复展示，不声称已消除同时首次查询的竞态。
+- 存储完全不可用的原生 DOM 验收使用临时测试页，渲染实际 Blade 组件、模拟 localStorage 抛出 SecurityError 及接口响应；展示、确认、恢复后内存防重通过。此项验证的是组件行为，未声称全站既有脚本都支持禁用存储；临时测试页和辅助脚本均未纳入交付代码。
+- 构建生成的 `public/build/manifest.json` 和哈希资源同步更新。测试日志位于 `storage/logs/popup-full-test.log`，确认失败截图另存为本次会话验证附件。
+- 交付限制仍按本计划“必须写明的交付限制”执行；没有提交、推送或部署本次改动。

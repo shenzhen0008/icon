@@ -24,6 +24,7 @@ return [
         'total_profit' => '총 수익',
         'total_profit_suffix' => 'USDT',
         'popup_confirm' => '확인했습니다',
+        'popup_confirm_failed' => '확인에 실패했습니다. 다시 시도해 주세요.',
         'popup_salutation_default' => '사용자',
     ],
     'exchange' => [

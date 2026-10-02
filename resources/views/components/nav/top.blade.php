@@ -105,6 +105,8 @@
   </div>
 </header>
 
+<x-popup-push.pending />
+
 <script>
   const topNavBackButton = document.querySelector('[data-top-nav-back]');
   const languageToggle = document.getElementById('language-toggle');

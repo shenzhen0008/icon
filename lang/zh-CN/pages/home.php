@@ -24,6 +24,7 @@ return [
         'total_profit' => '总盘获利值',
         'total_profit_suffix' => 'USDT',
         'popup_confirm' => '我已知晓',
+        'popup_confirm_failed' => '确认失败，请重试。',
         'popup_salutation_default' => '用户',
     ],
     'exchange' => [

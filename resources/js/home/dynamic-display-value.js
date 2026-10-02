@@ -309,6 +309,34 @@ export const initHomeDynamicDisplay = (root = document) => {
   startHomeExchangeMetrics({ root });
 };
 
+// Resolve the current nodes on each refresh: cached navigation replaces main.
+let isRefreshingSummary = false;
+export const refreshHomeSummary = async () => {
+  const participant = document.getElementById('summary-participant-count');
+  const totalProfit = document.getElementById('summary-total-profit');
+  if (!participant || !totalProfit || document.visibilityState === 'hidden' || isRefreshingSummary) return;
+
+  isRefreshingSummary = true;
+  try {
+    const response = await fetch('/home-summary', { headers: { Accept: 'application/json' } });
+    if (!response.ok) return;
+    const payload = await response.json();
+    if (!participant.isConnected || !totalProfit.isConnected) return;
+    if (typeof payload.participant_count === 'string') {
+      participant.textContent = payload.participant_count;
+      participant.dataset.summaryTickerBaseValue = String(parseTickerNumber(payload.participant_count));
+    }
+    if (typeof payload.total_profit === 'string') {
+      totalProfit.textContent = `${payload.total_profit} ${totalProfit.dataset.summaryTickerSuffix || ''}`.trim();
+      totalProfit.dataset.summaryTickerBaseValue = String(parseTickerNumber(payload.total_profit));
+    }
+  } catch (_) {
+    // Statistics are retried at the next interval.
+  } finally {
+    isRefreshingSummary = false;
+  }
+};
+
 if (typeof window !== 'undefined') {
   window.startBaseAnchoredTicker = startBaseAnchoredTicker;
   window.startHomeSummaryTicker = () => startHomeSummaryTicker();
@@ -323,4 +351,5 @@ if (typeof window !== 'undefined') {
   window.dispatchEvent(new CustomEvent('home-dynamic-display:ready'));
 
   initHomeDynamicDisplay();
+  setInterval(refreshHomeSummary, 15000);
 }

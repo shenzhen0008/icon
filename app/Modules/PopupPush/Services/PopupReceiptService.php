@@ -20,21 +20,6 @@ class PopupReceiptService
         $receipt->save();
     }
 
-    public function markDismissed(int $campaignId, int $userId): void
-    {
-        $receipt = $this->ensureReceipt($campaignId, $userId);
-
-        if ($receipt->shown_at === null) {
-            $receipt->shown_at = now();
-        }
-
-        if ($receipt->dismissed_at === null) {
-            $receipt->dismissed_at = now();
-        }
-
-        $receipt->save();
-    }
-
     public function markConfirmed(int $campaignId, int $userId): void
     {
         $receipt = $this->ensureReceipt($campaignId, $userId);

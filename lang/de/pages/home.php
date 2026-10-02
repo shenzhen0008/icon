@@ -24,6 +24,7 @@ return [
         'total_profit' => 'Gesamtgewinn',
         'total_profit_suffix' => 'USDT',
         'popup_confirm' => 'Verstanden',
+        'popup_confirm_failed' => 'Bestätigung fehlgeschlagen. Bitte erneut versuchen.',
         'popup_salutation_default' => 'Benutzer',
     ],
     'exchange' => [

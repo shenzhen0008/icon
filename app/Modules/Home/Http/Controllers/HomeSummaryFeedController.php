@@ -8,14 +8,12 @@ use Illuminate\Http\JsonResponse;
 
 class HomeSummaryFeedController extends Controller
 {
-    public function __construct(private readonly HomeSummaryService $homeSummaryService)
-    {
-    }
+    public function __construct(private readonly HomeSummaryService $homeSummaryService) {}
 
     public function __invoke(): JsonResponse
     {
         return response()->json(
-            $this->homeSummaryService->resolve(auth('web')->id())
+            $this->homeSummaryService->resolve()
         );
     }
 }

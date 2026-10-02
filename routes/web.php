@@ -40,7 +40,7 @@ use App\Modules\OnchainRecharge\Http\Controllers\ReportWalletClientEventControll
 use App\Modules\OnchainRecharge\Http\Controllers\SubmitOnchainRechargeRequestController;
 use App\Modules\OnchainRecharge\Http\Controllers\AutoSubmitOnchainRechargeRequestController;
 use App\Modules\PopupPush\Http\Controllers\MarkPopupConfirmedController;
-use App\Modules\PopupPush\Http\Controllers\MarkPopupDismissedController;
+use App\Modules\PopupPush\Http\Controllers\PendingPopupController;
 use App\Modules\PopupPush\Http\Controllers\MarkPopupShownController;
 use App\Modules\Support\Http\Controllers\StreamChatPageController;
 use App\Modules\User\Http\Controllers\SensitivePageController;
@@ -109,8 +109,8 @@ Route::middleware('auth')->group(function (): void {
         Route::get('/stream-chat-agent', StreamChatAgentPageController::class);
         Route::post('/stream-chat-agent/token', StreamChatAgentTokenController::class);
     });
+    Route::get('/popup/pending', PendingPopupController::class);
     Route::post('/popup/{campaign}/shown', MarkPopupShownController::class);
-    Route::post('/popup/{campaign}/dismiss', MarkPopupDismissedController::class);
     Route::post('/popup/{campaign}/confirm', MarkPopupConfirmedController::class);
 
     Route::get('/confirm-password', [ConfirmablePasswordController::class, 'show'])

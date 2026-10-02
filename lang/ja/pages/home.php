@@ -24,6 +24,7 @@ return [
         'total_profit' => '総利益',
         'total_profit_suffix' => 'USDT',
         'popup_confirm' => '了解',
+        'popup_confirm_failed' => '確認に失敗しました。もう一度お試しください。',
         'popup_salutation_default' => 'ユーザー',
     ],
     'exchange' => [
