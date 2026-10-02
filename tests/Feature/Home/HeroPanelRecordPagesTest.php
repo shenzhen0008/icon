@@ -169,7 +169,7 @@ class HeroPanelRecordPagesTest extends TestCase
             ->assertSee('Trade Records')
             ->assertSee('Type')
             ->assertSee('No trade records yet')
-            ->assertSee('Back to Home');
+            ->assertDontSee('Back to Home');
     }
 
     public function test_income_records_page_localizes_fixed_ui_copy_for_english(): void
@@ -227,7 +227,7 @@ class HeroPanelRecordPagesTest extends TestCase
             ->assertOk()
             ->assertSee('Income Records')
             ->assertSee('Product')
-            ->assertSee('Back to Home')
+            ->assertDontSee('Back to Home')
             ->assertSee('Referral Commission')
             ->assertSee('Savings Interest');
     }

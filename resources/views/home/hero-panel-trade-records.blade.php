@@ -11,7 +11,6 @@
   <x-layout.background-glow />
   <x-nav.top />
   @php
-    $localeQuery = 'locale='.urlencode(app()->getLocale());
     $modeLabel = $mode === 'demo'
       ? __('pages/trade-records.mode.demo')
       : __('pages/trade-records.mode.live');
@@ -68,7 +67,6 @@
           <h1 class="text-scale-title font-semibold text-theme">{{ __('pages/trade-records.title') }}</h1>
           <p class="mt-2 text-scale-body text-theme-secondary">{{ __('pages/trade-records.intro', ['mode' => $modeLabel]) }}</p>
         </div>
-        <a href="/?{{ $localeQuery }}" class="rounded-lg border border-theme px-3 py-2 text-scale-body text-theme-secondary hover:text-theme">{{ __('pages/trade-records.back_home') }}</a>
       </div>
     </section>
 
