@@ -26,8 +26,10 @@ class MyCenterPageTest extends TestCase
         $response->assertSee('输入 6 位 PIN');
         $response->assertSee('确认 6 位 PIN');
         $response->assertSee('设置交易 PIN');
-        $response->assertSee('已有账号，去登录');
+        $response->assertSee('注册新账户');
+        $response->assertSee('登录账户');
         $response->assertSee('data-switch-panel="login"', false);
+        $response->assertSee('grid gap-3 grid-cols-2', false);
         $response->assertSee('const shouldAutoOpen = true;', false);
         $response->assertSee('const closeRedirectUrl =', false);
         $response->assertSee('locale=zh-CN', false);

@@ -24,6 +24,8 @@ return [
         'withdrawal_debit' => '提款',
         'withdrawal_refund' => '提款退款',
     ],
+    'withdrawal_to' => '提款至 :address',
+    'withdrawal_refund_title' => '提款驳回退款',
     'status' => [
         'completed' => '已完成',
         'pending' => '待处理',

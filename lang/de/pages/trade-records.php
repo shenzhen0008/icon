@@ -24,6 +24,8 @@ return [
         'withdrawal_debit' => 'Auszahlung',
         'withdrawal_refund' => 'Auszahlungsrückerstattung',
     ],
+    'withdrawal_to' => 'Auszahlung an :address',
+    'withdrawal_refund_title' => 'Rückerstattung der Auszahlung',
     'status' => [
         'completed' => 'Abgeschlossen',
         'pending' => 'Ausstehend',

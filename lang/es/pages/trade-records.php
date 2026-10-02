@@ -24,6 +24,8 @@ return [
         'withdrawal_debit' => 'Retiro',
         'withdrawal_refund' => 'Reembolso de retiro',
     ],
+    'withdrawal_to' => 'Retiro a :address',
+    'withdrawal_refund_title' => 'Reembolso de retiro',
     'status' => [
         'completed' => 'Completado',
         'pending' => 'Pendiente',

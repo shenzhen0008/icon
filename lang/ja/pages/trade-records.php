@@ -24,6 +24,8 @@ return [
         'withdrawal_debit' => '出金',
         'withdrawal_refund' => '出金返金',
     ],
+    'withdrawal_to' => ':address への出金',
+    'withdrawal_refund_title' => '出金返金',
     'status' => [
         'completed' => '完了',
         'pending' => '保留中',

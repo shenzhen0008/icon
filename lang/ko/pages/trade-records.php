@@ -24,6 +24,8 @@ return [
         'withdrawal_debit' => '출금',
         'withdrawal_refund' => '출금 환불',
     ],
+    'withdrawal_to' => ':address로 출금',
+    'withdrawal_refund_title' => '출금 환불',
     'status' => [
         'completed' => '완료',
         'pending' => '대기 중',

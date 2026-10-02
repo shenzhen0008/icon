@@ -150,25 +150,27 @@
         @error('password'){{ $message }}@enderror
       </p>
 
-      <button
-        id="{{ $submitButtonId }}"
-        type="submit"
-        class="w-full rounded-lg bg-[rgb(var(--theme-primary))] px-4 py-2.5 font-semibold text-theme-on-primary"
-      >
-        {{ $submitLabel }}
-      </button>
+      <div @class(['grid gap-3', 'grid-cols-2' => $loginUrl !== null])>
+        <button
+          id="{{ $submitButtonId }}"
+          type="submit"
+          class="w-full rounded-lg bg-[rgb(var(--theme-primary))] px-4 py-2.5 font-semibold text-theme-on-primary"
+        >
+          {{ $submitLabel }}
+        </button>
 
+        @if ($loginUrl !== null)
+          <button
+            id="{{ $switchToLoginButtonId }}"
+            type="button"
+            data-switch-panel="login"
+            class="w-full rounded-lg border border-theme px-4 py-2.5 font-semibold text-theme hover:bg-theme-secondary/60"
+          >
+            {{ $loginLabel }}
+          </button>
+        @endif
+      </div>
     </form>
-    @if ($loginUrl !== null)
-      <button
-        id="{{ $switchToLoginButtonId }}"
-        type="button"
-        data-switch-panel="login"
-        class="mt-4 block w-full text-center text-scale-body text-theme-secondary underline decoration-theme underline-offset-2 hover:text-theme"
-      >
-        {{ $loginLabel }}
-      </button>
-    @endif
     </div>
 
     @if ($loginUrl !== null)
@@ -540,6 +542,8 @@
 
       passwordHiddenInput.value = passwordInput.value;
       confirmationHiddenInput.value = confirmationInput.value;
+      submitButton.disabled = true;
+      submitButton.classList.add('opacity-60', 'cursor-not-allowed');
       updateSubmitState();
     });
 

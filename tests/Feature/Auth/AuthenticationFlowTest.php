@@ -216,10 +216,10 @@ class AuthenticationFlowTest extends TestCase
         $this->get('/login?locale=en')
             ->assertOk()
             ->assertSee('Login')
-            ->assertSee('Password login')
+            ->assertSee('PIN login')
             ->assertSee('Mnemonic login')
             ->assertSee('Username')
-            ->assertSee('Password')
+            ->assertSee('PIN')
             ->assertSee('Remember me');
     }
 

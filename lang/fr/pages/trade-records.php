@@ -24,6 +24,8 @@ return [
         'withdrawal_debit' => 'Retrait',
         'withdrawal_refund' => 'Remboursement de retrait',
     ],
+    'withdrawal_to' => 'Retrait vers :address',
+    'withdrawal_refund_title' => 'Remboursement du retrait',
     'status' => [
         'completed' => 'Terminé',
         'pending' => 'En attente',

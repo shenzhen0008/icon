@@ -403,14 +403,16 @@ class HomeHeroPanelService
                     ],
                     'withdrawal_debit' => [
                         'event_type' => 'withdrawal_debit',
-                        'title' => '提款至 '.(string) ($withdrawalRequests->get((string) $ledger->biz_ref_id)?->destination_address ?? '--'),
+                        'title' => __('pages/trade-records.withdrawal_to', [
+                            'address' => (string) ($withdrawalRequests->get((string) $ledger->biz_ref_id)?->destination_address ?? '--'),
+                        ]),
                         'amount' => $this->formatMoney(abs((float) $ledger->amount)),
                         'status' => (string) ($withdrawalRequests->get((string) $ledger->biz_ref_id)?->status ?? 'pending'),
                         'occurred_at' => $occurredAt,
                     ],
                     'withdrawal_refund' => [
                         'event_type' => 'withdrawal_refund',
-                        'title' => '提款驳回退款',
+                        'title' => __('pages/trade-records.withdrawal_refund_title'),
                         'amount' => $this->formatMoney(abs((float) $ledger->amount)),
                         'status' => 'refunded',
                         'occurred_at' => $occurredAt,

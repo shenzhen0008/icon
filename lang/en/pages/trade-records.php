@@ -24,6 +24,8 @@ return [
         'withdrawal_debit' => 'Withdrawal',
         'withdrawal_refund' => 'Withdrawal Refund',
     ],
+    'withdrawal_to' => 'Withdrawal to :address',
+    'withdrawal_refund_title' => 'Withdrawal refund',
     'status' => [
         'completed' => 'Completed',
         'pending' => 'Pending',

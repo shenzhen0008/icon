@@ -24,6 +24,8 @@ return [
         'withdrawal_debit' => 'Saque',
         'withdrawal_refund' => 'Reembolso de saque',
     ],
+    'withdrawal_to' => 'Saque para :address',
+    'withdrawal_refund_title' => 'Reembolso de saque',
     'status' => [
         'completed' => 'Concluído',
         'pending' => 'Pendente',

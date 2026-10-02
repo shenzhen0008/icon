@@ -16,7 +16,7 @@
         <p class="mb-6 text-scale-body text-theme-secondary">{{ __('pages/auth.register.temp_username', ['username' => session(config('user.temp_username_session_key'))]) }}</p>
         <p class="mb-6 text-scale-body text-theme-secondary">{{ __('pages/auth.register.pin_hint') }}</p>
 
-        <form method="POST" action="/register" class="space-y-4 rounded-lg border border-theme bg-theme-secondary p-4">
+        <form method="POST" action="/register" class="space-y-4 rounded-lg border border-theme bg-theme-secondary p-4" onsubmit="this.querySelector('button[type=submit]').disabled = true">
             @csrf
             <input type="hidden" name="invite_code" value="{{ app(\App\Modules\Referral\Support\InviteCodeResolver::class)->currentForForm(request()) }}">
 
