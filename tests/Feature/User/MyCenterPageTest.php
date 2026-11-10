@@ -11,6 +11,24 @@ class MyCenterPageTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function test_my_center_shows_badge_only_for_assigned_levels(): void
+    {
+        $this->get('/me')->assertOk()->assertDontSee('images/user-level/');
+        $user = User::factory()->create();
+        $this->actingAs($user)->get('/me')->assertOk()->assertDontSee('images/user-level/');
+
+        foreach (range(0, 5) as $level) {
+            $user->update(['user_level' => $level]);
+            $this->get('/me')->assertOk()
+                ->assertSee('aria-label="Level '.$level.'"', false)
+                ->assertSee('images/user-level/on-dark-'.$level.'.webp')
+                ->assertSee('images/user-level/on-light-'.$level.'.webp');
+        }
+
+        $user->update(['user_level' => null]);
+        $this->get('/me')->assertOk()->assertDontSee('images/user-level/');
+    }
+
     public function test_guest_can_view_my_center_with_temp_username(): void
     {
         $response = $this->get('/me');

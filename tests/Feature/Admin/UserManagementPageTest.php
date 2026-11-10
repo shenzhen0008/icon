@@ -15,6 +15,28 @@ class UserManagementPageTest extends AdminPanelTestCase
 {
     use RefreshDatabase;
 
+    public function test_admin_can_assign_change_and_clear_user_level(): void
+    {
+        $user = User::factory()->create();
+        $form = Livewire::test(EditUser::class, ['record' => $user->getRouteKey()]);
+
+        foreach ([0, 5, null] as $level) {
+            $form->fillForm(['user_level' => $level])->call('save')->assertHasNoFormErrors();
+            $this->assertSame($level, $user->fresh()->user_level);
+        }
+
+        $form->fillForm(['user_level' => 6])->call('save')->assertHasFormErrors(['user_level']);
+        $this->assertNull($user->fresh()->user_level);
+    }
+
+    public function test_non_admin_cannot_access_user_level_editor(): void
+    {
+        $user = User::factory()->create(['is_admin' => false]);
+
+        $this->actingAs($user)->get('/admin/users/'.$user->id.'/edit')->assertRedirect();
+        $this->assertNull($user->fresh()->user_level);
+    }
+
     public function test_existing_username_cannot_be_changed_by_admin_form(): void
     {
         $user = User::factory()->create(['username' => 'StableCustomer123']);

@@ -178,6 +178,7 @@ CREATE TABLE `users` (
   `invite_code` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `referrer_id` bigint(20) unsigned DEFAULT NULL,
   `is_admin` tinyint(1) NOT NULL DEFAULT '0',
+  `user_level` tinyint unsigned DEFAULT NULL,
   `mnemonic_lookup` char(64) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,

@@ -55,6 +55,7 @@ class MyCenterController extends Controller
                 'profile' => [
                     'label' => __('pages/me.account.formal_label'),
                     'id' => $user->username,
+                    'user_level' => $user->user_level,
                     'status' => __('pages/me.account.formal_status'),
                     'created_at' => $user->created_at?->format('Y-m-d H:i') ?? '--',
                 ],

@@ -12,7 +12,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Gate;
 
-#[Fillable(['username', 'name', 'remark', 'email', 'email_verified_at', 'password', 'balance', 'invite_code', 'referrer_id', 'is_admin', 'mnemonic_lookup'])]
+#[Fillable(['username', 'name', 'remark', 'email', 'email_verified_at', 'password', 'balance', 'invite_code', 'referrer_id', 'is_admin', 'mnemonic_lookup', 'user_level'])]
 #[Hidden(['password', 'remember_token', 'mnemonic_lookup'])]
 class User extends Authenticatable implements FilamentUser
 {
@@ -30,6 +30,7 @@ class User extends Authenticatable implements FilamentUser
             'balance' => 'decimal:2',
             'referrer_id' => 'integer',
             'is_admin' => 'boolean',
+            'user_level' => 'integer',
         ];
     }
 

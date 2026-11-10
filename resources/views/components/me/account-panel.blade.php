@@ -2,10 +2,17 @@
   <h2 class="text-scale-body font-semibold text-theme">{{ __('pages/me.account.title') }}</h2>
 
   <div class="mt-4 rounded-xl border border-theme bg-theme-secondary/20 p-4">
-    <p class="text-scale-micro text-theme-secondary">{{ $profile['label'] }}</p>
-    <div class="mt-1 flex flex-nowrap items-center justify-between gap-2">
-      <p class="min-w-0 flex-1 whitespace-nowrap text-[clamp(0.78rem,3.1vw,0.96rem)] font-semibold tracking-[0.02em] text-theme">{{ $profile['id'] }}</p>
-      <button type="button" id="copy-account-button" data-copy-account-button data-copy-text="{{ $profile['id'] }}" data-copy-success-label="{{ __('pages/me.account.copied') }}" class="shrink-0 rounded-xl border border-theme bg-theme-secondary px-2.5 py-1 text-[clamp(0.68rem,2.8vw,0.8rem)] font-semibold text-theme transition hover:border-[rgb(var(--theme-primary))] hover:text-[rgb(var(--theme-primary))]">{{ __('pages/me.account.copy_account') }}</button>
+    <div class="grid grid-cols-[minmax(0,1fr)_7rem] items-center gap-x-3 gap-y-1">
+      <p class="text-scale-micro text-theme-secondary">{{ $profile['label'] }}</p>
+      @if (($profile['user_level'] ?? null) !== null)
+        <a href="#" aria-label="Level {{ $profile['user_level'] }}"
+           class="inline-block h-6 w-full justify-self-center rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 bg-[image:var(--badge-on-dark)] bg-contain bg-center bg-no-repeat [[data-theme=business]_&]:bg-[image:var(--badge-on-light)]"
+           style="--badge-on-dark: url('{{ asset('images/user-level/on-dark-'.$profile['user_level'].'.webp') }}'); --badge-on-light: url('{{ asset('images/user-level/on-light-'.$profile['user_level'].'.webp') }}')"></a>
+      @else
+        <span aria-hidden="true"></span>
+      @endif
+      <p class="min-w-0 whitespace-nowrap text-[clamp(0.78rem,3.1vw,0.96rem)] font-semibold tracking-[0.02em] text-theme">{{ $profile['id'] }}</p>
+      <button type="button" id="copy-account-button" data-copy-account-button data-copy-text="{{ $profile['id'] }}" data-copy-success-label="{{ __('pages/me.account.copied') }}" class="justify-self-center rounded-xl border border-theme bg-theme-secondary px-2.5 py-1 text-[clamp(0.68rem,2.8vw,0.8rem)] font-semibold text-theme transition hover:border-[rgb(var(--theme-primary))] hover:text-[rgb(var(--theme-primary))]">{{ __('pages/me.account.copy_account') }}</button>
     </div>
   </div>
 

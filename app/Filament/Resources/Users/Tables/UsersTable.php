@@ -35,6 +35,9 @@ class UsersTable
                     ->label('用户名')
                     ->searchable()
                     ->sortable(),
+                TextColumn::make('user_level')
+                    ->label('用户等级')
+                    ->placeholder('—'),
                 TextColumn::make('remark')
                     ->label('备注')
                     ->limit(30)

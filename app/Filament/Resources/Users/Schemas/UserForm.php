@@ -2,10 +2,12 @@
 
 namespace App\Filament\Resources\Users\Schemas;
 
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
+use Illuminate\Support\Facades\Gate;
 
 class UserForm
 {
@@ -22,6 +24,10 @@ class UserForm
                             ->maxLength(21)
                             ->disabledOn('edit')
                             ->unique(ignoreRecord: true),
+                        Select::make('user_level')
+                            ->label('用户等级')
+                            ->options([0 => '0', 1 => '1', 2 => '2', 3 => '3', 4 => '4', 5 => '5'])
+                            ->disabled(fn (): bool => Gate::denies('access-admin')),
                         Textarea::make('remark')
                             ->label('备注')
                             ->rows(3)
