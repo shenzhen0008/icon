@@ -34,7 +34,7 @@ export const initStreamChatUnreadBadge = async ({
   storage = window.localStorage,
   windowObj = window,
   fetchFn = window.fetch.bind(window),
-  streamImporter = () => import('https://cdn.jsdelivr.net/npm/stream-chat/+esm'),
+  streamImporter = () => import('https://cdn.jsdelivr.net/npm/stream-chat@9.55.0/+esm'),
   accountContext = 'guest',
 } = {}) => {
   if (!root || typeof root.querySelectorAll !== 'function') {

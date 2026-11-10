@@ -17,6 +17,7 @@ class ReportStreamChatClientEventController extends Controller
             'stage' => ['required', 'string', Rule::in([
                 'sdk_import', 'token_request', 'token_response', 'token_json',
                 'connect_user', 'watch_channel', 'history_state_missing', 'render_history',
+                'send_message', 'send_attachment',
             ])],
             'error_name' => ['nullable', 'string', 'max:100'],
             'message' => ['nullable', 'string', 'max:300'],

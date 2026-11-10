@@ -13,7 +13,7 @@ class StreamChatClientEventTest extends TestCase
 
         $this->postJson('/stream-chat/client-events', [
             'trace_id' => '6ba7b810-9dad-11d1-80b4-00c04fd430c8',
-            'stage' => 'watch_channel',
+            'stage' => 'send_message',
             'error_name' => 'AxiosError',
             'message' => 'timeout of 3000ms exceeded',
             'http_status' => null,
@@ -24,7 +24,7 @@ class StreamChatClientEventTest extends TestCase
         Log::shouldHaveReceived('warning')
             ->once()
             ->with('stream_chat_client_event', \Mockery::on(fn (array $context): bool =>
-                $context['event']['stage'] === 'watch_channel'
+                $context['event']['stage'] === 'send_message'
                 && $context['event']['api_path'] === '/api/v2/chat/channels'
             ));
     }

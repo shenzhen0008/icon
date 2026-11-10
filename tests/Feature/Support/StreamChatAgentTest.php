@@ -33,6 +33,7 @@ class StreamChatAgentTest extends TestCase
             ->assertSee('event.user?.id', false)
             ->assertSee('normalizeChannelId', false)
             ->assertSee('refreshChannels')
+            ->assertSee('stream-chat@9.55.0/+esm')
             ->assertSee('agent-chat-file')
             ->assertSee('agent-chat-sound-prompt')
             ->assertSee('agent-mobile-list-view')

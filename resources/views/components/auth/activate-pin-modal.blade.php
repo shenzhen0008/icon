@@ -151,14 +151,6 @@
       </p>
 
       <div @class(['grid gap-3', 'grid-cols-2' => $loginUrl !== null])>
-        <button
-          id="{{ $submitButtonId }}"
-          type="submit"
-          class="w-full rounded-lg bg-[rgb(var(--theme-primary))] px-4 py-2.5 font-semibold text-theme-on-primary"
-        >
-          {{ $submitLabel }}
-        </button>
-
         @if ($loginUrl !== null)
           <button
             id="{{ $switchToLoginButtonId }}"
@@ -169,6 +161,14 @@
             {{ $loginLabel }}
           </button>
         @endif
+
+        <button
+          id="{{ $submitButtonId }}"
+          type="submit"
+          class="w-full rounded-lg bg-[rgb(var(--theme-primary))] px-4 py-2.5 font-semibold text-theme-on-primary"
+        >
+          {{ $submitLabel }}
+        </button>
       </div>
     </form>
     </div>

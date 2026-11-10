@@ -84,7 +84,7 @@
 
   @if ($streamEnabled)
     <script type="module">
-      import { StreamChat } from 'https://cdn.jsdelivr.net/npm/stream-chat/+esm';
+      import { StreamChat } from 'https://cdn.jsdelivr.net/npm/stream-chat@9.55.0/+esm';
 
       const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content ?? '';
       const statusEl = document.getElementById('agent-status');

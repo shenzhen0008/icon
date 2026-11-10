@@ -283,7 +283,7 @@
       showSoundPrompt();
 
       const connectChat = async () => {
-        const { StreamChat } = await import('https://cdn.jsdelivr.net/npm/stream-chat/+esm');
+        const { StreamChat } = await import('https://cdn.jsdelivr.net/npm/stream-chat@9.55.0/+esm');
         connectionStage = 'token_request';
         const response = await fetch('/stream-chat/guest-token', {
           method: 'POST',
@@ -393,7 +393,8 @@
                 title: file.name,
               }],
             });
-          } catch (_) {
+          } catch (error) {
+            reportClientEvent('send_attachment', error);
             const failedNode = pendingUploads.get(localUploadId);
             if (failedNode) {
               failedNode.innerHTML = '';
@@ -428,9 +429,11 @@
           if (!text) return;
 
           inputEl.value = '';
-          await channel.sendMessage({
-            text,
-          });
+          try {
+            await channel.sendMessage({ text, attachments: [] });
+          } catch (error) {
+            reportClientEvent('send_message', error);
+          }
         });
 
         setStatus(i18n.statusConnected);
