@@ -1,4 +1,4 @@
-import test from 'node:test';
+import test, { afterEach } from 'node:test';
 import assert from 'node:assert/strict';
 
 import {
@@ -71,11 +71,23 @@ const createWindow = (pathname = '/') => {
     addEventListener(type, listener) {
       listeners[type] = listener;
     },
+    removeEventListener(type, listener) {
+      if (listeners[type] === listener) delete listeners[type];
+    },
     dispatch(type, event) {
       return listeners[type]?.(event);
     },
   };
 };
+
+afterEach(async () => {
+  await initStreamChatUnreadBadge({
+    root: createRoot([createDot()]),
+    storage: createStorage(),
+    windowObj: createWindow('/stream-chat'),
+    fetchFn: async () => { throw new Error('unexpected request'); },
+  });
+});
 
 test('parseStoredUnreadCount handles positive and invalid values', () => {
   assert.equal(parseStoredUnreadCount('2'), 2);
@@ -99,7 +111,7 @@ test('syncUnreadDots toggles hidden class and aria-hidden state', () => {
 
 test('initStreamChatUnreadBadge shows cached unread count before remote check resolves', async () => {
   const dot = createDot();
-  const storage = createStorage({ stream_chat_unread_count: '4' });
+  const storage = createStorage({ stream_chat_account_context: 'guest', stream_chat_unread_count: '4' });
   let fetched = false;
   let resolveFetch;
 
@@ -145,7 +157,7 @@ test('initStreamChatUnreadBadge skips remote check for visitors without chat ses
 
 test('initStreamChatUnreadBadge uses notify token and Stream unread events for existing sessions', async () => {
   const dot = createDot();
-  const storage = createStorage({ stream_chat_has_session: '1' });
+  const storage = createStorage({ stream_chat_account_context: 'guest', stream_chat_has_session: '1' });
   const fetchRequests = [];
   let eventListener = null;
   const client = {
@@ -188,7 +200,7 @@ test('initStreamChatUnreadBadge uses notify token and Stream unread events for e
 
 test('initStreamChatUnreadBadge does not run sound hooks when unread count increases', async () => {
   const dot = createDot();
-  const storage = createStorage({ stream_chat_has_session: '1' });
+  const storage = createStorage({ stream_chat_account_context: 'guest', stream_chat_has_session: '1' });
   let eventListener = null;
   let soundCount = 0;
   const client = {
@@ -254,7 +266,7 @@ test('initStreamChatUnreadBadge does not run sound hooks for custom unread event
 
 test('initStreamChatUnreadBadge skips remote check on stream chat page', async () => {
   const dot = createDot();
-  const storage = createStorage({ stream_chat_has_session: '1' });
+  const storage = createStorage({ stream_chat_account_context: 'guest', stream_chat_has_session: '1' });
   let fetched = false;
 
   await initStreamChatUnreadBadge({
@@ -268,4 +280,161 @@ test('initStreamChatUnreadBadge skips remote check on stream chat page', async (
   });
 
   assert.equal(fetched, false);
+});
+
+const createConnectionScenario = ({
+  accountContext = 'user:1', initialStorage = {}, userID, disconnectFails = false,
+  connectFails = false, status = 200,
+} = {}) => {
+  const calls = [];
+  const storage = createStorage(initialStorage);
+  const dot = createDot();
+  const windowObj = createWindow();
+  let listener;
+  const client = {
+    userID,
+    user: { total_unread_count: 3 },
+    async disconnectUser() {
+      calls.push('disconnect');
+      if (disconnectFails) throw new Error('disconnect failed');
+      this.userID = undefined;
+    },
+    async connectUser(user) {
+      calls.push(`connect:${user.id}`);
+      if (connectFails) throw new Error('connect failed');
+      this.userID = user.id;
+      return { me: { total_unread_count: 2 } };
+    },
+    on(callback) {
+      calls.push('subscribe');
+      listener = callback;
+      return { unsubscribe() { calls.push('unsubscribe'); } };
+    },
+  };
+  const options = {
+    accountContext, storage, windowObj,
+    root: createRoot([dot]),
+    fetchFn: async () => {
+      calls.push('fetch');
+      return {
+        ok: status === 200, status,
+        json: async () => ({ apiKey: 'key', user: { id: 'customer1' }, token: 'token' }),
+      };
+    },
+    streamImporter: async () => ({ StreamChat: { getInstance: () => client } }),
+  };
+  return { options, client, storage, dot, calls, emit: (event) => listener(event) };
+};
+
+test('logged-in users check unread on a new device without a guest marker', async () => {
+  const scenario = createConnectionScenario();
+  assert.equal(await initStreamChatUnreadBadge(scenario.options), scenario.client);
+  assert.deepEqual(scenario.calls, ['fetch', 'connect:customer1', 'subscribe']);
+  assert.equal(scenario.storage.values.stream_chat_unread_count, '2');
+  assert.equal(scenario.dot.classList.contains('hidden'), false);
+});
+
+test('legacy caches without an account context are cleared before display', async () => {
+  const scenario = createConnectionScenario({
+    accountContext: 'guest', initialStorage: { stream_chat_unread_count: '7', stream_chat_has_session: '1' },
+  });
+  await initStreamChatUnreadBadge(scenario.options);
+  assert.deepEqual(scenario.calls, []);
+  assert.equal(scenario.storage.values.stream_chat_unread_count, undefined);
+  assert.equal(scenario.storage.values.stream_chat_has_session, undefined);
+  assert.equal(scenario.dot.classList.contains('hidden'), true);
+});
+
+test('account changes clear old cache before display and still check for logged-in users', async () => {
+  for (const [previousContext, accountContext] of [
+    ['user:1', 'user:2'], ['user:1', 'guest'], ['guest', 'user:1'],
+  ]) {
+    const scenario = createConnectionScenario({
+      accountContext, status: 503,
+      initialStorage: {
+        stream_chat_account_context: previousContext,
+        stream_chat_has_session: '1', stream_chat_unread_count: '9',
+      },
+    });
+    const result = initStreamChatUnreadBadge(scenario.options);
+    assert.equal(scenario.dot.classList.contains('hidden'), true);
+    await result;
+    assert.equal(scenario.storage.values.stream_chat_unread_count, undefined);
+    assert.equal(scenario.storage.values.stream_chat_has_session, undefined);
+    assert.equal(scenario.storage.values.stream_chat_account_context, accountContext);
+    assert.deepEqual(scenario.calls, accountContext === 'guest' ? [] : ['fetch']);
+  }
+});
+
+test('same-account request failure retains that account cache', async () => {
+  const scenario = createConnectionScenario({
+    status: 503,
+    initialStorage: { stream_chat_account_context: 'user:1', stream_chat_unread_count: '4' },
+  });
+  await initStreamChatUnreadBadge(scenario.options);
+  assert.equal(scenario.storage.values.stream_chat_unread_count, '4');
+  assert.equal(scenario.dot.classList.contains('hidden'), false);
+});
+
+test('existing SDK identity is disconnected before connecting the current user', async () => {
+  const scenario = createConnectionScenario({ userID: 'old-customer' });
+  await initStreamChatUnreadBadge(scenario.options);
+  assert.deepEqual(scenario.calls, ['fetch', 'disconnect', 'connect:customer1', 'subscribe']);
+});
+
+test('same SDK user reuses the connection and reads current unread state', async () => {
+  const scenario = createConnectionScenario({ userID: 'customer1' });
+  await initStreamChatUnreadBadge(scenario.options);
+  assert.deepEqual(scenario.calls, ['fetch', 'subscribe']);
+  assert.equal(scenario.storage.values.stream_chat_unread_count, '3');
+});
+
+test('reinitialization cancels old subscriptions and custom event handlers', async () => {
+  const scenario = createConnectionScenario();
+  await initStreamChatUnreadBadge(scenario.options);
+  const oldWindow = scenario.options.windowObj;
+  scenario.options = { ...scenario.options, windowObj: createWindow() };
+  await initStreamChatUnreadBadge(scenario.options);
+  assert.deepEqual(scenario.calls, ['fetch', 'connect:customer1', 'subscribe', 'unsubscribe', 'fetch', 'subscribe']);
+  oldWindow.dispatch('stream-chat-unread-updated', { detail: { count: 99 } });
+  assert.equal(scenario.storage.values.stream_chat_unread_count, '3');
+  scenario.emit({ total_unread_count: 5 });
+  assert.equal(scenario.storage.values.stream_chat_unread_count, '5');
+});
+
+test('switching to a visitor disconnects the live old user even when remote check is skipped', async () => {
+  const scenario = createConnectionScenario();
+  await initStreamChatUnreadBadge(scenario.options);
+  await initStreamChatUnreadBadge({ ...scenario.options, accountContext: 'guest' });
+  assert.deepEqual(scenario.calls, ['fetch', 'connect:customer1', 'subscribe', 'unsubscribe', 'disconnect']);
+  scenario.emit({ total_unread_count: 99 });
+  assert.equal(scenario.storage.values.stream_chat_unread_count, undefined);
+  assert.equal(scenario.dot.classList.contains('hidden'), true);
+});
+
+test('404 clears unread state and the session marker', async () => {
+  const scenario = createConnectionScenario({
+    status: 404,
+    initialStorage: {
+      stream_chat_account_context: 'user:1', stream_chat_has_session: '1', stream_chat_unread_count: '4',
+    },
+  });
+  await initStreamChatUnreadBadge(scenario.options);
+  assert.equal(scenario.storage.values.stream_chat_unread_count, '0');
+  assert.equal(scenario.storage.values.stream_chat_has_session, undefined);
+  assert.equal(scenario.dot.classList.contains('hidden'), true);
+});
+
+test('connection and disconnection errors cannot restore another user unread state', async () => {
+  for (const failure of [{ disconnectFails: true, userID: 'old-customer' }, { connectFails: true }]) {
+    const scenario = createConnectionScenario({
+      ...failure,
+      initialStorage: { stream_chat_account_context: 'user:2', stream_chat_unread_count: '8' },
+    });
+    assert.equal(await initStreamChatUnreadBadge(scenario.options), null);
+    assert.equal(scenario.dot.classList.contains('hidden'), true);
+    assert.notEqual(scenario.storage.values.stream_chat_unread_count, '8');
+    assert.equal(scenario.storage.values.stream_chat_has_session, undefined);
+    assert.equal(scenario.calls.includes('subscribe'), false);
+  }
 });

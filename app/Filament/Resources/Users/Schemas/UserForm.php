@@ -20,6 +20,7 @@ class UserForm
                             ->label('用户名')
                             ->required()
                             ->maxLength(21)
+                            ->disabledOn('edit')
                             ->unique(ignoreRecord: true),
                         Textarea::make('remark')
                             ->label('备注')

@@ -1,5 +1,8 @@
 export const STREAM_CHAT_UNREAD_COUNT_KEY = 'stream_chat_unread_count';
 export const STREAM_CHAT_SESSION_KEY = 'stream_chat_has_session';
+export const STREAM_CHAT_ACCOUNT_CONTEXT_KEY = 'stream_chat_account_context';
+
+let stopUnreadUpdates = () => {};
 
 export const parseStoredUnreadCount = (value) => {
   const count = Number.parseInt(String(value ?? '0'), 10);
@@ -32,6 +35,7 @@ export const initStreamChatUnreadBadge = async ({
   windowObj = window,
   fetchFn = window.fetch.bind(window),
   streamImporter = () => import('https://cdn.jsdelivr.net/npm/stream-chat/+esm'),
+  accountContext = 'guest',
 } = {}) => {
   if (!root || typeof root.querySelectorAll !== 'function') {
     return null;
@@ -42,29 +46,51 @@ export const initStreamChatUnreadBadge = async ({
     return null;
   }
 
-  const cachedCount = parseStoredUnreadCount(storage?.getItem?.(STREAM_CHAT_UNREAD_COUNT_KEY));
+  const disconnectPrevious = stopUnreadUpdates(accountContext);
+  const previousContext = storage?.getItem?.(STREAM_CHAT_ACCOUNT_CONTEXT_KEY);
+  if (previousContext !== accountContext) {
+    storage?.removeItem?.(STREAM_CHAT_UNREAD_COUNT_KEY);
+    storage?.removeItem?.(STREAM_CHAT_SESSION_KEY);
+  }
+  storage?.setItem?.(STREAM_CHAT_ACCOUNT_CONTEXT_KEY, accountContext);
+  const isAuthenticated = accountContext.startsWith('user:');
+  let active = true;
+  let client;
+  let subscription;
+  let cachedCount = parseStoredUnreadCount(storage?.getItem?.(STREAM_CHAT_UNREAD_COUNT_KEY));
   syncUnreadDots(dots, cachedCount);
 
   const applyUnreadCount = (nextCount) => {
+    if (!active) return;
     persistUnreadCount(storage, nextCount);
     syncUnreadDots(dots, nextCount);
   };
 
-  windowObj?.addEventListener?.('stream-chat-unread-updated', (event) => {
+  const onUnreadUpdated = (event) => {
     const nextCount = parseStoredUnreadCount(event?.detail?.count);
     applyUnreadCount(nextCount);
-  });
-
-  if (resolvePathname(windowObj) === '/stream-chat' || !shouldCheckRemoteUnread(storage, cachedCount)) {
-    return null;
-  }
+  };
+  windowObj?.addEventListener?.('stream-chat-unread-updated', onUnreadUpdated);
+  stopUnreadUpdates = (nextContext) => {
+    active = false;
+    subscription?.unsubscribe();
+    windowObj?.removeEventListener?.('stream-chat-unread-updated', onUnreadUpdated);
+    return client && nextContext !== accountContext ? client.disconnectUser() : undefined;
+  };
 
   try {
+    if (disconnectPrevious) await disconnectPrevious;
+    if (!active || resolvePathname(windowObj) === '/stream-chat'
+        || (!isAuthenticated && !shouldCheckRemoteUnread(storage, cachedCount))) {
+      return null;
+    }
+
     const tokenResponse = await fetchFn('/stream-chat/notify-token', {
       headers: {
         Accept: 'application/json',
       },
     });
+    if (!active) return null;
 
     if (!tokenResponse.ok) {
       if (tokenResponse.status === 404) {
@@ -77,14 +103,24 @@ export const initStreamChatUnreadBadge = async ({
 
     const payload = await tokenResponse.json();
     const { StreamChat } = await streamImporter();
-    const client = StreamChat.getInstance(payload.apiKey);
-    const connectedUser = await client.connectUser(payload.user, payload.token);
+    if (!active) return null;
+    client = StreamChat.getInstance(payload.apiKey);
+    if (client.userID && client.userID !== payload.user.id) {
+      cachedCount = 0;
+      storage?.removeItem?.(STREAM_CHAT_SESSION_KEY);
+      applyUnreadCount(0);
+      await client.disconnectUser();
+    }
+    const connectedUser = client.userID === payload.user.id
+      ? { me: client.user }
+      : await client.connectUser(payload.user, payload.token);
+    if (!active) return null;
     const initialCount = parseStoredUnreadCount(connectedUser?.me?.total_unread_count);
 
     storage?.setItem?.(STREAM_CHAT_SESSION_KEY, '1');
     applyUnreadCount(initialCount);
 
-    client.on((event) => {
+    subscription = client.on((event) => {
       if (event?.total_unread_count === undefined) {
         return;
       }
@@ -95,7 +131,7 @@ export const initStreamChatUnreadBadge = async ({
 
     return client;
   } catch (_) {
-    syncUnreadDots(dots, cachedCount);
+    if (active) syncUnreadDots(dots, cachedCount);
 
     return null;
   }

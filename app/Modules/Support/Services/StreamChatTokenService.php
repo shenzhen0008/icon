@@ -12,50 +12,20 @@ class StreamChatTokenService
 {
     public function __construct(
         private readonly TemporaryAccountService $temporaryAccountService,
-    ) {
-    }
+    ) {}
 
     public function issueGuestTokenPayload(Request $request): array
     {
-        $apiKey = (string) config('stream_chat.api_key');
-        $apiSecret = (string) config('stream_chat.api_secret');
-
-        if ($apiKey === '' || $apiSecret === '') {
-            throw new RuntimeException('Stream Chat is not configured.');
-        }
-
-        $guestId = (string) $request->session()->get('stream_chat.guest_id');
-        if ($guestId === '') {
-            $guestId = 'guest_'.Str::lower(Str::random(16));
-            $request->session()->put('stream_chat.guest_id', $guestId);
-        }
-
-        $guestName = $this->resolveDisplayName($request);
-        $request->session()->put('stream_chat.guest_name', $guestName);
-
-        $channelType = (string) config('stream_chat.channel_type', 'messaging');
-        $channelPrefix = (string) config('stream_chat.channel_prefix', 'support');
-        $channelId = sprintf('%s-%s', $channelPrefix, str_replace('_', '-', $guestId));
-        $agentUserId = (string) config('stream_chat.agent_user_id', 'support_agent_1');
-
-        return [
-            'apiKey' => $apiKey,
-            'token' => $this->createUserToken($guestId, $apiSecret),
-            'user' => [
-                'id' => $guestId,
-                'name' => $guestName,
-            ],
-            'channel' => [
-                'type' => $channelType,
-                'id' => $channelId,
-                'name' => $guestName,
-                'members' => [$guestId, $agentUserId],
-            ],
-        ];
+        return $this->issueCustomerTokenPayload($request, true);
     }
 
     public function issueExistingGuestTokenPayload(Request $request): array
     {
+        return $this->issueCustomerTokenPayload($request, false);
+    }
+
+    private function issueCustomerTokenPayload(Request $request, bool $allowGuestCreation): array
+    {
         $apiKey = (string) config('stream_chat.api_key');
         $apiSecret = (string) config('stream_chat.api_secret');
 
@@ -63,31 +33,45 @@ class StreamChatTokenService
             throw new RuntimeException('Stream Chat is not configured.');
         }
 
-        $guestId = (string) $request->session()->get('stream_chat.guest_id');
-        if ($guestId === '') {
-            throw new RuntimeException('Stream Chat guest session is not initialized.');
+        $user = $request->user();
+        if ($user instanceof User) {
+            $streamUserId = (string) $user->username;
+        } else {
+            $streamUserId = (string) $request->session()->get('stream_chat.guest_id');
+            if ($streamUserId === '') {
+                if (! $allowGuestCreation) {
+                    throw new RuntimeException('Stream Chat guest session is not initialized.');
+                }
+
+                $streamUserId = 'guest_'.Str::lower(Str::random(16));
+                $request->session()->put('stream_chat.guest_id', $streamUserId);
+            }
         }
 
-        $guestName = $this->resolveDisplayName($request);
-        $request->session()->put('stream_chat.guest_name', $guestName);
+        $displayName = $this->resolveDisplayName($request);
+        if (! $user instanceof User) {
+            $request->session()->put('stream_chat.guest_name', $displayName);
+        }
 
         $channelType = (string) config('stream_chat.channel_type', 'messaging');
         $channelPrefix = (string) config('stream_chat.channel_prefix', 'support');
-        $channelId = sprintf('%s-%s', $channelPrefix, str_replace('_', '-', $guestId));
+        $channelId = $user instanceof User
+            ? sprintf('%s-customer-%s', $channelPrefix, $streamUserId)
+            : sprintf('%s-%s', $channelPrefix, str_replace('_', '-', $streamUserId));
         $agentUserId = (string) config('stream_chat.agent_user_id', 'support_agent_1');
 
         return [
             'apiKey' => $apiKey,
-            'token' => $this->createUserToken($guestId, $apiSecret),
+            'token' => $this->createUserToken($streamUserId, $apiSecret),
             'user' => [
-                'id' => $guestId,
-                'name' => $guestName,
+                'id' => $streamUserId,
+                'name' => $displayName,
             ],
             'channel' => [
                 'type' => $channelType,
                 'id' => $channelId,
-                'name' => $guestName,
-                'members' => [$guestId, $agentUserId],
+                'name' => $displayName,
+                'members' => [$streamUserId, $agentUserId],
             ],
         ];
     }
@@ -159,7 +143,7 @@ class StreamChatTokenService
         }
 
         $legacyName = trim((string) $request->session()->get('stream_chat.guest_name', ''));
-        if ($legacyName !== '' && !str_starts_with($legacyName, 'Guest-')) {
+        if ($legacyName !== '' && ! str_starts_with($legacyName, 'Guest-')) {
             return $legacyName;
         }
 

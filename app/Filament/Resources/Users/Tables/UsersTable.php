@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Users\Tables;
 
 use App\Models\User;
+use App\Modules\Position\Models\Position;
 use App\Modules\Product\Models\Product;
 use App\Modules\Product\Models\UserProductPurchaseLimit;
 use App\Modules\PopupPush\Services\PopupCampaignService;
@@ -52,6 +53,22 @@ class UsersTable
             ])
             ->recordActions([
                 EditAction::make(),
+                Action::make('view_positions')
+                    ->label('购买记录')
+                    ->icon('heroicon-o-shopping-bag')
+                    ->color('info')
+                    ->modalHeading(fn (User $record): string => "用户 {$record->username} 的购买记录")
+                    ->modalWidth('4xl')
+                    ->modalSubmitAction(false)
+                    ->modalCancelActionLabel('关闭')
+                    ->modalContent(fn (User $record) => view('filament.users.positions-modal', [
+                        'positions' => Position::query()
+                            ->with('product')
+                            ->where('user_id', $record->id)
+                            ->latest('opened_at')
+                            ->latest('id')
+                            ->get(),
+                    ])),
                 Action::make('set_purchase_limit_override')
                     ->label('限购覆盖')
                     ->icon('heroicon-o-adjustments-horizontal')

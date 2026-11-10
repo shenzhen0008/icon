@@ -2,16 +2,43 @@
 
 namespace Tests\Feature\Admin;
 
+use App\Filament\Resources\Users\Pages\CreateUser;
+use App\Filament\Resources\Users\Pages\EditUser;
 use App\Models\User;
 use App\Modules\Balance\Models\BalanceLedger;
 use App\Modules\Position\Models\Position;
 use App\Modules\Product\Models\Product;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
+use Livewire\Livewire;
 
 class UserManagementPageTest extends AdminPanelTestCase
 {
     use RefreshDatabase;
+
+    public function test_existing_username_cannot_be_changed_by_admin_form(): void
+    {
+        $user = User::factory()->create(['username' => 'StableCustomer123']);
+
+        Livewire::test(EditUser::class, ['record' => $user->getRouteKey()])
+            ->assertFormFieldIsDisabled('username')
+            ->fillForm(['username' => 'ChangedCustomer123', 'remark' => 'Updated remark'])
+            ->call('save')
+            ->assertHasNoFormErrors();
+
+        $this->assertSame('StableCustomer123', $user->fresh()->username);
+        $this->assertSame('Updated remark', $user->fresh()->remark);
+    }
+
+    public function test_new_user_username_remains_editable_and_can_be_created(): void
+    {
+        Livewire::test(CreateUser::class)
+            ->assertFormFieldIsEnabled('username')
+            ->fillForm(['username' => 'NewCustomer123', 'balance' => 0, 'password' => 'password123'])
+            ->call('create')
+            ->assertHasNoFormErrors();
+
+        $this->assertDatabaseHas('users', ['username' => 'NewCustomer123']);
+    }
 
     public function test_guest_can_access_user_management_pages_in_local_environment(): void
     {

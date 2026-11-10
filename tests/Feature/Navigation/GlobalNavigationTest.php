@@ -13,6 +13,20 @@ class GlobalNavigationTest extends TestCase
 
     private const SUPPORT_URL = '/stream-chat?locale=zh-CN';
 
+    public function test_navigation_exposes_account_context_for_chat_unread_initialization(): void
+    {
+        $guest = $this->get('/stream-chat')->assertOk();
+        $this->assertStringContainsString('data-page-cache-context="guest"', $this->topNavMarkup($guest->getContent()));
+
+        foreach (User::factory()->count(2)->create() as $user) {
+            $response = $this->actingAs($user)->get('/stream-chat')->assertOk();
+            $this->assertStringContainsString(
+                'data-page-cache-context="user:'.$user->id.'"',
+                $this->topNavMarkup($response->getContent())
+            );
+        }
+    }
+
     private function topNavMarkup(string $content): string
     {
         $topNavStart = strpos($content, '<header id="top-nav"');

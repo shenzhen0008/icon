@@ -57,8 +57,6 @@
 
   @if ($streamEnabled)
     <script type="module">
-      import { StreamChat } from 'https://cdn.jsdelivr.net/npm/stream-chat/+esm';
-
       const statusEl = document.getElementById('stream-chat-status');
       const messagesEl = document.getElementById('stream-chat-messages');
       const formEl = document.getElementById('stream-chat-form');
@@ -68,7 +66,19 @@
       const soundEnableEl = document.getElementById('stream-chat-sound-enable');
       const soundDismissEl = document.getElementById('stream-chat-sound-dismiss');
       const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content ?? '';
+      const diagnosticTraceId = window.crypto?.randomUUID?.()
+        ?? 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (char) => {
+          const value = Math.random() * 16 | 0;
+          return (char === 'x' ? value : (value & 0x3 | 0x8)).toString(16);
+        });
+      let connectionStage = 'sdk_import';
       const pendingUploads = new Map();
+      const accountContext = document.getElementById('top-nav')?.dataset.pageCacheContext ?? 'guest';
+      if (localStorage.getItem('stream_chat_account_context') !== accountContext) {
+        localStorage.removeItem('stream_chat_unread_count');
+        localStorage.removeItem('stream_chat_has_session');
+      }
+      localStorage.setItem('stream_chat_account_context', accountContext);
       const i18n = {
         nameSelf: @json(__('pages/stream-chat.name_self')),
         nameSupportDefault: @json(__('pages/stream-chat.name_support_default')),
@@ -84,6 +94,7 @@
         statusConnectFailed: @json(__('pages/stream-chat.status_connect_failed')),
       };
       let currentUserId = '';
+      let messageSubscription;
       let soundEnabled = localStorage.getItem('stream_chat_sound_enabled') === '1';
       const audioCtx = window.AudioContext ? new window.AudioContext() : null;
 
@@ -96,6 +107,41 @@
         window.dispatchEvent(new CustomEvent('stream-chat-unread-updated', {
           detail: { count: 0 },
         }));
+      };
+
+      const reportClientEvent = (stage, error = null, details = {}) => {
+        const rawUrl = error?.config?.url || error?.request?.responseURL || '';
+        let apiPath = null;
+        try {
+          const path = new URL(rawUrl, window.location.origin).pathname;
+          if (/^\/api\/v[0-9]+\/[A-Za-z0-9_\/-]*$/.test(path)) apiPath = path;
+        } catch (_) {}
+
+        const rawMessage = error?.message ? String(error.message) : null;
+        const message = rawMessage
+          ?.replace(/(api[_-]?key|token|authorization)([=: ]+)\S+/gi, '$1$2[redacted]')
+          .replace(/[\r\n\x00-\x1F\x7F]+/g, ' ')
+          .slice(0, 300);
+
+        fetch('/stream-chat/client-events', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': csrfToken,
+            'Accept': 'application/json',
+          },
+          keepalive: true,
+          body: JSON.stringify({
+            trace_id: diagnosticTraceId,
+            stage,
+            error_name: error?.name ? String(error.name).slice(0, 100) : null,
+            message,
+            http_status: Number(error?.status || error?.statusCode || error?.response?.status) || null,
+            stream_code: error?.code === undefined ? null : String(error.code).slice(0, 64),
+            api_path: apiPath,
+            ...details,
+          }),
+        }).catch(() => {});
       };
       clearUnreadBadge();
 
@@ -237,6 +283,8 @@
       showSoundPrompt();
 
       const connectChat = async () => {
+        const { StreamChat } = await import('https://cdn.jsdelivr.net/npm/stream-chat/+esm');
+        connectionStage = 'token_request';
         const response = await fetch('/stream-chat/guest-token', {
           method: 'POST',
           headers: {
@@ -247,32 +295,57 @@
           body: JSON.stringify({}),
         });
 
+        connectionStage = 'token_response';
         if (!response.ok) {
-          throw new Error(i18n.errorTokenFailed);
+          const error = new Error(i18n.errorTokenFailed);
+          error.status = response.status;
+          throw error;
         }
 
+        connectionStage = 'token_json';
         const payload = await response.json();
         const client = StreamChat.getInstance(payload.apiKey);
+        messageSubscription?.unsubscribe();
+        if (client.userID && client.userID !== payload.user.id) {
+          messagesEl?.replaceChildren();
+          pendingUploads.clear();
+          clearUnreadBadge();
+          localStorage.removeItem('stream_chat_has_session');
+          await client.disconnectUser();
+        }
         currentUserId = payload.user.id;
-        localStorage.setItem('stream_chat_has_session', '1');
 
-        await client.connectUser(payload.user, payload.token);
+        connectionStage = 'connect_user';
+        if (client.userID !== payload.user.id) {
+          await client.connectUser(payload.user, payload.token);
+        }
+        localStorage.setItem('stream_chat_has_session', '1');
 
         const channel = client.channel(payload.channel.type, payload.channel.id, {
           name: payload.channel.name,
           members: payload.channel.members,
         });
 
-        await channel.watch();
+        connectionStage = 'watch_channel';
+        const watchState = await channel.watch();
+        const messages = channel.state?.messages;
+        if (!Array.isArray(messages)) {
+          reportClientEvent('history_state_missing', null, {
+            watch_messages_array: Array.isArray(watchState?.messages),
+            state_messages_array: false,
+            state_messages_count: null,
+          });
+        }
         channel.markRead().catch(() => {});
         if ((channel.data?.name || '') !== payload.channel.name) {
           channel.updatePartial({
             set: { name: payload.channel.name },
           }).catch(() => {});
         }
-        renderHistory(channel.state.messages);
+        connectionStage = 'render_history';
+        renderHistory(Array.isArray(messages) ? messages : []);
 
-        channel.on('message.new', (event) => {
+        messageSubscription = channel.on('message.new', (event) => {
           const localUploadId = event.message?.local_upload_id;
           if (localUploadId && pendingUploads.has(localUploadId) && messagesEl) {
             const oldNode = pendingUploads.get(localUploadId);
@@ -361,9 +434,11 @@
         });
 
         setStatus(i18n.statusConnected);
+        connectionStage = 'connected';
       };
 
       connectChat().catch((error) => {
+        reportClientEvent(connectionStage, error);
         setStatus(error.message || i18n.statusConnectFailed);
       });
     </script>

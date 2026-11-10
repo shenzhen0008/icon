@@ -24,6 +24,7 @@ use App\Modules\Support\Http\Controllers\StreamChatAgentPageController;
 use App\Modules\Support\Http\Controllers\StreamChatAgentTokenController;
 use App\Modules\Support\Http\Controllers\StreamChatGuestTokenController;
 use App\Modules\Support\Http\Controllers\StreamChatNotifyTokenController;
+use App\Modules\Support\Http\Controllers\ReportStreamChatClientEventController;
 use App\Modules\Balance\Http\Controllers\RechargePageController;
 use App\Modules\Balance\Http\Controllers\RechargeEntryController;
 use App\Modules\Balance\Http\Controllers\SubmitRechargePaymentRequestController;
@@ -70,6 +71,7 @@ Route::get('/support', SupportPageController::class);
 Route::get('/stream-chat', StreamChatPageController::class);
 Route::post('/stream-chat/guest-token', StreamChatGuestTokenController::class);
 Route::get('/stream-chat/notify-token', StreamChatNotifyTokenController::class);
+Route::post('/stream-chat/client-events', ReportStreamChatClientEventController::class)->middleware('throttle:60,1');
 Route::get('/client-env/access-reminder', ClientEnvAccessReminderPageController::class)
     ->name('client-env.access-reminder');
 Route::get('/dev/client-env/detect', DetectClientEnvController::class);
