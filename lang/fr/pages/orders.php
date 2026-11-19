@@ -18,6 +18,11 @@ return [
             'redeemed' => 'Racheté',
         ],
     ],
+    'fund_orders' => [
+        'title' => 'Fonds de réservation sur la blockchain',
+        'reservation_fund_debit' => 'Débit',
+        'reservation_fund_release' => 'Déblocage',
+    ],
     'reservations' => [
         'title' => 'Ordres de réservation',
         'badge' => 'Réservation',

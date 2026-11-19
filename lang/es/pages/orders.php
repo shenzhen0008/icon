@@ -18,6 +18,11 @@ return [
             'redeemed' => 'Rescatada',
         ],
     ],
+    'fund_orders' => [
+        'title' => 'Fondos de reserva en cadena',
+        'reservation_fund_debit' => 'Débito',
+        'reservation_fund_release' => 'Liberación',
+    ],
     'reservations' => [
         'title' => 'Órdenes de reserva',
         'badge' => 'Reserva',

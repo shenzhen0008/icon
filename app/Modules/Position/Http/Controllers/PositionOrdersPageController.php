@@ -3,6 +3,7 @@
 namespace App\Modules\Position\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Modules\Balance\Services\ListUserAdminReservationFundOrdersService;
 use App\Modules\Position\Services\ListUserPositionsService;
 use App\Modules\Reservation\Services\ListUserReservationsService;
 use Illuminate\Contracts\View\View;
@@ -13,6 +14,7 @@ class PositionOrdersPageController extends Controller
     public function __construct(
         private readonly ListUserPositionsService $listUserPositionsService,
         private readonly ListUserReservationsService $listUserReservationsService,
+        private readonly ListUserAdminReservationFundOrdersService $listUserFundOrders,
     )
     {
     }
@@ -25,6 +27,7 @@ class PositionOrdersPageController extends Controller
         return view('orders.index', [
             'positions' => $this->listUserPositionsService->handle($user),
             'reservations' => $this->listUserReservationsService->handle($user),
+            'fundOrders' => $this->listUserFundOrders->handle($user),
         ]);
     }
 }

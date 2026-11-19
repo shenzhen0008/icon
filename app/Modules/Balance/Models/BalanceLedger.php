@@ -34,6 +34,11 @@ class BalanceLedger extends Model
         ];
     }
 
+    public function reservationFundOrder(): BelongsTo
+    {
+        return $this->belongsTo(AdminReservationFundOrder::class, 'biz_ref_id');
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

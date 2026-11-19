@@ -588,6 +588,24 @@ CREATE TABLE `recharge_payment_requests` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `admin_reservation_fund_orders`
+--
+
+DROP TABLE IF EXISTS `admin_reservation_fund_orders`;
+CREATE TABLE `admin_reservation_fund_orders` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` bigint unsigned NOT NULL,
+  `type` varchar(32) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `amount` decimal(16,2) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `reservation_fund_orders_user_time_index` (`user_id`,`created_at`,`id`),
+  CONSTRAINT `admin_reservation_fund_orders_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
 -- Table structure for table `balance_ledgers`
 --
 

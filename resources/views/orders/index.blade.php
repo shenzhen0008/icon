@@ -58,6 +58,9 @@
           </ul>
         @endif
       </section>
+      @if ($fundOrders->isNotEmpty())
+        @include('balance.orders.reservation-funds', ['orders' => $fundOrders])
+      @endif
     </div>
   </main>
 

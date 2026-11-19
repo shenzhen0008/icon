@@ -76,8 +76,13 @@
         <tbody class="bg-theme-secondary/40">
           @forelse ($records as $record)
             @php
-              $productName = $incomeTypeLabels[$record['income_type'] ?? '']
-                ?? (($record['product_name'] ?? '') === __('pages/income-records.income_type.referral_commission_legacy_name')
+              $incomeType = $record['income_type'] ?? '';
+              $isFundMovement = in_array($incomeType, [
+                \App\Modules\Balance\Models\AdminReservationFundOrder::DEBIT,
+                \App\Modules\Balance\Models\AdminReservationFundOrder::RELEASE,
+              ], true);
+              $productName = $incomeTypeLabels[$incomeType]
+                ?? (! $isFundMovement && ($record['product_name'] ?? '') === __('pages/income-records.income_type.referral_commission_legacy_name')
                   ? __('pages/income-records.income_type.referral_commission')
                   : ($record['product_name'] ?? '--'));
             @endphp

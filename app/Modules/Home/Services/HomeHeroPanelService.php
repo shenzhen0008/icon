@@ -3,6 +3,7 @@
 namespace App\Modules\Home\Services;
 
 use App\Models\User;
+use App\Modules\Balance\Models\AdminReservationFundOrder;
 use App\Modules\Balance\Models\BalanceLedger;
 use App\Modules\Position\Models\Position;
 use App\Modules\Product\Models\Product;
@@ -222,8 +223,21 @@ class HomeHeroPanelService
                 [$savingsRate]
             );
 
+        $fundQuery = BalanceLedger::query()
+            ->join('admin_reservation_fund_orders as fund_orders', function ($join): void {
+                $join->on('fund_orders.id', '=', 'balance_ledgers.biz_ref_id')
+                    ->on('fund_orders.user_id', '=', 'balance_ledgers.user_id');
+            })
+            ->where('balance_ledgers.user_id', $userId)
+            ->where('balance_ledgers.biz_ref_type', AdminReservationFundOrder::REFERENCE_TYPE)
+            ->where('fund_orders.type', AdminReservationFundOrder::DEBIT)
+            ->whereIn('balance_ledgers.type', [AdminReservationFundOrder::DEBIT, AdminReservationFundOrder::RELEASE])
+            ->selectRaw('balance_ledgers.type as income_type, balance_ledgers.id as sort_id,
+                NULL as product_id, fund_orders.name as product_name, balance_ledgers.amount as profit,
+                NULL as rate, NULL as settlement_date, balance_ledgers.occurred_at as occurred_at');
+
         return DB::query()
-            ->fromSub($settlementQuery->unionAll($commissionQuery)->unionAll($savingsQuery), 'income_records')
+            ->fromSub($settlementQuery->unionAll($commissionQuery)->unionAll($savingsQuery)->unionAll($fundQuery), 'income_records')
             ->orderByDesc('occurred_at')
             ->orderByDesc('sort_id');
     }
@@ -279,8 +293,14 @@ class HomeHeroPanelService
         return $incomeRowCollection
             ->map(fn (stdClass $record): array => [
                 'income_type' => (string) ($record->income_type ?? ''),
-                'product_name' => $incomeProductNamesByRecordId[(int) ($record->sort_id ?? 0)] ?? (string) ($record->product_name ?? '--'),
-                'profit' => $this->formatMoney((float) ($record->profit ?? 0)),
+                'product_name' => ($record->income_type ?? '') === 'settlement'
+                    ? ($incomeProductNamesByRecordId[(int) ($record->sort_id ?? 0)] ?? (string) ($record->product_name ?? '--'))
+                    : (string) ($record->product_name ?? '--'),
+                'profit' => match ($record->income_type ?? '') {
+                    AdminReservationFundOrder::DEBIT => (string) $record->profit,
+                    AdminReservationFundOrder::RELEASE => '+'.$record->profit,
+                    default => $this->formatMoney((float) ($record->profit ?? 0)),
+                },
                 'rate_percent' => $record->rate === null
                     ? '--'
                     : number_format((float) $record->rate * 100, 2, '.', '').'%',

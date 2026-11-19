@@ -3,6 +3,8 @@
 namespace Tests\Feature\Home;
 
 use App\Models\User;
+use App\Modules\Balance\Services\CreateAdminReservationFundOrderService;
+use App\Modules\Balance\Services\ReleaseAdminReservationFundOrderService;
 use App\Modules\Balance\Models\BalanceLedger;
 use App\Modules\Position\Models\Position;
 use App\Modules\Product\Models\Product;
@@ -15,6 +17,23 @@ use Tests\TestCase;
 class HeroPanelRecordPagesTest extends TestCase
 {
     use RefreshDatabase;
+
+    public function test_income_records_show_fund_debit_and_release_with_the_original_name(): void
+    {
+        $admin = User::factory()->create(['is_admin' => true]);
+        $user = User::factory()->create(['balance' => '200.00']);
+        $otherUser = User::factory()->create();
+        $create = app(CreateAdminReservationFundOrderService::class);
+        $name = '推荐提成';
+        $order = $create->handle($admin, $user->id, ['name' => $name, 'amount' => '1000.00']);
+        $create->handle($admin, $otherUser->id, ['name' => '其他用户预约', 'amount' => '321.00']);
+        app(ReleaseAdminReservationFundOrderService::class)->handle($admin, $user->id, $order->id);
+
+        $this->actingAs($user)->get('/home/hero-panel/income-records?locale=en')
+            ->assertOk()
+            ->assertSeeInOrder([$name, '+1000.00', $name, '-1000.00'])
+            ->assertDontSee('其他用户预约');
+    }
 
     public function test_authenticated_user_can_open_trade_and_income_record_pages(): void
     {

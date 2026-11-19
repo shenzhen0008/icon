@@ -18,6 +18,11 @@ return [
             'redeemed' => 'Redeemed',
         ],
     ],
+    'fund_orders' => [
+        'title' => 'On-chain reservation funds',
+        'reservation_fund_debit' => 'Debit',
+        'reservation_fund_release' => 'Release',
+    ],
     'reservations' => [
         'title' => 'Reservation Orders',
         'badge' => 'Reservation',

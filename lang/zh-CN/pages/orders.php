@@ -18,6 +18,11 @@ return [
             'redeemed' => '已赎回',
         ],
     ],
+    'fund_orders' => [
+        'title' => '链上预约资金',
+        'reservation_fund_debit' => '扣款',
+        'reservation_fund_release' => '解冻',
+    ],
     'reservations' => [
         'title' => '预订订单',
         'badge' => '预订订单',

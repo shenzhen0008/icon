@@ -3,6 +3,8 @@
 namespace Tests\Feature\Product;
 
 use App\Models\User;
+use App\Modules\Balance\Services\CreateAdminReservationFundOrderService;
+use App\Modules\Balance\Services\ReleaseAdminReservationFundOrderService;
 use App\Modules\Position\Models\Position;
 use App\Modules\Product\Models\Product;
 use App\Modules\Product\Models\ProductTranslation;
@@ -14,6 +16,28 @@ use Tests\TestCase;
 class PublicProductCatalogTest extends TestCase
 {
     use RefreshDatabase;
+
+    public function test_order_count_includes_only_the_users_unreleased_fund_orders(): void
+    {
+        $admin = User::factory()->create(['is_admin' => true]);
+        $user = User::factory()->create();
+        $otherUser = User::factory()->create();
+        $create = app(CreateAdminReservationFundOrderService::class);
+        $input = ['name' => '链上预约资金', 'amount' => '100.00'];
+        $order = $create->handle($admin, $user->id, $input);
+        $create->handle($admin, $otherUser->id, $input);
+        $counter = 'class="text-scale-title font-semibold text-[rgb(var(--theme-accent))]"';
+
+        $this->actingAs($user)->get('/products')
+            ->assertOk()
+            ->assertSee($counter.'>1</a>', escape: false);
+
+        app(ReleaseAdminReservationFundOrderService::class)->handle($admin, $user->id, $order->id);
+
+        $this->get('/products')
+            ->assertOk()
+            ->assertSee($counter.'>0</a>', escape: false);
+    }
 
     public function test_guest_can_view_public_product_catalog_page(): void
     {

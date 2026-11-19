@@ -18,6 +18,11 @@ return [
             'redeemed' => '상환 완료',
         ],
     ],
+    'fund_orders' => [
+        'title' => '온체인 예약 자금',
+        'reservation_fund_debit' => '차감',
+        'reservation_fund_release' => '해제',
+    ],
     'reservations' => [
         'title' => '예약 주문',
         'badge' => '예약',

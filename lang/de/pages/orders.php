@@ -18,6 +18,11 @@ return [
             'redeemed' => 'Eingelöst',
         ],
     ],
+    'fund_orders' => [
+        'title' => 'On-Chain-Reservierungsgelder',
+        'reservation_fund_debit' => 'Abbuchung',
+        'reservation_fund_release' => 'Freigabe',
+    ],
     'reservations' => [
         'title' => 'Reservierungsaufträge',
         'badge' => 'Reservierung',

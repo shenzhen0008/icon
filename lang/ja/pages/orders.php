@@ -18,6 +18,11 @@ return [
             'redeemed' => '償還済み',
         ],
     ],
+    'fund_orders' => [
+        'title' => 'オンチェーン予約資金',
+        'reservation_fund_debit' => '引き落とし',
+        'reservation_fund_release' => '解除',
+    ],
     'reservations' => [
         'title' => '予約注文',
         'badge' => '予約',

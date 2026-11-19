@@ -3,6 +3,7 @@
 namespace App\Modules\Product\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Modules\Balance\Services\ListUserAdminReservationFundOrdersService;
 use App\Modules\Position\Models\Position;
 use App\Modules\Product\Models\Product;
 use App\Modules\Product\Models\UserProductPurchaseLimit;
@@ -17,6 +18,7 @@ class PublicProductCatalogController extends Controller
     public function __construct(
         private readonly TemporaryAccountService $temporaryAccountService,
         private readonly ProductTranslationService $productTranslationService,
+        private readonly ListUserAdminReservationFundOrdersService $listUserFundOrders,
     ) {}
 
     public function __invoke(): View
@@ -51,7 +53,7 @@ class PublicProductCatalogController extends Controller
             $summary = [
                 'today_profit' => '$'.number_format($estimatedOpenProfit, 2, '.', ''),
                 'total_profit' => '$'.number_format($totalSettledProfit, 2, '.', ''),
-                'orders_count' => (string) $openPositions->count(),
+                'orders_count' => (string) ($openPositions->count() + $this->listUserFundOrders->count($user)),
             ];
 
             $purchasedCountByProductId = Position::query()

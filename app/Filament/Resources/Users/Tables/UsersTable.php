@@ -3,6 +3,10 @@
 namespace App\Filament\Resources\Users\Tables;
 
 use App\Models\User;
+use App\Modules\Balance\Models\AdminReservationFundOrder;
+use App\Modules\Balance\Models\BalanceLedger;
+use App\Modules\Balance\Services\CreateAdminReservationFundOrderService;
+use App\Modules\Balance\Services\ReleaseAdminReservationFundOrderService;
 use App\Modules\Position\Models\Position;
 use App\Modules\Product\Models\Product;
 use App\Modules\Product\Models\UserProductPurchaseLimit;
@@ -12,6 +16,7 @@ use Filament\Actions\BulkAction;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Facades\Filament;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -72,6 +77,68 @@ class UsersTable
                             ->latest('id')
                             ->get(),
                     ])),
+                Action::make('create_reservation_fund_order')
+                    ->label('创建预约资金订单')
+                    ->authorize(fn (): bool => Filament::auth()->user()?->can('access-admin') ?? false)
+                    ->modalHeading(fn (User $record): string => "为 {$record->username} 创建预约资金订单")
+                    ->modalDescription(fn (User $record): string => "当前余额 {$record->balance} USDT")
+                    ->schema([
+                        TextInput::make('name')->label('订单名称')->required()->maxLength(255),
+                        TextInput::make('amount')->label('金额 (USDT)')->required()
+                            ->inputMode('decimal')
+                            ->rule(CreateAdminReservationFundOrderService::AMOUNT_RULE),
+                    ])
+                    ->successNotificationTitle('预约资金订单已创建')
+                    ->action(function (User $record, array $data, Action $action): void {
+                        app(CreateAdminReservationFundOrderService::class)
+                            ->handle(Filament::auth()->user(), $record->id, $data);
+
+                        $action->success();
+                    }),
+                Action::make('release_reservation_fund_order')
+                    ->label('解冻预约资金')
+                    ->authorize(fn (): bool => Filament::auth()->user()?->can('access-admin') ?? false)
+                    ->modalHeading(fn (User $record): string => "为 {$record->username} 解冻预约资金")
+                    ->modalDescription('解冻金额为所选扣款订单的原始金额。')
+                    ->schema([
+                        Select::make('order_id')->label('扣款订单')->options(fn (User $record): array => AdminReservationFundOrder::query()
+                            ->where('user_id', $record->id)
+                            ->where('type', AdminReservationFundOrder::DEBIT)
+                            ->whereDoesntHave('releaseLedger')
+                            ->latest('id')
+                            ->get()
+                            ->mapWithKeys(fn (AdminReservationFundOrder $order): array => [
+                                $order->id => "#{$order->id} {$order->name} · {$order->amount} USDT",
+                            ])->all())->searchable()->required(),
+                    ])
+                    ->successNotificationTitle('预约资金已解冻')
+                    ->action(function (User $record, array $data, Action $action): void {
+                        app(ReleaseAdminReservationFundOrderService::class)
+                            ->handle(Filament::auth()->user(), $record->id, (int) $data['order_id']);
+
+                        $action->success();
+                    }),
+                Action::make('view_bill')
+                    ->label('账单')
+                    ->icon('heroicon-o-document-text')
+                    ->color('gray')
+                    ->modalHeading(fn (User $record): string => "用户 {$record->username} 的账单")
+                    ->modalWidth('5xl')
+                    ->modalSubmitAction(false)
+                    ->modalCancelActionLabel('关闭')
+                    ->modalContent(function (User $record) {
+                        $ledgers = BalanceLedger::query()
+                            ->where('user_id', $record->id)
+                            ->orderByDesc('occurred_at')
+                            ->orderByDesc('id')
+                            ->paginate(15, ['*'], 'ledgerPage');
+
+                        $ledgers->getCollection()
+                            ->where('biz_ref_type', AdminReservationFundOrder::REFERENCE_TYPE)
+                            ->load('reservationFundOrder');
+
+                        return view('filament.users.ledger-modal', ['ledgers' => $ledgers]);
+                    }),
                 Action::make('set_purchase_limit_override')
                     ->label('限购覆盖')
                     ->icon('heroicon-o-adjustments-horizontal')
