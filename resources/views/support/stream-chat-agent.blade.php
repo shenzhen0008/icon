@@ -604,7 +604,10 @@
 
         const payload = await tokenResponse.json();
         const client = StreamChat.getInstance(payload.apiKey);
-        await client.connectUser(payload.user, payload.token);
+        if (client.userID !== payload.user.id) {
+          if (client.userID) await client.disconnectUser();
+          await client.connectUser(payload.user, payload.token);
+        }
         currentUserId = payload.user.id;
 
         const refreshChannels = async () => {

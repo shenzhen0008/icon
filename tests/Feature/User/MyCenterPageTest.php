@@ -21,8 +21,8 @@ class MyCenterPageTest extends TestCase
             $user->update(['user_level' => $level]);
             $this->get('/me')->assertOk()
                 ->assertSee('aria-label="Level '.$level.'"', false)
-                ->assertSee('images/user-level/on-dark-'.$level.'.webp')
-                ->assertSee('images/user-level/on-light-'.$level.'.webp');
+                ->assertSee('images/user-level/on-light-'.$level.'.webp')
+                ->assertDontSee('images/user-level/on-dark-'.$level.'.webp');
         }
 
         $user->update(['user_level' => null]);

@@ -6,8 +6,8 @@
       <p class="text-scale-micro text-theme-secondary">{{ $profile['label'] }}</p>
       @if (($profile['user_level'] ?? null) !== null)
         <a href="#" aria-label="Level {{ $profile['user_level'] }}"
-           class="inline-block h-6 w-full justify-self-center rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 bg-[image:var(--badge-on-dark)] bg-contain bg-center bg-no-repeat [[data-theme=business]_&]:bg-[image:var(--badge-on-light)]"
-           style="--badge-on-dark: url('{{ asset('images/user-level/on-dark-'.$profile['user_level'].'.webp') }}'); --badge-on-light: url('{{ asset('images/user-level/on-light-'.$profile['user_level'].'.webp') }}')"></a>
+           class="inline-block h-6 w-full justify-self-center rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 bg-contain bg-center bg-no-repeat"
+           style="background-image: url('{{ asset('images/user-level/on-light-'.$profile['user_level'].'.webp') }}')"></a>
       @else
         <span aria-hidden="true"></span>
       @endif

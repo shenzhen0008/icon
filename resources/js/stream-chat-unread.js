@@ -46,6 +46,10 @@ export const initStreamChatUnreadBadge = async ({
     return null;
   }
 
+  if (['/stream-chat', '/stream-chat-agent'].includes(resolvePathname(windowObj))) {
+    return null;
+  }
+
   const disconnectPrevious = stopUnreadUpdates(accountContext);
   const previousContext = storage?.getItem?.(STREAM_CHAT_ACCOUNT_CONTEXT_KEY);
   if (previousContext !== accountContext) {
@@ -80,8 +84,7 @@ export const initStreamChatUnreadBadge = async ({
 
   try {
     if (disconnectPrevious) await disconnectPrevious;
-    if (!active || resolvePathname(windowObj) === '/stream-chat'
-        || (!isAuthenticated && !shouldCheckRemoteUnread(storage, cachedCount))) {
+    if (!active || (!isAuthenticated && !shouldCheckRemoteUnread(storage, cachedCount))) {
       return null;
     }
 
